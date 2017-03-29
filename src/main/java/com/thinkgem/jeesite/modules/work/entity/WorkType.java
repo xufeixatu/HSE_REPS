@@ -19,7 +19,7 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
  * @author ThinkGem
  * @version 2013-05-15
  */
-public class PlanType extends TreeEntity<PlanType> {
+public class WorkType extends TreeEntity<WorkType> {
 
 	private static final long serialVersionUID = 1L;
 	// private Office parent; // 父级编号
@@ -29,11 +29,11 @@ public class PlanType extends TreeEntity<PlanType> {
 	private String type_desc;
 	private List<String> childPlanTypeList;// 快速添加子类别
 
-	public PlanType() {
+	public WorkType() {
 		super();
 	}
 
-	public PlanType(String id) {
+	public WorkType(String id) {
 		super(id);
 	}
 
@@ -64,11 +64,11 @@ public class PlanType extends TreeEntity<PlanType> {
 
 	// @JsonBackReference
 	// @NotNull
-	public PlanType getParent() {
+	public WorkType getParent() {
 		return parent;
 	}
 
-	public void setParent(PlanType parent) {
+	public void setParent(WorkType parent) {
 		this.parent = parent;
 	}
 	
