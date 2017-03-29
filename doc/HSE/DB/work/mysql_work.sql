@@ -1,5 +1,11 @@
 drop table if exists Data_dict;
 
+drop table if exists work_approve_history;
+
+drop table if exists work_feedback;
+
+drop table if exists work_frequency;
+
 drop table if exists work_plan;
 
 drop table if exists work_responsible_dept;
@@ -26,6 +32,48 @@ create table Data_dict
 alter table Data_dict comment '数据字典表';
 
 /*==============================================================*/
+/* Table: work_approve_history                                  */
+/*==============================================================*/
+create table work_approve_history
+(
+   id                   varchar(64) not null,
+   approve_update_history varchar(255) comment '审批更新的历史信息',
+   work_plan_id         varchar(64),
+   user_id              varchar(64) comment '修改人引用人员ID(FK)',
+   primary key (id)
+);
+
+alter table work_approve_history comment '审批历史信息表';
+
+/*==============================================================*/
+/* Table: work_feedback                                         */
+/*==============================================================*/
+create table work_feedback
+(
+   id                   varchar(64) not null,
+   feedback_info        varchar(255) comment '反馈信息',
+   feedbakc_user_id     varchar(64) comment '反馈人的用户ID(FK)',
+   word_plan_id         varchar(64) comment '工作计划的ID(FK)',
+   feedback_reply       varchar(255) comment '指派人对反馈的回复',
+   primary key (id)
+);
+
+alter table work_feedback comment '工作任务反馈表';
+
+/*==============================================================*/
+/* Table: work_frequency                                        */
+/*==============================================================*/
+create table work_frequency
+(
+   id                   varchar(64) not null,
+   month                varchar(10) comment '执行工作的月份',
+   work_plan_id         varchar(64) comment '关联工作计划表的工作计划ID[FK]',
+   primary key (id)
+);
+
+alter table work_frequency comment '工作频次';
+
+/*==============================================================*/
 /* Table: work_plan                                             */
 /*==============================================================*/
 create table work_plan
@@ -46,6 +94,16 @@ create table work_plan
    work_state_id        varchar(64) comment '工作状态（引用数据字典中工作状态选择项ID）(FK)',
    is_open              bool comment '是否公开(不公开则只有责任人和任务分派人可见)',
    create_by            varchar(64) comment '工作计划的分派人ID(FK)',
+   parent_id            varchar(64) comment '子任务引用父任务的ID[FK]',
+   is_cancel            bool comment '是否取消任务（任务取消时子任务同时取消，些字段同步设置为false）',
+   cancel_reason        varchar(255) comment '取消原因',
+   is_remove            bool comment '是否删除属性',
+   remove_reason        varchar(255) comment '删除原因',
+   is_approvable        bool comment '可否审批',
+   is_approve_update    bool comment '是否允许审批时更新工作计划',
+   is_retains_approve_update bool comment '是否保留审批时更新的工作计划历史信息',
+   approve_opinion      varchar(255) comment '审批意见',
+   reminder_desc        varchar(255) comment '催办描述，催办时工作置顶',
    primary key (id)
 );
 
