@@ -34,121 +34,87 @@
 	
 	<select id="findList" resultType="WorkType">
 		SELECT
-			<include refid="officeColumns"/>
-		FROM sys_office a
-		<include refid="officeJoins"/>
+			<include refid="WorkTypeColumns"/>
+		FROM work_type a
+		<include refid="WorkTypeJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		<!-- 数据范围过滤 -->
 		${sqlMap.dsf}
-		OR a.id = #{currentUser.office.id}
-		ORDER BY a.code
+		ORDER BY a.id
 	</select>
 			
-	<select id="findAllList" resultType="Office">
+	<select id="findAllList" resultType="WorkType">
 		SELECT
 			<include refid="WorkTypeColumns"/>
-		FROM sys_office a
-		<include refid="officeJoins"/>
+		FROM work_type a
+		<include refid="WorkTypeJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
-		ORDER BY a.code
+		ORDER BY a.id
 	</select>
 	
-	<select id="findByParentIdsLike" resultType="Office">
+	<select id="findByParentIdsLike" resultType="WorkType">
 		SELECT
-			<include refid="officeColumns"/>
-		FROM sys_office a
-		<include refid="officeJoins"/>
+			<include refid="WorkTypeColumns"/>
+		FROM work_type a
+		<include refid="WorkTypeJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
 		ORDER BY a.code
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO sys_office(
+		INSERT INTO work_type(
 			id, 
 			parent_id, 
 			parent_ids, 
-			area_id, 
-			code, 
 			name, 
 			sort, 
-			type, 
-			grade, 
-			address, 
-			zip_code, 
-			master, 
-			phone, 
-			fax, 
-			email, 
+			type_name,
+			type_desc,
 			create_by, 
 			create_date, 
 			update_by, 
 			update_date, 
 			remarks, 
-			del_flag,
-			useable,
-			primary_person,
-			deputy_person
+			del_flag
 		) VALUES (
 			#{id}, 
 			#{parent.id}, 
 			#{parentIds}, 
-			#{area.id}, 
-			#{code}, 
 			#{name}, 
 			#{sort}, 
-			#{type}, 
-			#{grade}, 
-			#{address}, 
-			#{zipCode}, 
-			#{master}, 
-			#{phone}, 
-			#{fax}, 
-			#{email}, 
+			#{type_name},
+			#{type_desc},
 			#{createBy.id}, 
 			#{createDate}, 
 			#{updateBy.id}, 
 			#{updateDate}, 
 			#{remarks}, 
-			#{delFlag},
-			#{useable},
-			#{primaryPerson.id},
-			#{deputyPerson.id}
+			#{delFlag}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE sys_office SET 
+		UPDATE work_type SET 
 			parent_id = #{parent.id}, 
 			parent_ids = #{parentIds}, 
-			area_id = #{area.id}, 
-			code = #{code}, 
 			name = #{name}, 
-			type = #{type}, 
-			grade = #{grade}, 
-			address = #{address}, 
-			zip_code = #{zipCode}, 
-			master = #{master}, 
-			phone = #{phone}, 
-			fax = #{fax}, 
-			email = #{email}, 
+			type_name = #{type_name},
+			type_desc = #{type_desc},
 			update_by = #{updateBy.id}, 
 			update_date = #{updateDate}, 
 			remarks = #{remarks},
-			useable=#{useable},
-			primary_person=#{primaryPerson.id},
-			deputy_person=#{deputyPerson.id}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="updateParentIds">
-		UPDATE sys_office SET 
+		UPDATE work_type SET 
 			parent_id = #{parent.id}, 
 			parent_ids = #{parentIds}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
-		UPDATE sys_office SET 
+		UPDATE work_type SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id} OR parent_ids LIKE 
 					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
