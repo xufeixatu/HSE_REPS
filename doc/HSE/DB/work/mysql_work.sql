@@ -1,5 +1,3 @@
-drop table if exists Data_dict;
-
 drop table if exists work_approve_history;
 
 drop table if exists work_feedback;
@@ -19,19 +17,6 @@ drop table if exists zsk_document;
 drop table if exists zsk_history_version;
 
 /*==============================================================*/
-/* Table: Data_dict                                             */
-/*==============================================================*/
-create table Data_dict
-(
-   id                   varchar(64) not null comment '数据字典标识(PK)',
-   field_name           varchar(200) comment '数据字段名称',
-   field_desc           varchar(255) comment '数据字段描述',
-   primary key (id)
-);
-
-alter table Data_dict comment '数据字典表';
-
-/*==============================================================*/
 /* Table: work_approve_history                                  */
 /*==============================================================*/
 create table work_approve_history
@@ -40,6 +25,16 @@ create table work_approve_history
    approve_update_history varchar(255) comment '审批更新的历史信息',
    work_plan_id         varchar(64),
    user_id              varchar(64) comment '修改人引用人员ID(FK)',
+   parent_id            varchar(64),
+   parent_ids           varchar(2000),
+   name                 varchar(100),
+   sort                 decimal(10),
+   create_by            varchar(64),
+   create_date          datetime,
+   update_by            varchar(64),
+   update_date          datetime,
+   remarks              varchar(255),
+   del_flag             char(1),
    primary key (id)
 );
 
@@ -55,6 +50,18 @@ create table work_feedback
    feedbakc_user_id     varchar(64) comment '反馈人的用户ID(FK)',
    word_plan_id         varchar(64) comment '工作计划的ID(FK)',
    feedback_reply       varchar(255) comment '指派人对反馈的回复',
+   parent_id            varchar(64),
+   parent_ids           varchar(2000),
+   name                 varchar(100),
+   sort                 decimal(10),
+   code                 varchar(100),
+   type                 char(1),
+   create_by            varchar(64),
+   create_date          datetime,
+   update_by            varchar(64),
+   update_date          datetime,
+   remarks              varchar(255),
+   del_flag             char(1),
    primary key (id)
 );
 
@@ -68,6 +75,16 @@ create table work_frequency
    id                   varchar(64) not null,
    month                varchar(10) comment '执行工作的月份',
    work_plan_id         varchar(64) comment '关联工作计划表的工作计划ID[FK]',
+   parent_id            varchar(64) not null comment '分类父ID(FK)',
+   parent_ids           varchar(2000) not null,
+   name                 varchar(255) not null,
+   sort                 decimal(10),
+   create_by            varchar(255),
+   create_date          datetime,
+   update_by            varchar(64),
+   update_date          datetime,
+   remarks              varchar(255),
+   del_flag             char(1),
    primary key (id)
 );
 
@@ -101,9 +118,17 @@ create table work_plan
    remove_reason        varchar(255) comment '删除原因',
    is_approvable        bool comment '可否审批',
    is_approve_update    bool comment '是否允许审批时更新工作计划',
-   is_retains_approve_update bool comment '是否保留审批时更新的工作计划历史信息',
    approve_opinion      varchar(255) comment '审批意见',
    reminder_desc        varchar(255) comment '催办描述，催办时工作置顶',
+   parent_ids           varchar(200),
+   is_retains_approve_update bool comment '是否保留审批时更新的工作计划历史信息',
+   create_date          date,
+   update_by            varchar(64),
+   update_date          date,
+   remarks              varchar(255),
+   del_flag             char(1),
+   name                 varchar(100),
+   sort                 decimal(10),
    primary key (id)
 );
 
@@ -117,6 +142,16 @@ create table work_responsible_dept
    id                   varchar(64) not null,
    dept_id              varchar(64) comment '责任部门ID（关联部门表ID）[FK]',
    work_plan_id         varchar(64) comment '工作计划ID(关联工作计划表)[FK]',
+   parent_id            varchar(64),
+   parent_ids           varchar(2000),
+   name                 varchar(100),
+   sort                 decimal(10),
+   create_by            varchar(64),
+   create_date          datetime,
+   update_by            varchar(64),
+   update_date          datetime,
+   remarks              varchar(255),
+   del_flag             char(1),
    primary key (id)
 );
 
@@ -130,7 +165,16 @@ create table work_type
    id                   varchar(64) not null,
    type_name            varchar(200) comment '工作分类的名称',
    type_desc            varchar(255) comment '工作分类的描述',
-   pid                  varchar(64) comment '分类父ID(FK)',
+   parent_id            varchar(64) not null comment '分类父ID(FK)',
+   parent_ids           varchar(2000) not null,
+   name                 varchar(255) not null,
+   sort                 decimal(10),
+   create_by            varchar(255),
+   create_date          datetime,
+   update_by            varchar(64),
+   update_date          datetime,
+   remarks              varchar(255),
+   del_flag             char(1),
    primary key (id)
 );
 

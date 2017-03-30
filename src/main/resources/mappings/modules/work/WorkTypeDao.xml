@@ -18,10 +18,7 @@
 	</sql>
 	
 	<sql id="WorkTypeJoins">
-		LEFT JOIN work_type_type p ON p.id = a.parent_id
-		LEFT JOIN sys_area ar ON ar.id = a.area_id
-		LEFT JOIN SYS_USER pp ON pp.id = a.primary_person
-		LEFT JOIN SYS_USER dp ON dp.id = a.deputy_person
+		LEFT JOIN work_type p ON p.id = a.parent_id
     </sql>
 	
 	<select id="get" resultType="WorkType">
