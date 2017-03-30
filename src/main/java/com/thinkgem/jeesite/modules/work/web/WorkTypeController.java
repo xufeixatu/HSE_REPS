@@ -56,14 +56,14 @@ public class WorkTypeController extends BaseController {
 	@RequestMapping(value = {""})
 	public String index(WorkType workType, Model model) {
 //        model.addAttribute("list", officeService.findAll());
-		return "modules/work/workIndex";
+		return "modules/work/workTypeIndex";
 	}
 
 	@RequiresPermissions("work:workType:view")
 	@RequestMapping(value = {"list"})
 	public String list(WorkType workType, Model model) {
         model.addAttribute("list", workTypeService.findList(workType));
-		return "modules/work/workList";
+		return "modules/work/workTypeList";
 	}
 	
 	@RequiresPermissions("work:workType:view")
