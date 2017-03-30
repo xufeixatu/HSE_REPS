@@ -29,7 +29,7 @@ public class WorkTypeService extends TreeService<WorkTypeDao, WorkType> {
 		return dao.findAllList(new WorkType());
 	}
 
-	public List<WorkType> findList(){
+	public List<WorkType> findList(boolean isAll){
 		return dao.findAllList(new WorkType());
 	}
 	

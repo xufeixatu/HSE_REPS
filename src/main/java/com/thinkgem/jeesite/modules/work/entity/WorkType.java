@@ -27,7 +27,7 @@ public class WorkType extends TreeEntity<WorkType> {
 
 	private String type_name;
 	private String type_desc;
-	private List<String> childPlanTypeList;// 快速添加子类别
+	private List<String> childWorkTypeList;// 快速添加子类别
 
 	public WorkType() {
 		super();
@@ -54,12 +54,12 @@ public class WorkType extends TreeEntity<WorkType> {
 		this.type_desc = type_desc;
 	}
 
-	public List<String> getChildPlanTypeList() {
-		return childPlanTypeList;
+	public List<String> getChildWorkTypeList() {
+		return childWorkTypeList;
 	}
 
-	public void setChildPlanTypeList(List<String> childPlanTypeList) {
-		this.childPlanTypeList = childPlanTypeList;
+	public void setChildWorkTypeList(List<String> childWorkTypeList) {
+		this.childWorkTypeList = childWorkTypeList;
 	}
 
 	// @JsonBackReference
