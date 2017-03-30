@@ -55,7 +55,7 @@
 		FROM work_type a
 		<include refid="WorkTypeJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
-		ORDER BY a.code
+		ORDER BY a.id
 	</select>
 	
 	<insert id="insert">
