@@ -3,67 +3,55 @@
  */
 package com.thinkgem.jeesite.modules.work.entity;
 
-import java.util.List;
-
+import org.hibernate.validator.constraints.Length;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.Length;
-
-import com.thinkgem.jeesite.common.persistence.TreeEntity;
-import com.thinkgem.jeesite.modules.sys.entity.Area;
-import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
- * 工作计划Entity
- * 
- * @author ThinkGem
- * @version 2013-05-15
+ * 增删改查工作类别Entity
+ * @author 何其锟
+ * @version 2017-03-30
  */
-public class WorkType extends TreeEntity<WorkType> {
-
+public class WorkType extends DataEntity<WorkType> {
+	
 	private static final long serialVersionUID = 1L;
-	// private Office parent; // 父级编号
-	// private String parentIds; // 所有父级编号
-
-	private String type_name;
-	private String type_desc;
-	private List<String> childWorkTypeList;// 快速添加子类别
-
+	private String typeName;		// 工作类型名
+	private String typeDesc;		// 类型描述
+	private WorkType parent;		// 父级编号
+	private String parentIds;		// 所有父级编号
+	private String name;		// 名称
+	private Integer sort;		// 排序
+	
 	public WorkType() {
 		super();
 	}
 
-	public WorkType(String id) {
+	public WorkType(String id){
 		super(id);
 	}
 
+	@Length(min=0, max=200, message="工作类型名长度必须介于 0 和 200 之间")
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
 	
-	public String getType_name() {
-		return type_name;
+	@Length(min=0, max=255, message="类型描述长度必须介于 0 和 255 之间")
+	public String getTypeDesc() {
+		return typeDesc;
 	}
 
-	public void setType_name(String type_name) {
-		this.type_name = type_name;
+	public void setTypeDesc(String typeDesc) {
+		this.typeDesc = typeDesc;
 	}
-
-	public String getType_desc() {
-		return type_desc;
-	}
-
-	public void setType_desc(String type_desc) {
-		this.type_desc = type_desc;
-	}
-
-	public List<String> getChildWorkTypeList() {
-		return childWorkTypeList;
-	}
-
-	public void setChildWorkTypeList(List<String> childWorkTypeList) {
-		this.childWorkTypeList = childWorkTypeList;
-	}
-
-	// @JsonBackReference
-	// @NotNull
+	
+	@JsonBackReference
+	@NotNull(message="父级编号不能为空")
 	public WorkType getParent() {
 		return parent;
 	}
@@ -72,9 +60,31 @@ public class WorkType extends TreeEntity<WorkType> {
 		this.parent = parent;
 	}
 	
+	@Length(min=1, max=2000, message="所有父级编号长度必须介于 1 和 2000 之间")
+	public String getParentIds() {
+		return parentIds;
+	}
 
-	@Override
-	public String toString() {
+	public void setParentIds(String parentIds) {
+		this.parentIds = parentIds;
+	}
+	
+	@Length(min=1, max=100, message="名称长度必须介于 1 和 100 之间")
+	public String getName() {
 		return name;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@NotNull(message="排序不能为空")
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+	
 }

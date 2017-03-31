@@ -1,122 +1,131 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thinkgem.jeesite.modules.work.dao.WorkTypeDao">
-
-	<sql id="WorkTypeColumns">
-		a.id,
+    
+	<sql id="workTypeColumns">
+		a.id AS "id",
+		a.type_name AS "typeName",
+		a.type_desc AS "typeDesc",
 		a.parent_id AS "parent.id",
-		a.parent_ids,
-		a.type_name,
-		a.type_desc,
-		a.remarks,
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.sort AS "sort",
 		a.create_by AS "createBy.id",
-		a.create_date,
+		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
-		a.update_date,
-		a.remarks,
-		a.del_flag
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks"
 	</sql>
 	
-	<sql id="WorkTypeJoins">
-		LEFT JOIN work_type p ON p.id = a.parent_id
-    </sql>
-	
+	<sql id="workTypeJoins">
+	</sql>
+    
 	<select id="get" resultType="WorkType">
-		SELECT
-			<include refid="WorkTypeColumns"/>
+		SELECT 
+			<include refid="workTypeColumns"/>
 		FROM work_type a
-		<include refid="WorkTypeJoins"/>
+		<include refid="workTypeJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
 	<select id="findList" resultType="WorkType">
-		SELECT
-			<include refid="WorkTypeColumns"/>
+		SELECT 
+			<include refid="workTypeColumns"/>
 		FROM work_type a
-		<include refid="WorkTypeJoins"/>
-		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
-		<!-- 数据范围过滤 -->
-		${sqlMap.dsf}
-		ORDER BY a.id
-	</select>
+		<include refid="workTypeJoins"/>
+		<where>
 			
-	<select id="findAllList" resultType="WorkType">
-		SELECT
-			<include refid="WorkTypeColumns"/>
-		FROM work_type a
-		<include refid="WorkTypeJoins"/>
-		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
-		ORDER BY a.id
+			<if test="typeName != null and typeName != ''">
+				AND a.type_name = #{typeName}
+			</if>
+			<if test="typeDesc != null and typeDesc != ''">
+				AND a.type_desc = #{typeDesc}
+			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
 	</select>
 	
-	<select id="findByParentIdsLike" resultType="WorkType">
-		SELECT
-			<include refid="WorkTypeColumns"/>
+	<select id="findAllList" resultType="WorkType">
+		SELECT 
+			<include refid="workTypeColumns"/>
 		FROM work_type a
-		<include refid="WorkTypeJoins"/>
-		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
-		ORDER BY a.id
+		<include refid="workTypeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
 	</select>
 	
 	<insert id="insert">
 		INSERT INTO work_type(
-			id, 
-			parent_id, 
-			parent_ids, 
-			name, 
-			sort, 
+			id,
 			type_name,
 			type_desc,
-			create_by, 
-			create_date, 
-			update_by, 
-			update_date, 
-			remarks, 
-			del_flag
+			parent_id,
+			parent_ids,
+			name,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
 		) VALUES (
-			#{id}, 
-			#{parent.id}, 
-			#{parentIds}, 
-			#{name}, 
-			#{sort}, 
-			#{type_name},
-			#{type_desc},
-			#{createBy.id}, 
-			#{createDate}, 
-			#{updateBy.id}, 
-			#{updateDate}, 
-			#{remarks}, 
-			#{delFlag}
+			#{id},
+			#{typeName},
+			#{typeDesc},
+			#{parent.id},
+			#{parentIds},
+			#{name},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE work_type SET 
-			parent_id = #{parent.id}, 
-			parent_ids = #{parentIds}, 
-			name = #{name}, 
-			type_name = #{type_name},
-			type_desc = #{type_desc},
-			update_by = #{updateBy.id}, 
-			update_date = #{updateDate}, 
-			remarks = #{remarks},
-		WHERE id = #{id}
-	</update>
-	
-	<update id="updateParentIds">
-		UPDATE work_type SET 
-			parent_id = #{parent.id}, 
-			parent_ids = #{parentIds}
+		UPDATE work_type SET 	
+			type_name = #{typeName},
+			type_desc = #{typeDesc},
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			name = #{name},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
-		UPDATE work_type SET 
-			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id} OR parent_ids LIKE 
-					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
-					<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
-					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+		DELETE FROM work_type
+		WHERE id = #{id}
 	</update>
 	
 </mapper>
