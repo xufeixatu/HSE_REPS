@@ -24,16 +24,13 @@ import com.thinkgem.jeesite.modules.work.entity.WorkType;
 @Transactional(readOnly = true)
 public class WorkTypeService extends TreeService<WorkTypeDao, WorkType> {
 
-	public List<Office> findAll(){
-		return UserUtils.getOfficeList();
+	public List<WorkType> findAll(){
+		return dao.findAllList(new WorkType());
 	}
 
-	public List<Office> findList(Boolean isAll){
-		if (isAll != null && isAll){
-			return UserUtils.getOfficeAllList();
-		}else{
-			return UserUtils.getOfficeList();
-		}
+	public List<WorkType> findList(Boolean isAll){
+		//暂不用缓存
+		return dao.findList(new WorkType());
 	}
 	
 	@Transactional(readOnly = true)

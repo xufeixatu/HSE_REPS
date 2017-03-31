@@ -23,6 +23,14 @@ public class WorkType extends TreeEntity<WorkType> {
 	private String typeName;		// 工作类型名
 	private String typeDesc;		// 类型描述
 	private List<String> childWorkTypeList;//快速添加子工作类型
+	public List<String> getChildWorkTypeList() {
+		return childWorkTypeList;
+	}
+
+	public void setChildWorkTypeList(List<String> childWorkTypeList) {
+		this.childWorkTypeList = childWorkTypeList;
+	}
+
 	public WorkType() {
 		super();
 	}
