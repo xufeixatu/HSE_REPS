@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.work.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
+import com.thinkgem.jeesite.common.persistence.TreeDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.work.entity.WorkType;
 
@@ -13,6 +14,6 @@ import com.thinkgem.jeesite.modules.work.entity.WorkType;
  * @version 2017-03-30
  */
 @MyBatisDao
-public interface WorkTypeDao extends CrudDao<WorkType> {
+public interface WorkTypeDao extends TreeDao<WorkType> {
 	
 }

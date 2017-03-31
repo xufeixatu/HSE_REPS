@@ -34,7 +34,6 @@
 		FROM work_type a
 		<include refid="workTypeJoins"/>
 		<where>
-			
 			<if test="typeName != null and typeName != ''">
 				AND a.type_name = #{typeName}
 			</if>
@@ -79,6 +78,15 @@
 		</choose>
 	</select>
 	
+	<select id="findByParentIdsLike" resultType="WorkType">
+		SELECT
+			<include refid="workTypeColumns"/>
+		FROM work_type a
+		<include refid="workTypeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
+		ORDER BY a.id
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO work_type(
 			id,
@@ -120,6 +128,13 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE work_type SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
 		WHERE id = #{id}
 	</update>
 	
