@@ -43,14 +43,14 @@
 		<div class="control-group">
 			<label class="control-label">工作类别名称:</label>
 			<div class="controls">
-				<form:input path="type_name" htmlEscape="false" maxlength="100" class="required"/>
+				<form:input path="typeName" htmlEscape="false" maxlength="100" class="required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">工作类别描述:</label>
 			<div class="controls">
-				<form:input path="type_desc" htmlEscape="false" maxlength="100"/>
+				<form:textarea path="typeDesc" htmlEscape="false" rows="3"  maxlength="200" class="input-xlarge"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -63,7 +63,7 @@
 			<div class="control-group">
 				<label class="control-label">快速添加下级工作类别:</label>
 				<div class="controls">
-					<form:checkboxes path="childWorkTypeList" items="${fns:getWorkTypeList('work_workType_common')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:checkboxes path="childWorkTypeList" items="${fns:getDictList('work_workType_common')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</div>
 			</div>
 		</c:if>

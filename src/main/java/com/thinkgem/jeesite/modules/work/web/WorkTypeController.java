@@ -64,7 +64,7 @@ public class WorkTypeController extends BaseController {
 	@RequestMapping(value = {"list"})
 	public String list(WorkType workType, Model model) {
         model.addAttribute("list", workTypeService.findList(workType));
-		return "modules/workType/workTypeList";
+		return "modules/work/workTypeList";
 	}
 	
 	@RequiresPermissions("work:workType:view")
