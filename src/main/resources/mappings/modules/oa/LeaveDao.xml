@@ -27,7 +27,7 @@
 		SELECT 
 			<include refid="leaveColumns"/>
 		FROM oa_leave a
-		<include refid="leaveJoins"/>
+			<include refid="leaveJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL} 
 		<if test="createDateStart != null">
 			AND a.create_date &gt;= #{createDateStart}
