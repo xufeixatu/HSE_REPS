@@ -3,34 +3,27 @@
  */
 package com.thinkgem.jeesite.modules.work.entity;
 
-import java.util.List;
-
+import org.hibernate.validator.constraints.Length;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.Length;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
 
 /**
  * 增删改查工作类别Entity
  * @author 何其锟
- * @version 2017-03-30
+ * @version 2017-04-01
  */
 public class WorkType extends TreeEntity<WorkType> {
 	
 	private static final long serialVersionUID = 1L;
 	private String typeName;		// 工作类型名
 	private String typeDesc;		// 类型描述
-	private List<String> childWorkTypeList;//快速添加子工作类型
-	public List<String> getChildWorkTypeList() {
-		return childWorkTypeList;
-	}
-
-	public void setChildWorkTypeList(List<String> childWorkTypeList) {
-		this.childWorkTypeList = childWorkTypeList;
-	}
-
+	private WorkType parent;		// 父级编号
+	private String parentIds;		// 所有父级编号
+	private String name;		// 名称
+	private Integer sort;		// 排序
+	
 	public WorkType() {
 		super();
 	}
@@ -94,4 +87,7 @@ public class WorkType extends TreeEntity<WorkType> {
 		this.sort = sort;
 	}
 	
+	public String getParentId() {
+		return parent != null && parent.getId() != null ? parent.getId() : "0";
+	}
 }

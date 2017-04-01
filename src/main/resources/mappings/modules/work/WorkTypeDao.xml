@@ -34,6 +34,7 @@
 		FROM work_type a
 		<include refid="workTypeJoins"/>
 		<where>
+			
 			<if test="typeName != null and typeName != ''">
 				AND a.type_name = #{typeName}
 			</if>
@@ -43,6 +44,12 @@
 			<if test="parent != null and parent.id != null and parent.id != ''">
 				AND a.parent_id = #{parent.id}
 			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
@@ -50,14 +57,7 @@
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
 		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
+		ORDER BY a.sort ASC
 	</select>
 	
 	<select id="findAllList" resultType="WorkType">
@@ -67,24 +67,22 @@
 		<include refid="workTypeJoins"/>
 		<where>
 			
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
+		</where>
+		ORDER BY a.sort ASC
 	</select>
 	
 	<select id="findByParentIdsLike" resultType="WorkType">
 		SELECT
-			<include refid="workTypeColumns"/>
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
 		FROM work_type a
 		<include refid="workTypeJoins"/>
-		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
-		ORDER BY a.id
+		<where>
+			
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
 	</select>
 	
 	<insert id="insert">
@@ -140,7 +138,7 @@
 	
 	<update id="delete">
 		DELETE FROM work_type
-		WHERE id = #{id}
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
 	
 </mapper>

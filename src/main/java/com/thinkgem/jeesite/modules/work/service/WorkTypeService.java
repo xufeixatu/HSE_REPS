@@ -3,43 +3,34 @@
  */
 package com.thinkgem.jeesite.modules.work.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.service.TreeService;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
-import com.thinkgem.jeesite.modules.work.dao.WorkTypeDao;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkType;
+import com.thinkgem.jeesite.modules.work.dao.WorkTypeDao;
 
 /**
- * 机构Service
- * @author ThinkGem
- * @version 2014-05-16
+ * 增删改查工作类别Service
+ * @author 何其锟
+ * @version 2017-04-01
  */
 @Service
 @Transactional(readOnly = true)
 public class WorkTypeService extends TreeService<WorkTypeDao, WorkType> {
 
-	public List<WorkType> findAll(){
-		return dao.findAllList(new WorkType());
-	}
-
-	public List<WorkType> findList(Boolean isAll){
-		//暂不用缓存
-		return dao.findList(new WorkType());
+	public WorkType get(String id) {
+		return super.get(id);
 	}
 	
-	@Transactional(readOnly = true)
-	public List<WorkType> findList(WorkType workType){
-		if(workType != null){
-			workType.setParentIds(workType.getParentIds()+"%");
-			return dao.findByParentIdsLike(workType);
+	public List<WorkType> findList(WorkType workType) {
+		if (StringUtils.isNotBlank(workType.getParentIds())){
+			workType.setParentIds(","+workType.getParentIds()+",");
 		}
-		return  new ArrayList<WorkType>();
+		return super.findList(workType);
 	}
 	
 	@Transactional(readOnly = false)
