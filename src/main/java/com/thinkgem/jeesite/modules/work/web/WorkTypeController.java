@@ -22,13 +22,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.work.entity.WorkType;
 import com.thinkgem.jeesite.modules.work.service.WorkTypeService;
 
 /**
  * 增删改查工作类别Controller
+ * 
  * @author 何其锟
  * @version 2017-04-01
  */
@@ -38,23 +39,23 @@ public class WorkTypeController extends BaseController {
 
 	@Autowired
 	private WorkTypeService workTypeService;
-	
+
 	@ModelAttribute
-	public WorkType get(@RequestParam(required=false) String id) {
+	public WorkType get(@RequestParam(required = false) String id) {
 		WorkType entity = null;
-		if (StringUtils.isNotBlank(id)){
+		if (StringUtils.isNotBlank(id)) {
 			entity = workTypeService.get(id);
 		}
-		if (entity == null){
+		if (entity == null) {
 			entity = new WorkType();
 		}
 		return entity;
 	}
-	
+
 	@RequiresPermissions("work:workType:view")
-	@RequestMapping(value = {"list", ""})
+	@RequestMapping(value = { "list", "" })
 	public String list(WorkType workType, HttpServletRequest request, HttpServletResponse response, Model model) {
-		List<WorkType> list = workTypeService.findList(workType); 
+		List<WorkType> list = workTypeService.findList(workType);
 		model.addAttribute("list", list);
 		return "modules/work/workTypeList";
 	}
@@ -62,22 +63,22 @@ public class WorkTypeController extends BaseController {
 	@RequiresPermissions("work:workType:view")
 	@RequestMapping(value = "form")
 	public String form(WorkType workType, Model model) {
-		if (workType.getParent()!=null && StringUtils.isNotBlank(workType.getParent().getId())){
+		if (workType.getParent() != null && StringUtils.isNotBlank(workType.getParent().getId())) {
 			workType.setParent(workTypeService.get(workType.getParent().getId()));
 			// 获取排序号，最末节点排序号+30
-			if (StringUtils.isBlank(workType.getId())){
+			if (StringUtils.isBlank(workType.getId())) {
 				WorkType workTypeChild = new WorkType();
 				workTypeChild.setParent(new WorkType(workType.getParent().getId()));
-				List<WorkType> list = workTypeService.findList(workType); 
-				if (list.size() > 0){
-					workType.setSort(list.get(list.size()-1).getSort());
-					if (workType.getSort() != null){
+				List<WorkType> list = workTypeService.findList(workType);
+				if (list.size() > 0) {
+					workType.setSort(list.get(list.size() - 1).getSort());
+					if (workType.getSort() != null) {
 						workType.setSort(workType.getSort() + 30);
 					}
 				}
 			}
 		}
-		if (workType.getSort() == null){
+		if (workType.getSort() == null) {
 			workType.setSort(30);
 		}
 		model.addAttribute("workType", workType);
@@ -87,31 +88,33 @@ public class WorkTypeController extends BaseController {
 	@RequiresPermissions("work:workType:edit")
 	@RequestMapping(value = "save")
 	public String save(WorkType workType, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, workType)){
+		if (!beanValidator(model, workType)) {
 			return form(workType, model);
 		}
 		workTypeService.save(workType);
 		addMessage(redirectAttributes, "保存工作类别成功");
-		return "redirect:"+Global.getAdminPath()+"/work/workType/?repage";
+		return "redirect:" + Global.getAdminPath() + "/work/workType/?repage";
 	}
-	
+
 	@RequiresPermissions("work:workType:edit")
 	@RequestMapping(value = "delete")
 	public String delete(WorkType workType, RedirectAttributes redirectAttributes) {
 		workTypeService.delete(workType);
 		addMessage(redirectAttributes, "删除工作类别成功");
-		return "redirect:"+Global.getAdminPath()+"/work/workType/?repage";
+		return "redirect:" + Global.getAdminPath() + "/work/workType/?repage";
 	}
 
 	@RequiresPermissions("user")
 	@ResponseBody
 	@RequestMapping(value = "treeData")
-	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
+	public List<Map<String, Object>> treeData(@RequestParam(required = false) String extId,
+			HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<WorkType> list = workTypeService.findList(new WorkType());
-		for (int i=0; i<list.size(); i++){
+		for (int i = 0; i < list.size(); i++) {
 			WorkType e = list.get(i);
-			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
+			if (StringUtils.isBlank(extId) || (extId != null && !extId.equals(e.getId())
+					&& e.getParentIds().indexOf("," + extId + ",") == -1)) {
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
 				map.put("pId", e.getParentId());
@@ -121,5 +124,6 @@ public class WorkTypeController extends BaseController {
 		}
 		return mapList;
 	}
-	
+
+
 }

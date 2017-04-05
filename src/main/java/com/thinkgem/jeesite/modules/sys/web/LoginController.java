@@ -47,6 +47,7 @@ public class LoginController extends BaseController{
 	 */
 	@RequestMapping(value = "${adminPath}/login", method = RequestMethod.GET)
 	public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
+		
 		Principal principal = UserUtils.getPrincipal();
 
 //		// 默认页签模式
@@ -83,7 +84,6 @@ public class LoginController extends BaseController{
 	@RequestMapping(value = "${adminPath}/login", method = RequestMethod.POST)
 	public String loginFail(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Principal principal = UserUtils.getPrincipal();
-		
 		// 如果已经登录，则跳转到管理首页
 		if(principal != null){
 			return "redirect:" + adminPath;

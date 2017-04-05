@@ -1,20 +1,73 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>${fns:getConfig('productName')}</title>
-	<meta name="decorator" content="blank"/><c:set var="tabmode" value="${empty cookie.tabmode.value ? '0' : cookie.tabmode.value}"/>
-    <c:if test="${tabmode eq '1'}"><link rel="Stylesheet" href="${ctxStatic}/jerichotab/css/jquery.jerichotab.css" />
-    <script type="text/javascript" src="${ctxStatic}/jerichotab/js/jquery.jerichotab.js"></script></c:if>
-	<style type="text/css">
-		#main {padding:0;margin:0;} #main .container-fluid{padding:0 4px 0 6px;}
-		#header {margin:0 0 8px;position:static;} #header li {font-size:14px;_font-size:12px;}
-		#header .brand {font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:26px;padding-left:33px;}
-		#footer {margin:8px 0 0 0;padding:3px 0 0 0;font-size:11px;text-align:center;border-top:2px solid #0663A2;}
-		#footer, #footer a {color:#999;} #left{overflow-x:hidden;overflow-y:auto;} #left .collapse{position:static;}
-		#userControl>li>a{/*color:#fff;*/text-shadow:none;} #userControl>li>a:hover, #user #userControl>li.open>a{background:transparent;}
-	</style>
-	<script type="text/javascript">
+<title>${fns:getConfig('productName')}</title>
+<meta name="decorator" content="blank" />
+<c:set var="tabmode"
+	value="${empty cookie.tabmode.value ? '0' : cookie.tabmode.value}" />
+<c:if test="${tabmode eq '1'}">
+	<link rel="Stylesheet"
+		href="${ctxStatic}/jerichotab/css/jquery.jerichotab.css" />
+	<script type="text/javascript"
+		src="${ctxStatic}/jerichotab/js/jquery.jerichotab.js"></script>
+</c:if>
+<style type="text/css">
+#main {
+	padding: 0;
+	margin: 0;
+}
+
+#main .container-fluid {
+	padding: 0 4px 0 6px;
+}
+
+#header {
+	margin: 0 0 8px;
+	position: static;
+}
+
+#header li {
+	font-size: 14px;
+	_font-size: 12px;
+}
+
+#header .brand {
+	font-family: Helvetica, Georgia, Arial, sans-serif, 黑体;
+	font-size: 26px;
+	padding-left: 33px;
+}
+
+#footer {
+	margin: 8px 0 0 0;
+	padding: 3px 0 0 0;
+	font-size: 11px;
+	text-align: center;
+	border-top: 2px solid #0663A2;
+}
+
+#footer, #footer a {
+	color: #999;
+}
+
+#left {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#left .collapse {
+	position: static;
+}
+
+#userControl>li>a { /*color:#fff;*/
+	text-shadow: none;
+}
+
+#userControl>li>a:hover, #user #userControl>li.open>a {
+	background: transparent;
+}
+</style>
+<script type="text/javascript">
 		$(document).ready(function() {
 			// <c:if test="${tabmode eq '1'}"> 初始化页签
 			$.fn.initJerichoTab({
@@ -149,25 +202,39 @@
 	<div id="main">
 		<div id="header" class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
-				<div class="brand"><span id="productName">${fns:getConfig('productName')}</span></div>
+				<div class="brand">
+					<span id="productName">${fns:getConfig('productName')}</span>
+				</div>
 				<ul id="userControl" class="nav pull-right">
-					<li><a href="${pageContext.request.contextPath}${fns:getFrontPath()}/index-${fnc:getCurrentSiteId()}.html" target="_blank" title="访问网站主页"><i class="icon-home"></i></a></li>
-					<li id="themeSwitch" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="主题切换"><i class="icon-th-large"></i></a>
+					<li><a
+						href="${pageContext.request.contextPath}${fns:getFrontPath()}/index-${fnc:getCurrentSiteId()}.html"
+						target="_blank" title="访问网站主页"><i class="icon-home"></i></a></li>
+					<li id="themeSwitch" class="dropdown"><a
+						class="dropdown-toggle" data-toggle="dropdown" href="#"
+						title="主题切换"><i class="icon-th-large"></i></a>
 						<ul class="dropdown-menu">
-							<c:forEach items="${fns:getDictList('theme')}" var="dict"><li><a href="#" onclick="location='${pageContext.request.contextPath}/theme/${dict.value}?url='+location.href">${dict.label}</a></li></c:forEach>
-							<li><a href="javascript:cookie('tabmode','${tabmode eq '1' ? '0' : '1'}');location=location.href">${tabmode eq '1' ? '关闭' : '开启'}页签模式</a></li>
-						</ul>
-						<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
+							<c:forEach items="${fns:getDictList('theme')}" var="dict">
+								<li><a href="#"
+									onclick="location='${pageContext.request.contextPath}/theme/${dict.value}?url='+location.href">${dict.label}</a></li>
+							</c:forEach>
+							<li><a
+								href="javascript:cookie('tabmode','${tabmode eq '1' ? '0' : '1'}');location=location.href">${tabmode eq '1' ? '关闭' : '开启'}页签模式</a></li>
+						</ul> <!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
 					</li>
-					<li id="userInfo" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="个人信息">您好, ${fns:getUser().name}&nbsp;<span id="notifyNum" class="label label-info hide"></span></a>
+					<li id="userInfo" class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" title="个人信息">您好,
+							${fns:getUser().name}&nbsp;<span id="notifyNum"
+							class="label label-info hide"></span>
+					</a>
 						<ul class="dropdown-menu">
-							<li><a href="${ctx}/sys/user/info" target="mainFrame"><i class="icon-user"></i>&nbsp; 个人信息</a></li>
-							<li><a href="${ctx}/sys/user/modifyPwd" target="mainFrame"><i class="icon-lock"></i>&nbsp;  修改密码</a></li>
-							<li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i class="icon-bell"></i>&nbsp;  我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
-						</ul>
-					</li>
+							<li><a href="${ctx}/sys/user/info" target="mainFrame"><i
+									class="icon-user"></i>&nbsp; 个人信息</a></li>
+							<li><a href="${ctx}/sys/user/modifyPwd" target="mainFrame"><i
+									class="icon-lock"></i>&nbsp; 修改密码</a></li>
+							<li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i
+									class="icon-bell"></i>&nbsp; 我的通知 <span id="notifyNum2"
+									class="label label-info hide"></span></a></li>
+						</ul></li>
 					<li><a href="${ctx}/logout" title="退出登录">退出</a></li>
 					<li>&nbsp;</li>
 				</ul>
@@ -181,24 +248,31 @@
 					</script>
 				</c:if> --%>
 				<div class="nav-collapse">
-					<ul id="menu" class="nav" style="*white-space:nowrap;float:none;">
-						<c:set var="firstMenu" value="true"/>
-						<c:forEach items="${fns:getMenuList()}" var="menu" varStatus="idxStatus">
+					<ul id="menu" class="nav"
+						style="*white-space: nowrap; float: none;">
+						<c:set var="firstMenu" value="true" />
+						<c:forEach items="${fns:getMenuList()}" var="menu"
+							varStatus="idxStatus">
 							<c:if test="${menu.parent.id eq '1'&&menu.isShow eq '1'}">
-								<li class="menu ${not empty firstMenu && firstMenu ? ' active' : ''}">
+								<li
+									class="menu ${not empty firstMenu && firstMenu ? ' active' : ''}">
 									<c:if test="${empty menu.href}">
-										<a class="menu" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}"><span>${menu.name}</span></a>
-									</c:if>
-									<c:if test="${not empty menu.href}">
-										<a class="menu" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" target="mainFrame"><span>${menu.name}</span></a>
+										<a class="menu" href="javascript:"
+											data-href="${ctx}/sys/menu/tree?parentId=${menu.id}"
+											data-id="${menu.id}"><span>${menu.name}</span></a>
+									</c:if> <c:if test="${not empty menu.href}">
+										<a class="menu"
+											href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}"
+											data-id="${menu.id}" target="mainFrame"><span>${menu.name}</span></a>
 									</c:if>
 								</li>
 								<c:if test="${firstMenu}">
-									<c:set var="firstMenuId" value="${menu.id}"/>
+									<c:set var="firstMenuId" value="${menu.id}" />
 								</c:if>
-								<c:set var="firstMenu" value="false"/>
+								<c:set var="firstMenu" value="false" />
 							</c:if>
-						</c:forEach><%--
+						</c:forEach>
+						<%--
 						<shiro:hasPermission name="cms:site:select">
 						<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">${fnc:getSite(fnc:getCurrentSiteId()).name}<b class="caret"></b></a>
@@ -208,21 +282,28 @@
 						</li>
 						</shiro:hasPermission> --%>
 					</ul>
-				</div><!--/.nav-collapse -->
+				</div>
+				<!--/.nav-collapse -->
 			</div>
-	    </div>
-	    <div class="container-fluid">
+		</div>
+		<div class="container-fluid">
 			<div id="content" class="row-fluid">
-				<div id="left"><%-- 
+				<div id="left">
+					<%-- 
 					<iframe id="menuFrame" name="menuFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe> --%>
 				</div>
 				<div id="openClose" class="close">&nbsp;</div>
 				<div id="right">
-					<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe>
+					<iframe id="mainFrame" name="mainFrame" src=""
+						style="overflow: visible;" scrolling="yes" frameborder="no"
+						width="100%" height="650"></iframe>
 				</div>
 			</div>
-		    <div id="footer" class="row-fluid">
-	            Copyright &copy; 2012-${fns:getConfig('copyrightYear')} ${fns:getConfig('productName')} - Powered By <a href="http://jeesite.com" target="_blank">JeeSite</a> ${fns:getConfig('version')}
+			<div id="footer" class="row-fluid">
+				Copyright &copy; 2012-${fns:getConfig('copyrightYear')}
+				${fns:getConfig('productName')} - Powered By <a
+					href="http://jeesite.com" target="_blank">JeeSite</a>
+				${fns:getConfig('version')}
 			</div>
 		</div>
 	</div>

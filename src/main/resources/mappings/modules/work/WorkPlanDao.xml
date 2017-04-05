@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.work.dao.WorkPlanDao">
+    
+	<sql id="workPlanColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.work_type_id AS "workTypeId",
+		a.required_finish_time AS "requiredFinishTime",
+		a.start_time AS "startTime",
+		a.planed_finish_time AS "planedFinishTime",
+		a.dept_id AS "deptId",
+		a.person_liable_id AS "personLiableId",
+		a.actual_finish_time AS "actualFinishTime",
+		a.work_level_id AS "workLevelId",
+		a.work_desc AS "workDesc",
+		a.job_require AS "jobRequire",
+		a.zsk_id AS "zskId",
+		a.work_state_id AS "workStateId",
+		a.is_open AS "isOpen",
+		a.create_by AS "createBy.id",
+		a.parent_id AS "parent.id",
+		a.is_cancel AS "isCancel",
+		a.cancel_reason AS "cancelReason",
+		a.is_remove AS "isRemove",
+		a.remove_reason AS "removeReason",
+		a.is_approvable AS "isApprovable",
+		a.is_approve_update AS "isApproveUpdate",
+		a.is_retains_approve_update AS "isRetainsApproveUpdate",
+		a.approve_opinion AS "approveOpinion",
+		a.reminder_desc AS "reminderDesc",
+		a.assigner_id AS "assignerId",
+		a.assign_time AS "assignTime",
+		a.acceptance_time AS "acceptanceTime",
+		a.end_state_id AS "endStateId",
+		a.frequency AS "frequency",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.sort AS "sort",
+		a.name AS "name",
+		a.parent_ids AS "parentIds"
+	</sql>
+	
+	<sql id="workPlanJoins">
+	</sql>
+    
+	<select id="get" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns"/>
+		FROM work_plan a
+		<include refid="workPlanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns"/>
+		FROM work_plan a
+		<include refid="workPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="personLiableId != null and personLiableId != ''">
+				AND a.person_liable_id = #{personLiableId}
+			</if>
+			<if test="assignerId != null and assignerId != ''">
+				AND a.assigner_id = #{assignerId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns"/>
+		FROM work_plan a
+		<include refid="workPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_plan(
+			id,
+			title,
+			work_type_id,
+			required_finish_time,
+			start_time,
+			planed_finish_time,
+			dept_id,
+			person_liable_id,
+			actual_finish_time,
+			work_level_id,
+			work_desc,
+			job_require,
+			zsk_id,
+			work_state_id,
+			is_open,
+			create_by,
+			parent_id,
+			is_cancel,
+			cancel_reason,
+			is_remove,
+			remove_reason,
+			is_approvable,
+			is_approve_update,
+			is_retains_approve_update,
+			approve_opinion,
+			reminder_desc,
+			assigner_id,
+			assign_time,
+			acceptance_time,
+			end_state_id,
+			frequency,
+			del_flag,
+			remarks,
+			update_date,
+			update_by,
+			create_date,
+			sort,
+			name,
+			parent_ids
+		) VALUES (
+			#{id},
+			#{title},
+			#{workTypeId},
+			#{requiredFinishTime},
+			#{startTime},
+			#{planedFinishTime},
+			#{deptId},
+			#{personLiableId},
+			#{actualFinishTime},
+			#{workLevelId},
+			#{workDesc},
+			#{jobRequire},
+			#{zskId},
+			#{workStateId},
+			#{isOpen},
+			#{createBy.id},
+			#{parent.id},
+			#{isCancel},
+			#{cancelReason},
+			#{isRemove},
+			#{removeReason},
+			#{isApprovable},
+			#{isApproveUpdate},
+			#{isRetainsApproveUpdate},
+			#{approveOpinion},
+			#{reminderDesc},
+			#{assignerId},
+			#{assignTime},
+			#{acceptanceTime},
+			#{endStateId},
+			#{frequency},
+			#{delFlag},
+			#{remarks},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{sort},
+			#{name},
+			#{parentIds}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_plan SET 	
+			title = #{title},
+			work_type_id = #{workTypeId},
+			required_finish_time = #{requiredFinishTime},
+			start_time = #{startTime},
+			planed_finish_time = #{planedFinishTime},
+			dept_id = #{deptId},
+			person_liable_id = #{personLiableId},
+			actual_finish_time = #{actualFinishTime},
+			work_level_id = #{workLevelId},
+			work_desc = #{workDesc},
+			job_require = #{jobRequire},
+			zsk_id = #{zskId},
+			work_state_id = #{workStateId},
+			is_open = #{isOpen},
+			parent_id = #{parent.id},
+			is_cancel = #{isCancel},
+			cancel_reason = #{cancelReason},
+			is_remove = #{isRemove},
+			remove_reason = #{removeReason},
+			is_approvable = #{isApprovable},
+			is_approve_update = #{isApproveUpdate},
+			is_retains_approve_update = #{isRetainsApproveUpdate},
+			approve_opinion = #{approveOpinion},
+			reminder_desc = #{reminderDesc},
+			assigner_id = #{assignerId},
+			assign_time = #{assignTime},
+			acceptance_time = #{acceptanceTime},
+			end_state_id = #{endStateId},
+			frequency = #{frequency},
+			remarks = #{remarks},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			sort = #{sort},
+			name = #{name},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_plan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
