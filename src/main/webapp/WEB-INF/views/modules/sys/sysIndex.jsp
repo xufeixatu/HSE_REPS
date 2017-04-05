@@ -1,259 +1,354 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
+<!-- Mirrored from www.zi-han.net/theme/hplus/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:16:41 GMT -->
 <head>
-	<title>${fns:getConfig('productName')}</title>
-	<meta name="decorator" content="blank"/><c:set var="tabmode" value="${empty cookie.tabmode.value ? '0' : cookie.tabmode.value}"/>
-    <c:if test="${tabmode eq '1'}"><link rel="Stylesheet" href="${ctxStatic}/jerichotab/css/jquery.jerichotab.css" />
-    <script type="text/javascript" src="${ctxStatic}/jerichotab/js/jquery.jerichotab.js"></script></c:if>
-	<style type="text/css">
-		#main {padding:0;margin:0;} #main .container-fluid{padding:0 4px 0 6px;}
-		#header {margin:0 0 8px;position:static;} #header li {font-size:14px;_font-size:12px;}
-		#header .brand {font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:26px;padding-left:33px;}
-		#footer {margin:8px 0 0 0;padding:3px 0 0 0;font-size:11px;text-align:center;border-top:2px solid #0663A2;}
-		#footer, #footer a {color:#999;} #left{overflow-x:hidden;overflow-y:auto;} #left .collapse{position:static;}
-		#userControl>li>a{/*color:#fff;*/text-shadow:none;} #userControl>li>a:hover, #user #userControl>li.open>a{background:transparent;}
-	</style>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			// <c:if test="${tabmode eq '1'}"> 初始化页签
-			$.fn.initJerichoTab({
-                renderTo: '#right', uniqueId: 'jerichotab',
-                contentCss: { 'height': $('#right').height() - tabTitleHeight },
-                tabs: [], loadOnce: true, tabWidth: 110, titleHeight: tabTitleHeight
-            });//</c:if>
-			// 绑定菜单单击事件
-			$("#menu a.menu").click(function(){
-				// 一级菜单焦点
-				$("#menu li.menu").removeClass("active");
-				$(this).parent().addClass("active");
-				// 左侧区域隐藏
-				if ($(this).attr("target") == "mainFrame"){
-					$("#left,#openClose").hide();
-					wSizeWidth();
-					// <c:if test="${tabmode eq '1'}"> 隐藏页签
-					$(".jericho_tab").hide();
-					$("#mainFrame").show();//</c:if>
-					return true;
-				}
-				// 左侧区域显示
-				$("#left,#openClose").show();
-				if(!$("#openClose").hasClass("close")){
-					$("#openClose").click();
-				}
-				// 显示二级菜单
-				var menuId = "#menu-" + $(this).attr("data-id");
-				if ($(menuId).length > 0){
-					$("#left .accordion").hide();
-					$(menuId).show();
-					// 初始化点击第一个二级菜单
-					if (!$(menuId + " .accordion-body:first").hasClass('in')){
-						$(menuId + " .accordion-heading:first a").click();
-					}
-					if (!$(menuId + " .accordion-body li:first ul:first").is(":visible")){
-						$(menuId + " .accordion-body a:first i").click();
-					}
-					// 初始化点击第一个三级菜单
-					$(menuId + " .accordion-body li:first li:first a:first i").click();
-				}else{
-					// 获取二级菜单数据
-					$.get($(this).attr("data-href"), function(data){
-						if (data.indexOf("id=\"loginForm\"") != -1){
-							alert('未登录或登录超时。请重新登录，谢谢！');
-							top.location = "${ctx}";
-							return false;
-						}
-						$("#left .accordion").hide();
-						$("#left").append(data);
-						// 链接去掉虚框
-						$(menuId + " a").bind("focus",function() {
-							if(this.blur) {this.blur()};
-						});
-						// 二级标题
-						$(menuId + " .accordion-heading a").click(function(){
-							$(menuId + " .accordion-toggle i").removeClass('icon-chevron-down').addClass('icon-chevron-right');
-							if(!$($(this).attr('data-href')).hasClass('in')){
-								$(this).children("i").removeClass('icon-chevron-right').addClass('icon-chevron-down');
-							}
-						});
-						// 二级内容
-						$(menuId + " .accordion-body a").click(function(){
-							$(menuId + " li").removeClass("active");
-							$(menuId + " li i").removeClass("icon-white");
-							$(this).parent().addClass("active");
-							$(this).children("i").addClass("icon-white");
-						});
-						// 展现三级
-						$(menuId + " .accordion-inner a").click(function(){
-							var href = $(this).attr("data-href");
-							if($(href).length > 0){
-								$(href).toggle().parent().toggle();
-								return false;
-							}
-							// <c:if test="${tabmode eq '1'}"> 打开显示页签
-							return addTab($(this)); // </c:if>
-						});
-						// 默认选中第一个菜单
-						$(menuId + " .accordion-body a:first i").click();
-						$(menuId + " .accordion-body li:first li:first a:first i").click();
-					});
-				}
-				// 大小宽度调整
-				wSizeWidth();
-				return false;
-			});
-			// 初始化点击第一个一级菜单
-			$("#menu a.menu:first span").click();
-			// <c:if test="${tabmode eq '1'}"> 下拉菜单以选项卡方式打开
-			$("#userInfo .dropdown-menu a").mouseup(function(){
-				return addTab($(this), true);
-			});// </c:if>
-			// 鼠标移动到边界自动弹出左侧菜单
-			$("#openClose").mouseover(function(){
-				if($(this).hasClass("open")){
-					$(this).click();
-				}
-			});
-			// 获取通知数目  <c:set var="oaNotifyRemindInterval" value="${fns:getConfig('oa.notify.remind.interval')}"/>
-			function getNotifyNum(){
-				$.get("${ctx}/oa/oaNotify/self/count?updateSession=0&t="+new Date().getTime(),function(data){
-					var num = parseFloat(data);
-					if (num > 0){
-						$("#notifyNum,#notifyNum2").show().html("("+num+")");
-					}else{
-						$("#notifyNum,#notifyNum2").hide()
-					}
-				});
-			}
-			getNotifyNum(); //<c:if test="${oaNotifyRemindInterval ne '' && oaNotifyRemindInterval ne '0'}">
-			setInterval(getNotifyNum, ${oaNotifyRemindInterval}); //</c:if>
-		});
-		// <c:if test="${tabmode eq '1'}"> 添加一个页签
-		function addTab($this, refresh){
-			$(".jericho_tab").show();
-			$("#mainFrame").hide();
-			$.fn.jerichoTab.addTab({
-                tabFirer: $this,
-                title: $this.text(),
-                closeable: true,
-                data: {
-                    dataType: 'iframe',
-                    dataLink: $this.attr('href')
-                }
-            }).loadData(refresh);
-			return false;
-		}// </c:if>
-	</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+	<link rel="shortcut icon" href="favicon.ico">
+    <link href="${ctxStatic}/hplus/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="${ctxStatic}/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="${ctxStatic}/hplus/css/animate.min.css" rel="stylesheet">
+    <link href="${ctxStatic}/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
 </head>
-<body>
-	<div id="main">
-		<div id="header" class="navbar navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="brand"><span id="productName">${fns:getConfig('productName')}</span></div>
-				<ul id="userControl" class="nav pull-right">
-					<li><a href="${pageContext.request.contextPath}${fns:getFrontPath()}/index-${fnc:getCurrentSiteId()}.html" target="_blank" title="访问网站主页"><i class="icon-home"></i></a></li>
-					<li id="themeSwitch" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="主题切换"><i class="icon-th-large"></i></a>
-						<ul class="dropdown-menu">
-							<c:forEach items="${fns:getDictList('theme')}" var="dict"><li><a href="#" onclick="location='${pageContext.request.contextPath}/theme/${dict.value}?url='+location.href">${dict.label}</a></li></c:forEach>
-							<li><a href="javascript:cookie('tabmode','${tabmode eq '1' ? '0' : '1'}');location=location.href">${tabmode eq '1' ? '关闭' : '开启'}页签模式</a></li>
-						</ul>
-						<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
+
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+    <div id="wrapper">
+        <!--左侧导航开始-->
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="nav-close"><i class="fa fa-times-circle"></i>
+            </div>
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <span><img alt="image" class="img-circle" src="${ctxStatic}/hplus/img/profile_small.jpg" /></span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                <span class="block m-t-xs"><strong class="font-bold">${fns:getUser().name}</strong></span>
+                                <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a class="J_menuItem" href="/HSE/a/sys/user/info">个人资料</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="${ctx}/logout">安全退出</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-home"></i>
+                            <span class="nav-label">我的面板</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#">个人信息<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/user/info">个人信息</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/user/modifyPwd">修改密码</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="/HSE/a/../static/ckfinder/ckfinder.html">文件管理</a>
+                            </li>
+                        </ul>
+
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa fa-bar-chart-o"></i>
+                            <span class="nav-label">在线办公</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a  href="#">我的通告<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/oa/oaNotify/self">我的通告</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/oa/oaNotify">通知公告</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a  href="#">个人办公<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/act/task/todo/">我的任务</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/oa/testAudit">审批测试</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a  href="graph_morris.html">流程管理<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/act/process">流程管理</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/act/model">模型管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    
+					<li>
+                        <a href="#">
+                            <i class="fa fa fa-bar-chart-o"></i>
+                            <span class="nav-label">内容管理</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                            	<a  href="#">内容管理<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/cms/">内容发布</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/cms/comment/?status=2">评论管理</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/cms/guestbook/?status=2">公共留言</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a  href="#">统计分析<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/cms/stats/article">信息量统计</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a  href="#">栏目设置<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/cms/category/">栏目管理</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/cms/site/">站点设置</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/cms/site/select">切换站点</a>
+                                    </li>
+                                </ul>
+                            </li>
+                         </ul>
 					</li>
-					<li id="userInfo" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="个人信息">您好, ${fns:getUser().name}&nbsp;<span id="notifyNum" class="label label-info hide"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="${ctx}/sys/user/info" target="mainFrame"><i class="icon-user"></i>&nbsp; 个人信息</a></li>
-							<li><a href="${ctx}/sys/user/modifyPwd" target="mainFrame"><i class="icon-lock"></i>&nbsp;  修改密码</a></li>
-							<li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i class="icon-bell"></i>&nbsp;  我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
-						</ul>
-					</li>
-					<li><a href="${ctx}/logout" title="退出登录">退出</a></li>
-					<li>&nbsp;</li>
-				</ul>
-				<%-- <c:if test="${cookie.theme.value eq 'cerulean'}">
-					<div id="user" style="position:absolute;top:0;right:0;"></div>
-					<div id="logo" style="background:url(${ctxStatic}/images/logo_bg.jpg) right repeat-x;width:100%;">
-						<div style="background:url(${ctxStatic}/images/logo.jpg) left no-repeat;width:100%;height:70px;"></div>
-					</div>
-					<script type="text/javascript">
-						$("#productName").hide();$("#user").html($("#userControl"));$("#header").prepend($("#user, #logo"));
-					</script>
-				</c:if> --%>
-				<div class="nav-collapse">
-					<ul id="menu" class="nav" style="*white-space:nowrap;float:none;">
-						<c:set var="firstMenu" value="true"/>
-						<c:forEach items="${fns:getMenuList()}" var="menu" varStatus="idxStatus">
-							<c:if test="${menu.parent.id eq '1'&&menu.isShow eq '1'}">
-								<li class="menu ${not empty firstMenu && firstMenu ? ' active' : ''}">
-									<c:if test="${empty menu.href}">
-										<a class="menu" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}"><span>${menu.name}</span></a>
-									</c:if>
-									<c:if test="${not empty menu.href}">
-										<a class="menu" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" target="mainFrame"><span>${menu.name}</span></a>
-									</c:if>
-								</li>
-								<c:if test="${firstMenu}">
-									<c:set var="firstMenuId" value="${menu.id}"/>
-								</c:if>
-								<c:set var="firstMenu" value="false"/>
-							</c:if>
-						</c:forEach><%--
-						<shiro:hasPermission name="cms:site:select">
-						<li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">${fnc:getSite(fnc:getCurrentSiteId()).name}<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<c:forEach items="${fnc:getSiteList()}" var="site"><li><a href="${ctx}/cms/site/select?id=${site.id}&flag=1">${site.name}</a></li></c:forEach>
-							</ul>
-						</li>
-						</shiro:hasPermission> --%>
-					</ul>
-				</div><!--/.nav-collapse -->
-			</div>
-	    </div>
-	    <div class="container-fluid">
-			<div id="content" class="row-fluid">
-				<div id="left"><%-- 
-					<iframe id="menuFrame" name="menuFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe> --%>
-				</div>
-				<div id="openClose" class="close">&nbsp;</div>
-				<div id="right">
-					<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe>
-				</div>
-			</div>
-		    <div id="footer" class="row-fluid">
-	            Copyright &copy; 2012-${fns:getConfig('copyrightYear')} ${fns:getConfig('productName')} - Powered By <a href="http://jeesite.com" target="_blank">JeeSite</a> ${fns:getConfig('version')}
-			</div>
-		</div>
-	</div>
-	<script type="text/javascript"> 
-		var leftWidth = 160; // 左侧窗口大小
-		var tabTitleHeight = 33; // 页签的高度
-		var htmlObj = $("html"), mainObj = $("#main");
-		var headerObj = $("#header"), footerObj = $("#footer");
-		var frameObj = $("#left, #openClose, #right, #right iframe");
-		function wSize(){
-			var minHeight = 500, minWidth = 980;
-			var strs = getWindowSize().toString().split(",");
-			htmlObj.css({"overflow-x":strs[1] < minWidth ? "auto" : "hidden", "overflow-y":strs[0] < minHeight ? "auto" : "hidden"});
-			mainObj.css("width",strs[1] < minWidth ? minWidth - 10 : "auto");
-			frameObj.height((strs[0] < minHeight ? minHeight : strs[0]) - headerObj.height() - footerObj.height() - (strs[1] < minWidth ? 42 : 28));
-			$("#openClose").height($("#openClose").height() - 5);// <c:if test="${tabmode eq '1'}"> 
-			$(".jericho_tab iframe").height($("#right").height() - tabTitleHeight); // </c:if>
-			wSizeWidth();
-		}
-		function wSizeWidth(){
-			if (!$("#openClose").is(":hidden")){
-				var leftWidth = ($("#left").width() < 0 ? 0 : $("#left").width());
-				$("#right").width($("#content").width()- leftWidth - $("#openClose").width() -5);
-			}else{
-				$("#right").width("100%");
-			}
-		}// <c:if test="${tabmode eq '1'}"> 
-		function openCloseClickCallBack(b){
-			$.fn.jerichoTab.resize();
-		} // </c:if>
-	</script>
-	<script src="${ctxStatic}/common/wsize.min.js" type="text/javascript"></script>
+                    <li>
+                        <a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">系统设置</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                            	<a  href="#">机构用户<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/user/index">用户管理</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/office/">机构管理</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/area/">区域管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                            	<a  href="#">系统设置<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/menu/">菜单管理</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/role/">角色管理</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/dict/">字典管理</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                            	<a  href="#">日志查询<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/sys/log">日志查询</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/../druid">连接池监视</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">代码生成</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#">代码生成<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/gen/genTable">业务表配置</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/gen/genScheme">生成方案配置</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">生成示例 <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a class="J_menuItem" href="/HSE/a/test/testData">单表</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/test/testDataMain">主子表</a>
+                                    </li>
+                                    <li><a class="J_menuItem" href="/HSE/a/test/testTree">树结构</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--左侧导航结束-->
+        <!--右侧部分开始-->
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                        <form role="search" class="navbar-form-custom" method="post" action="http://www.zi-han.net/theme/hplus/search_results.html">
+                            <div class="form-group">
+                                <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
+                            </div>
+                        </form>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-envelope"></i> <!-- <span class="label label-warning">16</span> -->
+                            </a>
+                            <ul class="dropdown-menu dropdown-messages">
+                                <li class="m-t-xs">
+                                    <div class="dropdown-messages-box">
+                                        <a href="profile.html" class="pull-left">
+                                            <img alt="image" class="img-circle" src="img/a7.jpg">
+                                        </a>
+                                        <div class="media-body">
+                                            <small class="pull-right">46小时前</small>
+                                            <strong>小四</strong> 这个在日本投降书上签字的军官，建国后一定是个不小的干部吧？
+                                            <br>
+                                            <small class="text-muted">3天前 2014.11.8</small>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="dropdown-messages-box">
+                                        <a href="profile.html" class="pull-left">
+                                            <img alt="image" class="img-circle" src="img/a4.jpg">
+                                        </a>
+                                        <div class="media-body ">
+                                            <small class="pull-right text-navy">25小时前</small>
+                                            <strong>国民岳父</strong> 如何看待“男子不满自己爱犬被称为狗，刺伤路人”？——这人比犬还凶
+                                            <br>
+                                            <small class="text-muted">昨天</small>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="text-center link-block">
+                                        <a class="J_menuItem" href="mailbox.html">
+                                            <i class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-bell"></i>
+                                <!--  <span class="label label-primary">8</span>  -->
+                            </a>
+                            <ul class="dropdown-menu dropdown-alerts">
+                                <li>
+                                    <a href="mailbox.html">
+                                        <div>
+                                            <i class="fa fa-envelope fa-fw"></i> 您有16条未读消息
+                                            <span class="pull-right text-muted small">4分钟前</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="profile.html">
+                                        <div>
+                                            <i class="fa fa-qq fa-fw"></i> 3条新回复
+                                            <span class="pull-right text-muted small">12分钟钱</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="text-center link-block">
+                                        <a class="J_menuItem" href="notifications.html">
+                                            <strong>查看所有 </strong>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- 
+                        <li class="hidden-xs">
+                            <a href="index_v1.html" class="J_menuItem" data-index="0"><i class="fa fa-cart-arrow-down"></i> 购买</a>
+                        </li>
+                        <li class="dropdown hidden-xs">
+                            <a class="right-sidebar-toggle" aria-expanded="false">
+                                <i class="fa fa-tasks"></i> 主题
+                            </a>
+                        </li>
+                         -->
+                    </ul>
+                </nav>
+            </div>
+            <div class="row content-tabs">
+                <button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i>
+                </button>
+                <nav class="page-tabs J_menuTabs">
+                    <div class="page-tabs-content">
+                        <a href="javascript:;" class="active J_menuTab" data-id="index_v1.html">首页</a>
+                    </div>
+                </nav>
+                <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
+                </button>
+                <div class="btn-group roll-nav roll-right">
+                    <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
+
+                    </button>
+                    <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                        <li class="J_tabShowActive"><a>定位当前选项卡</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="J_tabCloseAll"><a>关闭全部选项卡</a>
+                        </li>
+                        <li class="J_tabCloseOther"><a>关闭其他选项卡</a>
+                        </li>
+                    </ul>
+                </div>
+                <a href="login.html" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            </div>
+            <div class="row J_mainContent" id="content-main">
+                <iframe id="mainFrame" class="J_iframe" name="mainFrame" width="100%" height="100%" src="" frameborder="0"  seamless></iframe>
+            </div>
+            <div class="footer">
+                <div class="pull-right">&copy; 2014-2015 <a href="http://www.zi-han.net/" target="_blank">zihan's blog</a>
+                </div>
+            </div>
+        </div>
+        <!--右侧部分结束-->
+    </div>
+    <script src="${ctxStatic}/hplus/js/jquery.min.js?v=2.1.4"></script>
+    <script src="${ctxStatic}/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="${ctxStatic}/hplus/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="${ctxStatic}/hplus/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="${ctxStatic}/hplus/js/plugins/layer/layer.min.js"></script>
+    <script src="${ctxStatic}/hplus/js/hplus.min.js?v=4.1.0"></script>
+    <script src="${ctxStatic}/hplus/js/contabs.min.js"></script>
+    <script src="${ctxStatic}/hplus/js/plugins/pace/pace.min.js"></script>
 </body>
+
 </html>
