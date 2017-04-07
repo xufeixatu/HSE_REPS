@@ -8,49 +8,64 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.persistence.TreeEntity;
 
 /**
  * 工作计划管理Entity
  * @author 何其锟
- * @version 2017-04-05
+ * @version 2017-04-06
  */
-public class WorkPlan extends DataEntity<WorkPlan> {
+public class WorkPlan extends TreeEntity<WorkPlan> {
 	
 	private static final long serialVersionUID = 1L;
-	private String title;		// 工作计划标题
-	private String workTypeId;		// work_type_id
+	private String title;		// 标题
+	private String workTypeId;		// 工作类别
+	private String workTypeName; //工作类别名称
 	private Date requiredFinishTime;		// 要求结束时间
 	private Date startTime;		// 开始时间
 	private Date planedFinishTime;		// 计划结束时间
-	private String deptId;		// 部门ID
+	private String deptId;		// 部门
 	private String personLiableId;		// ָ责任人ID
+	private String personLiable_name;//责任人姓名
 	private Date actualFinishTime;		// 实际结束时间
-	private String workLevelId;		// 工作级别ID
+	private String workLevelId;		// 工作级别
 	private String workDesc;		// 工作描述
 	private String jobRequire;		// 工作要求
-	private String zskId;		// 附件ID集合
-	private String workStateId;		// 工作状态ID
-	private String isOpen;		// 是否打开
+	private String zskId;		// zsk_id
+	private String workStateId;		// 工作状态
+	private boolean isOpen;		// 是否开放
 	private WorkPlan parent;		// parent_id
-	private String isCancel;		// 是否取消
+	private boolean isCancel;		// 是否取消
 	private String cancelReason;		// 取消原因
-	private String isRemove;		// 是否删除
+	private boolean isRemove;		// 是否删除
 	private String removeReason;		// 删除原因
-	private String isApprovable;		// 是否核准
-	private String isApproveUpdate;		// 核准后是否可更新
-	private String isRetainsApproveUpdate;		// 是否保留核准后更新历史
-	private String approveOpinion;		// 此字段淘汰
-	private String reminderDesc;		// 催办描述
-	private String assignerId;		// 指派人ID
+	private boolean isApprovable;		// 是否审核
+	private boolean isApproveUpdate;		// 审核人是否可修改
+	private boolean isRetainsApproveUpdate;		// 是否保留审核人修改
+	private String approveOpinion;		// 淘汰字段
+	private String reminderDesc;		// 接受任务描述信息
+	private String assignerId;		// 指派人
 	private Date assignTime;		// 指派时间
-	private Date acceptanceTime;		// 接受指派任务的时间
-	private String endStateId;		// 结束状态ID
+	private Date acceptanceTime;		// 接受时间
+	private String endStateId;		// 结束状态
 	private String frequency;		// 频次
-	private String sort;		// sort
 	private String name;		// name
 	private String parentIds;		// parent_ids
 	
+	public String getPersonLiable_name() {
+		return personLiable_name;
+	}
+
+	public void setPersonLiable_name(String personLiableId_name) {
+		this.personLiable_name = personLiableId_name;
+	}
+	public String getWorkTypeName() {
+		return workTypeName;
+	}
+
+	public void setWorkTypeName(String workTypeName) {
+		this.workTypeName = workTypeName;
+	}
 	public WorkPlan() {
 		super();
 	}
@@ -59,7 +74,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		super(id);
 	}
 
-	@Length(min=1, max=200, message="工作计划标题长度必须介于 1 和 200 之间")
+	@Length(min=1, max=200, message="标题长度必须介于 1 和 200 之间")
 	public String getTitle() {
 		return title;
 	}
@@ -68,7 +83,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.title = title;
 	}
 	
-	@Length(min=0, max=64, message="work_type_id长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="工作类别长度必须介于 0 和 64 之间")
 	public String getWorkTypeId() {
 		return workTypeId;
 	}
@@ -104,7 +119,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.planedFinishTime = planedFinishTime;
 	}
 	
-	@Length(min=0, max=64, message="部门ID长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="部门长度必须介于 0 和 64 之间")
 	public String getDeptId() {
 		return deptId;
 	}
@@ -113,7 +128,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.deptId = deptId;
 	}
 	
-	@Length(min=0, max=64, message="ָ责任人ID长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="ָ责任人长度必须介于 0 和 64 之间")
 	public String getPersonLiableId() {
 		return personLiableId;
 	}
@@ -131,7 +146,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.actualFinishTime = actualFinishTime;
 	}
 	
-	@Length(min=0, max=64, message="工作级别ID长度必须介于 0 和 64 之间")
+	@Length(min=0, max=255, message="工作级别长度必须介于 0 和 64 之间")
 	public String getWorkLevelId() {
 		return workLevelId;
 	}
@@ -158,7 +173,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.jobRequire = jobRequire;
 	}
 	
-	@Length(min=0, max=200, message="附件ID集合长度必须介于 0 和 200 之间")
+	@Length(min=0, max=200, message="zsk_id长度必须介于 0 和 200 之间")
 	public String getZskId() {
 		return zskId;
 	}
@@ -167,22 +182,13 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.zskId = zskId;
 	}
 	
-	@Length(min=0, max=64, message="工作状态ID长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="工作状态长度必须介于 0 和 64 之间")
 	public String getWorkStateId() {
 		return workStateId;
 	}
 
 	public void setWorkStateId(String workStateId) {
 		this.workStateId = workStateId;
-	}
-	
-	@Length(min=0, max=1, message="是否打开长度必须介于 0 和 1 之间")
-	public String getIsOpen() {
-		return isOpen;
-	}
-
-	public void setIsOpen(String isOpen) {
-		this.isOpen = isOpen;
 	}
 	
 	@JsonBackReference
@@ -194,15 +200,6 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.parent = parent;
 	}
 	
-	@Length(min=0, max=1, message="是否取消长度必须介于 0 和 1 之间")
-	public String getIsCancel() {
-		return isCancel;
-	}
-
-	public void setIsCancel(String isCancel) {
-		this.isCancel = isCancel;
-	}
-	
 	@Length(min=0, max=255, message="取消原因长度必须介于 0 和 255 之间")
 	public String getCancelReason() {
 		return cancelReason;
@@ -211,16 +208,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 	public void setCancelReason(String cancelReason) {
 		this.cancelReason = cancelReason;
 	}
-	
-	@Length(min=0, max=1, message="是否删除长度必须介于 0 和 1 之间")
-	public String getIsRemove() {
-		return isRemove;
-	}
 
-	public void setIsRemove(String isRemove) {
-		this.isRemove = isRemove;
-	}
-	
 	@Length(min=0, max=255, message="删除原因长度必须介于 0 和 255 之间")
 	public String getRemoveReason() {
 		return removeReason;
@@ -230,34 +218,55 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.removeReason = removeReason;
 	}
 	
-	@Length(min=0, max=1, message="是否核准长度必须介于 0 和 1 之间")
-	public String getIsApprovable() {
+	public boolean getIsOpen() {
+		return isOpen;
+	}
+
+	public void setIsOpen(boolean isOpen) {
+		this.isOpen = isOpen;
+	}
+
+	public boolean getIsCancel() {
+		return isCancel;
+	}
+
+	public void setIsCancel(boolean isCancel) {
+		this.isCancel = isCancel;
+	}
+
+	public boolean getIsRemove() {
+		return isRemove;
+	}
+
+	public void setIsRemove(boolean isRemove) {
+		this.isRemove = isRemove;
+	}
+
+	public boolean getIsApprovable() {
 		return isApprovable;
 	}
 
-	public void setIsApprovable(String isApprovable) {
+	public void setIsApprovable(boolean isApprovable) {
 		this.isApprovable = isApprovable;
 	}
-	
-	@Length(min=0, max=1, message="核准后是否可更新长度必须介于 0 和 1 之间")
-	public String getIsApproveUpdate() {
+
+	public boolean getIsApproveUpdate() {
 		return isApproveUpdate;
 	}
 
-	public void setIsApproveUpdate(String isApproveUpdate) {
+	public void setIsApproveUpdate(boolean isApproveUpdate) {
 		this.isApproveUpdate = isApproveUpdate;
 	}
-	
-	@Length(min=0, max=1, message="是否保留核准后更新历史长度必须介于 0 和 1 之间")
-	public String getIsRetainsApproveUpdate() {
+
+	public boolean getIsRetainsApproveUpdate() {
 		return isRetainsApproveUpdate;
 	}
 
-	public void setIsRetainsApproveUpdate(String isRetainsApproveUpdate) {
+	public void setIsRetainsApproveUpdate(boolean isRetainsApproveUpdate) {
 		this.isRetainsApproveUpdate = isRetainsApproveUpdate;
 	}
-	
-	@Length(min=0, max=255, message="此字段淘汰长度必须介于 0 和 255 之间")
+
+	@Length(min=1, max=255, message="淘汰字段长度必须介于 1 和 255 之间")
 	public String getApproveOpinion() {
 		return approveOpinion;
 	}
@@ -266,7 +275,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.approveOpinion = approveOpinion;
 	}
 	
-	@Length(min=0, max=255, message="催办描述长度必须介于 0 和 255 之间")
+	@Length(min=0, max=255, message="接受任务描述信息长度必须介于 0 和 255 之间")
 	public String getReminderDesc() {
 		return reminderDesc;
 	}
@@ -275,7 +284,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.reminderDesc = reminderDesc;
 	}
 	
-	@Length(min=0, max=64, message="指派人ID长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="指派人长度必须介于 0 和 64 之间")
 	public String getAssignerId() {
 		return assignerId;
 	}
@@ -302,7 +311,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.acceptanceTime = acceptanceTime;
 	}
 	
-	@Length(min=0, max=64, message="结束状态ID长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="结束状态长度必须介于 0 和 64 之间")
 	public String getEndStateId() {
 		return endStateId;
 	}
@@ -319,15 +328,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
-	
-	public String getSort() {
-		return sort;
-	}
 
-	public void setSort(String sort) {
-		this.sort = sort;
-	}
-	
 	@Length(min=0, max=100, message="name长度必须介于 0 和 100 之间")
 	public String getName() {
 		return name;
@@ -346,4 +347,7 @@ public class WorkPlan extends DataEntity<WorkPlan> {
 		this.parentIds = parentIds;
 	}
 	
+	public String getParentId() {
+		return parent != null && parent.getId() != null ? parent.getId() : "0";
+	}
 }

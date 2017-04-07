@@ -45,6 +45,9 @@
 	</sql>
 	
 	<sql id="workPlanJoins">
+		LEFT JOIN sys_office o7 ON o7.id = a.dept_id
+		LEFT JOIN sys_user u8 ON u8.id = a.person_liable_id
+		LEFT JOIN sys_user u27 ON u27.id = a.assigner_id
 	</sql>
     
 	<select id="get" resultType="WorkPlan">
@@ -62,17 +65,8 @@
 		<include refid="workPlanJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="title != null and title != ''">
-				AND a.title LIKE 
-					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
-			</if>
-			<if test="personLiableId != null and personLiableId != ''">
-				AND a.person_liable_id = #{personLiableId}
-			</if>
-			<if test="assignerId != null and assignerId != ''">
-				AND a.assigner_id = #{assignerId}
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
 			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE 
@@ -80,15 +74,14 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
 		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
+		ORDER BY a.sort ASC
 	</select>
 	
 	<select id="findAllList" resultType="WorkPlan">
@@ -98,15 +91,22 @@
 		<include refid="workPlanJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="WorkPlan">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM work_plan a
+		<include refid="workPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
 	</select>
 	
 	<insert id="insert">
@@ -135,7 +135,6 @@
 			is_approvable,
 			is_approve_update,
 			is_retains_approve_update,
-			approve_opinion,
 			reminder_desc,
 			assigner_id,
 			assign_time,
@@ -175,7 +174,6 @@
 			#{isApprovable},
 			#{isApproveUpdate},
 			#{isRetainsApproveUpdate},
-			#{approveOpinion},
 			#{reminderDesc},
 			#{assignerId},
 			#{assignTime},
@@ -217,7 +215,6 @@
 			is_approvable = #{isApprovable},
 			is_approve_update = #{isApproveUpdate},
 			is_retains_approve_update = #{isRetainsApproveUpdate},
-			approve_opinion = #{approveOpinion},
 			reminder_desc = #{reminderDesc},
 			assigner_id = #{assignerId},
 			assign_time = #{assignTime},
@@ -225,10 +222,15 @@
 			end_state_id = #{endStateId},
 			frequency = #{frequency},
 			remarks = #{remarks},
-			update_date = #{updateDate},
-			update_by = #{updateBy.id},
 			sort = #{sort},
 			name = #{name},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE work_plan SET 
+			parent_id = #{parent.id}, 
 			parent_ids = #{parentIds}
 		WHERE id = #{id}
 	</update>
@@ -236,7 +238,7 @@
 	<update id="delete">
 		UPDATE work_plan SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
 	
 </mapper>

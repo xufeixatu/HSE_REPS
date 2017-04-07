@@ -3,7 +3,6 @@
  */
 package com.thinkgem.jeesite.modules.work.web;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,19 +22,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
-import com.thinkgem.jeesite.modules.sys.service.OfficeService;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
-import com.thinkgem.jeesite.modules.work.entity.WorkType;
 import com.thinkgem.jeesite.modules.work.service.WorkPlanService;
 
 /**
  * 工作计划管理Controller
  * @author 何其锟
- * @version 2017-04-05
+ * @version 2017-04-06
  */
 @Controller
 @RequestMapping(value = "${adminPath}/work/workPlan")
@@ -43,8 +38,6 @@ public class WorkPlanController extends BaseController {
 
 	@Autowired
 	private WorkPlanService workPlanService;
-	@Autowired
-	private OfficeService officeService;
 	
 	@ModelAttribute
 	public WorkPlan get(@RequestParam(required=false) String id) {
@@ -61,17 +54,33 @@ public class WorkPlanController extends BaseController {
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<WorkPlan> page = workPlanService.findPage(new Page<WorkPlan>(request, response), workPlan); 
-		model.addAttribute("page", page);
+		List<WorkPlan> list = workPlanService.findList(workPlan); 
+		model.addAttribute("list", list);
 		return "modules/work/workPlanList";
 	}
 
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "form")
 	public String form(WorkPlan workPlan, Model model) {
-		List<Office> depts = officeService.findAll();
+		if (workPlan.getParent()!=null && StringUtils.isNotBlank(workPlan.getParent().getId())){
+			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
+			// 获取排序号，最末节点排序号+30
+			if (StringUtils.isBlank(workPlan.getId())){
+				WorkPlan workPlanChild = new WorkPlan();
+				workPlanChild.setParent(new WorkPlan(workPlan.getParent().getId()));
+				List<WorkPlan> list = workPlanService.findList(workPlan); 
+				if (list.size() > 0){
+					workPlan.setSort(list.get(list.size()-1).getSort());
+					if (workPlan.getSort() != null){
+						workPlan.setSort(workPlan.getSort() + 30);
+					}
+				}
+			}
+		}
+		if (workPlan.getSort() == null){
+			workPlan.setSort(30);
+		}
 		model.addAttribute("workPlan", workPlan);
-		model.addAttribute("depts",depts);
 		return "modules/work/workPlanForm";
 	}
 
@@ -94,5 +103,23 @@ public class WorkPlanController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/work/workPlan/?repage";
 	}
 
+	@RequiresPermissions("user")
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		List<WorkPlan> list = workPlanService.findList(new WorkPlan());
+		for (int i=0; i<list.size(); i++){
+			WorkPlan e = list.get(i);
+			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
+				Map<String, Object> map = Maps.newHashMap();
+				map.put("id", e.getId());
+				map.put("pId", e.getParentId());
+				map.put("name", e.getName());
+				mapList.add(map);
+			}
+		}
+		return mapList;
+	}
 	
 }

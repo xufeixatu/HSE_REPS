@@ -4,16 +4,38 @@
 <head>
 	<title>工作计划管理</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/treetable.jsp" %>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
+			var tpl = $("#treeTableTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+			var data = ${fns:toJson(list)}, ids = [], rootIds = [];
+			for (var i=0; i<data.length; i++){
+				ids.push(data[i].id);
+			}
+			for (var i=0; i<data.length; i++){
+				if (ids.indexOf(','+data[i].parentId+',') == -1){
+					if ((','+rootIds.join(',')+',').indexOf(','+data[i].parentId+',') == -1){
+						rootIds.push(data[i].parentId);
+					}
+				}
+			}
+			for (var i=0; i<rootIds.length; i++){
+				addRow("#treeTableList", tpl, data, rootIds[i], true);
+			}
+			$("#treeTable").treeTable({expandLevel : 5});
 		});
-		function page(n,s){
-			$("#pageNo").val(n);
-			$("#pageSize").val(s);
-			$("#searchForm").submit();
-        	return false;
-        }
+		function addRow(list, tpl, data, pid, root){
+			for (var i=0; i<data.length; i++){
+				var row = data[i];
+				if ((${fns:jsGetVal('row.parentId')}) == pid){
+					$(list).append(Mustache.render(tpl, {
+						dict: {
+						blank123:0}, pid: (root?0:pid), row: row
+					}));
+					addRow(list, tpl, data, row.id);
+				}
+			}
+		}
 	</script>
 </head>
 <body>
@@ -22,18 +44,7 @@
 		<shiro:hasPermission name="work:workPlan:edit"><li><a href="${ctx}/work/workPlan/form">工作计划添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan" action="${ctx}/work/workPlan/" method="post" class="breadcrumb form-search">
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>工作计划标题：</label>
-				<form:input path="title" htmlEscape="false" maxlength="200" class="input-medium"/>
-			</li>
-			<li><label>ָ责任人ID：</label>
-				<form:input path="personLiableId" htmlEscape="false" maxlength="64" class="input-medium"/>
-			</li>
-			<li><label>指派人ID：</label>
-				<form:input path="assignerId" htmlEscape="false" maxlength="64" class="input-medium"/>
-			</li>
 			<li><label>name：</label>
 				<form:input path="name" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
@@ -42,39 +53,34 @@
 		</ul>
 	</form:form>
 	<sys:message content="${message}"/>
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
+	<table id="treeTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>工作计划标题</th>
-				<th>remarks</th>
-				<th>update_date</th>
-				<th>name</th>
+				<th>标题</th>
+				<th>负责人</th>
+				<th>工作类别</th>
 				<shiro:hasPermission name="work:workPlan:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
-		<tbody>
-		<c:forEach items="${page.list}" var="workPlan">
-			<tr>
-				<td><a href="${ctx}/work/workPlan/form?id=${workPlan.id}">
-					${workPlan.title}
-				</a></td>
-				<td>
-					${workPlan.remarks}
-				</td>
-				<td>
-					<fmt:formatDate value="${workPlan.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
-					${workPlan.name}
-				</td>
-				<shiro:hasPermission name="work:workPlan:edit"><td>
-    				<a href="${ctx}/work/workPlan/form?id=${workPlan.id}">修改</a>
-					<a href="${ctx}/work/workPlan/delete?id=${workPlan.id}" onclick="return confirmx('确认要删除该工作计划吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
-			</tr>
-		</c:forEach>
-		</tbody>
+		<tbody id="treeTableList"></tbody>
 	</table>
-	<div class="pagination">${page}</div>
+	<script type="text/template" id="treeTableTpl">
+		<tr id="{{row.id}}" pId="{{pid}}">
+			<td><a href="${ctx}/work/workPlan/form?id={{row.id}}">
+				{{row.title}}
+			</a></td>
+			<td>
+				{{row.personLiable_name}}
+			</td>
+			<td>
+				{{row.workTypeName}}
+			</td>
+			<shiro:hasPermission name="work:workPlan:edit"><td>
+   				<a href="${ctx}/work/workPlan/form?id={{row.id}}">修改</a>
+				<a href="${ctx}/work/workPlan/delete?id={{row.id}}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
+				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}">添加下级工作计划</a> 
+			</td></shiro:hasPermission>
+		</tr>
+	</script>
 </body>
 </html>
