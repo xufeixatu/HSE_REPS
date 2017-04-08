@@ -117,6 +117,13 @@ public class WorkPlanController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/work/workPlan/?repage";
 	}
 
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = "upload")
+	public String upload(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
+		
+		return "modules/work/workPlanForm";
+	}
+	
 	@RequiresPermissions("user")
 	@ResponseBody
 	@RequestMapping(value = "treeData")
