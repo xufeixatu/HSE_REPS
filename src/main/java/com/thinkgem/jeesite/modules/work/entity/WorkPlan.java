@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
@@ -23,7 +24,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private Date requiredFinishTime;		// 要求结束时间
 	private Date startTime;		// 工作开始时间
 	private Date planedFinishTime;		// 计划结束时间
-	private String depts;		// 部门
+	private Office depts;		// 部门
 	private User personLiable;		// ָ责任人
 	private Date actualFinishTime;		// 实际结束时间
 	private String workLevelId;		// 工作级别
@@ -97,15 +98,6 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 
 	public void setPlanedFinishTime(Date planedFinishTime) {
 		this.planedFinishTime = planedFinishTime;
-	}
-	
-	@Length(min=0, max=200, message="部门长度必须介于 0 和 200 之间")
-	public String getDepts() {
-		return depts;
-	}
-
-	public void setDepts(String depts) {
-		this.depts = depts;
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -306,6 +298,14 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 
 	public void setPersonLiable(User personLiable) {
 		this.personLiable = personLiable;
+	}
+
+	public Office getDepts() {
+		return depts;
+	}
+
+	public void setDepts(Office depts) {
+		this.depts = depts;
 	}
 
 
