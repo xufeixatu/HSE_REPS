@@ -12,6 +12,11 @@
     <link href="${ctxStatic}/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="${ctxStatic}/hplus/css/animate.min.css" rel="stylesheet">
     <link href="${ctxStatic}/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <style>
+    	body{
+    		background-color: white;
+    	}
+    </style>
 </head>
 
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
@@ -35,8 +40,7 @@
     <div id="wrapper">
         <!--左侧导航开始-->
         <nav class="navbar-default navbar-static-side" role="navigation">
-            <div class="nav-close"><i class="fa fa-times-circle"></i>
-            </div>
+            <div class="nav-close"><i class="fa fa-times-circle"></i></div>
             <div class="sidebar-collapse">
                 <ul class="nav" id="side-menu">
                     <li class="nav-header">
@@ -181,7 +185,7 @@
                 <a href="login.html" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
             </div>
             <div class="row J_mainContent" id="content-main">
-                <iframe id="mainFrame" class="J_iframe" name="mainFrame" width="100%" height="100%" src="" frameborder="0"  seamless></iframe>
+                <iframe id="mainFrame" class="J_iframe" name="mainFrame" width="100%" height="100%" src="/HSE/empty.jsp" frameborder="0"  seamless></iframe>
             </div>
             <div class="footer">
                 <div class="pull-right">Copyright &copy; 2012-${fns:getConfig('copyrightYear')} ${fns:getConfig('productName')} - Powered By <a href="http://jeesite.com" target="_blank">JeeSite</a> ${fns:getConfig('version')}
@@ -225,9 +229,7 @@
 			menu['name'] = name;
 			menuhreflist[i] = menu;
 		}
-		
-    
-	
+
 	headlist = [];
 	innerlist = [];
 	
@@ -265,23 +267,22 @@
 	        }
 		});
 	}
-	/*
-	console.log(menunohreflist);
-	console.log(headlist);
-	console.log(innerlist);
-*/
+
 	var rootul = $("#side-menu");
 	for(var i=0;i<innerlist.length;i++){
-		var li = createFirstMenu(rootul,menunohreflist[i]['name']);
+		if(innerlist[i].length > 0){
+			var type = 1;
+		}else{
+			var type = 0;
+		}
+		var li = createFirstMenu(rootul,menunohreflist[i]['name'],type);
 		var ul_second = $("<ul></ul>").attr("class","nav nav-second-level");
 		
 		for(var j=0;j<headlist[i].length;j++){
 			var li_second = createSecondMenu(li,ul_second,headlist[i][j]);
 			var ul_third = $("<ul></ul>").attr("class","nav nav-third-level");
 			
-			
 			for(var k=0;k<innerlist[i][j].length;k++){
-				console.log(innerlist[i][j][k]);
 				createThirdMenu(li_second,ul_third,innerlist[i][j][k]['href'],innerlist[i][j][k]['name']);
 			}
 		}
@@ -290,10 +291,14 @@
 	/*
 	生成一级菜单
 	*/
-	function createFirstMenu(parentul,name){
+	function createFirstMenu(parentul,name,type){
 		var span1 = $("<span></span>").attr("class","nav-label").text(name);
-		var span2 = $("<span></span>").attr("class","fa arrow");
-		var a = $("<a></a>").attr("href","#").append(span1).append(span2);
+		var a = $("<a></a>").attr("href","#").append(span1);
+		if(type == 1){
+			var span2 = $("<span></span>").attr("class","fa arrow");
+			a.append(span2);
+		}
+		
 		var li = $("<li></li>").append(a);
 		parentul.append(li);
 		return li;
