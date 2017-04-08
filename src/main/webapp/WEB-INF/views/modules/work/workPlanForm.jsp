@@ -36,15 +36,15 @@
 		<div class="control-group">
 			<label class="control-label">标题：</label>
 			<div class="controls">
-				<form:input path="title" htmlEscape="false" maxlength="200" class="input-xlarge required"/>
+				<form:input path="name" htmlEscape="false" maxlength="200" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">工作类别：</label>
 			<div class="controls">
-                <sys:treeselect id="work" name="workTypeId" value="${workType.id}" labelName="workType.name" labelValue="${workType.id}"
-					title="工作类别" url="/work/workType/treeData" extId="" cssClass="" allowClear="${office.currentUser.admin}" />
+                <sys:treeselect id="worktype" name="workType.id" value="${workType.id}" labelName="workType.name" labelValue="${workPlan.workType.name}"
+					title="工作类别" url="/work/workType/treeData" extId="${workType.id}" cssClass="" allowClear="${office.currentUser.admin}" />
 			</div>
 		</div>
 		<div class="control-group">
@@ -86,14 +86,14 @@
 		<div class="control-group">
 			<label class="control-label">部门：</label>
 			<div class="controls">
-				<sys:treeselect checked="true" id="deptId" name="deptId" value="${workPlan.deptId}" labelName="" labelValue="${workPlan.deptId}"
+				<sys:treeselect checked="true" id="dept" name="depts" value="${office.id}" labelName="" labelValue="${office.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">负责人:</label>
 			<div class="controls">
-				 <sys:treeselect id="personLiableId" name="personLiableId" value="${office.primaryPerson.id}" labelName="office.primaryPerson.name" labelValue="${office.primaryPerson.name}"
+				 <sys:treeselect id="personLiableId" name="personLiable.id" value="${office.id}" labelName="personLiable.name" labelValue="${workPlan.personLiable.name}"
 					title="用户" url="/sys/office/treeData?type=3" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
@@ -149,7 +149,7 @@
 			<label class="control-label">父计划:</label>
 			<div class="controls">
 				<sys:treeselect id="parent" name="parent.id" value="${workPlan.parent.id}" labelName="parent.name" labelValue="${workPlan.parent.name}"
-					title="parent_id" url="/work/workPlan/treeData" extId="${workPlan.id}" cssClass="" allowClear="true"/>
+					title="父工作计划" url="/work/workPlan/treeData" extId="${workPlan.id}" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">

@@ -10,7 +10,7 @@ import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 /**
  * 工作计划管理DAO接口
  * @author 何其锟
- * @version 2017-04-06
+ * @version 2017-04-07
  */
 @MyBatisDao
 public interface WorkPlanDao extends TreeDao<WorkPlan> {

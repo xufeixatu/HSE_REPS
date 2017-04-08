@@ -16,7 +16,7 @@ import com.thinkgem.jeesite.modules.work.dao.WorkPlanDao;
 /**
  * 工作计划管理Service
  * @author 何其锟
- * @version 2017-04-06
+ * @version 2017-04-07
  */
 @Service
 @Transactional(readOnly = true)

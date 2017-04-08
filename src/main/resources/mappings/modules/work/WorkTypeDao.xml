@@ -10,8 +10,6 @@
 		a.parent_ids AS "parentIds",
 		a.name AS "name",
 		a.sort AS "sort",
-		wt.type_name AS "workTypeName",
-		ur.name AS "personLiable_name",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -20,8 +18,7 @@
 	</sql>
 	
 	<sql id="workTypeJoins">
-		join work_type wt on a.work_type_id = wt.id
-		join sys_user ur on ur.id = a.person_liable_id
+		
 	</sql>
     
 	<select id="get" resultType="WorkType">

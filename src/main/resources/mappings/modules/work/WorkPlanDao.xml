@@ -4,13 +4,12 @@
     
 	<sql id="workPlanColumns">
 		a.id AS "id",
-		a.title AS "title",
-		a.work_type_id AS "workTypeId",
+		a.work_type_id AS "workType.id",
 		a.required_finish_time AS "requiredFinishTime",
 		a.start_time AS "startTime",
 		a.planed_finish_time AS "planedFinishTime",
-		a.dept_id AS "deptId",
-		a.person_liable_id AS "personLiableId",
+		a.depts AS "depts",
+		a.person_liable_id AS "personLiable.id",
 		a.actual_finish_time AS "actualFinishTime",
 		a.work_level_id AS "workLevelId",
 		a.work_desc AS "workDesc",
@@ -45,9 +44,6 @@
 	</sql>
 	
 	<sql id="workPlanJoins">
-		LEFT JOIN sys_office o7 ON o7.id = a.dept_id
-		LEFT JOIN sys_user u8 ON u8.id = a.person_liable_id
-		LEFT JOIN sys_user u27 ON u27.id = a.assigner_id
 	</sql>
     
 	<select id="get" resultType="WorkPlan">
@@ -112,12 +108,11 @@
 	<insert id="insert">
 		INSERT INTO work_plan(
 			id,
-			title,
 			work_type_id,
 			required_finish_time,
 			start_time,
 			planed_finish_time,
-			dept_id,
+			depts,
 			person_liable_id,
 			actual_finish_time,
 			work_level_id,
@@ -135,6 +130,7 @@
 			is_approvable,
 			is_approve_update,
 			is_retains_approve_update,
+			approve_opinion,
 			reminder_desc,
 			assigner_id,
 			assign_time,
@@ -151,13 +147,12 @@
 			parent_ids
 		) VALUES (
 			#{id},
-			#{title},
-			#{workTypeId},
+			#{workType.id},
 			#{requiredFinishTime},
 			#{startTime},
 			#{planedFinishTime},
-			#{deptId},
-			#{personLiableId},
+			#{depts},
+			#{personLiable.id},
 			#{actualFinishTime},
 			#{workLevelId},
 			#{workDesc},
@@ -174,6 +169,7 @@
 			#{isApprovable},
 			#{isApproveUpdate},
 			#{isRetainsApproveUpdate},
+			#{approveOpinion},
 			#{reminderDesc},
 			#{assignerId},
 			#{assignTime},
@@ -193,13 +189,12 @@
 	
 	<update id="update">
 		UPDATE work_plan SET 	
-			title = #{title},
-			work_type_id = #{workTypeId},
+			work_type_id = #{workType.id},
 			required_finish_time = #{requiredFinishTime},
 			start_time = #{startTime},
 			planed_finish_time = #{planedFinishTime},
-			dept_id = #{deptId},
-			person_liable_id = #{personLiableId},
+			depts = #{depts},
+			person_liable_id = #{personLiable.id},
 			actual_finish_time = #{actualFinishTime},
 			work_level_id = #{workLevelId},
 			work_desc = #{workDesc},
@@ -215,6 +210,7 @@
 			is_approvable = #{isApprovable},
 			is_approve_update = #{isApproveUpdate},
 			is_retains_approve_update = #{isRetainsApproveUpdate},
+			approve_opinion = #{approveOpinion},
 			reminder_desc = #{reminderDesc},
 			assigner_id = #{assignerId},
 			assign_time = #{assignTime},
@@ -222,6 +218,8 @@
 			end_state_id = #{endStateId},
 			frequency = #{frequency},
 			remarks = #{remarks},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
 			sort = #{sort},
 			name = #{name},
 			parent_ids = #{parentIds}

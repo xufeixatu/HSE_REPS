@@ -12,6 +12,7 @@
 			for (var i=0; i<data.length; i++){
 				ids.push(data[i].id);
 			}
+			ids = ',' + ids.join(',') + ',';
 			for (var i=0; i<data.length; i++){
 				if (ids.indexOf(','+data[i].parentId+',') == -1){
 					if ((','+rootIds.join(',')+',').indexOf(','+data[i].parentId+',') == -1){
@@ -45,7 +46,7 @@
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan" action="${ctx}/work/workPlan/" method="post" class="breadcrumb form-search">
 		<ul class="ul-form">
-			<li><label>name：</label>
+			<li><label>标题：</label>
 				<form:input path="name" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -56,9 +57,9 @@
 	<table id="treeTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>备注</th>
+				<th>更新时间</th>
 				<th>标题</th>
-				<th>负责人</th>
-				<th>工作类别</th>
 				<shiro:hasPermission name="work:workPlan:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -67,13 +68,13 @@
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
 			<td><a href="${ctx}/work/workPlan/form?id={{row.id}}">
-				{{row.title}}
+				{{row.remarks}}
 			</a></td>
 			<td>
-				{{row.personLiable_name}}
+				{{row.updateDate}}
 			</td>
 			<td>
-				{{row.workTypeName}}
+				{{row.name}}
 			</td>
 			<shiro:hasPermission name="work:workPlan:edit"><td>
    				<a href="${ctx}/work/workPlan/form?id={{row.id}}">修改</a>

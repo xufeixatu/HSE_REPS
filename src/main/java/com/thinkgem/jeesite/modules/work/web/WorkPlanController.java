@@ -24,13 +24,15 @@ import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 import com.thinkgem.jeesite.modules.work.service.WorkPlanService;
+import com.thinkgem.jeesite.modules.work.service.WorkTypeService;
 
 /**
  * 工作计划管理Controller
  * @author 何其锟
- * @version 2017-04-06
+ * @version 2017-04-07
  */
 @Controller
 @RequestMapping(value = "${adminPath}/work/workPlan")
@@ -38,6 +40,9 @@ public class WorkPlanController extends BaseController {
 
 	@Autowired
 	private WorkPlanService workPlanService;
+	
+	@Autowired
+	private WorkTypeService workTypeService;
 	
 	@ModelAttribute
 	public WorkPlan get(@RequestParam(required=false) String id) {
@@ -64,6 +69,15 @@ public class WorkPlanController extends BaseController {
 	public String form(WorkPlan workPlan, Model model) {
 		if (workPlan.getParent()!=null && StringUtils.isNotBlank(workPlan.getParent().getId())){
 			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
+			//获得工作计划的完整工作类型
+			if (workPlan.getWorkType()!=null && StringUtils.isNotBlank(workPlan.getWorkType().getId())){
+				workPlan.setWorkType(workTypeService.get(workPlan.getWorkType().getId()));
+			}
+			//获得工作计划的完整责任人
+			if (workPlan.getPersonLiable()!=null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())){
+				workPlan.setPersonLiable(UserUtils.get(workPlan.getPersonLiable().getId()));
+			}
+			
 			// 获取排序号，最末节点排序号+30
 			if (StringUtils.isBlank(workPlan.getId())){
 				WorkPlan workPlanChild = new WorkPlan();
