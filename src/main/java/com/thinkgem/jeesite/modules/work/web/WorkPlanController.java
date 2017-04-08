@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.work.web;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -103,6 +104,12 @@ public class WorkPlanController extends BaseController {
 	public String save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, workPlan)){
 			return form(workPlan, model);
+		}
+		if(workPlan.getId() == null && StringUtils.isBlank(workPlan.getId())){
+			//保存指派人
+			workPlan.setAssignerId(UserUtils.getUser().getId());
+			//保存指派时间
+			workPlan.setAssignTime(new Date());
 		}
 		workPlanService.save(workPlan);
 		addMessage(redirectAttributes, "保存工作计划成功");

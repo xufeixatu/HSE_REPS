@@ -103,8 +103,16 @@
 		<div class="control-group">
 			<label class="control-label">部门：</label>
 			<div class="controls">
-				<sys:treeselect checked="true" id="dept" name="depts" value="${workPlan.depts.id}" labelName="depts" labelValue="${workPlan.depts.name}"
-								title="部门" url="/sys/office/treeData?type=2" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				<sys:treeselect checked="true" 
+								id="dept" 
+								name="depts" 
+								value="${workPlan.depts.id}" 
+								labelName="depts" 
+								labelValue="${workPlan.depts.name}"
+								cssClass="required" 
+								title="部门" url="/sys/office/treeData?type=2"
+								allowClear="true" 
+								notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
