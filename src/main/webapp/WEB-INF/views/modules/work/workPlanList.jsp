@@ -41,8 +41,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/work/workPlan/">工作计划列表</a></li>
-		<shiro:hasPermission name="work:workPlan:edit"><li><a href="${ctx}/work/workPlan/form">工作计划添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+		<shiro:hasPermission name="work:workPlan:edit"><li><a href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan" action="${ctx}/work/workPlan/" method="post" class="breadcrumb form-search">
 		<ul class="ul-form">
@@ -67,7 +67,7 @@
 	</table>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
-			<td><a href="${ctx}/work/workPlan/form?id={{row.id}}">
+			<td><a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">
 				{{row.remarks}}
 			</a></td>
 			<td>
@@ -77,7 +77,7 @@
 				{{row.name}}
 			</td>
 			<shiro:hasPermission name="work:workPlan:edit"><td>
-   				<a href="${ctx}/work/workPlan/form?id={{row.id}}">修改</a>
+   				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>
 				<a href="${ctx}/work/workPlan/delete?id={{row.id}}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
 				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}">添加下级工作计划</a> 
 			</td></shiro:hasPermission>
