@@ -52,6 +52,7 @@
 		FROM work_plan a
 		<include refid="workPlanJoins"/>
 		WHERE a.id = #{id}
+		${sqlMap.dsf}
 	</select>
 	
 	<select id="findList" resultType="WorkPlan">
