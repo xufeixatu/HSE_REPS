@@ -37,6 +37,34 @@ public class DictUtils {
 		}
 		return defaultValue;
 	}
+	/**
+	 * 根据字典值返回字典记录对象
+	 * @param value
+	 * @param type
+	 * @param defaultValue
+	 * @return
+	 */
+	public static Dict getDictByValue(String value, String type){
+		if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(value)){
+			for (Dict dict : getDictList(type)){
+				if (type.equals(dict.getType()) && value.equals(dict.getValue())){
+					return dict;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 根据字典ID返回字典记录对象
+	 * @param value
+	 * @param type
+	 * @param defaultValue
+	 * @return
+	 */
+	public static Dict getDictByID(String id){
+		return dictDao.get(id);
+	}
 	
 	public static String getDictLabels(String values, String type, String defaultValue){
 		if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(values)){

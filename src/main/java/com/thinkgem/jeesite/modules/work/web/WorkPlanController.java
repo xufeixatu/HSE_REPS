@@ -24,6 +24,8 @@ import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.entity.Dict;
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 import com.thinkgem.jeesite.modules.work.service.WorkPlanService;
@@ -31,35 +33,77 @@ import com.thinkgem.jeesite.modules.work.service.WorkTypeService;
 
 /**
  * 工作计划管理Controller
+ * 
  * @author 何其锟
  * @version 2017-04-07
  */
 @Controller
 @RequestMapping(value = "${adminPath}/work/workPlan")
 public class WorkPlanController extends BaseController {
+	/**
+	 * 保存在model中的工作计划类别（个人，公司，部门等类别）数据字典对象的键
+	 */
+	private final static String PLAN_TYPE_DICT_KEY = "planTypeDict";
 
 	@Autowired
 	private WorkPlanService workPlanService;
-	
+
 	@Autowired
 	private WorkTypeService workTypeService;
-	
+
 	@ModelAttribute
-	public WorkPlan get(@RequestParam(required=false) String id) {
+	public WorkPlan get(@RequestParam(required = false) String id) {
 		WorkPlan entity = null;
-		if (StringUtils.isNotBlank(id)){
+		if (StringUtils.isNotBlank(id)) {
 			entity = workPlanService.get(id);
 		}
-		if (entity == null){
+		if (entity == null) {
 			entity = new WorkPlan();
 		}
 		return entity;
 	}
-	
+
+	/**
+	 * 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+	 * 
+	 * @param workPlan
+	 * @param model
+	 */
+	private void updateSqlMapDsf(WorkPlan workPlan, Model model) {
+		Dict planTypeDict = DictUtils.getDictByValue(workPlan.getPlanType(), "type_plan");
+		model.addAttribute(PLAN_TYPE_DICT_KEY, planTypeDict);
+		Map<String, String> sqlMap = workPlan.getSqlMap();
+		StringBuffer dsf = new StringBuffer();
+		if (sqlMap.get("dsf") != null && !"".equals(sqlMap.get("dsf"))) {
+			dsf.append(sqlMap.get("dsf"));
+			dsf.append(" ");
+		}
+
+		// 设置根据计划类别（个人计划｜｜部门计划｜｜公司计划）过滤工作计划条件字符串
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("plan_type = '");
+		dsf.append(planTypeDict.getId());
+		dsf.append("'");
+
+		// 只看本人创建的数据
+		dsf.append(" and ");
+		dsf.append("create_by = '");
+		dsf.append(UserUtils.getUser().getId());
+		dsf.append("'");
+
+		// 将字符串加回到sqlMap.dsf属性
+		sqlMap.put("dsf", dsf.toString());
+	}
+
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"list", ""})
+	@RequestMapping(value = { "list", "" })
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-		List<WorkPlan> list = workPlanService.findList(workPlan); 
+		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+		updateSqlMapDsf(workPlan, model);
+
+		List<WorkPlan> list = workPlanService.findList(workPlan);
+
 		model.addAttribute("list", list);
 		return "modules/work/workPlanList";
 	}
@@ -67,33 +111,37 @@ public class WorkPlanController extends BaseController {
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "form")
 	public String form(WorkPlan workPlan, Model model) {
-		if (workPlan.getParent()!=null && StringUtils.isNotBlank(workPlan.getParent().getId())){
+		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+		updateSqlMapDsf(workPlan, model);
+
+		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
 			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
-			//获得工作计划的完整工作类型
-			if (workPlan.getWorkType()!=null && StringUtils.isNotBlank(workPlan.getWorkType().getId())){
+			// 获得工作计划的完整工作类型
+			if (workPlan.getWorkType() != null && StringUtils.isNotBlank(workPlan.getWorkType().getId())) {
 				workPlan.setWorkType(workTypeService.get(workPlan.getWorkType().getId()));
 			}
-			//获得工作计划的完整责任人
-			if (workPlan.getPersonLiable()!=null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())){
+			// 获得工作计划的完整责任人
+			if (workPlan.getPersonLiable() != null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())) {
 				workPlan.setPersonLiable(UserUtils.get(workPlan.getPersonLiable().getId()));
 			}
-			
+
 			// 获取排序号，最末节点排序号+30
-			if (StringUtils.isBlank(workPlan.getId())){
+			if (StringUtils.isBlank(workPlan.getId())) {
 				WorkPlan workPlanChild = new WorkPlan();
 				workPlanChild.setParent(new WorkPlan(workPlan.getParent().getId()));
-				List<WorkPlan> list = workPlanService.findList(workPlan); 
-				if (list.size() > 0){
-					workPlan.setSort(list.get(list.size()-1).getSort());
-					if (workPlan.getSort() != null){
+				List<WorkPlan> list = workPlanService.findList(workPlan);
+				if (list.size() > 0) {
+					workPlan.setSort(list.get(list.size() - 1).getSort());
+					if (workPlan.getSort() != null) {
 						workPlan.setSort(workPlan.getSort() + 30);
 					}
 				}
 			}
 		}
-		if (workPlan.getSort() == null){
+		if (workPlan.getSort() == null) {
 			workPlan.setSort(30);
 		}
+
 		model.addAttribute("workPlan", workPlan);
 		return "modules/work/workPlanForm";
 	}
@@ -101,38 +149,49 @@ public class WorkPlanController extends BaseController {
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "save")
 	public String save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, workPlan)){
+		// 保存当前工作类别（个人，公司，部门等类别）的数据字典对象
+		Dict planTypeDict = DictUtils.getDictByID(workPlan.getPlanType());
+		// 如何个人工作计划，直接把当前用户所在部门设置到工作计划中
+		if ("personal".equals(planTypeDict.getValue())) {
+			workPlan.setDepts(UserUtils.getUser().getOffice());
+		}
+
+		if (!beanValidator(model, workPlan)) {
+			workPlan.setPlanType(planTypeDict.getValue());
 			return form(workPlan, model);
 		}
 		workPlanService.save(workPlan);
 		addMessage(redirectAttributes, "保存工作计划成功");
-		return "redirect:"+Global.getAdminPath()+"/work/workPlan/?repage";
+
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage&planType=" + planTypeDict.getValue();
 	}
-	
+
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "delete")
 	public String delete(WorkPlan workPlan, RedirectAttributes redirectAttributes) {
 		workPlanService.delete(workPlan);
 		addMessage(redirectAttributes, "删除工作计划成功");
-		return "redirect:"+Global.getAdminPath()+"/work/workPlan/?repage";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage";
 	}
 
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "upload")
 	public String upload(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
-		
+
 		return "modules/work/workPlanForm";
 	}
-	
+
 	@RequiresPermissions("user")
 	@ResponseBody
 	@RequestMapping(value = "treeData")
-	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
+	public List<Map<String, Object>> treeData(@RequestParam(required = false) String extId,
+			HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<WorkPlan> list = workPlanService.findList(new WorkPlan());
-		for (int i=0; i<list.size(); i++){
+		for (int i = 0; i < list.size(); i++) {
 			WorkPlan e = list.get(i);
-			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
+			if (StringUtils.isBlank(extId) || (extId != null && !extId.equals(e.getId())
+					&& e.getParentIds().indexOf("," + extId + ",") == -1)) {
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
 				map.put("pId", e.getParentId());
@@ -142,5 +201,5 @@ public class WorkPlanController extends BaseController {
 		}
 		return mapList;
 	}
-	
+
 }

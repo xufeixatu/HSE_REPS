@@ -40,6 +40,7 @@
 		a.create_date AS "createDate",
 		a.sort AS "sort",
 		a.name AS "name",
+		a.plan_type as "workPlan",
 		a.parent_ids AS "parentIds"
 	</sql>
 	
@@ -52,7 +53,6 @@
 		FROM work_plan a
 		<include refid="workPlanJoins"/>
 		WHERE a.id = #{id}
-		${sqlMap.dsf}
 	</select>
 	
 	<select id="findList" resultType="WorkPlan">
@@ -78,6 +78,9 @@
 					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
 			</if>
 		</where>
+		
+		${sqlMap.dsf}
+		
 		ORDER BY a.sort ASC
 	</select>
 	
@@ -145,6 +148,7 @@
 			create_date,
 			sort,
 			name,
+			plan_type,
 			parent_ids
 		) VALUES (
 			#{id},
@@ -184,6 +188,7 @@
 			#{createDate},
 			#{sort},
 			#{name},
+			#{planType},
 			#{parentIds}
 		)
 	</insert>
