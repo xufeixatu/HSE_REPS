@@ -47,7 +47,16 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private Date acceptanceTime;		// 接受时间
 	private String endStateId;		// 结束状态
 	private String frequency;		// 频次
+	private String planType;     //计划类型：如个人计划，部门计划，公司计划
 	
+	public String getPlanType() {
+		return planType;
+	}
+
+	public void setPlanType(String planType) {
+		this.planType = planType;
+	}
+
 	public WorkPlan() {
 		super();
 	}
