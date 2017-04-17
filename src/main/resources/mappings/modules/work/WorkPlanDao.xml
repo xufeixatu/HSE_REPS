@@ -41,10 +41,14 @@
 		a.sort AS "sort",
 		a.name AS "name",
 		a.plan_type as "workPlan",
-		a.parent_ids AS "parentIds"
+		a.parent_ids AS "parentIds",
+		pp.name AS "personLiable.name",
+		sd.label AS "workLevel"
 	</sql>
 	
 	<sql id="workPlanJoins">
+		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
+		LEFT JOIN SYS_DICT sd ON sd.id = a.work_level_id
 	</sql>
     
 	<select id="get" resultType="WorkPlan">

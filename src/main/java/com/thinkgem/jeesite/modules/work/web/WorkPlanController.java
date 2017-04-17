@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,6 +31,7 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 import com.thinkgem.jeesite.modules.work.service.WorkPlanService;
 import com.thinkgem.jeesite.modules.work.service.WorkTypeService;
+import com.thinkgem.jeesite.modules.work.workSqlMapFilter.WorkPlanSqlMapFilter;
 
 /**
  * 工作计划管理Controller
@@ -40,10 +42,6 @@ import com.thinkgem.jeesite.modules.work.service.WorkTypeService;
 @Controller
 @RequestMapping(value = "${adminPath}/work/workPlan")
 public class WorkPlanController extends BaseController {
-	/**
-	 * 保存在model中的工作计划类别（个人，公司，部门等类别）数据字典对象的键
-	 */
-	private final static String PLAN_TYPE_DICT_KEY = "planTypeDict";
 
 	@Autowired
 	private WorkPlanService workPlanService;
@@ -63,44 +61,11 @@ public class WorkPlanController extends BaseController {
 		return entity;
 	}
 
-	/**
-	 * 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
-	 * 
-	 * @param workPlan
-	 * @param model
-	 */
-	private void updateSqlMapDsf(WorkPlan workPlan, Model model) {
-		Dict planTypeDict = DictUtils.getDictByValue(workPlan.getPlanType(), "type_plan");
-		model.addAttribute(PLAN_TYPE_DICT_KEY, planTypeDict);
-		Map<String, String> sqlMap = workPlan.getSqlMap();
-		StringBuffer dsf = new StringBuffer();
-		if (sqlMap.get("dsf") != null && !"".equals(sqlMap.get("dsf"))) {
-			dsf.append(sqlMap.get("dsf"));
-			dsf.append(" ");
-		}
-
-		// 设置根据计划类别（个人计划｜｜部门计划｜｜公司计划）过滤工作计划条件字符串
-		dsf.append("and");
-		dsf.append(" ");
-		dsf.append("plan_type = '");
-		dsf.append(planTypeDict.getId());
-		dsf.append("'");
-
-		// 只看本人创建的数据
-		dsf.append(" and ");
-		dsf.append("create_by = '");
-		dsf.append(UserUtils.getUser().getId());
-		dsf.append("'");
-
-		// 将字符串加回到sqlMap.dsf属性
-		sqlMap.put("dsf", dsf.toString());
-	}
-
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
-		updateSqlMapDsf(workPlan, model);
+		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
 
 		List<WorkPlan> list = workPlanService.findList(workPlan);
 
@@ -109,10 +74,29 @@ public class WorkPlanController extends BaseController {
 	}
 
 	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = { "workList" })
+	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		if("personal".equals(workPlan.getPlanType())){
+			WorkPlanSqlMapFilter.getFilter().typeliableFilter(workPlan, model);
+		}else if("department".equals(workPlan.getPlanType())){
+			WorkPlanSqlMapFilter.getFilter().typeDeptFilter(workPlan, model);
+		}else if("company".equals(workPlan.getPlanType())){
+			WorkPlanSqlMapFilter.getFilter().typeCompnayFilter(workPlan, model);
+		}
+		
+		
+
+		List<WorkPlan> list = workPlanService.findList(workPlan);
+
+		model.addAttribute("list", list);
+		return "modules/work/exec/workPlanExecList";
+	}
+
+	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "form")
 	public String form(WorkPlan workPlan, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
-		updateSqlMapDsf(workPlan, model);
+		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
 
 		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
 			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));

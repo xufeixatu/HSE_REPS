@@ -57,9 +57,13 @@
 	<table id="treeTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>备注</th>
-				<th>更新时间</th>
-				<th>标题</th>
+				<th>工作项</th>
+				<th>工作描述</th>
+				<th>级别</th>
+				<th>频次</th>
+				<th>计划完成时间</th>
+				<th>责任单位</th>
+				<th>责任人</th>
 				<shiro:hasPermission name="work:workPlan:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -68,13 +72,25 @@
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
 			<td><a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">
-				{{row.remarks}}
+				{{row.name}}
 			</a></td>
 			<td>
-				{{row.updateDate}}
+				{{row.workDesc}}
 			</td>
 			<td>
-				{{row.name}}
+				{{row.workLevel}}
+			</td>
+			<td>
+				{{row.frequency}}
+			</td>
+			<td>
+				{{row.planedFinishTime}}
+			</td>
+			<td>
+				{{row.depts.name}}
+			</td>
+			<td>
+				{{row.personLiable.name}}
 			</td>
 			<shiro:hasPermission name="work:workPlan:edit"><td>
    				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>

@@ -145,6 +145,14 @@
     <example>${fns:getDictListJson(type)}</example>  
   </function>
   
+  <function>
+    <description>根据ＩＤ获取字典对象</description>
+    <name>getDictByID</name>
+    <function-class>com.thinkgem.jeesite.modules.sys.utils.DictUtils</function-class>
+    <function-signature>com.thinkgem.jeesite.modules.sys.utils.Dict getDictByID(java.lang.String)</function-signature>
+    <example>${fns:getDictByID(id)}</example>  
+  </function>
+  
   <!-- Encodes -->
   <function>
     <description>URL编码</description>

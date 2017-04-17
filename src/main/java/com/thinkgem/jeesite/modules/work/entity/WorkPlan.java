@@ -48,6 +48,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String endStateId;		// 结束状态
 	private String frequency;		// 频次
 	private String planType;     //计划类型：如个人计划，部门计划，公司计划
+	private String workLevel; //级别
 	
 	public String getPlanType() {
 		return planType;
