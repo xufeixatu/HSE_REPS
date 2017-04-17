@@ -72,7 +72,9 @@
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
 			<td><a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">
+
 				{{row.name}}
+
 			</a></td>
 			<td>
 				{{row.workDesc}}

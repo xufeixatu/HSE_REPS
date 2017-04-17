@@ -41,9 +41,11 @@
 		a.sort AS "sort",
 		a.name AS "name",
 		a.plan_type as "workPlan",
+
 		a.parent_ids AS "parentIds",
 		pp.name AS "personLiable.name",
 		sd.label AS "workLevel"
+
 	</sql>
 	
 	<sql id="workPlanJoins">

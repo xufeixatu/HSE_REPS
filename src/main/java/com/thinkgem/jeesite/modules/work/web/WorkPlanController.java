@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,8 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
@@ -42,6 +41,10 @@ import com.thinkgem.jeesite.modules.work.workSqlMapFilter.WorkPlanSqlMapFilter;
 @Controller
 @RequestMapping(value = "${adminPath}/work/workPlan")
 public class WorkPlanController extends BaseController {
+	/**
+	 * 保存在model中的工作计划类别（个人，公司，部门等类别）数据字典对象的键
+	 */
+	private final static String PLAN_TYPE_DICT_KEY = "planTypeDict";
 
 	@Autowired
 	private WorkPlanService workPlanService;
@@ -61,10 +64,12 @@ public class WorkPlanController extends BaseController {
 		return entity;
 	}
 
+
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+
 		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
 
 		List<WorkPlan> list = workPlanService.findList(workPlan);
@@ -96,6 +101,7 @@ public class WorkPlanController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(WorkPlan workPlan, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+
 		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
 
 		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
@@ -223,5 +229,4 @@ public class WorkPlanController extends BaseController {
 		}
 		return mapList;
 	}
-
 }
