@@ -122,8 +122,16 @@ public class WorkPlanSqlMapFilter {
 		dsf.append(planTypeDict.getId());
 		dsf.append("' ");
 		dsf.append("and");
-		dsf.append(" ");
+		dsf.append(" (");
 		dsf.append("a.is_open = 1");
+		dsf.append(" or ");
+		dsf.append("a.person_liable_id='");
+		dsf.append(UserUtils.getUser().getId());
+		dsf.append("' or ");
+		dsf.append("a.assigner_id='");
+		dsf.append(UserUtils.getUser().getId());
+		dsf.append("') ");
+		
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}

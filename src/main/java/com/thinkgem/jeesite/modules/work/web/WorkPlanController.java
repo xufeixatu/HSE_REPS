@@ -130,6 +130,44 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workPlanForm";
 	}
 
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = "detail")
+	public String detail(WorkPlan workPlan, Model model) {
+		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
+
+		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
+			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
+			// 获得工作计划的完整工作类型
+			if (workPlan.getWorkType() != null && StringUtils.isNotBlank(workPlan.getWorkType().getId())) {
+				workPlan.setWorkType(workTypeService.get(workPlan.getWorkType().getId()));
+			}
+			// 获得工作计划的完整责任人
+			if (workPlan.getPersonLiable() != null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())) {
+				workPlan.setPersonLiable(UserUtils.get(workPlan.getPersonLiable().getId()));
+			}
+
+			// 获取排序号，最末节点排序号+30
+			if (StringUtils.isBlank(workPlan.getId())) {
+				WorkPlan workPlanChild = new WorkPlan();
+				workPlanChild.setParent(new WorkPlan(workPlan.getParent().getId()));
+				List<WorkPlan> list = workPlanService.findList(workPlan);
+				if (list.size() > 0) {
+					workPlan.setSort(list.get(list.size() - 1).getSort());
+					if (workPlan.getSort() != null) {
+						workPlan.setSort(workPlan.getSort() + 30);
+					}
+				}
+			}
+		}
+		if (workPlan.getSort() == null) {
+			workPlan.setSort(30);
+		}
+
+		model.addAttribute("workPlan", workPlan);
+		return "modules/work/exec/workPlanDetail";
+	}
+	
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "save")
 	public String save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
