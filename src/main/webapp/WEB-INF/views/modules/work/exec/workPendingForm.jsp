@@ -265,6 +265,8 @@
 	<!-- workPlanController中的auditing审核方法和reject否决方法还未写 -->
 	
 	<form:form action="${ctx}/work/workPlan/agree" method="post" id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
+		<form:hidden path="id" />
+		<input type="hidden" name="planType" value="${planTypeDict.id}" />
 		<div class="control-group">
 			<label class="control-label">审核意见:</label>
 			<div class="controls">

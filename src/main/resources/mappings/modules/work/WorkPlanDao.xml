@@ -44,12 +44,14 @@
 		a.work_submit as "workSubmit",
 		a.parent_ids AS "parentIds",
 		pp.name AS "personLiable.name",
-		sd.label AS "workLevel"
+		sd.label AS "workLevel",
+		sd2.label AS "workState"
 	</sql>
 	
 	<sql id="workPlanJoins">
 		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
 		LEFT JOIN SYS_DICT sd ON sd.id = a.work_level_id
+		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
 	</sql>
     
 	<select id="get" resultType="WorkPlan">
@@ -86,7 +88,7 @@
 		
 		${sqlMap.dsf}
 		
-		ORDER BY a.work_state_id ASC,a.sort ASC
+		ORDER BY a.work_state_id DESC,a.sort ASC
 	</select>
 	
 	<select id="findAllList" resultType="WorkPlan">
@@ -169,7 +171,7 @@
 			#{workDesc},
 			#{jobRequire},
 			#{zskId},
-			#{workStateId},
+			'f3aa6747844045e0ad00605e60b8b5c1',
 			#{isOpen},
 			#{createBy.id},
 			#{parent.id},

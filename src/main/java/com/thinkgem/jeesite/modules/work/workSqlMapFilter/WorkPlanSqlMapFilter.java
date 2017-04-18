@@ -137,6 +137,7 @@ public class WorkPlanSqlMapFilter {
 	}
 	/**
 	 * 过滤所有已经提交状态的公司级工作计划
+	 *    work_state_id = '45d756f45bb04155adb95e66b6a0d1c1'
 	 * @param id
 	 */
 	public void typeSubmittedCompanyWorkPlanyFilter(WorkPlan workPlan, Model model){

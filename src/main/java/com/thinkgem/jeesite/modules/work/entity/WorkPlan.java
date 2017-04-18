@@ -51,7 +51,24 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String workLevel; //级别
 	private boolean workSubmit = false;//是否提交
 	private boolean noedit = false; //是否不可编辑
+	private String workState;
 	
+	public String getWorkLevel() {
+		return workLevel;
+	}
+
+	public void setWorkLevel(String workLevel) {
+		this.workLevel = workLevel;
+	}
+
+	public String getWorkState() {
+		return workState;
+	}
+
+	public void setWorkState(String work_state) {
+		this.workState = work_state;
+	}
+
 	public boolean isNoedit() {
 		return noedit;
 	}

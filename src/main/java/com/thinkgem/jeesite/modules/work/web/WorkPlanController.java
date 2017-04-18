@@ -150,6 +150,23 @@ public class WorkPlanController extends BaseController {
 		model.addAttribute("workPlan", workPlan);
 		return "modules/work/workPlanForm";
 	}
+	/**
+	 * 分配公司工作给部门
+	 * @param workPlan
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = "assigned_work")
+	public String assigned_work(WorkPlan workPlan, Model model) {
+
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+
+		workPlan = workPlanService.get(workPlan.getId());
+
+		model.addAttribute("workPlan", workPlan);
+		return "modules/work/assignedWorkPlanForm";
+	}
 	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "pending_form")

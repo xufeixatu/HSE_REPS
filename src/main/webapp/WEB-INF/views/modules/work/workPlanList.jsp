@@ -34,10 +34,15 @@
 						dict: {
 						blank123:0}, pid: (root?0:pid), row: row,
 						edit:function(){
-							return row.workStateId != '45d756f45bb04155adb95e66b6a0d1c1';
+							return row.workStateId != '45d756f45bb04155adb95e66b6a0d1c1' && 
+								   row.workStateId != '0374ed53f5034055943e0381aca4c22a';
 						},
 						no_edit:function(){
-							return row.workStateId == '45d756f45bb04155adb95e66b6a0d1c1';
+							return row.workStateId == '45d756f45bb04155adb95e66b6a0d1c1' && 
+								   row.workStateId != '0374ed53f5034055943e0381aca4c22a';
+						},
+						pass:function(){
+							return row.workStateId != '0374ed53f5034055943e0381aca4c22a';
 						}
 					}));
 					addRow(list, tpl, data, row.id);
@@ -97,10 +102,10 @@
 			<tr>
 				<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
 				<th>工作项</th>
-				<th>工作描述</th>
 				<th>级别</th>
 				<th>频次</th>
 				<th>计划完成时间</th>
+				<th>状态</th>
 				<th>责任单位</th>
 				<th>责任人</th>
 				<shiro:hasPermission name="work:workPlan:edit">
@@ -123,9 +128,6 @@
 			</a>{{/no_edit}}
 			</td>
 			<td>
-				{{row.workDesc}}
-			</td>
-			<td>
 				{{row.workLevel}}
 			</td>
 			<td>
@@ -133,6 +135,9 @@
 			</td>
 			<td>
 				{{row.planedFinishTime}}
+			</td>
+			<td>
+				{{row.workState}}
 			</td>
 			<td>
 				{{row.depts.name}}
@@ -144,9 +149,12 @@
 			{{#edit}}
    				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>
 				<a href="${ctx}/work/workPlan/delete?id={{row.id}}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
-				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}">添加下级工作计划</a> 
-				<a href="${ctx}/work/workPlan/submitPlan?id={{row.id}}&planType=${planTypeDict.value}" onclick="return submitAll(this)">提交公司工作计划</a>				
+				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}">添加子工作</a> 
+				<a href="${ctx}/work/workPlan/submitPlan?id={{row.id}}&planType=${planTypeDict.value}" onclick="return submitAll(this)">提交</a>				
 			{{/edit}}
+			{{#pass}}
+				<a href="${ctx}/work/workPlan/assigned_work?id={{row.id}}&planType=${planTypeDict.value}">分配任务</a>	
+			{{/pass}}
 			</td></shiro:hasPermission>
 		</tr>
 	</script>

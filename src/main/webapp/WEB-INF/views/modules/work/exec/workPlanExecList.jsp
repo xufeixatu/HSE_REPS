@@ -71,12 +71,12 @@
 		<thead>
 			<tr>
 				<th>工作项</th>
-				<th>工作描述</th>
 				<th>级别</th>
 				<th>频次</th>
 				<th>计划完成时间</th>
 				<th>责任单位</th>
 				<th>责任人</th>
+				<th>状态</th>
 				<c:if test="${planTypeDict.value == 'personal' }">
 					<shiro:hasPermission name="work:workPlan:edit">
 						<th>操作</th>
@@ -89,10 +89,8 @@
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
 			<td><a href="${ctx}/work/workPlan/detail?id={{row.id}}&planType=${planTypeDict.value}">
-				{{row.name}}
-			</a></td>
-			<td>
-				{{row.workDesc}}
+					{{row.name}}
+				</a>
 			</td>
 			<td>
 				{{row.workLevel}}
@@ -108,6 +106,9 @@
 			</td>
 			<td>
 				{{row.personLiable.name}}
+			</td>
+			<td>
+				{{row.workState}}
 			</td>
 			<c:if test="${planTypeDict.value == 'personal' }">
 			<shiro:hasPermission name="work:workPlan:edit"><td>
