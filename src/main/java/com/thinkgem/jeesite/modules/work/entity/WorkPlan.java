@@ -49,7 +49,25 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String frequency;		// 频次
 	private String planType;     //计划类型：如个人计划，部门计划，公司计划
 	private String workLevel; //级别
+	private boolean workSubmit = false;//是否提交
+	private boolean noedit = false; //是否不可编辑
 	
+	public boolean isNoedit() {
+		return noedit;
+	}
+
+	public void setNoedit(boolean noedit) {
+		this.noedit = noedit;
+	}
+
+	public boolean isWorkSubmit() {
+		return workSubmit;
+	}
+
+	public void setWorkSubmit(boolean workSubmit) {
+		this.workSubmit = workSubmit;
+	}
+
 	public String getPlanType() {
 		return planType;
 	}

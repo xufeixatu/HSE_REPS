@@ -43,4 +43,9 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		super.delete(workPlan);
 	}
 	
+	@Transactional(readOnly = false)
+	public void submit_company_plan(WorkPlan workPlan) {
+		dao.submit_company_plan(workPlan);
+	}
+	
 }

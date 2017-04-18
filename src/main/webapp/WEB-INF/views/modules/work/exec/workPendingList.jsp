@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<!-- 获取当前user对象 -->
+<c:set value="${fns:getUser()}" var="user"/>
+<c:set value="${fns:getOfficeById('4eb71afc7bd34163a381eb3e37d05fdc')}" var="office_quality"/>
 <html>
 <head>
 <title>工作计划管理</title>
@@ -9,7 +12,6 @@
 		$(document).ready(function() {
 			var tpl = $("#treeTableTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 			var data = ${fns:toJson(list)}, ids = [], rootIds = [];
-			
 			for (var i=0; i<data.length; i++){
 				ids.push(data[i].id);
 			}
@@ -32,48 +34,25 @@
 				if ((${fns:jsGetVal('row.parentId')}) == pid){
 					$(list).append(Mustache.render(tpl, {
 						dict: {
-						blank123:0}, pid: (root?0:pid), row: row,
-						edit:function(){
-							return row.workStateId != '45d756f45bb04155adb95e66b6a0d1c1';
-						},
-						no_edit:function(){
-							return row.workStateId == '45d756f45bb04155adb95e66b6a0d1c1';
-						}
+						blank123:0}, pid: (root?0:pid), row: row
 					}));
 					addRow(list, tpl, data, row.id);
 				}
 			}
-		}
-		//选择或取消所有选项
-		function selectAll(me){
-			var ids = $("input[name='ids']");
-			for(var i = 0 ; i < ids.length ; i++){
-				ids[i].checked = me.checked;
-			}
-		}
-		//批量提交
-		function submitAll(me){
-			var ids = $("input[name='ids']");
-			var str = "";
-			for(var i = 0 ; i < ids.length ; i++){
-				if(ids[i].checked){
-					str += "&ids=" + ids[i].value;
-				}
-			}
-			me.href += str;
-			return confirmx('确认要提交该工作计划吗？', me.href);
 		}
 	</script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a
-			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">新增${planTypeDict.label}列表</a></li>
-		<shiro:hasPermission name="work:workPlan:edit">
-			<li><a
-				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
-		</shiro:hasPermission>
+			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
 		
+		<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
+			<shiro:hasPermission name="work:workPlan:edit">
+				<li><a
+					href="${ctx}/work/workPlan/pending_form?planType=${planTypeDict.value}">待审核${planTypeDict.label}列表</a></li>
+			</shiro:hasPermission>
+		</c:if>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
 		action="${ctx}/work/workPlan/" method="post"
@@ -83,10 +62,6 @@
 					htmlEscape="false" maxlength="100" class="input-medium" /></li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary"
 				type="submit" value="查询" /></li>
-			<li class="btns">
-				<a href="#">下载工作计划模板</a></li>
-			<li class="btns">
-				<a href="#">导入工作计划EXCEL文件</a></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
@@ -95,7 +70,6 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
 				<th>工作项</th>
 				<th>工作描述</th>
 				<th>级别</th>
@@ -103,25 +77,20 @@
 				<th>计划完成时间</th>
 				<th>责任单位</th>
 				<th>责任人</th>
-				<shiro:hasPermission name="work:workPlan:edit">
-					<th>操作</th>
-				</shiro:hasPermission>
+				<c:if test="${planTypeDict.value == 'personal' }">
+					<shiro:hasPermission name="work:workPlan:edit">
+						<th>操作</th>
+					</shiro:hasPermission>
+				</c:if>
 			</tr>
 		</thead>
 		<tbody id="treeTableList"></tbody>
 	</table>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
-			<td>
-				{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
-			</td>
-			<td>{{#edit}}<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">
+			<td><a href="${ctx}/work/workPlan/detail?id={{row.id}}&planType=${planTypeDict.value}">
 				{{row.name}}
-			</a>{{/edit}}
-				{{#no_edit}}<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=true">
-				{{row.name}}
-			</a>{{/no_edit}}
-			</td>
+			</a></td>
 			<td>
 				{{row.workDesc}}
 			</td>
@@ -140,16 +109,15 @@
 			<td>
 				{{row.personLiable.name}}
 			</td>
+			<c:if test="${planTypeDict.value == 'personal' }">
 			<shiro:hasPermission name="work:workPlan:edit"><td>
-			{{#edit}}
+				
    				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>
 				<a href="${ctx}/work/workPlan/delete?id={{row.id}}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
 				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}">添加下级工作计划</a> 
-				<a href="${ctx}/work/workPlan/submitPlan?id={{row.id}}&planType=${planTypeDict.value}" onclick="return submitAll(this)">提交公司工作计划</a>				
-			{{/edit}}
 			</td></shiro:hasPermission>
+			</c:if>
 		</tr>
 	</script>
-	
 </body>
 </html>
