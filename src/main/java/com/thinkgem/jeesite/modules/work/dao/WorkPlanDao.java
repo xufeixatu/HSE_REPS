@@ -14,7 +14,5 @@ import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
  */
 @MyBatisDao
 public interface WorkPlanDao extends TreeDao<WorkPlan> {
-
-	public void submit_company_plan(WorkPlan workPlan);
 	
 }
