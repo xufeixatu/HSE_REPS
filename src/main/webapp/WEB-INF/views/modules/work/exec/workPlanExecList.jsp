@@ -1,11 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<!-- 获取当前user对象 -->
+<c:set value="${fns:getUser()}" var="user"/>
+<c:set value="${fns:getOfficeById('4eb71afc7bd34163a381eb3e37d05fdc')}" var="office_quality"/>
 <html>
 <head>
-	<title>工作计划管理</title>
-	<meta name="decorator" content="default"/>
-	<%@include file="/WEB-INF/views/include/treetable.jsp" %>
-	<script type="text/javascript">
+<title>工作计划管理</title>
+<meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/treetable.jsp"%>
+<script type="text/javascript">
 		$(document).ready(function() {
 			var tpl = $("#treeTableTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 			var data = ${fns:toJson(list)}, ids = [], rootIds = [];
@@ -41,20 +44,30 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
-		<!--<shiro:hasPermission name="work:workPlan:edit"><li><a href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li></shiro:hasPermission>-->
+		<li class="active"><a
+			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+		
+		<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
+			<shiro:hasPermission name="work:workPlan:edit">
+				<li><a
+					href="${ctx}/work/workPlan/pending_list?planType=${planTypeDict.value}">待审核${planTypeDict.label}列表</a></li>
+			</shiro:hasPermission>
+		</c:if>
 	</ul>
-	<form:form id="searchForm" modelAttribute="workPlan" action="${ctx}/work/workPlan/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="workPlan"
+		action="${ctx}/work/workPlan/" method="post"
+		class="breadcrumb form-search">
 		<ul class="ul-form">
-			<li><label>标题：</label>
-				<form:input path="name" htmlEscape="false" maxlength="100" class="input-medium"/>
-			</li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
+			<li><label>标题：</label> <form:input path="name"
+					htmlEscape="false" maxlength="100" class="input-medium" /></li>
+			<li class="btns"><input id="btnSubmit" class="btn btn-primary"
+				type="submit" value="查询" /></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
-	<sys:message content="${message}"/>
-	<table id="treeTable" class="table table-striped table-bordered table-condensed">
+	<sys:message content="${message}" />
+	<table id="treeTable"
+		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
 				<th>工作项</th>
@@ -65,7 +78,9 @@
 				<th>责任单位</th>
 				<th>责任人</th>
 				<c:if test="${planTypeDict.value == 'personal' }">
-				<shiro:hasPermission name="work:workPlan:edit"><th>操作</th></shiro:hasPermission>
+					<shiro:hasPermission name="work:workPlan:edit">
+						<th>操作</th>
+					</shiro:hasPermission>
 				</c:if>
 			</tr>
 		</thead>

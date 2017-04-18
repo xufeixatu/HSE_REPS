@@ -40,8 +40,8 @@
 		a.create_date AS "createDate",
 		a.sort AS "sort",
 		a.name AS "name",
-		a.plan_type as "workPlan",
-
+		a.plan_type as "planType",
+		a.work_submit as "workSubmit",
 		a.parent_ids AS "parentIds",
 		pp.name AS "personLiable.name",
 		sd.label AS "workLevel"
@@ -87,7 +87,7 @@
 		
 		${sqlMap.dsf}
 		
-		ORDER BY a.sort ASC
+		ORDER BY a.work_state_id ASC,a.sort ASC
 	</select>
 	
 	<select id="findAllList" resultType="WorkPlan">
@@ -155,6 +155,7 @@
 			sort,
 			name,
 			plan_type,
+			work_submit,
 			parent_ids
 		) VALUES (
 			#{id},
@@ -195,6 +196,7 @@
 			#{sort},
 			#{name},
 			#{planType},
+			#{workSubmit},
 			#{parentIds}
 		)
 	</insert>
@@ -234,6 +236,7 @@
 			update_by = #{updateBy.id},
 			sort = #{sort},
 			name = #{name},
+			work_submit = #{workSubmit},
 			parent_ids = #{parentIds}
 		WHERE id = #{id}
 	</update>
@@ -242,6 +245,13 @@
 		UPDATE work_plan SET 
 			parent_id = #{parent.id}, 
 			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 提交公司计划:更新work_plan表的submit字段 -->
+	<update id="submit_company_plan">
+		UPDATE work_plan SET 
+			work_state_id = '45d756f45bb04155adb95e66b6a0d1c1'
 		WHERE id = #{id}
 	</update>
 	

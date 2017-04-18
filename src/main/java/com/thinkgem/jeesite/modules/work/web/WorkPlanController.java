@@ -96,6 +96,21 @@ public class WorkPlanController extends BaseController {
 		model.addAttribute("list", list);
 		return "modules/work/exec/workPlanExecList";
 	}
+	
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"pending_list"})
+	public String pending_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		/**
+		 *	过滤出所有已提交状态的公司级工作计划
+		 */
+		WorkPlanSqlMapFilter.getFilter().typeSubmittedCompanyWorkPlanyFilter(workPlan, model);
+		
+
+		List<WorkPlan> list = workPlanService.findList(workPlan);
+
+		model.addAttribute("list", list);
+		return "modules/work/exec/workPendingList";
+	}
 
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "form")
@@ -136,6 +151,24 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workPlanForm";
 	}
 
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = "submitPlan")
+	public String submitPlan(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model){
+		String[] ids = request.getParameterValues("ids");
+		if(ids != null && ids.length > 0){
+			for(String id : ids){
+				WorkPlan w = new WorkPlan();
+				w.setId(id);
+				workPlanService.submit_company_plan(w);//提交公司计划
+			}
+		}else{			
+			workPlanService.submit_company_plan(workPlan);//提交公司计划
+		}
+		WorkPlan wp = new WorkPlan();
+		wp.setPlanType(workPlan.getPlanType());
+		return list(wp, request, response, model);
+	}
+	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "detail")
 	public String detail(WorkPlan workPlan, Model model) {
