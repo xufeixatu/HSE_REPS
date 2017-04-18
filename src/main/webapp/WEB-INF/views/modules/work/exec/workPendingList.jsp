@@ -44,13 +44,13 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a
-			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+		<li><a
+			href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
 		
 		<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
 			<shiro:hasPermission name="work:workPlan:edit">
-				<li><a
-					href="${ctx}/work/workPlan/pending_form?planType=${planTypeDict.value}">待审核${planTypeDict.label}列表</a></li>
+				<li class="active"><a
+					href="${ctx}/work/workPlan/pending_list?planType=${planTypeDict.value}">待审核${planTypeDict.label}列表</a></li>
 			</shiro:hasPermission>
 		</c:if>
 	</ul>
@@ -77,11 +77,9 @@
 				<th>计划完成时间</th>
 				<th>责任单位</th>
 				<th>责任人</th>
-				<c:if test="${planTypeDict.value == 'personal' }">
-					<shiro:hasPermission name="work:workPlan:edit">
-						<th>操作</th>
-					</shiro:hasPermission>
-				</c:if>
+				<shiro:hasPermission name="work:workPlan:edit">
+					<th>操作</th>
+				</shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody id="treeTableList"></tbody>
@@ -109,14 +107,9 @@
 			<td>
 				{{row.personLiable.name}}
 			</td>
-			<c:if test="${planTypeDict.value == 'personal' }">
 			<shiro:hasPermission name="work:workPlan:edit"><td>
-				
-   				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>
-				<a href="${ctx}/work/workPlan/delete?id={{row.id}}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
-				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}">添加下级工作计划</a> 
+   				<a href="${ctx}/work/workPlan/pending_form?id={{row.id}}&planType=${planTypeDict.value}">审核</a>
 			</td></shiro:hasPermission>
-			</c:if>
 		</tr>
 	</script>
 </body>
