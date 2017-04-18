@@ -45,7 +45,6 @@
 		a.parent_ids AS "parentIds",
 		pp.name AS "personLiable.name",
 		sd.label AS "workLevel"
-
 	</sql>
 	
 	<sql id="workPlanJoins">
@@ -248,10 +247,25 @@
 		WHERE id = #{id}
 	</update>
 	
-	<!-- 提交公司计划:更新work_plan表的submit字段 -->
+	<!-- 提交公司计划:更新work_plan表的work_plan表的work_state_id字段 -->
 	<update id="submit_company_plan">
 		UPDATE work_plan SET 
 			work_state_id = '45d756f45bb04155adb95e66b6a0d1c1'
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 审核拒绝公司计划:更新work_plan表的work_state_id字段 -->
+	<update id="reject">
+		UPDATE work_plan SET 
+			work_state_id = '8332da35c3e3419caf094f53e7a6c58c'
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 审核同意公司计划:更新work_plan表的work_state_id字段 -->
+	<update id="agree">
+		UPDATE work_plan SET 
+			work_state_id = '0374ed53f5034055943e0381aca4c22a',
+			approve_opinion = #{approveOpinion}
 		WHERE id = #{id}
 	</update>
 	

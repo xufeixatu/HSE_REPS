@@ -16,5 +16,9 @@ import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 public interface WorkPlanDao extends TreeDao<WorkPlan> {
 
 	public void submit_company_plan(WorkPlan workPlan);
+
+	public void reject(WorkPlan workPlan);
+
+	public void agree(WorkPlan workPlan);
 	
 }

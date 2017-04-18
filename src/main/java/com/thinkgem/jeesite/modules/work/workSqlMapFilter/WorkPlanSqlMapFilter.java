@@ -29,7 +29,7 @@ public class WorkPlanSqlMapFilter {
 		return new WorkPlanSqlMapFilter();
 	}
 
-	private void common(WorkPlan workPlan, Model model) {
+	public void common(WorkPlan workPlan, Model model) {
 		planTypeDict = DictUtils.getDictByValue(workPlan.getPlanType(), "type_plan");
 		model.addAttribute(PLAN_TYPE_DICT_KEY, planTypeDict);
 		sqlMap = workPlan.getSqlMap();

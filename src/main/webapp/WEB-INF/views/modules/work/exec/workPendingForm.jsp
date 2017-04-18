@@ -47,7 +47,13 @@
 			});
 	//否决的方法
 	function reject(){
-		location = "${ctx}/work/workPlan/reject?id=${workPlan.id}";
+		location = "${ctx}/work/workPlan/reject?id=${workPlan.id}&planType=${planTypeDict.value}";
+	}
+
+	//修改的方法
+	function save(){
+		var f = $("form")[0];
+		f.submit();
 	}
 </script>
 </head>
@@ -61,8 +67,7 @@
 	</ul>
 	<br />
 	<form:form id="inputForm" modelAttribute="workPlan"
-		action="${ctx}/work/workPlan/save" method="post"
-		class="form-horizontal">
+		action="${ctx}/work/workPlan/pending_save" method="post" class="form-horizontal">
 		<form:hidden path="id" />
 		<input type="hidden" name="planType" value="${planTypeDict.id}" />
 		<sys:message content="${message}" />
@@ -252,24 +257,14 @@
 				</div>
 			</div>
 		</c:if>
-
-		<div class="form-actions">
-			<c:if test="${workPlan.isApproveUpdate}">
-			<shiro:hasPermission name="work:workPlan:edit">
-			
-				<input id="btnSubmit" class="btn btn-primary" type="submit"
-					value="修改" />&nbsp;</shiro:hasPermission>
-			</c:if>
-			
-		</div>
+<div id="files" class="control-group">此处是下载附件链接的列表</div>
+		
 	</form:form>
-	<div id="files" class="control-group">此处是下载附件链接的列表</div>
+	
 	
 	<!-- workPlanController中的auditing审核方法和reject否决方法还未写 -->
 	
-	<form:form id="auditingForm" modelAttribute="workPlan"
-		action="${ctx}/work/workPlan/auditing" method="post" class="form-horizontal">
-		<form:hidden path="id" />
+	<form:form action="${ctx}/work/workPlan/agree" method="post" id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
 		<div class="control-group">
 			<label class="control-label">审核意见:</label>
 			<div class="controls">
@@ -280,13 +275,18 @@
 		<div class="form-actions">
 			<shiro:hasPermission name="work:workPlan:edit">
 				<input id="btnSubmit1" class="btn btn-primary" type="submit"
-					value="同意" />&nbsp;
+					value="同意"/>&nbsp;
 				<input id="btnSubmit2" class="btn btn-primary" type="button"
 					value="否决" onclick="reject();"/>&nbsp;
+				<c:if test="${workPlan.isApproveUpdate}">
+					<input id="btnSubmit" class="btn btn-primary" type="button"
+						value="修改" onclick="save();"/>&nbsp;
+				</c:if>
 			</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回"
 				onclick="history.go(-1)" />
 		</div>
+		
 	</form:form>
 	
 	

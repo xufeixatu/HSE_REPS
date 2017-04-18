@@ -154,7 +154,8 @@ public class WorkPlanController extends BaseController {
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "pending_form")
 	public String pending_form(WorkPlan workPlan, Model model) {
-
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
 		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
 			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
 			// 获得工作计划的完整工作类型
@@ -261,6 +262,42 @@ public class WorkPlanController extends BaseController {
 		addMessage(redirectAttributes, "保存工作计划成功");
 
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage&planType=" + planTypeDict.getValue();
+	}
+	
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = "pending_save")
+	public String pending_save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
+		save(workPlan, model, redirectAttributes);
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_form?id=" + workPlan.getId() + "&repage&planType=company";
+	}
+	
+	/**
+	 * 审核拒绝的方法（还未实现）
+	 * @param workPlan
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = "reject")
+	public String reject(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
+		workPlanService.reject(workPlan);
+		
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?id=" + workPlan.getId() + "&planType=company";
+	}
+	
+	/**
+	 * 审核同意的方法（还未实现）
+	 * @param workPlan
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = "agree")
+	public String agree(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
+		workPlanService.agree(workPlan);
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?id=" + workPlan.getId() + "&planType=company";
 	}
 
 	@RequiresPermissions("work:workPlan:edit")

@@ -48,4 +48,14 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		dao.submit_company_plan(workPlan);
 	}
 	
+	@Transactional(readOnly = false)
+	public void reject(WorkPlan workPlan) {
+		dao.reject(workPlan);
+	}
+	
+	@Transactional(readOnly = false)
+	public void agree(WorkPlan workPlan) {
+		dao.agree(workPlan);
+	}
+	
 }
