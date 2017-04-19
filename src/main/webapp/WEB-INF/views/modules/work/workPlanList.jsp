@@ -38,11 +38,12 @@
 								   row.workStateId != '0374ed53f5034055943e0381aca4c22a';
 						},
 						no_edit:function(){
-							return row.workStateId == '45d756f45bb04155adb95e66b6a0d1c1' && 
-								   row.workStateId != '0374ed53f5034055943e0381aca4c22a';
+							return row.workStateId == '45d756f45bb04155adb95e66b6a0d1c1' || 
+								   row.workStateId == '0374ed53f5034055943e0381aca4c22a';
 						},
 						pass:function(){
-							return row.workStateId != '0374ed53f5034055943e0381aca4c22a';
+							return row.workStateId == '0374ed53f5034055943e0381aca4c22a' && 
+							 	   row.endStateId == null;
 						}
 					}));
 					addRow(list, tpl, data, row.id);
@@ -120,12 +121,16 @@
 			<td>
 				{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
-			<td>{{#edit}}<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">
-				{{row.name}}
-			</a>{{/edit}}
-				{{#no_edit}}<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=true">
-				{{row.name}}
-			</a>{{/no_edit}}
+			<td>{{#edit}}
+					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
+						{{row.name}}
+					</a>
+				{{/edit}}
+				{{#no_edit}}
+					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=true">
+						{{row.name}}
+					</a>
+				{{/no_edit}}
 			</td>
 			<td>
 				{{row.workLevel}}

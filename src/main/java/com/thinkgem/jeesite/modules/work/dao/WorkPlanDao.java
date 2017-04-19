@@ -20,5 +20,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	public void reject(WorkPlan workPlan);
 
 	public void agree(WorkPlan workPlan);
+
+	public void asigned(WorkPlan workPlan);
 	
 }

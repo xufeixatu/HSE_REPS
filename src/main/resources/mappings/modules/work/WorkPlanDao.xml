@@ -271,6 +271,15 @@
 		WHERE id = #{id}
 	</update>
 	
+	<!-- 公司计划审核通过后分派给部门:更新work_plan表的work_state_id字段 -->
+	<update id="asigned">
+		UPDATE work_plan SET 
+			end_state_id = '042bb2ce059249729da41c7995e4381b',
+			depts = #{depts.id}
+		WHERE id = #{id}
+	</update>
+	
+	
 	<update id="delete">
 		UPDATE work_plan SET 
 			del_flag = #{DEL_FLAG_DELETE}

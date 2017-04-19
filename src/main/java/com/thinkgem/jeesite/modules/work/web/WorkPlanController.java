@@ -151,7 +151,7 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workPlanForm";
 	}
 	/**
-	 * 分配公司工作给部门
+	 * 进入分配公司工作给部门的表单
 	 * @param workPlan
 	 * @param model
 	 * @return
@@ -166,6 +166,20 @@ public class WorkPlanController extends BaseController {
 
 		model.addAttribute("workPlan", workPlan);
 		return "modules/work/assignedWorkForm";
+	}
+	
+	/**
+	 * 分配任务给部门
+	 * @param workPlan
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = "assigned")
+	public String assigned(WorkPlan workPlan, Model model) {
+		workPlanService.asigned(workPlan);
+		
+		return "modules/work/workPlan/list?planType=company";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")

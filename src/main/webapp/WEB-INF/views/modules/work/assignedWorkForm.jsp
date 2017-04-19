@@ -71,43 +71,6 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">工作类别：</label>
-			<div class="controls">
-				<sys:treeselect id="worktype" name="workType.id"
-					value="${workPlan.workType.id}" labelName="workType.name"
-					labelValue="${workPlan.workType.name}" title="工作类别"
-					url="/work/workType/treeData"
-					allowClear="${office.currentUser.admin}" disabled="true"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">计划开始时间：</label>
-			<div class="controls">
-				<input name="startTime" type="text" readonly="true"
-					maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${workPlan.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});" />
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">计划结束时间：</label>
-			<div class="controls">
-				<input name="planedFinishTime" type="text" readonly="true"
-					maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${workPlan.planedFinishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});" />
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">要求结束时间：</label>
-			<div class="controls">
-				<input name="requiredFinishTime" type="text" readonly="true"
-					maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${workPlan.requiredFinishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});" />
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">工作描述：</label>
 			<div class="controls">
 				<form:textarea path="workDesc" htmlEscape="false" rows="4"
@@ -115,49 +78,12 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">工作级别：</label>
-			<div class="controls">
-				<form:select path="workLevelId" class="input-medium" disabled="true" >
-					<form:options items="${fns:getDictList('work_level')}"
-						itemLabel="label" itemValue="value" htmlEscape="false" />
-				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">父计划:</label>
-			<div class="controls">
-				<sys:treeselect id="parent" name="parent.id" disabled="true"
-					value="${workPlan.parent.id}" labelName="parent.name"
-					labelValue="${workPlan.parent.name}" title="父工作计划"
-					url="/work/workPlan/treeData" extId="${workPlan.id}" cssClass=""
-					allowClear="true" />
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">任务频次：</label>
-			<div class="controls">
-				<form:checkboxes path="frequency" disabled="true"
-					items="${fns:getDictList('frequency_months')}" itemLabel="label"
-					itemValue="value" htmlEscape="false" class="" />
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">部门：</label>
+			<label class="control-label">分派任务部门：</label>
 			<div class="controls">
 				<sys:treeselect checked="true" id="dept" name="depts"
 					value="${workPlan.depts.id}" labelName="depts"
 					labelValue="${workPlan.depts.name}" title="部门"
-					url="/sys/office/treeData?type=2" cssClass="" allowClear="true"
-					notAllowSelectParent="true" />
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">负责人:</label>
-			<div class="controls">
-				<sys:treeselect id="personLiableId" name="personLiable.id"
-					value="${workPlan.personLiable.id}" labelName="personLiable.name"
-					labelValue="${workPlan.personLiable.name}" title="用户"
-					url="/sys/office/treeData?type=3" allowClear="true"
+					url="/sys/office/treeData?type=2" cssClass="required" allowClear="true"
 					notAllowSelectParent="true" />
 			</div>
 		</div>

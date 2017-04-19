@@ -58,4 +58,9 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		dao.agree(workPlan);
 	}
 	
+	@Transactional(readOnly = false)
+	public void asigned(WorkPlan workPlan) {
+		dao.asigned(workPlan);
+	}
+	
 }
