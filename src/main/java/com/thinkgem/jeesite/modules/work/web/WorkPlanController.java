@@ -113,6 +113,21 @@ public class WorkPlanController extends BaseController {
 	}
 
 	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"pending_list"})
+	public String remain_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		/**
+		 *	过滤出所有已提交状态的公司级工作计划
+		 */
+		WorkPlanSqlMapFilter.getFilter().typeSubmittedCompanyWorkPlanyFilter(workPlan, model);
+		
+
+		List<WorkPlan> list = workPlanService.findList(workPlan);
+
+		model.addAttribute("list", list);
+		return "modules/work/exec/workPendingList";
+	}
+	
+	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "form")
 	public String form(WorkPlan workPlan, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
@@ -177,9 +192,10 @@ public class WorkPlanController extends BaseController {
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "assigned")
 	public String assigned(WorkPlan workPlan, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		workPlanService.asigned(workPlan);
-		
-		return "modules/work/list?planType=company";
+		workPlan = new WorkPlan();
+		return "modules/work/exec/workPendingList";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")

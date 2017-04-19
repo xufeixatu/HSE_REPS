@@ -46,13 +46,14 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a
 			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
-		
-		<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
-			<shiro:hasPermission name="work:workPlan:edit">
+		<shiro:hasPermission name="work:workPlan:edit">
+			<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
 				<li><a
 					href="${ctx}/work/workPlan/pending_list?planType=${planTypeDict.value}">待审核${planTypeDict.label}列表</a></li>
-			</shiro:hasPermission>
-		</c:if>
+			</c:if>
+			<li><a
+					href="${ctx}/work/workPlan/remain_list?planType=${planTypeDict.value}">待受理${planTypeDict.label}列表</a></li>
+		</shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
 		action="${ctx}/work/workPlan/" method="post"
