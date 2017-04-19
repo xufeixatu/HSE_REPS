@@ -179,7 +179,7 @@ public class WorkPlanController extends BaseController {
 	public String assigned(WorkPlan workPlan, Model model) {
 		workPlanService.asigned(workPlan);
 		
-		return "modules/work/workPlan/list?planType=company";
+		return "modules/work/list?planType=company";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")
