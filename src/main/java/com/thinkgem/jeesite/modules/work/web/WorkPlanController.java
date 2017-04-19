@@ -165,7 +165,7 @@ public class WorkPlanController extends BaseController {
 		workPlan = workPlanService.get(workPlan.getId());
 
 		model.addAttribute("workPlan", workPlan);
-		return "modules/work/assignedWorkPlanForm";
+		return "modules/work/assignedWorkForm";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")
