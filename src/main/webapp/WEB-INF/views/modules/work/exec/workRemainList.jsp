@@ -34,7 +34,7 @@
 				if ((${fns:jsGetVal('row.parentId')}) == pid){
 					$(list).append(Mustache.render(tpl, {
 						dict: {
-						blank123:0}, pid: (root?0:pid), row: row
+						blank123:0}, pid: (root?0:pid), row: row,
 					}));
 					addRow(list, tpl, data, row.id);
 				}
@@ -45,7 +45,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a
-			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+			href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
 		<shiro:hasPermission name="work:workPlan:edit">
 			<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
 				<li><a
@@ -110,7 +110,7 @@
 				{{row.workState}}
 			</td>
 			<shiro:hasPermission name="work:workPlan:edit"><td>
-   				<a href="${ctx}/work/workPlan/remain_form?id={{row.id}}&planType=${planTypeDict.value}">受理</a>
+   				<a href="${ctx}/work/workPlan/remain_form?id={{row.id}}&planType=${planTypeDict.value}&currentRemainDeptId={{row.currentRemainDeptId}}">受理</a>
 			</td></shiro:hasPermission>
 		</tr>
 	</script>

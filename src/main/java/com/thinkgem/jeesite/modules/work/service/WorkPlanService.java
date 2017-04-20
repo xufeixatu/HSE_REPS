@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thinkgem.jeesite.common.service.TreeService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
+import com.thinkgem.jeesite.modules.work.entity.WorkPlanRemain;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.dao.WorkPlanDao;
 
 /**
@@ -63,6 +65,18 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	@Transactional(readOnly = false)
 	public void asigned(WorkPlan workPlan) {
 		dao.asigned(workPlan);
+	}
+	/**
+	 * 受理工作
+	 * @param workPlan
+	 */
+	@Transactional(readOnly = false)
+	public void remain(WorkPlan workPlan) {
+		WorkPlanRemain wpr = new WorkPlanRemain();
+		wpr.setRemainnerId(UserUtils.getUser().getId());
+		wpr.setRemainDeptId(workPlan.getCurrentRemainDeptId());
+		wpr.setRemainDesc(workPlan.getReminderDesc());
+		dao.remain_insert(wpr);
 	}
 
 

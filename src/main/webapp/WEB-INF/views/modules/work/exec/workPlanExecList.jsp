@@ -45,7 +45,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a
-			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+			href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
 		<shiro:hasPermission name="work:workPlan:edit">
 			<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
 				<li><a

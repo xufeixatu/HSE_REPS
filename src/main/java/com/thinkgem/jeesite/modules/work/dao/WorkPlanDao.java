@@ -9,6 +9,7 @@ import com.thinkgem.jeesite.common.persistence.TreeDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
+import com.thinkgem.jeesite.modules.work.entity.WorkPlanRemain;
 
 /**
  * 工作计划管理DAO接口
@@ -25,4 +26,6 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	public void agree(WorkPlan workPlan);
 
 	public void asigned(WorkPlan workPlan);
+
+	public void remain_insert(WorkPlanRemain wpr);
 }

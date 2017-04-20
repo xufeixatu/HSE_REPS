@@ -145,11 +145,49 @@ public class WorkPlanController extends BaseController {
 		for(WorkPlan wrkPln : list){
 			for(Office o : cos){
 				if(wrkPln.getDepts().getId().contains(o.getId())){
+					wrkPln.setCurrentRemainDeptId(o.getId());
 					lst.add(wrkPln);
 				}
 			}
 		}
 		model.addAttribute("list", lst);
+		return "modules/work/exec/workRemainList";
+	}
+	
+	/**
+	 * 进入受理工作表单
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"remain_form"})
+	public String remain_form(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		workPlan = workPlanService.get(workPlan.getId());
+		model.addAttribute("workPlan",workPlan);
+		return "modules/work/exec/workRemainForm";
+	}
+	
+	/**
+	 * 受理(修改end_state为"已受理"状态)工作
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"pending_list"})
+	public String remain_save(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		workPlanService.remain(workPlan);
+		
 		return "modules/work/exec/workRemainList";
 	}
 	

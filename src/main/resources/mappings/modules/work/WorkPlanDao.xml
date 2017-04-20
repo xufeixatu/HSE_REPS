@@ -47,11 +47,29 @@
 		sd.label AS "workLevel",
 		sd2.label AS "workState"
 	</sql>
-	
+		
 	<sql id="workPlanJoins">
 		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
 		LEFT JOIN SYS_DICT sd ON sd.id = a.work_level_id
 		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
+	</sql>
+    
+    <sql id="workRemainCollumns">
+		a.id AS "id",
+		a.remain_desc AS "remainDesc",
+		a.remainner_id AS "remainnerId",
+		a.remain_dept_id AS "remainDeptId",
+		a.workplan_id AS "workPlanId",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy",
+		a.sort AS "sort",
+		a.name AS "name"
+	</sql>
+	<sql id="workRemainJoins">
 	</sql>
     
 	<select id="get" resultType="WorkPlan">
@@ -286,4 +304,35 @@
 		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
 	
+	<insert id="remain_insert">
+		INSERT INTO work_remain_info(
+			id,
+			remain_desc",
+			remainner_id,
+			remain_dept_id,
+			workplan_id,
+			create_by,
+			del_flag,
+			remarks,
+			update_date,
+			update_by,
+			create_date,
+			sort,
+			name,
+		) VALUES (
+			#{id},
+			#{remainDesc},
+			#{remainnerId},
+			#{remainDeptId},
+			#{workPlanId},
+			#{createBy},
+			#{delFlag},
+			#{remarks},
+			#{updateDate},
+			#{updateBy},
+			now(),
+			#{sort},
+			#{name},
+		)
+	</insert>
 </mapper>
