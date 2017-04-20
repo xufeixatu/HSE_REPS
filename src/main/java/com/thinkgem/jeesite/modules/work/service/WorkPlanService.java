@@ -3,19 +3,19 @@
  */
 package com.thinkgem.jeesite.modules.work.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.service.TreeService;
+import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
-import com.thinkgem.jeesite.modules.work.entity.WorkPlanRemain;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
-import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.dao.WorkPlanDao;
+import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
+import com.thinkgem.jeesite.modules.work.entity.WorkPlanRemain;
 
 /**
  * 工作计划管理Service
@@ -73,9 +73,11 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	@Transactional(readOnly = false)
 	public void remain(WorkPlan workPlan) {
 		WorkPlanRemain wpr = new WorkPlanRemain();
+		wpr.setId(IdGen.uuid());
 		wpr.setRemainnerId(UserUtils.getUser().getId());
 		wpr.setRemainDeptId(workPlan.getCurrentRemainDeptId());
 		wpr.setRemainDesc(workPlan.getReminderDesc());
+		wpr.setCreateDate(new Date());
 		dao.remain_insert(wpr);
 	}
 

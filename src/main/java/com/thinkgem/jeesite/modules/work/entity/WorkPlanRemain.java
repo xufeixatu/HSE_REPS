@@ -3,7 +3,7 @@ package com.thinkgem.jeesite.modules.work.entity;
 import java.util.Date;
 
 public class WorkPlanRemain {
-	private int id;
+	private String id;
 	private String remainDesc;
 	private String remainnerId;
 	private String remainDeptId;
@@ -14,10 +14,10 @@ public class WorkPlanRemain {
 	private String updateBy;
 	private Date createDate;
 	private String createBy;
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getRemainDesc() {
