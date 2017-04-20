@@ -57,6 +57,7 @@ public class WorkPlanController extends BaseController {
 	
 	@ModelAttribute
 	public WorkPlan get(@RequestParam(required = false) String id) {
+		
 		WorkPlan entity = null;
 		if (StringUtils.isNotBlank(id)) {
 			entity = workPlanService.get(id);
@@ -91,8 +92,6 @@ public class WorkPlanController extends BaseController {
 		}else if("company".equals(workPlan.getPlanType())){
 			WorkPlanSqlMapFilter.getFilter().typeCompnayFilter(workPlan, model);
 		}
-		
-		
 
 		List<WorkPlan> list = workPlanService.findList(workPlan);
 
@@ -133,7 +132,8 @@ public class WorkPlanController extends BaseController {
 		/**
 		 * 查出当前登陆人任负责人的部门
 		 */
-		List<Office> cos = OfficeUtil.getCurrentUserOfficeById(UserUtils.getUser().getId());
+		workPlan.setUserId(UserUtils.getUser().getId());
+		List<Office> cos = OfficeUtil.getCurrentUserOfficeById(workPlan);
 		
 		/**
 		 * 找出指派单位是当前登陆人负责的部门的工作置入列表
@@ -185,7 +185,7 @@ public class WorkPlanController extends BaseController {
 		
 		workPlanService.remain(workPlan);
 		
-		return "modules/work/exec/workRemainList";
+		return "redirect:" + Global.getAdminPath() + "/work/exec/workRemainList?repage&planType=company";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")

@@ -307,7 +307,7 @@
 	<insert id="remain_insert">
 		INSERT INTO work_remain_info(
 			id,
-			remain_desc",
+			remain_desc,
 			remainner_id,
 			remain_dept_id,
 			workplan_id,
@@ -317,22 +317,20 @@
 			update_date,
 			update_by,
 			create_date,
-			sort,
-			name,
+			name
 		) VALUES (
-			#{id},
+			#{remainId},
 			#{remainDesc},
 			#{remainnerId},
 			#{remainDeptId},
-			#{workPlanId},
-			#{createBy},
-			#{delFlag},
-			#{remarks},
-			#{updateDate},
-			#{updateBy},
+			#{remainWorkPlanId},
+			#{remainCreateBy},
+			#{remainDelFlag},
+			#{remainRemarks},
+			#{remainUpdateDate},
+			#{remainUpdateBy},
 			now(),
-			#{sort},
-			#{name},
+			#{remainName}
 		)
 	</insert>
 </mapper>

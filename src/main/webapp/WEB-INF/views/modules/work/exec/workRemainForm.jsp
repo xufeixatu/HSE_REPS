@@ -235,6 +235,7 @@
 	
 	<form:form action="${ctx}/work/workPlan/remain_save" method="post" id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
 		<form:hidden path="id" />
+		<form:hidden path="currentRemainDeptId"/>
 		<input type="hidden" name="planType" value="company" />
 		<div class="control-group">
 			<label class="control-label">接受工作留言:</label>
@@ -245,7 +246,7 @@
 		</div>
 		<div class="form-actions">
 			<input id="btnSubmit1" class="btn btn-primary" type="submit"
-				value="同意"/>&nbsp;
+				value="受理"/>&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回"
 				onclick="history.go(-1)" />
 		</div>

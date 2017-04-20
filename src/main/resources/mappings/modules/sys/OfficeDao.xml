@@ -49,13 +49,13 @@
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findCurrentUserOfficesById" parameterType="string" resultType="Office">
+	<select id="findCurrentUserOfficesById" resultType="Office">
 		SELECT
 			<include refid="officeColumns"/>
 		FROM sys_office a
 		<include refid="officeJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL} and 
-		      pp.id = #{userid}
+		      pp.id = #{userId}
 	</select>
 	
 	<select id="findList" resultType="Office">

@@ -24,5 +24,5 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 
 	public void asigned(WorkPlan workPlan);
 
-	public void remain_insert(WorkPlanRemain wpr);
+	public void remain_insert(WorkPlan workPlan);
 }

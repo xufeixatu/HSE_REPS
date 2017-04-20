@@ -6,10 +6,8 @@ package com.thinkgem.jeesite.modules.work.entity;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
@@ -43,7 +41,11 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private boolean isApproveUpdate;		// 审核人能否更改
 	private boolean isRetainsApproveUpdate;		// 是否保留审核者的更新
 	private String approveOpinion;		// approve_opinion
-//	private Date acceptanceTime;		// 接受时间 
+	/**
+	 * 接受任务时间，已经淘汰不用。因公司任务分派给多个部门，所以同一任务的接受也是多个部门的信息，原设计用单一属性是错误的
+	 */
+	@Deprecated
+	private Date acceptanceTime;
 	private String assignerId;		// 指派人
 	private Date assignTime;		// 指派时间
 	private String endStateId;		// 结束状态
@@ -67,7 +69,120 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 *    此属性值并非保存在工作计划表中，而是与受理人，受理部门等信息一起存在受理信息表中
 	 */
 	private String reminderDesc;
+	/**
+	 * 存储受理人ID的临时变量
+	 */
+	private String userId;
+	
+	/***************************************************************************************
+	 **********************************Remain受理表数据开始***********************************
+	 ***************************************************************************************/
+	private String remainId;
+	private String remainDesc;
+	private String remainnerId;
+	private String remainDeptId;
+	private String remainWorkPlanId;
+	private String remainDelFlag;
+	private String remainRemarks;
+	private Date remainUpdateDate;
+	private String remainUpdateBy;
+	private Date remainCreateDate;
+	private String remainCreateBy;
+	private String remainName;
+	/***************************************************************************************
+	 **********************************Remain受理表数据结束***********************************
+	 ***************************************************************************************/
+	public String getRemainCreateBy() {
+		return remainCreateBy;
+	}
+	public void setRemainCreateBy(String remainCreateBy) {
+		this.remainCreateBy = remainCreateBy;
+	}
+	public String getRemainName() {
+		return remainName;
+	}
+	public void setRemainName(String remainName) {
+		this.remainName = remainName;
+	}
+	public String getRemainDesc() {
+		return remainDesc;
+	}
+	public String getRemainId() {
+		return remainId;
+	}
+	public void setRemainId(String remainId) {
+		this.remainId = remainId;
+	}
+	public String getRemainDelFlag() {
+		return remainDelFlag;
+	}
+	public void setRemainDelFlag(String remainDelFlag) {
+		this.remainDelFlag = remainDelFlag;
+	}
+	public String getRemainRemarks() {
+		return remainRemarks;
+	}
+	public void setRemainRemarks(String remainRemark) {
+		this.remainRemarks = remainRemark;
+	}
+	public Date getRemainUpdateDate() {
+		return remainUpdateDate;
+	}
+	public void setRemainUpdateDate(Date remainUpdateDate) {
+		this.remainUpdateDate = remainUpdateDate;
+	}
+	public String getRemainUpdateBy() {
+		return remainUpdateBy;
+	}
+	public void setRemainUpdateBy(String remainUpdateBy) {
+		this.remainUpdateBy = remainUpdateBy;
+	}
+	public Date getRemainCreateDate() {
+		return remainCreateDate;
+	}
+	public void setRemainCreateDate(Date remainCreateDate) {
+		this.remainCreateDate = remainCreateDate;
+	}
+	public void setRemainDesc(String remainDesc) {
+		this.remainDesc = remainDesc;
+	}
+	public String getRemainnerId() {
+		return remainnerId;
+	}
+	public void setRemainnerId(String remainnerId) {
+		this.remainnerId = remainnerId;
+	}
+	public String getRemainDeptId() {
+		return remainDeptId;
+	}
+	public void setRemainDeptId(String remainDeptId) {
+		this.remainDeptId = remainDeptId;
+	}
+	public String getRemainWorkPlanId() {
+		return remainWorkPlanId;
+	}
+	public void setRemainWorkPlanId(String remainWorkPlanId) {
+		this.remainWorkPlanId = remainWorkPlanId;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public String getUserId() {
+		return userId;
+	}
 
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public Date getAcceptanceTime() {
+		return acceptanceTime;
+	}
+
+	public void setAcceptanceTime(Date acceptanceTime) {
+		this.acceptanceTime = acceptanceTime;
+	}
 	public String getReminderDesc() {
 		return reminderDesc;
 	}
@@ -75,211 +190,155 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setReminderDesc(String reminderDesc) {
 		this.reminderDesc = reminderDesc;
 	}
-
 	public String getCurrentRemainDeptId() {
 		return currentRemainDeptId;
 	}
-
 	public void setCurrentRemainDeptId(String currentRemainDeptId) {
 		this.currentRemainDeptId = currentRemainDeptId;
 	}
-
 	public Set<WorkPlanRemain> getRemains() {
 		return remains;
 	}
-
 	public void setRemains(Set<WorkPlanRemain> remains) {
 		this.remains = remains;
 	}
-
 	public String getWorkLevel() {
 		return workLevel;
 	}
-
 	public void setWorkLevel(String workLevel) {
 		this.workLevel = workLevel;
 	}
-
 	public String getWorkState() {
 		return workState;
 	}
-
 	public void setWorkState(String work_state) {
 		this.workState = work_state;
 	}
-
 	public boolean isNoedit() {
 		return noedit;
 	}
-
 	public void setNoedit(boolean noedit) {
 		this.noedit = noedit;
 	}
-
 	public boolean isWorkSubmit() {
 		return workSubmit;
 	}
-
 	public void setWorkSubmit(boolean workSubmit) {
 		this.workSubmit = workSubmit;
 	}
-
 	public String getPlanType() {
 		return planType;
 	}
-
 	public void setPlanType(String planType) {
 		this.planType = planType;
 	}
-
 	public WorkPlan() {
 		super();
 	}
-
 	public WorkPlan(String id){
 		super(id);
 	}
-
-//	@Length(min=0, max=64, message="工作类别长度必须介于 0 和 64 之间")
-//	public String getWorkTypeId() {
-//		return workTypeId;
-//	}
-//
-//	public void setWorkTypeId(String workTypeId) {
-//		this.workTypeId = workTypeId;
-//	}
-	
 	public WorkType getWorkType() {
 		return workType;
 	}
-
 	public void setWorkType(WorkType workType) {
 		this.workType = workType;
 	}
-
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getRequiredFinishTime() {
 		return requiredFinishTime;
 	}
-
 	public void setRequiredFinishTime(Date requiredFinishTime) {
 		this.requiredFinishTime = requiredFinishTime;
 	}
-	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getStartTime() {
 		return startTime;
 	}
-
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getPlanedFinishTime() {
 		return planedFinishTime;
 	}
-
 	public void setPlanedFinishTime(Date planedFinishTime) {
 		this.planedFinishTime = planedFinishTime;
 	}
-	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getActualFinishTime() {
 		return actualFinishTime;
 	}
-
 	public void setActualFinishTime(Date actualFinishTime) {
 		this.actualFinishTime = actualFinishTime;
 	}
-	
 	@Length(min=0, max=64, message="工作级别长度必须介于 0 和 64 之间")
 	public String getWorkLevelId() {
 		return workLevelId;
 	}
-
 	public void setWorkLevelId(String workLevelId) {
 		this.workLevelId = workLevelId;
 	}
-	
 	@Length(min=0, max=255, message="工作描述长度必须介于 0 和 255 之间")
 	public String getWorkDesc() {
 		return workDesc;
 	}
-
 	public void setWorkDesc(String workDesc) {
 		this.workDesc = workDesc;
 	}
-	
 	@Length(min=0, max=255, message="工作要求长度必须介于 0 和 255 之间")
 	public String getJobRequire() {
 		return jobRequire;
 	}
-
 	public void setJobRequire(String jobRequire) {
 		this.jobRequire = jobRequire;
 	}
-	
 	@Length(min=0, max=200, message="zsk_id长度必须介于 0 和 200 之间")
 	public String getZskId() {
 		return zskId;
 	}
-
 	public void setZskId(String zskId) {
 		this.zskId = zskId;
 	}
-	
 	@Length(min=0, max=64, message="工作状态长度必须介于 0 和 64 之间")
 	public String getWorkStateId() {
 		return workStateId;
 	}
-
 	public void setWorkStateId(String workStateId) {
 		this.workStateId = workStateId;
 	}
-	
 	public boolean getIsOpen() {
 		return isOpen;
 	}
-
 	public void setIsOpen(boolean isOpen) {
 		this.isOpen = isOpen;
 	}
-	
 	@JsonBackReference
 	public WorkPlan getParent() {
 		return parent;
 	}
-
 	public void setParent(WorkPlan parent) {
 		this.parent = parent;
 	}
-	
 	public boolean getIsCancel() {
 		return isCancel;
 	}
-
 	public void setIsCancel(boolean isCancel) {
 		this.isCancel = isCancel;
 	}
-	
 	@Length(min=0, max=255, message="取消原因长度必须介于 0 和 255 之间")
 	public String getCancelReason() {
 		return cancelReason;
 	}
-
 	public void setCancelReason(String cancelReason) {
 		this.cancelReason = cancelReason;
 	}
-	
 	public boolean getIsRemove() {
 		return isRemove;
 	}
-
 	public void setIsRemove(boolean isRemove) {
 		this.isRemove = isRemove;
 	}
-	
 	@Length(min=0, max=255, message="删除原因长度必须介于 0 和 255 之间")
 	public String getRemoveReason() {
 		return removeReason;
@@ -374,6 +433,4 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setDepts(Office depts) {
 		this.depts = depts;
 	}
-
-
 }

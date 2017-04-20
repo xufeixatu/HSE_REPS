@@ -123,7 +123,7 @@ public class WorkPlanSqlMapFilter {
 		dsf.append("' ");
 		dsf.append("and");
 		dsf.append(" (");
-		dsf.append("a.is_open = 1");
+		dsf.append("a.is_open = 0");//开放状态
 		dsf.append(" or ");
 		dsf.append("a.person_liable_id='");
 		dsf.append(UserUtils.getUser().getId());

@@ -72,13 +72,13 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	 */
 	@Transactional(readOnly = false)
 	public void remain(WorkPlan workPlan) {
-		WorkPlanRemain wpr = new WorkPlanRemain();
-		wpr.setId(IdGen.uuid());
-		wpr.setRemainnerId(UserUtils.getUser().getId());
-		wpr.setRemainDeptId(workPlan.getCurrentRemainDeptId());
-		wpr.setRemainDesc(workPlan.getReminderDesc());
-		wpr.setCreateDate(new Date());
-		dao.remain_insert(wpr);
+		WorkPlan wrkpln = new WorkPlan();
+		wrkpln.setRemainId(IdGen.uuid());
+		wrkpln.setRemainDesc(workPlan.getRemainDesc());
+		wrkpln.setRemainnerId(UserUtils.getUser().getId());
+		wrkpln.setRemainDeptId(workPlan.getCurrentRemainDeptId());
+		wrkpln.setRemainWorkPlanId(workPlan.getId());
+		dao.remain_insert(wrkpln);
 	}
 
 }

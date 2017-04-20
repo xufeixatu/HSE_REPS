@@ -5,6 +5,7 @@ import java.util.List;
 import com.thinkgem.jeesite.common.utils.SpringContextHolder;
 import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
+import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 
 public class OfficeUtil {
 	private static OfficeDao officeDao = SpringContextHolder.getBean(OfficeDao.class);
@@ -22,7 +23,7 @@ public class OfficeUtil {
 	 * @param userid
 	 * @return
 	 */
-	public static List<Office> getCurrentUserOfficeById(String userid){
-		return officeDao.findCurrentUserOfficesById(userid);
+	public static List<Office> getCurrentUserOfficeById(WorkPlan workPlan){
+		return officeDao.findCurrentUserOfficesById(workPlan);
 	}
 }

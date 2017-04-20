@@ -113,7 +113,6 @@
 			</td>
 			<c:if test="${planTypeDict.value == 'personal' }">
 			<shiro:hasPermission name="work:workPlan:edit"><td>
-				
    				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>
 				<a href="${ctx}/work/workPlan/delete?id={{row.id}}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
 				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}">添加下级工作计划</a> 
