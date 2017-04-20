@@ -181,7 +181,7 @@ public class WorkPlanController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"pending_list"})
+	@RequestMapping(value = {"remain_save"})
 	public String remain_save(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);

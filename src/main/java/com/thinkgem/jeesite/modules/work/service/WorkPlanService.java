@@ -79,5 +79,4 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		dao.remain_insert(wpr);
 	}
 
-
 }
