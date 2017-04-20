@@ -304,6 +304,31 @@
 		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
 	
+	<!-- 受理分派的公司计划:更新WorkPlan表的end_state_id字段,为已受理状态 -->
+	<update id="remain">
+		UPDATE work_plan SET 
+			end_state_id = '1564424ef256499bb3faa03033924b2f'
+		WHERE id = #{id} 
+	</update>
+	
+	<!-- 查询受理人受理特定工作的次数 -->
+	<select id="remainsCount" resultType="int">
+		SELECT count(*) FROM work_remain_info a
+		<where>
+			a.workplan_id = #{workPlanId} and
+			a.remainner_id = #{remainnerId}
+		</where>
+	</select>
+	
+	<!-- 查询特定工作被分配部门受理的次数 -->
+	<select id="isRemainOver" resultType="int">
+		SELECT count(*) FROM work_remain_info a
+		<where>
+			a.workplan_id = #{remainWorkPlanId} and 
+			FIND_IN_SET(remain_dept_id,#{depts}) > 0
+		</where>
+	</select>
+	
 	<insert id="remain_insert">
 		INSERT INTO work_remain_info(
 			id,

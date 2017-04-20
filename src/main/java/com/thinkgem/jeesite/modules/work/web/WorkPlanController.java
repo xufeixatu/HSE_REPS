@@ -27,6 +27,7 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.modules.sys.utils.OfficeUtil;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
@@ -132,7 +133,8 @@ public class WorkPlanController extends BaseController {
 		/**
 		 * 查出当前登陆人任负责人的部门
 		 */
-		workPlan.setUserId(UserUtils.getUser().getId());
+		User cu = UserUtils.getUser();
+		workPlan.setUserId(cu.getId());
 		List<Office> cos = OfficeUtil.getCurrentUserOfficeById(workPlan);
 		
 		/**
@@ -142,8 +144,11 @@ public class WorkPlanController extends BaseController {
 		for(WorkPlan wrkPln : list){
 			for(Office o : cos){
 				if(wrkPln.getDepts().getId().contains(o.getId())){
-					wrkPln.setCurrentRemainDeptId(o.getId());
-					lst.add(wrkPln);
+					//判断在受理表中当前用户未受理过该工作再添加进待审核列表
+					if(workPlanService.remainsCount(wrkPln.getId(),cu.getId()) == 0){
+						wrkPln.setCurrentRemainDeptId(o.getId());
+						lst.add(wrkPln);
+					}
 				}
 			}
 		}
@@ -184,7 +189,7 @@ public class WorkPlanController extends BaseController {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
 		workPlanService.remain(workPlan);
-		
+		System.out.println("redirect:" + Global.getAdminPath() + "/work/exec/workRemainList?repage&planType=company");
 		return "redirect:" + Global.getAdminPath() + "/work/exec/workRemainList?repage&planType=company";
 	}
 	

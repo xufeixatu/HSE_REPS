@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.work.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.thinkgem.jeesite.common.persistence.TreeDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
@@ -25,4 +27,10 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	public void asigned(WorkPlan workPlan);
 
 	public void remain_insert(WorkPlan workPlan);
+
+	public void remain();
+
+	public int remainsCount(@Param("workPlanId") String workPlanId,@Param("remainnerId") String remainnerId);
+
+	public int isRemainOver(@Param("depts") String depts, @Param("remainWorkPlanId") String remainWorkPlanId);
 }

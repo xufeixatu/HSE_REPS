@@ -237,6 +237,7 @@
 		<form:hidden path="id" />
 		<form:hidden path="currentRemainDeptId"/>
 		<input type="hidden" name="planType" value="company" />
+		<form:hidden path="depts"/>
 		<div class="control-group">
 			<label class="control-label">接受工作留言:</label>
 			<div class="controls">

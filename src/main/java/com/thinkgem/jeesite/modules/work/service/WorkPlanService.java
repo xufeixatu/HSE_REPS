@@ -3,7 +3,6 @@
  */
 package com.thinkgem.jeesite.modules.work.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.dao.WorkPlanDao;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
-import com.thinkgem.jeesite.modules.work.entity.WorkPlanRemain;
 
 /**
  * 工作计划管理Service
@@ -25,6 +23,8 @@ import com.thinkgem.jeesite.modules.work.entity.WorkPlanRemain;
 @Service
 @Transactional(readOnly = true)
 public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
+
+	private static final String String = null;
 
 	public WorkPlan get(String id) {
 		return super.get(id);
@@ -79,6 +79,26 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		wrkpln.setRemainDeptId(workPlan.getCurrentRemainDeptId());
 		wrkpln.setRemainWorkPlanId(workPlan.getId());
 		dao.remain_insert(wrkpln);
+		
+		/**
+		 * 如果所有分配该工作的部门均已接受，则将受理状态改为已受理
+		 */
+		String depts = workPlan.getDepts().getId();
+		if(dao.isRemainOver(depts,wrkpln.getRemainWorkPlanId()) == depts.split(",").length ){
+			dao.remain();
+		}
+	}
+
+	/**
+	 * 查询是否
+	 * @param id
+	 * @param id2
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public int remainsCount(String workPlanId, String remainnerId) {
+		
+		return dao.remainsCount(workPlanId,remainnerId);
 	}
 
 }
