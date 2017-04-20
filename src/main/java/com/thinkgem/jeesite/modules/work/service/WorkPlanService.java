@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thinkgem.jeesite.common.service.TreeService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.work.dao.WorkPlanDao;
 
 /**
@@ -62,5 +64,6 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	public void asigned(WorkPlan workPlan) {
 		dao.asigned(workPlan);
 	}
-	
+
+
 }

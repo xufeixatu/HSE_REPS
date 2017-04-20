@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.work.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,10 +23,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.utils.SpringContextHolder;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
 import com.thinkgem.jeesite.modules.sys.entity.Dict;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
+import com.thinkgem.jeesite.modules.sys.service.OfficeService;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
+import com.thinkgem.jeesite.modules.sys.utils.OfficeUtil;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 import com.thinkgem.jeesite.modules.work.service.WorkPlanService;
@@ -51,7 +57,7 @@ public class WorkPlanController extends BaseController {
 
 	@Autowired
 	private WorkTypeService workTypeService;
-
+	
 	@ModelAttribute
 	public WorkPlan get(@RequestParam(required = false) String id) {
 		WorkPlan entity = null;
@@ -111,27 +117,46 @@ public class WorkPlanController extends BaseController {
 		model.addAttribute("list", list);
 		return "modules/work/exec/workPendingList";
 	}
-
+	/**
+	 * 查询待受理工作
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"pending_list"})
+	@RequestMapping(value = {"remain_list"})
 	public String remain_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		/**
-		 *	过滤出所有已提交状态的公司级工作计划
+		 *	过滤出所有待受理状态的公司级工作计划
 		 */
-		WorkPlanSqlMapFilter.getFilter().typeSubmittedCompanyWorkPlanyFilter(workPlan, model);
-		
-
+		WorkPlanSqlMapFilter.getFilter().typeRemainCompanyWorkPlanyFilter(workPlan, model);
 		List<WorkPlan> list = workPlanService.findList(workPlan);
-
-		model.addAttribute("list", list);
-		return "modules/work/exec/workPendingList";
+		/**
+		 * 查出当前登陆人任负责人的部门
+		 */
+		List<Office> cos = OfficeUtil.getCurrentUserOfficeById(UserUtils.getUser().getId());
+		
+		/**
+		 * 找出指派单位是当前登陆人负责的部门的工作置入列表
+		 */
+		List<WorkPlan> lst = new ArrayList<WorkPlan>();
+		for(WorkPlan wrkPln : list){
+			for(Office o : cos){
+				if(wrkPln.getDepts().getId().contains(o.getId())){
+					lst.add(wrkPln);
+				}
+			}
+		}
+		model.addAttribute("list", lst);
+		return "modules/work/exec/workRemainList";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "form")
 	public String form(WorkPlan workPlan, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
-
 		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
 
 		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {

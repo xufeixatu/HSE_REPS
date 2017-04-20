@@ -155,4 +155,24 @@ public class WorkPlanSqlMapFilter {
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}
+
+	/**
+	 * 过滤出所有end_state为"已分派"状态的公司级工作计划
+	 * @param workPlan
+	 * @param model
+	 */
+	public void typeRemainCompanyWorkPlanyFilter(WorkPlan workPlan, Model model) {
+		common(workPlan, model);
+		planTypeDict = DictUtils.getDictByValue("company", "type_plan");
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("a.plan_type = '");
+		dsf.append(planTypeDict.getId());
+		dsf.append("' ");
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("a.end_state_id = '042bb2ce059249729da41c7995e4381b' ");
+		// 将字符串加回到sqlMap.dsf属性
+		sqlMap.put("dsf", dsf.toString());
+	}
 }
