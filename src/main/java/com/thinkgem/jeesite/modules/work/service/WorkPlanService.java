@@ -84,7 +84,7 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		 * 如果所有分配该工作的部门均已接受，则将受理状态改为已受理
 		 */
 		String depts = workPlan.getDepts().getId();
-		if(dao.isRemainOver(depts,wrkpln.getRemainWorkPlanId()) == depts.split(",").length ){
+		if(dao.isRemainOver(depts,wrkpln.getId()) == depts.split(",").length ){
 			dao.remain();
 		}
 	}
@@ -96,9 +96,14 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	 * @return
 	 */
 	@Transactional(readOnly = false)
-	public int remainsCount(String workPlanId, String remainnerId) {
+	public int remainsCount(String workPlanId, String remainnerId,String officeId) {
 		
-		return dao.remainsCount(workPlanId,remainnerId);
+		return dao.remainsCount(workPlanId,remainnerId,officeId);
+	}
+	@Transactional(readOnly = false)
+	public List<WorkPlan> findRemainnedWorkPlanList(String id) {
+		
+		return dao.findCurrentRemainnedWorkPlanList(id);
 	}
 
 }

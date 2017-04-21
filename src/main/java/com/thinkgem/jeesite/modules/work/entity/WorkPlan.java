@@ -18,7 +18,6 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
  * @version 2017-04-07
  */
 public class WorkPlan extends TreeEntity<WorkPlan> {
-	
 	private static final long serialVersionUID = 1L;
 	private WorkType workType;		// 工作类别
 	private Date requiredFinishTime;		// 要求结束时间
@@ -89,9 +88,16 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private Date remainCreateDate;
 	private String remainCreateBy;
 	private String remainName;
+	private String remainDeptName;
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	public String getRemainDeptName() {
+		return remainDeptName;
+	}
+	public void setRemainDeptName(String remainDeptName) {
+		this.remainDeptName = remainDeptName;
+	}
 	public String getRemainCreateBy() {
 		return remainCreateBy;
 	}
@@ -432,5 +438,281 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 
 	public void setDepts(Office depts) {
 		this.depts = depts;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((acceptanceTime == null) ? 0 : acceptanceTime.hashCode());
+		result = prime * result + ((actualFinishTime == null) ? 0 : actualFinishTime.hashCode());
+		result = prime * result + ((approveOpinion == null) ? 0 : approveOpinion.hashCode());
+		result = prime * result + ((assignTime == null) ? 0 : assignTime.hashCode());
+		result = prime * result + ((assignerId == null) ? 0 : assignerId.hashCode());
+		result = prime * result + ((cancelReason == null) ? 0 : cancelReason.hashCode());
+		result = prime * result + ((currentRemainDeptId == null) ? 0 : currentRemainDeptId.hashCode());
+		result = prime * result + ((depts == null) ? 0 : depts.hashCode());
+		result = prime * result + ((endStateId == null) ? 0 : endStateId.hashCode());
+		result = prime * result + ((frequency == null) ? 0 : frequency.hashCode());
+		result = prime * result + (isApprovable ? 1231 : 1237);
+		result = prime * result + (isApproveUpdate ? 1231 : 1237);
+		result = prime * result + (isCancel ? 1231 : 1237);
+		result = prime * result + (isOpen ? 1231 : 1237);
+		result = prime * result + (isRemove ? 1231 : 1237);
+		result = prime * result + (isRetainsApproveUpdate ? 1231 : 1237);
+		result = prime * result + ((jobRequire == null) ? 0 : jobRequire.hashCode());
+		result = prime * result + (noedit ? 1231 : 1237);
+		result = prime * result + ((personLiable == null) ? 0 : personLiable.hashCode());
+		result = prime * result + ((planType == null) ? 0 : planType.hashCode());
+		result = prime * result + ((planedFinishTime == null) ? 0 : planedFinishTime.hashCode());
+		result = prime * result + ((remainCreateBy == null) ? 0 : remainCreateBy.hashCode());
+		result = prime * result + ((remainCreateDate == null) ? 0 : remainCreateDate.hashCode());
+		result = prime * result + ((remainDelFlag == null) ? 0 : remainDelFlag.hashCode());
+		result = prime * result + ((remainDeptId == null) ? 0 : remainDeptId.hashCode());
+		result = prime * result + ((remainDesc == null) ? 0 : remainDesc.hashCode());
+		result = prime * result + ((remainId == null) ? 0 : remainId.hashCode());
+		result = prime * result + ((remainName == null) ? 0 : remainName.hashCode());
+		result = prime * result + ((remainRemarks == null) ? 0 : remainRemarks.hashCode());
+		result = prime * result + ((remainUpdateBy == null) ? 0 : remainUpdateBy.hashCode());
+		result = prime * result + ((remainUpdateDate == null) ? 0 : remainUpdateDate.hashCode());
+		result = prime * result + ((remainWorkPlanId == null) ? 0 : remainWorkPlanId.hashCode());
+		result = prime * result + ((remainnerId == null) ? 0 : remainnerId.hashCode());
+		result = prime * result + ((remains == null) ? 0 : remains.hashCode());
+		result = prime * result + ((reminderDesc == null) ? 0 : reminderDesc.hashCode());
+		result = prime * result + ((removeReason == null) ? 0 : removeReason.hashCode());
+		result = prime * result + ((requiredFinishTime == null) ? 0 : requiredFinishTime.hashCode());
+		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		result = prime * result + ((workDesc == null) ? 0 : workDesc.hashCode());
+		result = prime * result + ((workLevel == null) ? 0 : workLevel.hashCode());
+		result = prime * result + ((workLevelId == null) ? 0 : workLevelId.hashCode());
+		result = prime * result + ((workState == null) ? 0 : workState.hashCode());
+		result = prime * result + ((workStateId == null) ? 0 : workStateId.hashCode());
+		result = prime * result + (workSubmit ? 1231 : 1237);
+		result = prime * result + ((workType == null) ? 0 : workType.hashCode());
+		result = prime * result + ((zskId == null) ? 0 : zskId.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		WorkPlan other = (WorkPlan) obj;
+		if (acceptanceTime == null) {
+			if (other.acceptanceTime != null)
+				return false;
+		} else if (!acceptanceTime.equals(other.acceptanceTime))
+			return false;
+		if (actualFinishTime == null) {
+			if (other.actualFinishTime != null)
+				return false;
+		} else if (!actualFinishTime.equals(other.actualFinishTime))
+			return false;
+		if (approveOpinion == null) {
+			if (other.approveOpinion != null)
+				return false;
+		} else if (!approveOpinion.equals(other.approveOpinion))
+			return false;
+		if (assignTime == null) {
+			if (other.assignTime != null)
+				return false;
+		} else if (!assignTime.equals(other.assignTime))
+			return false;
+		if (assignerId == null) {
+			if (other.assignerId != null)
+				return false;
+		} else if (!assignerId.equals(other.assignerId))
+			return false;
+		if (cancelReason == null) {
+			if (other.cancelReason != null)
+				return false;
+		} else if (!cancelReason.equals(other.cancelReason))
+			return false;
+		if (currentRemainDeptId == null) {
+			if (other.currentRemainDeptId != null)
+				return false;
+		} else if (!currentRemainDeptId.equals(other.currentRemainDeptId))
+			return false;
+		if (depts == null) {
+			if (other.depts != null)
+				return false;
+		} else if (!depts.equals(other.depts))
+			return false;
+		if (endStateId == null) {
+			if (other.endStateId != null)
+				return false;
+		} else if (!endStateId.equals(other.endStateId))
+			return false;
+		if (frequency == null) {
+			if (other.frequency != null)
+				return false;
+		} else if (!frequency.equals(other.frequency))
+			return false;
+		if (isApprovable != other.isApprovable)
+			return false;
+		if (isApproveUpdate != other.isApproveUpdate)
+			return false;
+		if (isCancel != other.isCancel)
+			return false;
+		if (isOpen != other.isOpen)
+			return false;
+		if (isRemove != other.isRemove)
+			return false;
+		if (isRetainsApproveUpdate != other.isRetainsApproveUpdate)
+			return false;
+		if (jobRequire == null) {
+			if (other.jobRequire != null)
+				return false;
+		} else if (!jobRequire.equals(other.jobRequire))
+			return false;
+		if (noedit != other.noedit)
+			return false;
+		if (personLiable == null) {
+			if (other.personLiable != null)
+				return false;
+		} else if (!personLiable.equals(other.personLiable))
+			return false;
+		if (planType == null) {
+			if (other.planType != null)
+				return false;
+		} else if (!planType.equals(other.planType))
+			return false;
+		if (planedFinishTime == null) {
+			if (other.planedFinishTime != null)
+				return false;
+		} else if (!planedFinishTime.equals(other.planedFinishTime))
+			return false;
+		if (remainCreateBy == null) {
+			if (other.remainCreateBy != null)
+				return false;
+		} else if (!remainCreateBy.equals(other.remainCreateBy))
+			return false;
+		if (remainCreateDate == null) {
+			if (other.remainCreateDate != null)
+				return false;
+		} else if (!remainCreateDate.equals(other.remainCreateDate))
+			return false;
+		if (remainDelFlag == null) {
+			if (other.remainDelFlag != null)
+				return false;
+		} else if (!remainDelFlag.equals(other.remainDelFlag))
+			return false;
+		if (remainDeptId == null) {
+			if (other.remainDeptId != null)
+				return false;
+		} else if (!remainDeptId.equals(other.remainDeptId))
+			return false;
+		if (remainDesc == null) {
+			if (other.remainDesc != null)
+				return false;
+		} else if (!remainDesc.equals(other.remainDesc))
+			return false;
+		if (remainId == null) {
+			if (other.remainId != null)
+				return false;
+		} else if (!remainId.equals(other.remainId))
+			return false;
+		if (remainName == null) {
+			if (other.remainName != null)
+				return false;
+		} else if (!remainName.equals(other.remainName))
+			return false;
+		if (remainRemarks == null) {
+			if (other.remainRemarks != null)
+				return false;
+		} else if (!remainRemarks.equals(other.remainRemarks))
+			return false;
+		if (remainUpdateBy == null) {
+			if (other.remainUpdateBy != null)
+				return false;
+		} else if (!remainUpdateBy.equals(other.remainUpdateBy))
+			return false;
+		if (remainUpdateDate == null) {
+			if (other.remainUpdateDate != null)
+				return false;
+		} else if (!remainUpdateDate.equals(other.remainUpdateDate))
+			return false;
+		if (remainWorkPlanId == null) {
+			if (other.remainWorkPlanId != null)
+				return false;
+		} else if (!remainWorkPlanId.equals(other.remainWorkPlanId))
+			return false;
+		if (remainnerId == null) {
+			if (other.remainnerId != null)
+				return false;
+		} else if (!remainnerId.equals(other.remainnerId))
+			return false;
+		if (remains == null) {
+			if (other.remains != null)
+				return false;
+		} else if (!remains.equals(other.remains))
+			return false;
+		if (reminderDesc == null) {
+			if (other.reminderDesc != null)
+				return false;
+		} else if (!reminderDesc.equals(other.reminderDesc))
+			return false;
+		if (removeReason == null) {
+			if (other.removeReason != null)
+				return false;
+		} else if (!removeReason.equals(other.removeReason))
+			return false;
+		if (requiredFinishTime == null) {
+			if (other.requiredFinishTime != null)
+				return false;
+		} else if (!requiredFinishTime.equals(other.requiredFinishTime))
+			return false;
+		if (startTime == null) {
+			if (other.startTime != null)
+				return false;
+		} else if (!startTime.equals(other.startTime))
+			return false;
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equals(other.userId))
+			return false;
+		if (workDesc == null) {
+			if (other.workDesc != null)
+				return false;
+		} else if (!workDesc.equals(other.workDesc))
+			return false;
+		if (workLevel == null) {
+			if (other.workLevel != null)
+				return false;
+		} else if (!workLevel.equals(other.workLevel))
+			return false;
+		if (workLevelId == null) {
+			if (other.workLevelId != null)
+				return false;
+		} else if (!workLevelId.equals(other.workLevelId))
+			return false;
+		if (workState == null) {
+			if (other.workState != null)
+				return false;
+		} else if (!workState.equals(other.workState))
+			return false;
+		if (workStateId == null) {
+			if (other.workStateId != null)
+				return false;
+		} else if (!workStateId.equals(other.workStateId))
+			return false;
+		if (workSubmit != other.workSubmit)
+			return false;
+		if (workType == null) {
+			if (other.workType != null)
+				return false;
+		} else if (!workType.equals(other.workType))
+			return false;
+		if (zskId == null) {
+			if (other.zskId != null)
+				return false;
+		} else if (!zskId.equals(other.zskId))
+			return false;
+		return true;
 	}
 }

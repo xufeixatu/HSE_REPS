@@ -47,12 +47,65 @@
 		sd.label AS "workLevel",
 		sd2.label AS "workState"
 	</sql>
-		
 	<sql id="workPlanJoins">
 		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
 		LEFT JOIN SYS_DICT sd ON sd.id = a.work_level_id
 		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
 	</sql>
+	
+	<sql id="workPlanColumns1">
+		a.id AS "id",
+		a.work_type_id AS "workType.id",
+		a.required_finish_time AS "requiredFinishTime",
+		a.start_time AS "startTime",
+		a.planed_finish_time AS "planedFinishTime",
+		a.depts AS "depts.id",
+		a.person_liable_id AS "personLiable.id",
+		a.actual_finish_time AS "actualFinishTime",
+		a.work_level_id AS "workLevelId",
+		a.work_desc AS "workDesc",
+		a.job_require AS "jobRequire",
+		a.zsk_id AS "zskId",
+		a.work_state_id AS "workStateId",
+		a.is_open AS "isOpen",
+		a.create_by AS "createBy.id",
+		a.parent_id AS "parent.id",
+		a.is_cancel AS "isCancel",
+		a.cancel_reason AS "cancelReason",
+		a.is_remove AS "isRemove",
+		a.remove_reason AS "removeReason",
+		a.is_approvable AS "isApprovable",
+		a.is_approve_update AS "isApproveUpdate",
+		a.is_retains_approve_update AS "isRetainsApproveUpdate",
+		a.approve_opinion AS "approveOpinion",
+		a.reminder_desc AS "reminderDesc",
+		a.assigner_id AS "assignerId",
+		a.assign_time AS "assignTime",
+		a.acceptance_time AS "acceptanceTime",
+		a.end_state_id AS "endStateId",
+		a.frequency AS "frequency",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.sort AS "sort",
+		a.name AS "name",
+		a.plan_type as "planType",
+		a.work_submit as "workSubmit",
+		a.parent_ids AS "parentIds",
+		su.id AS "remainnerId",
+		su.name AS "remainName", 
+		so.id AS "remainDeptId",
+		so.name AS "remainDeptName"
+	</sql>
+	<sql id="workPlanJoins1">
+		INNER JOIN work_remain_info wri ON a.id = wri.workplan_id 
+		INNER JOIN sys_user su ON wri.remainner_id = su.id
+		INNER JOIN sys_office so ON so.id = wri.remain_dept_id 
+	</sql>
+	
+	
     
     <sql id="workRemainCollumns">
 		a.id AS "id",
@@ -260,6 +313,12 @@
 		WHERE id = #{id}
 	</update>
 	
+	<update id="delete">
+		UPDATE work_plan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+	
 	<update id="updateParentIds">
 		UPDATE work_plan SET 
 			parent_id = #{parent.id}, 
@@ -296,14 +355,7 @@
 			depts = #{depts.id}
 		WHERE id = #{id}
 	</update>
-	
-	
-	<update id="delete">
-		UPDATE work_plan SET 
-			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
-	</update>
-	
+
 	<!-- 受理分派的公司计划:更新WorkPlan表的end_state_id字段,为已受理状态 -->
 	<update id="remain">
 		UPDATE work_plan SET 
@@ -311,21 +363,34 @@
 		WHERE id = #{id} 
 	</update>
 	
-	<!-- 查询受理人受理特定工作的次数 -->
-	<select id="remainsCount" resultType="int">
-		SELECT count(*) FROM work_remain_info a
+	<!-- 查询当前用户已受理的工作 -->
+	<select id="findCurrentRemainnedWorkPlanList" resultType="WorkPlan">
+		SELECT 
+		<include refid="workPlanColumns1"/> 
+		FROM work_plan a 
+		<include refid="workPlanJoins1"/> 
 		<where>
-			a.workplan_id = #{workPlanId} and
-			a.remainner_id = #{remainnerId}
+			a.del_flag = '0' AND
+			wri.remainner_id = #{userid}
 		</where>
 	</select>
-	
+
 	<!-- 查询特定工作被分配部门受理的次数 -->
 	<select id="isRemainOver" resultType="int">
 		SELECT count(*) FROM work_remain_info a
 		<where>
 			a.workplan_id = #{remainWorkPlanId} and 
 			FIND_IN_SET(remain_dept_id,#{depts}) > 0
+		</where>
+	</select>
+	
+	<!-- 查询特定工作被分配给特定部门的当前用户受理的次数，表示是否受理过 -->
+	<select id="remainsCount" resultType="int">
+		SELECT count(*) FROM work_remain_info a
+		<where>
+			a.workplan_id = #{workPlanId} and 
+			a.remain_dept_id = #{officeId} and 
+			a.remainner_id = #{remainnerId}
 		</where>
 	</select>
 	

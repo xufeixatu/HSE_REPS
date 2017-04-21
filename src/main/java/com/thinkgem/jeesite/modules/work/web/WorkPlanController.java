@@ -4,8 +4,10 @@
 package com.thinkgem.jeesite.modules.work.web;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -100,20 +102,6 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/exec/workPlanExecList";
 	}
 	
-	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"pending_list"})
-	public String pending_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-		/**
-		 *	过滤出所有已提交状态的公司级工作计划
-		 */
-		WorkPlanSqlMapFilter.getFilter().typeSubmittedCompanyWorkPlanyFilter(workPlan, model);
-		
-
-		List<WorkPlan> list = workPlanService.findList(workPlan);
-
-		model.addAttribute("list", list);
-		return "modules/work/exec/workPendingList";
-	}
 	/**
 	 * 查询待受理工作
 	 * @param workPlan
@@ -140,12 +128,12 @@ public class WorkPlanController extends BaseController {
 		/**
 		 * 找出指派单位是当前登陆人负责的部门的工作置入列表
 		 */
-		List<WorkPlan> lst = new ArrayList<WorkPlan>();
+		Set<WorkPlan> lst = new HashSet<WorkPlan>();
 		for(WorkPlan wrkPln : list){
 			for(Office o : cos){
 				if(wrkPln.getDepts().getId().contains(o.getId())){
 					//判断在受理表中当前用户未受理过该工作再添加进待审核列表
-					if(workPlanService.remainsCount(wrkPln.getId(),cu.getId()) == 0){
+					if(workPlanService.remainsCount(wrkPln.getId(),cu.getId(),o.getId()) == 0){
 						wrkPln.setCurrentRemainDeptId(o.getId());
 						lst.add(wrkPln);
 					}
@@ -169,10 +157,30 @@ public class WorkPlanController extends BaseController {
 	public String remain_form(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
-		workPlan = workPlanService.get(workPlan.getId());
-		model.addAttribute("workPlan",workPlan);
+		WorkPlan wpn = workPlanService.get(workPlan.getId());
+		wpn.setCurrentRemainDeptId(workPlan.getCurrentRemainDeptId());
+		model.addAttribute("workPlan",wpn);
 		return "modules/work/exec/workRemainForm";
 	}
+	
+	/**
+	 * 已受理工作列表
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"remainned_list"})
+	public String remainned_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		List<WorkPlan> list = workPlanService.findRemainnedWorkPlanList(UserUtils.getUser().getId());
+		
+		model.addAttribute("list", list);
+		return "modules/work/exec/workRemainnedList";
+	}
+	
 	
 	/**
 	 * 受理(修改end_state为"已受理"状态)工作
@@ -187,10 +195,8 @@ public class WorkPlanController extends BaseController {
 	public String remain_save(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		
 		workPlanService.remain(workPlan);
-		System.out.println("redirect:" + Global.getAdminPath() + "/work/exec/workRemainList?repage&planType=company");
-		return "redirect:" + Global.getAdminPath() + "/work/exec/workRemainList?repage&planType=company";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/remain_list?repage&planType=company";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")
@@ -263,42 +269,7 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/exec/workPendingList";
 	}
 	
-	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = "pending_form")
-	public String pending_form(WorkPlan workPlan, Model model) {
-		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		
-		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
-			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
-			// 获得工作计划的完整工作类型
-			if (workPlan.getWorkType() != null && StringUtils.isNotBlank(workPlan.getWorkType().getId())) {
-				workPlan.setWorkType(workTypeService.get(workPlan.getWorkType().getId()));
-			}
-			// 获得工作计划的完整责任人
-			if (workPlan.getPersonLiable() != null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())) {
-				workPlan.setPersonLiable(UserUtils.get(workPlan.getPersonLiable().getId()));
-			}
-
-			// 获取排序号，最末节点排序号+30
-			if (StringUtils.isBlank(workPlan.getId())) {
-				WorkPlan workPlanChild = new WorkPlan();
-				workPlanChild.setParent(new WorkPlan(workPlan.getParent().getId()));
-				List<WorkPlan> list = workPlanService.findList(workPlan);
-				if (list.size() > 0) {
-					workPlan.setSort(list.get(list.size() - 1).getSort());
-					if (workPlan.getSort() != null) {
-						workPlan.setSort(workPlan.getSort() + 30);
-					}
-				}
-			}
-		}
-		if (workPlan.getSort() == null) {
-			workPlan.setSort(30);
-		}
-
-		model.addAttribute("workPlan", workPlan);
-		return "modules/work/exec/workPendingForm";
-	}
+	
 
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "submitPlan")
@@ -380,7 +351,59 @@ public class WorkPlanController extends BaseController {
 	@RequestMapping(value = "pending_save")
 	public String pending_save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
 		save(workPlan, model, redirectAttributes);
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_form?id=" + workPlan.getId() + "&repage&planType=company";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_form?repage&id=" + workPlan.getId() + "&repage&planType=company";
+	}
+	
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"pending_list"})
+	public String pending_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		/**
+		 *	过滤出所有已提交状态的公司级工作计划
+		 */
+		WorkPlanSqlMapFilter.getFilter().typeSubmittedCompanyWorkPlanyFilter(workPlan, model);
+		
+
+		List<WorkPlan> list = workPlanService.findList(workPlan);
+
+		model.addAttribute("list", list);
+		return "modules/work/exec/workPendingList";
+	}
+	
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = "pending_form")
+	public String pending_form(WorkPlan workPlan, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
+			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
+			// 获得工作计划的完整工作类型
+			if (workPlan.getWorkType() != null && StringUtils.isNotBlank(workPlan.getWorkType().getId())) {
+				workPlan.setWorkType(workTypeService.get(workPlan.getWorkType().getId()));
+			}
+			// 获得工作计划的完整责任人
+			if (workPlan.getPersonLiable() != null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())) {
+				workPlan.setPersonLiable(UserUtils.get(workPlan.getPersonLiable().getId()));
+			}
+
+			// 获取排序号，最末节点排序号+30
+			if (StringUtils.isBlank(workPlan.getId())) {
+				WorkPlan workPlanChild = new WorkPlan();
+				workPlanChild.setParent(new WorkPlan(workPlan.getParent().getId()));
+				List<WorkPlan> list = workPlanService.findList(workPlan);
+				if (list.size() > 0) {
+					workPlan.setSort(list.get(list.size() - 1).getSort());
+					if (workPlan.getSort() != null) {
+						workPlan.setSort(workPlan.getSort() + 30);
+					}
+				}
+			}
+		}
+		if (workPlan.getSort() == null) {
+			workPlan.setSort(30);
+		}
+
+		model.addAttribute("workPlan", workPlan);
+		return "modules/work/exec/workPendingForm";
 	}
 	
 	/**
@@ -395,7 +418,7 @@ public class WorkPlanController extends BaseController {
 	public String reject(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
 		workPlanService.reject(workPlan);
 		
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?id=" + workPlan.getId() + "&planType=company";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?repage&planType=company";
 	}
 	
 	/**
@@ -409,7 +432,7 @@ public class WorkPlanController extends BaseController {
 	@RequestMapping(value = "agree")
 	public String agree(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
 		workPlanService.agree(workPlan);
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?id=" + workPlan.getId() + "&planType=company";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?repage&planType=company";
 	}
 
 	@RequiresPermissions("work:workPlan:edit")

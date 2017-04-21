@@ -53,6 +53,8 @@
 			</c:if>
 			<li><a
 					href="${ctx}/work/workPlan/remain_list?planType=${planTypeDict.value}">待受理${planTypeDict.label}列表</a></li>
+			<li><a
+					href="${ctx}/work/workPlan/remainned_list?planType=${planTypeDict.value}">已受理${planTypeDict.label}列表</a></li>
 		</shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"

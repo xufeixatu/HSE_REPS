@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.work.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.thinkgem.jeesite.common.persistence.TreeDao;
@@ -30,7 +32,9 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 
 	public void remain();
 
-	public int remainsCount(@Param("workPlanId") String workPlanId,@Param("remainnerId") String remainnerId);
+	public int remainsCount(@Param("workPlanId") String workPlanId,@Param("remainnerId") String remainnerId,@Param("officeId") String officeId);
 
 	public int isRemainOver(@Param("depts") String depts, @Param("remainWorkPlanId") String remainWorkPlanId);
+
+	public List<WorkPlan> findCurrentRemainnedWorkPlanList(@Param("userid") String userid);
 }

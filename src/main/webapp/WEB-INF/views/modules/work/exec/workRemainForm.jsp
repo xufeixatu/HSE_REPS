@@ -241,7 +241,7 @@
 		<div class="control-group">
 			<label class="control-label">接受工作留言:</label>
 			<div class="controls">
-				<form:textarea path="reminderDesc" htmlEscape="false" rows="4"
+				<form:textarea path="remainDesc" htmlEscape="false" rows="4"
 					maxlength="255" class="input-xxlarge " cssClass="required"/>
 			</div>
 		</div>
