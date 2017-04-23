@@ -97,12 +97,16 @@
 		su.id AS "remainnerId",
 		su.name AS "remainName", 
 		so.id AS "remainDeptId",
-		so.name AS "remainDeptName"
+		so.name AS "remainDeptName",
+		sd.value AS "endState",
+		sd2.label AS "workState"
 	</sql>
 	<sql id="workPlanJoins1">
 		INNER JOIN work_remain_info wri ON a.id = wri.workplan_id 
 		INNER JOIN sys_user su ON wri.remainner_id = su.id
 		INNER JOIN sys_office so ON so.id = wri.remain_dept_id 
+		LEFT JOIN SYS_DICT sd ON sd.id = a.end_state_id
+		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
 	</sql>
 	
 	

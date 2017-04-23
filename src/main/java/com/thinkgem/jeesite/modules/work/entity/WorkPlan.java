@@ -72,7 +72,22 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 * 存储受理人ID的临时变量
 	 */
 	private String userId;
+	private String endState; //结束状态的中文名字
+	private boolean isOver; //是否工作处理结束(预结束，关闭才是真正结束)
+	private String feedbackDesc;//当次反馈消息
 	
+	public boolean getIsOver() {
+		return isOver;
+	}
+	public void setIsOver(boolean isOver) {
+		this.isOver = isOver;
+	}
+	public String getFeedbackDesc() {
+		return feedbackDesc;
+	}
+	public void setFeedbackDesc(String feedbackDesc) {
+		this.feedbackDesc = feedbackDesc;
+	}
 	/***************************************************************************************
 	 **********************************Remain受理表数据开始***********************************
 	 ***************************************************************************************/
@@ -92,6 +107,12 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	public String getEndState() {
+		return endState;
+	}
+	public void setEndState(String endState) {
+		this.endState = endState;
+	}
 	public String getRemainDeptName() {
 		return remainDeptName;
 	}

@@ -105,5 +105,10 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		
 		return dao.findCurrentRemainnedWorkPlanList(id);
 	}
+	@Transactional(readOnly = false)
+	public void feedbackSave(String workplanId, String feedbackDesc, String userid) {
+		dao.feedbackSave(workplanId,feedbackDesc,userid);
+		
+	}
 
 }
