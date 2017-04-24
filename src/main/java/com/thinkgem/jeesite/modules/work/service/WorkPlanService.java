@@ -17,6 +17,7 @@ import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 
 /**
  * 工作计划管理Service
+ * 
  * @author 何其锟
  * @version 2017-04-07
  */
@@ -29,45 +30,47 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	public WorkPlan get(String id) {
 		return super.get(id);
 	}
-	
+
 	public List<WorkPlan> findList(WorkPlan workPlan) {
-		if (StringUtils.isNotBlank(workPlan.getParentIds())){
-			workPlan.setParentIds(","+workPlan.getParentIds()+",");
+		if (StringUtils.isNotBlank(workPlan.getParentIds())) {
+			workPlan.setParentIds("," + workPlan.getParentIds() + ",");
 		}
 		return super.findList(workPlan);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void save(WorkPlan workPlan) {
 		super.save(workPlan);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void delete(WorkPlan workPlan) {
 		super.delete(workPlan);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void submit_company_plan(WorkPlan workPlan) {
 		dao.submit_company_plan(workPlan);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void reject(WorkPlan workPlan) {
 		dao.reject(workPlan);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void agree(WorkPlan workPlan) {
 		dao.agree(workPlan);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void asigned(WorkPlan workPlan) {
 		dao.asigned(workPlan);
 	}
+
 	/**
 	 * 受理工作
+	 * 
 	 * @param workPlan
 	 */
 	@Transactional(readOnly = false)
@@ -79,36 +82,39 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		wrkpln.setRemainDeptId(workPlan.getCurrentRemainDeptId());
 		wrkpln.setRemainWorkPlanId(workPlan.getId());
 		dao.remain_insert(wrkpln);
-		
+
 		/**
 		 * 如果所有分配该工作的部门均已接受，则将受理状态改为已受理
 		 */
 		String depts = workPlan.getDepts().getId();
-		if(dao.isRemainOver(depts,wrkpln.getId()) == depts.split(",").length ){
+		if (dao.isRemainOver(depts, wrkpln.getId()) == depts.split(",").length) {
 			dao.remain();
 		}
 	}
 
 	/**
 	 * 查询是否
+	 * 
 	 * @param id
 	 * @param id2
 	 * @return
 	 */
 	@Transactional(readOnly = false)
-	public int remainsCount(String workPlanId, String remainnerId,String officeId) {
-		
-		return dao.remainsCount(workPlanId,remainnerId,officeId);
+	public int remainsCount(String workPlanId, String remainnerId, String officeId) {
+
+		return dao.remainsCount(workPlanId, remainnerId, officeId);
 	}
+
 	@Transactional(readOnly = false)
 	public List<WorkPlan> findRemainnedWorkPlanList(String id) {
-		
+
 		return dao.findCurrentRemainnedWorkPlanList(id);
 	}
+
 	@Transactional(readOnly = false)
 	public void feedbackSave(String workplanId, String feedbackDesc, String userid) {
-		dao.feedbackSave(workplanId,feedbackDesc,userid);
-		
+		dao.feedbackSave(workplanId, feedbackDesc, userid);
+
 	}
 
 }
