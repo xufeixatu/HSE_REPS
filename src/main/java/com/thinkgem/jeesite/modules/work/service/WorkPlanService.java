@@ -101,20 +101,29 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	 */
 	@Transactional(readOnly = false)
 	public int remainsCount(String workPlanId, String remainnerId, String officeId) {
-
 		return dao.remainsCount(workPlanId, remainnerId, officeId);
 	}
 
 	@Transactional(readOnly = false)
 	public List<WorkPlan> findRemainnedWorkPlanList(String id) {
-
 		return dao.findCurrentRemainnedWorkPlanList(id);
 	}
 
 	@Transactional(readOnly = false)
-	public void feedbackSave(String workplanId, String feedbackDesc, String userid) {
-		dao.feedbackSave(workplanId, feedbackDesc, userid);
-
+	public void feedbackSave(String remainId, String feedbackDesc, String userid,boolean isOver) {
+		dao.feedbackSave(remainId, feedbackDesc, userid);
+		if(isOver){
+			dao.feedback_over(remainId,WorkPlanDao.REMAIN_STATE_PROCESSED);
+		}
+	}
+	/**
+	 *  查找 已受理的受理状态为已处理的反馈记录且反馈记录的已回复状态（isReply）为否(false)且工作的指派人为当前用户的工作、受理及最新反馈信息列表
+	 * @param id 当前用户的ID
+	 */
+	@Transactional(readOnly = false)
+	public List<WorkPlan> findClosingReply(String userid) {
+		
+		return dao.findClosingReply(userid);
 	}
 
 }

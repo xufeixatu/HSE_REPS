@@ -69,13 +69,30 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 */
 	private String reminderDesc;
 	/**
+	 * 受理状态ID
+	 */
+	private String remainStateId;
+	public String getRemainStateId() {
+		return remainStateId;
+	}
+	public void setRemainStateId(String remainStateId) {
+		this.remainStateId = remainStateId;
+	}
+	/**
 	 * 存储受理人ID的临时变量
 	 */
 	private String userId;
 	private String endState; //结束状态的中文名字
 	private boolean isOver; //是否工作处理结束(预结束，关闭才是真正结束)
 	private String feedbackDesc;//当次反馈消息
+	private boolean isReply;//是否回复过
 	
+	public boolean getIsReply() {
+		return isReply;
+	}
+	public void setIsReply(boolean isReply) {
+		this.isReply = isReply;
+	}
 	public boolean getIsOver() {
 		return isOver;
 	}

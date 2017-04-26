@@ -21,21 +21,31 @@ import com.thinkgem.jeesite.modules.work.entity.WorkPlanRemain;
 public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	/**
 	 * 结束状态：已分派
+	 *          指派人将工作分派给多个部门后结束状态为已分派
 	 */
 	public static String END_STATE_ALLOCATED = "042bb2ce059249729da41c7995e4381b";
 	/**
 	 * 结束状态：已受理
+	 *         指派人指派的多个部门责任人均受理了工作则结束状态为已受理
 	 */
 	public static String END_STATE_RECEIVED = "1564424ef256499bb3faa03033924b2f";
 	/**
 	 * 结束状态：处理中
+	 *         
 	 */
+	@Deprecated
 	public static String END_STATE_HANDLING = "45b05804a9744a7e8f2503a164f201f1";
 	/**
 	 * 结束状态：已处理
+	 * 			
 	 */
+	@Deprecated
 	public static String END_STATE_PROCESSED = "fe1e5eae0adb4033befdc24c7180c5be";
-	
+	/**
+	 * 结束状态：已关闭
+	 * 			指派人指派人部门受理的任务均已关闭则结束状态改为已关闭
+	 */
+	public static String END_STATE_CLOSED = "94236754111945de90fe6a1418edb8e4";
 	/**
 	 * 工作状态：审核通过
 	 */
@@ -52,6 +62,27 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 * 工作状态：提交
 	 */
 	public static String WORK_STATE_SUBMIT = "45d756f45bb04155adb95e66b6a0d1c1";
+	
+	/**
+	 * 受理状态：已受理
+	 *         任务指派给多个部门，指派的特定部门负责人受理工作后受理表中的受理状态
+	 */
+	public static String REMAIN_STATE_RECEIVED = "8cee3cf155744bf6bb2a6295d72fad1b";
+	/**
+	 * 受理状态：处理中
+	 *         任务指派给多个部门，指派的特定部门负责人受理工作反馈后如指派人拒绝则受理表中的受理状态为处理中状态
+	 */
+	public static String REMAIN_STATE_HANDLING = "6b47a2b7fd9d4d13969befe3746d71df";
+	/**
+	 * 受理状态：已处理
+	 *         任务指派给多个部门，指派的特定部门负责人受理工作反馈后受理状态为已处理状态
+	 */
+	public static String REMAIN_STATE_PROCESSED = "842994c380da4d39803c83a293856066";
+	/**
+	 * 受理状态：已关闭
+	 *         任务指派给多个部门，指派的特定部门负责人受理工作反馈后如指派人接受结果并关闭则受理表中的受理状态为已关闭状态
+	 */
+	public static String REMAIN_STATE_CLOSED = "8cca32f9c7c44d31a31fbcbf57142147";
 	
 	public void submit_company_plan(WorkPlan workPlan);
 
@@ -75,6 +106,23 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 * @param endStateId 
 	 */
 	public void updateEndState(String endStateId);
-	
-	public void feedbackSave(@Param("workplanId") String workplanId,@Param("feedbackDesc") String feedbackDesc, @Param("userid") String userid);
+	/**
+	 * 保存反馈信息
+	 * @param workRemainId
+	 * @param feedbackDesc
+	 * @param userid
+	 */
+	public void feedbackSave(@Param("remainId") String remainId,@Param("feedbackDesc") String feedbackDesc, @Param("userid") String userid);
+	/**
+	 * 修改结束状态为已处理状态
+	 * @param workplanId
+	 * @param endStateClosed
+	 */
+	public void feedback_over(@Param("remainId") String workplanId, @Param("endStateProcessed") String endStateProcessed);
+	/**
+	 *  查找 已受理的受理状态为已处理的反馈记录且反馈记录的已回复状态（isReply）为否(false)且工作的指派人为当前用户的工作、受理及最新反馈信息列表
+	 * @param string
+	 * @return
+	 */
+	public List<WorkPlan> findClosingReply(java.lang.String string);
 }

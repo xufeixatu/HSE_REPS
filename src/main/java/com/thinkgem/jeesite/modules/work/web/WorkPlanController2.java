@@ -86,6 +86,7 @@ public class WorkPlanController2 extends BaseController {
 		
 		WorkPlan wpn = workPlanService.get(workPlan.getId());
 		wpn.setCurrentRemainDeptId(workPlan.getCurrentRemainDeptId());
+		wpn.setRemainId(workPlan.getRemainId());
 		model.addAttribute("workPlan",wpn);
 		return "modules/work/exec/workFeedbackForm";
 	}
@@ -102,8 +103,30 @@ public class WorkPlanController2 extends BaseController {
 	@RequestMapping(value = {"feedback_save"})
 	public String feedback_save(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.feedbackSave(workPlan.getId(),workPlan.getFeedbackDesc(),UserUtils.getUser().getId());
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/remain_list?repage&planType=company";
+		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getFeedbackDesc(),UserUtils.getUser().getId(),workPlan.getIsOver());
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/remainned_list?repage&planType=company";
+	}
+	
+	/**
+	 * 待关闭受理工作反馈列表
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"remainned_feedback_list"})
+	public String remainned_feedback_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		/**
+		 * 查找 已受理的受理状态为已处理的反馈记录且反馈记录的已回复状态（isReply）为否(false)且工作的指派人为当前用户的工作、受理及最新反馈信息列表
+		 *     列表字段包括：
+		 *     
+		 */
+		List<WorkPlan> list = workPlanService.findClosingReply(UserUtils.getUser().getId());
+		model.addAttribute("list",list);
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/remainned_list?repage&planType=company";
 	}
 	
 //	@RequiresPermissions("work:workPlan:view")

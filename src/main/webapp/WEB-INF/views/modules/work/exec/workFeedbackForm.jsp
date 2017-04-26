@@ -159,8 +159,8 @@
 <div id="files" class="control-group">此处是下载附件链接的列表</div>
 	</form:form>
 	
-	<form:form action="${ctx}/work/workPlan/feedback_save" method="post" id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
-		<form:hidden path="id" />
+	<form:form action="${ctx}/work/workPlan2/feedback_save" method="post" id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
+		<form:hidden path="remainId" />
 		<input type="hidden" name="planType" value="company" />
 		<div class="control-group">
 			<label class="control-label">反馈工作结果:</label>
@@ -168,12 +168,15 @@
 				<form:textarea path="feedbackDesc" htmlEscape="false" rows="4"
 					maxlength="255" class="input-xxlarge " cssClass="required"/>
 			</div>
+		</div>
+		<div>
+			<label class="control-label">工作是否结束:</label>
 			<div class="controls">
 				<form:checkbox path="isOver" htmlEscape="false" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="form-actions">
-			<label class="control-label">工作是否结束:</label>
+			
 			<input id="btnSubmit1" class="btn btn-primary" type="submit"
 				value="反馈"/>&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回"
