@@ -81,7 +81,8 @@ public class WorkPlanController2 extends BaseController {
 	 */
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = {"feedback_form"})
-	public String feedback_form(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String feedback_form(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
 		WorkPlan wpn = workPlanService.get(workPlan.getId());

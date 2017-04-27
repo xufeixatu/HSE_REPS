@@ -124,5 +124,5 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 * @param string
 	 * @return
 	 */
-	public List<WorkPlan> findClosingReply(java.lang.String string);
+	public List<WorkPlan> findClosingReply(@Param("assignerId") String assignerId);
 }

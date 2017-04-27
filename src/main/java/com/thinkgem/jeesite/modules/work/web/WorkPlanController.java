@@ -266,7 +266,7 @@ public class WorkPlanController extends BaseController {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		workPlanService.asigned(workPlan);
 		workPlan = new WorkPlan();
-		return "modules/work/exec/workPendingList";
+		return "modules/work/workPlan/exec/workPendingList";
 	}
 	
 	
@@ -361,12 +361,12 @@ public class WorkPlanController extends BaseController {
 		 *	过滤出所有已提交状态的公司级工作计划
 		 */
 		WorkPlanSqlMapFilter.getFilter().typeSubmittedCompanyWorkPlanyFilter(workPlan, model);
-		
 
 		List<WorkPlan> list = workPlanService.findList(workPlan);
 
 		model.addAttribute("list", list);
-		return "modules/work/exec/workPendingList";
+		System.out.println("redirect:" + Global.getAdminPath() + "/work/exec/workPendingList?repage&planType=company");
+		return "redirect:" + Global.getAdminPath() + "/work/exec/workPendingList?repage&planType=company";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")
