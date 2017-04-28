@@ -128,4 +128,9 @@ public class ZskClassController extends BaseController {
 		return "modules/zsk/zskTree";
 	}
 	
+	@RequestMapping(value = {"history/index"})
+	public String historyindex(User user, Model model) {
+		return "modules/zsk/zskHistoryTree";
+	}
+	
 }

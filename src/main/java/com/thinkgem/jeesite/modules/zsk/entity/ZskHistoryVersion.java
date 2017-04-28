@@ -15,6 +15,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class ZskHistoryVersion extends DataEntity<ZskHistoryVersion> {
 	
 	private static final long serialVersionUID = 1L;
+	private String classId;
 	private String documentId;		// 文档编号
 	private String fileName;		// 文件名
 	private String filePath;		// 文件路径
@@ -36,6 +37,7 @@ public class ZskHistoryVersion extends DataEntity<ZskHistoryVersion> {
 
 	public ZskHistoryVersion(ZskDocument zskDocument) {
 		super();
+		this.classId = zskDocument.getClassid();
 		this.documentId = zskDocument.getId();
 		this.fileName = zskDocument.getFileName();
 		this.filePath = zskDocument.getFilePath();
@@ -118,5 +120,19 @@ public class ZskHistoryVersion extends DataEntity<ZskHistoryVersion> {
 	public void setModifyContent(String modifyContent) {
 		this.modifyContent = modifyContent;
 	}
+
+
+	public String getClassId() {
+		return classId;
+	}
+
+
+	public void setClassId(String classId) {
+		this.classId = classId;
+	}
+
+
+	
+
 	
 }

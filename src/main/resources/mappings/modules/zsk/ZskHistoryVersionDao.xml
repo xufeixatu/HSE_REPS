@@ -5,6 +5,7 @@
 	<sql id="zskHistoryVersionColumns">
 		a.id AS "id",
 		a.document_id AS "documentId",
+		a.class_id AS "classId",
 		a.file_name AS "fileName",
 		a.file_path AS "filePath",
 		a.update_date AS "updateDate",
@@ -40,6 +41,9 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="documentId != null and documentId != ''">
 				AND a.document_id = #{documentId}
+			</if>
+			<if test="classId != null and classId != ''">
+				AND a.class_id = #{classId}
 			</if>
 			<if test="fileName != null and fileName != ''">
 				AND a.file_name LIKE 
