@@ -14,6 +14,7 @@
 	<bean name="shiroFilterChainDefinitions" class="java.lang.String">
 		<constructor-arg>
 			<value>
+				${adminPath}/zsk/zskApi =anon 
 				/static/** = anon
 				/userfiles/** = anon
 				${adminPath}/cas = cas

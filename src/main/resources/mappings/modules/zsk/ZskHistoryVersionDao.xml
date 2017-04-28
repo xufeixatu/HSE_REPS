@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.zsk.dao.ZskHistoryVersionDao">
+    
+	<sql id="zskHistoryVersionColumns">
+		a.id AS "id",
+		a.document_id AS "documentId",
+		a.file_name AS "fileName",
+		a.file_path AS "filePath",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.desc_info AS "descInfo",
+		a.doc_type AS "docType",
+		a.version_no AS "versionNo",
+		a.modify_reason AS "modifyReason",
+		a.modify_content AS "modifyContent",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+	
+	<sql id="zskHistoryVersionJoins">
+	</sql>
+    
+	<select id="get" resultType="ZskHistoryVersion">
+		SELECT 
+			<include refid="zskHistoryVersionColumns"/>
+		FROM zsk_history_version a
+		<include refid="zskHistoryVersionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ZskHistoryVersion">
+		SELECT 
+			<include refid="zskHistoryVersionColumns"/>
+		FROM zsk_history_version a
+		<include refid="zskHistoryVersionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="documentId != null and documentId != ''">
+				AND a.document_id = #{documentId}
+			</if>
+			<if test="fileName != null and fileName != ''">
+				AND a.file_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{fileName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{fileName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{fileName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ZskHistoryVersion">
+		SELECT 
+			<include refid="zskHistoryVersionColumns"/>
+		FROM zsk_history_version a
+		<include refid="zskHistoryVersionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zsk_history_version(
+			id,
+			document_id,
+			file_name,
+			file_path,
+			update_date,
+			update_by,
+			desc_info,
+			doc_type,
+			version_no,
+			modify_reason,
+			modify_content,
+			del_flag,
+			remarks,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{documentId},
+			#{fileName},
+			#{filePath},
+			#{updateDate},
+			#{updateBy.id},
+			#{descInfo},
+			#{docType},
+			#{versionNo},
+			#{modifyReason},
+			#{modifyContent},
+			#{delFlag},
+			#{remarks},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE zsk_history_version SET 	
+			document_id = #{documentId},
+			file_name = #{fileName},
+			file_path = #{filePath},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			desc_info = #{descInfo},
+			doc_type = #{docType},
+			version_no = #{versionNo},
+			modify_reason = #{modifyReason},
+			modify_content = #{modifyContent},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE zsk_history_version SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
