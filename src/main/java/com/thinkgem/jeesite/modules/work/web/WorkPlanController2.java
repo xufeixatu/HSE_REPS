@@ -127,7 +127,7 @@ public class WorkPlanController2 extends BaseController {
 		 */
 		List<WorkPlan> list = workPlanService.findClosingReply(UserUtils.getUser().getId());
 		model.addAttribute("list",list);
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/remainned_list?repage&planType=company";
+		return "modules/work/exec/workRemainList";
 	}
 	
 //	@RequiresPermissions("work:workPlan:view")

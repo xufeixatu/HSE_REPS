@@ -266,7 +266,7 @@ public class WorkPlanController extends BaseController {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		workPlanService.asigned(workPlan);
 		workPlan = new WorkPlan();
-		return "modules/work/workPlan/exec/workPendingList";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?playType=compnay";//"modules/work/exec/workPendingList";
 	}
 	
 	
@@ -351,7 +351,7 @@ public class WorkPlanController extends BaseController {
 	@RequestMapping(value = "pending_save")
 	public String pending_save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
 		save(workPlan, model, redirectAttributes);
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_form?repage&id=" + workPlan.getId() + "&repage&planType=company";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?repage&id=" + workPlan.getId() + "&repage&planType=company";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")
@@ -366,7 +366,7 @@ public class WorkPlanController extends BaseController {
 
 		model.addAttribute("list", list);
 		System.out.println("redirect:" + Global.getAdminPath() + "/work/exec/workPendingList?repage&planType=company");
-		return "redirect:" + Global.getAdminPath() + "/work/exec/workPendingList?repage&planType=company";
+		return "modules/work/exec/workPendingList";
 	}
 	
 	@RequiresPermissions("work:workPlan:view")

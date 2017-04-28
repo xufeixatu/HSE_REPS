@@ -118,7 +118,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 * @param workplanId
 	 * @param endStateClosed
 	 */
-	public void feedback_over(@Param("remainId") String workplanId, @Param("endStateProcessed") String endStateProcessed);
+	public void feedback_over(@Param("remainId") String remainId, @Param("endStateProcessed") String endStateProcessed);
 	/**
 	 *  查找 已受理的受理状态为已处理的反馈记录且反馈记录的已回复状态（isReply）为否(false)且工作的指派人为当前用户的工作、受理及最新反馈信息列表
 	 * @param string
