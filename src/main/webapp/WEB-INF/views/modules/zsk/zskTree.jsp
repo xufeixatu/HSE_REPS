@@ -2,72 +2,58 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>栏目列表</title>
+	<title>知识库</title>
 	<meta name="decorator" content="default"/>
 	<%@include file="/WEB-INF/views/include/treeview.jsp" %>
 	<style type="text/css">
-		.ztree {overflow:auto;margin:0;_margin-top:10px;padding:10px 0 0 10px;}<%--
-		.ztree li span.button.level0, .ztree li a.level0 {display:none;height:0;}
-		.ztree li ul.level0 {padding:0;background:none;}--%>
-		.accordion-inner{padding:2px;}
+		.ztree {overflow:auto;margin:0;_margin-top:10px;padding:10px 0 0 10px;}
 	</style>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			var setting = {view:{selectedMulti:false},data:{simpleData:{enable:true}}};
-			var zNodes=[
-		            <c:forEach items="${zskClassList}" var="tpl">{id:'${tpl.id}', pId:'${not empty tpl.parent?tpl.parent.id:0}', name:"${tpl.name}", url:"${ctx}/zsk/${not empty tpl.module?tpl.module:'none'}/?zskClass.id=${tpl.id}", target:"zskMainFrame"},
-		            </c:forEach>];
-			for(var i=0; i<zNodes.length; i++) {
-				// 移除父节点
-				if (zNodes[i] && zNodes[i].id == 1){
-					zNodes.splice(i, 1);
-				}<%--
-				// 并将没有关联关系的父节点，改为父节点
-				var isExistParent = false;
-				for(var j=0; j<zNodes.length; j++) {
-					if (zNodes[i].pId == zNodes[j].id){
-						isExistParent = true;
-						break;
-					}
-				}
-				if (!isExistParent){
-					zNodes[i].pId = 1;
-				}--%>
-			}
-			// 初始化树结构
-			var tree = $.fn.zTree.init($("#tree"), setting, zNodes);
-			// 展开第一级节点
-			var nodes = tree.getNodesByParam("level", 0);
-			for(var i=0; i<nodes.length; i++) {
-				tree.expandNode(nodes[i], true, true, false);
-			}
-			// 展开第二级节点
-			nodes = tree.getNodesByParam("level", 1);
-			for(var i=0; i<nodes.length; i++) {
-				tree.expandNode(nodes[i], true, true, false);
-			}
-			wSize();
-		});
-		$(window).resize(function(){
-			wSize();
-		});
-		function wSize(){
-			$(".ztree").width($(window).width()-16).height($(window).height()-62);
-			$(".ztree").css({"overflow":"auto","overflow-x":"auto","overflow-y":"auto"});
-			$("html,body").css({"overflow":"hidden","overflow-x":"hidden","overflow-y":"hidden"});
-		}
-	</script>
 </head>
 <body>
-	<div class="accordion-group">
-	    <div class="accordion-heading">
-	    	<a class="accordion-toggle">栏目列表</a>
-	    </div>
-	    <div class="accordion-body">
-			<div class="accordion-inner">
-				<div id="tree" class="ztree"></div>
-			</div>
-	    </div>
+	<sys:message content="${message}"/>
+	<div id="content" class="row-fluid">
+		<div id="left" class="accordion-group">
+			<div class="accordion-heading">
+		    	<a class="accordion-toggle">知识库分类<i class="icon-refresh pull-right" onclick="refreshTree();"></i></a>
+		    </div>
+			<div id="ztree" class="ztree"></div>
+		</div>
+		<div id="openClose" class="close">&nbsp;</div>
+		<div id="right">
+			<iframe id="officeContent" src="${ctx}/zsk/zskDocument/list" width="100%" height="91%" frameborder="0"></iframe>
+		</div>
 	</div>
+	<script type="text/javascript">
+		var setting = {data:{simpleData:{enable:true,idKey:"id",pIdKey:"pId",rootPId:'0'}},
+			callback:{onClick:function(event, treeId, treeNode){
+	          		/* alert(treeNode.id); */  
+					var id = treeNode.id == '0' ? '' :treeNode.id;
+					$('#officeContent').attr("src","${ctx}/zsk/zskDocument/list?classid="+treeNode.id);
+					//?office.id="+id+"&office.name="+treeNode.name
+				}
+			}
+		};
+		
+		function refreshTree(){
+			$.getJSON("${ctx}/zsk/zskClass/treeData",function(data){
+				$.fn.zTree.init($("#ztree"), setting, data).expandAll(true);
+			});
+		}
+		refreshTree();
+		 
+		var leftWidth = 180; // 左侧窗口大小
+		var htmlObj = $("html"), mainObj = $("#main");
+		var frameObj = $("#left, #openClose, #right, #right iframe");
+		function wSize(){
+			var strs = getWindowSize().toString().split(",");
+			htmlObj.css({"overflow-x":"hidden", "overflow-y":"hidden"});
+			mainObj.css("width","auto");
+			frameObj.height(strs[0] - 5);
+			var leftWidth = ($("#left").width() < 0 ? 0 : $("#left").width());
+			$("#right").width($("#content").width()- leftWidth - $("#openClose").width() -5);
+			$(".ztree").width(leftWidth - 10).height(frameObj.height() - 46);
+		}
+	</script>
+	<script src="${ctxStatic}/common/wsize.min.js" type="text/javascript"></script>
 </body>
 </html>

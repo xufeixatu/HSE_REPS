@@ -40,6 +40,7 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
+		
 		<div class="control-group">
 			<label class="control-label">知识库描述：</label>
 			<div class="controls">

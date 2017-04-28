@@ -60,10 +60,7 @@ public class ZskDocumentService extends CrudService<ZskDocumentDao, ZskDocument>
 		zskHistoryVersionService.save(zskHistoryVersion);
 		super.delete(zskDocument);
 	}
-	@Transactional(readOnly = false)
-	public ZskDocument getByHashcode(ZskDocument document) {
-		return zskDocumentDao.getByHashcode(document);
-	}
+	
 
 	public String fileUplod(MultipartFile file, String fileType, HttpServletRequest request) throws Exception {
 		ZskDocument document=new ZskDocument();

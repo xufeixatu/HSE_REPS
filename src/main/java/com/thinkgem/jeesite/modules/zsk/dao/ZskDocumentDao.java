@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.zsk.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
+import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.zsk.entity.ZskDocument;
 
@@ -15,6 +16,4 @@ import com.thinkgem.jeesite.modules.zsk.entity.ZskDocument;
 @MyBatisDao
 public interface ZskDocumentDao extends CrudDao<ZskDocument> {
 
-	public  ZskDocument getByHashcode(ZskDocument document);
-	
 }

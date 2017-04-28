@@ -34,10 +34,17 @@
 	<form:form id="inputForm" modelAttribute="zskDocument" action="${ctx}/zsk/zskDocument/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">分类编号：</label>
 			<div class="controls">
 				<form:input path="classid" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div> --%>
+			<div class="control-group">
+			<label class="control-label">分类:</label>
+			<div class="controls">
+				<sys:treeselect id="parent" name="classid" value="${zskClass.parent.id}" labelName="parent.name" labelValue="${zskClass.id}"
+					title="父级编号" url="/zsk/zskClass/treeData" extId="${zskClass.id}" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">

@@ -37,7 +37,23 @@
 		FROM zsk_document a
 		<include refid="zskDocumentJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			<!-- a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<!-- <if test="classid != null and classid != ''">
+				AND a.classid = #{classid}
+			</if>
+			<if test="fileName != null and fileName != ''">
+				AND a.file_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{fileName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{fileName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{fileName},'%')</if>
+			</if> -->
+				a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="classid != null and classid != ''">
+				AND a.classid = #{classid}
+			</if>
 			<if test="fileName != null and fileName != ''">
 				AND a.file_name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{fileName}||'%'</if>
@@ -54,7 +70,6 @@
 			</otherwise>
 		</choose>
 	</select>
-	
 	<select id="findAllList" resultType="ZskDocument">
 		SELECT 
 			<include refid="zskDocumentColumns"/>

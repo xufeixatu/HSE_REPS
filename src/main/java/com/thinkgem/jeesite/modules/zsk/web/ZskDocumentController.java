@@ -49,10 +49,21 @@ public class ZskDocumentController extends BaseController {
 	@RequiresPermissions("zsk:zskDocument:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(ZskDocument zskDocument, HttpServletRequest request, HttpServletResponse response, Model model) {
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+zskDocument);
 		Page<ZskDocument> page = zskDocumentService.findPage(new Page<ZskDocument>(request, response), zskDocument); 
 		model.addAttribute("page", page);
 		return "modules/zsk/zskDocumentList";
 	}
+	
+	/*@RequiresPermissions("zsk:zskDocument:view")
+	@RequestMapping(value = {"findzskByClassId", ""})
+	public String findzsk(ZskDocument zskDocument, HttpServletRequest request, HttpServletResponse response, Model model) {
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+zskDocument);
+		Page<ZskDocument> page = zskDocumentService.findPageByclassid(new Page<ZskDocument>(request, response), zskDocument); 
+		model.addAttribute("page", page);
+		return "modules/zsk/zskDocumentList";
+	}*/
+
 
 	@RequiresPermissions("zsk:zskDocument:view")
 	@RequestMapping(value = "form")

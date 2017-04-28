@@ -24,6 +24,7 @@ import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.zsk.entity.ZskClass;
 import com.thinkgem.jeesite.modules.zsk.service.ZskClassService;
 
@@ -120,6 +121,11 @@ public class ZskClassController extends BaseController {
 			}
 		}
 		return mapList;
+	}
+	
+	@RequestMapping(value = {"index"})
+	public String index(User user, Model model) {
+		return "modules/zsk/zskTree";
 	}
 	
 }
