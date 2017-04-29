@@ -126,7 +126,6 @@
 	
 	<update id="update">
 		UPDATE zsk_document SET 	
-			classid = #{classid},
 			file_name = #{fileName},
 			file_path = #{filePath},
 			update_date = #{updateDate},
@@ -139,6 +138,7 @@
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
+	
 	
 	<update id="delete">
 		UPDATE zsk_document SET 

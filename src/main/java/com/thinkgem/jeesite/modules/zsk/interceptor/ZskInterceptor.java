@@ -38,11 +38,16 @@ public class ZskInterceptor implements HandlerInterceptor{
 			ZskDocument zskDocument=new ZskDocument();
 			zskDocument.setFileName(UUID.randomUUID().toString());
 			zskDocument.setClassid(moduls_name);
+			
 			zskDocument.setFilePath(filePath);
+			String [] type=filePath.split("|");
+			
 			zskDocument.setDocType("233");
 			zskDocumentService.save(zskDocument);
+			zskDocumentService.get(zskDocument);
+			request.setAttribute("                     ", zskDocument.getId());
 		}
-		request.setAttribute("aaaaa", "eesfgddsg");
+		
 		return true;
 	}
 

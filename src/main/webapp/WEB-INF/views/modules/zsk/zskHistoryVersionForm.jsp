@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">文件名：</label>
+			<label class="control-label">文档名：</label>
 			<div class="controls">
 				<form:input path="fileName" htmlEscape="false" maxlength="200" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>

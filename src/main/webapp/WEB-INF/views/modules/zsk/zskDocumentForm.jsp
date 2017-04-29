@@ -54,7 +54,14 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
-	    <hse:file moduls_name="自己顶" />
+	  <div class="control-goup">
+			<label class="control-label">文件路径：</label>
+			<div class="controls">
+				<form:hidden id="filePath" path="filePath" htmlEscape="false" class="input-xlarge"/>
+				<sys:ckfinder input="filePath" type="files" uploadPath="/zsk/zskDocument" selectMultiple="true"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label">文件描述信息：</label>
 			<div class="controls">
@@ -68,12 +75,13 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
-		<div class="control-group">
+		<hr>
+		<%--  <div class="control-group">
 			<label class="control-label">版本号码：</label>
 			<div class="controls">
 				<form:input path="versionNo" htmlEscape="false" maxlength="60" class="input-xlarge "/>
 			</div>
-		</div>
+		</div>  --%>
 		<div class="control-group">
 			<label class="control-label">修改原因：</label>
 			<div class="controls">

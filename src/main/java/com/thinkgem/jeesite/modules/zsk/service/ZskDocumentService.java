@@ -51,7 +51,16 @@ public class ZskDocumentService extends CrudService<ZskDocumentDao, ZskDocument>
 	
 	@Transactional(readOnly = false)
 	public void save(ZskDocument zskDocument) {
-		super.save(zskDocument);
+		
+		if(zskDocument.getVersionNo() == null) {
+			zskDocument.setVersionNo("001");
+		} else {
+			int str0 = Integer.parseInt(zskDocument.getVersionNo())+1;
+			String str = String.format("%03d", str0);
+			zskDocument.setVersionNo(str);
+			//zskDocument.setClassid(null);
+		}
+			super.save(zskDocument);
 	}
 	
 	@Transactional(readOnly = false)
