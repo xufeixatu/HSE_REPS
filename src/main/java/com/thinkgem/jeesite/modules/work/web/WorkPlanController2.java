@@ -127,7 +127,7 @@ public class WorkPlanController2 extends BaseController {
 		 */
 		List<WorkPlan> list = workPlanService.findClosingReply(UserUtils.getUser().getId());
 		model.addAttribute("list",list);
-		return "modules/work/exec/workRemainList";
+		return "modules/work/exec/workRemainnedFeedbackList";
 	}
 	
 //	@RequiresPermissions("work:workPlan:view")
