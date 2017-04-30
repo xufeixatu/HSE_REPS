@@ -45,20 +45,32 @@
 									}
 								});
 			});
+	//否决的方法
+	function reject(){
+		location = "${ctx}/work/workPlan/reject?id=${workPlan.id}&planType=${planTypeDict.value}";
+	}
+
+	//修改的方法
+	function save(){
+		var f = $("form")[0];
+		f.submit();
+	}
 </script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/work/workPlan?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
-		<li class="active"><a
-			href="${ctx}/work/workPlan/form?id=${workPlan.id}&parent.id=${workPlanparent.id}&planType=${planTypeDict.value}">${planTypeDict.label}<shiro:hasPermission
-					name="work:workPlan:edit">${not empty workPlan.id?'修改':'添加'}</shiro:hasPermission>
-				<shiro:lacksPermission name="work:workPlan:edit">查看</shiro:lacksPermission></a></li>
+		<li><a
+			href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+		
+		<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
+			<shiro:hasPermission name="work:workPlan:edit">
+				<li class="active"><a
+					href="${ctx}/work/workPlan/pending_list?planType=${planTypeDict.value}">接受待审核${planTypeDict.label}列表</a></li>
+			</shiro:hasPermission>
+		</c:if>
 	</ul>
 	<br />
-	<form:form id="inputForm" modelAttribute="workPlan"
-		action="${ctx}/work/workPlan/save" method="post"
-		class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="workPlan" class="form-horizontal">
 		<form:hidden path="id" />
 		<input type="hidden" name="planType" value="${planTypeDict.id}" />
 		<sys:message content="${message}" />
@@ -66,7 +78,7 @@
 			<label class="control-label">标题：</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="200"
-					class="input-xlarge required" />
+					class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
@@ -218,61 +230,26 @@
 					maxlength="255" class="input-xxlarge " />
 			</div>
 		</div>
-		<c:if test="${not empty workPlan.id}">
-			<div class="control-group">
-				<label class="control-label">是否取消:</label>
-				<div class="controls">
-					<form:checkbox path="isCancel" htmlEscape="false" maxlength="1"
-						class="input-xlarge " />
-				</div>
+<div id="files" class="control-group">此处是下载附件链接的列表</div>
+	</form:form>
+	
+	<form:form action="${ctx}/work/workPlan/remain_save" method="post" id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
+		<form:hidden path="id" />
+		<form:hidden path="currentRemainDeptId"/>
+		<input type="hidden" name="planType" value="company" />
+		<form:hidden path="depts"/>
+		<div class="control-group">
+			<label class="control-label">接受工作留言:</label>
+			<div class="controls">
+				<form:textarea path="remainDesc" htmlEscape="false" rows="4"
+					maxlength="255" class="input-xxlarge " cssClass="required"/>
 			</div>
-			<div class="control-group">
-				<label class="control-label">取消原因:</label>
-				<div class="controls">
-					<form:textarea path="cancelReason" htmlEscape="false" rows="4"
-						maxlength="255" class="input-xxlarge " />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label">是否删除:</label>
-				<div class="controls">
-					<form:checkbox path="delFlag" htmlEscape="false" maxlength="1"
-						value="1" class="input-xlarge " />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label">删除原因:</label>
-				<div class="controls">
-					<form:textarea path="removeReason" htmlEscape="false" rows="4"
-						maxlength="255" class="input-xxlarge " />
-				</div>
-			</div>
-		</c:if>
-
+		</div>
 		<div class="form-actions">
-			<c:if test="${not workPlan.noedit}">
-			<shiro:hasPermission name="work:workPlan:edit">
-			
-				<input id="btnSubmit" class="btn btn-primary" type="submit"
-					value="保 存" />&nbsp;</shiro:hasPermission>
-			</c:if>
+			<input id="btnSubmit1" class="btn btn-primary" type="submit"
+				value="受理"/>&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回"
 				onclick="history.go(-1)" />
-		</div>
-
-	</form:form>
-	<div id="files" class="control-group"></div>
-	<form:form id="fileForm" modelAttribute="workPlan"
-		enctype="multipart/form-data" action="${ctx}/work/workPlan/upload"
-		method="post" class="form-horizontal">
-		<form:hidden path="id" />
-		<div class="control-group">
-			<label class="control-label">工作附件：</label>
-			<div class="controls">
-				<input name="attachFile" type="file" width="100" />
-				<shiro:hasPermission name="work:workPlan:edit">
-					<input id="btnUpload" type="submit" value="上传" />&nbsp;</shiro:hasPermission>
-			</div>
 		</div>
 	</form:form>
 </body>

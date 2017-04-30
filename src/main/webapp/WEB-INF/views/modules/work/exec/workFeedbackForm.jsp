@@ -21,7 +21,6 @@
 				});
 				</c:if>
 				//更新时回显frequency频次的选择项结束
-
 				$("#name").focus();
 				$("#inputForm")
 						.validate(
@@ -45,20 +44,32 @@
 									}
 								});
 			});
+	//否决的方法
+	function reject(){
+		location = "${ctx}/work/workPlan/reject?id=${workPlan.id}&planType=${planTypeDict.value}";
+	}
+
+	//修改的方法
+	function save(){
+		var f = $("form")[0];
+		f.submit();
+	}
 </script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/work/workPlan?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
-		<li class="active"><a
-			href="${ctx}/work/workPlan/form?id=${workPlan.id}&parent.id=${workPlanparent.id}&planType=${planTypeDict.value}">${planTypeDict.label}<shiro:hasPermission
-					name="work:workPlan:edit">${not empty workPlan.id?'修改':'添加'}</shiro:hasPermission>
-				<shiro:lacksPermission name="work:workPlan:edit">查看</shiro:lacksPermission></a></li>
+		<li><a
+				href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+		
+		<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
+			<shiro:hasPermission name="work:workPlan:edit">
+				<li class="active"><a
+					href="${ctx}/work/workPlan/pending_list?planType=${planTypeDict.value}">接受待审核${planTypeDict.label}列表</a></li>
+			</shiro:hasPermission>
+		</c:if>
 	</ul>
 	<br />
-	<form:form id="inputForm" modelAttribute="workPlan"
-		action="${ctx}/work/workPlan/save" method="post"
-		class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="workPlan" class="form-horizontal">
 		<form:hidden path="id" />
 		<input type="hidden" name="planType" value="${planTypeDict.id}" />
 		<sys:message content="${message}" />
@@ -66,7 +77,7 @@
 			<label class="control-label">标题：</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="200"
-					class="input-xlarge required" />
+					class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
@@ -112,13 +123,6 @@
 				</div>
 			</c:if>
 		</c:forEach>
-		<div class="control-group">
-			<label class="control-label">工作描述：</label>
-			<div class="controls">
-				<form:textarea path="workDesc" htmlEscape="false" rows="4"
-					maxlength="255" class="input-xxlarge " />
-			</div>
-		</div>
 		<c:if test="${planTypeDict.value != 'personal'}">
 			<c:forEach items="${fns:getUser().roleList}" var="role">
 				<c:if test="${role.name eq '科级以上干部'}">
@@ -132,64 +136,6 @@
 
 				</c:if>
 			</c:forEach>
-			<%-- <!--
-			<div class="control-group">
-				<label class="control-label">部门：</label>
-				<div class="controls">
-					<sys:treeselect checked="true" id="dept" name="depts"
-						value="${workPlan.depts.id}" labelName="depts"
-						labelValue="${workPlan.depts.name}" title="部门"
-						url="/sys/office/treeData?type=2" cssClass="" allowClear="true"
-						notAllowSelectParent="true" />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label">负责人:</label>
-				<div class="controls">
-					<sys:treeselect id="personLiableId" name="personLiable.id"
-						value="${workPlan.personLiable.id}" labelName="personLiable.name"
-						labelValue="${workPlan.personLiable.name}" title="用户"
-						url="/sys/office/treeData?type=3" allowClear="true"
-						notAllowSelectParent="true" />
-				</div>
-			</div>
-			--> --%>
-			<div class="control-group">
-				<label class="control-label">工作级别：</label>
-				<div class="controls">
-					<form:select path="workLevelId" class="input-medium">
-						<form:options items="${fns:getDictList('work_level')}"
-							itemLabel="label" itemValue="value" htmlEscape="false" />
-					</form:select>
-				</div>
-			</div>
-			
-			<div class="control-group">
-				<table width="100">
-					<tr>
-						<td><label class="control-label">是否开放：</label>
-							<div class="controls">
-								<form:checkbox path="isOpen" htmlEscape="false" maxlength="1"
-									class="input-xlarge " />
-							</div></td>
-						<td><label class="control-label">是否允许被审核：</label>
-							<div class="controls">
-								<form:checkbox path="isApprovable" htmlEscape="false"
-									maxlength="1" class="input-xlarge " />
-							</div></td>
-						<td><label class="control-label">审核人是否可修改：</label>
-							<div class="controls">
-								<form:checkbox path="isApproveUpdate" htmlEscape="false"
-									maxlength="1" class="input-xlarge " />
-							</div></td>
-						<td><label class="control-label">是否保留审核人修改：</label>
-							<div class="controls">
-								<form:checkbox path="isRetainsApproveUpdate" htmlEscape="false"
-									maxlength="1" class="input-xlarge " />
-							</div></td>
-					</tr>
-				</table>
-			</div>
 		</c:if>
 		<div class="control-group">
 			<label class="control-label">父计划:</label>
@@ -210,69 +156,31 @@
 			</div>
 		</div>
 
-
+<div id="files" class="control-group">此处是下载附件链接的列表</div>
+	</form:form>
+	
+	<form:form action="${ctx}/work/workPlan2/feedback_save" method="post" id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
+		<form:hidden path="remainId" />
+		<input type="hidden" name="planType" value="company" />
 		<div class="control-group">
-			<label class="control-label">备注：</label>
+			<label class="control-label">反馈工作结果:</label>
 			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4"
-					maxlength="255" class="input-xxlarge " />
+				<form:textarea path="feedbackDesc" htmlEscape="false" rows="4"
+					maxlength="255" class="input-xxlarge " cssClass="required"/>
 			</div>
 		</div>
-		<c:if test="${not empty workPlan.id}">
-			<div class="control-group">
-				<label class="control-label">是否取消:</label>
-				<div class="controls">
-					<form:checkbox path="isCancel" htmlEscape="false" maxlength="1"
-						class="input-xlarge " />
-				</div>
+		<div>
+			<label class="control-label">工作是否结束:</label>
+			<div class="controls">
+				<form:checkbox path="isOver" htmlEscape="false" class="input-xxlarge "/>
 			</div>
-			<div class="control-group">
-				<label class="control-label">取消原因:</label>
-				<div class="controls">
-					<form:textarea path="cancelReason" htmlEscape="false" rows="4"
-						maxlength="255" class="input-xxlarge " />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label">是否删除:</label>
-				<div class="controls">
-					<form:checkbox path="delFlag" htmlEscape="false" maxlength="1"
-						value="1" class="input-xlarge " />
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label">删除原因:</label>
-				<div class="controls">
-					<form:textarea path="removeReason" htmlEscape="false" rows="4"
-						maxlength="255" class="input-xxlarge " />
-				</div>
-			</div>
-		</c:if>
-
+		</div>
 		<div class="form-actions">
-			<c:if test="${not workPlan.noedit}">
-			<shiro:hasPermission name="work:workPlan:edit">
 			
-				<input id="btnSubmit" class="btn btn-primary" type="submit"
-					value="保 存" />&nbsp;</shiro:hasPermission>
-			</c:if>
+			<input id="btnSubmit1" class="btn btn-primary" type="submit"
+				value="反馈"/>&nbsp;
 			<input id="btnCancel" class="btn" type="button" value="返 回"
 				onclick="history.go(-1)" />
-		</div>
-
-	</form:form>
-	<div id="files" class="control-group"></div>
-	<form:form id="fileForm" modelAttribute="workPlan"
-		enctype="multipart/form-data" action="${ctx}/work/workPlan/upload"
-		method="post" class="form-horizontal">
-		<form:hidden path="id" />
-		<div class="control-group">
-			<label class="control-label">工作附件：</label>
-			<div class="controls">
-				<input name="attachFile" type="file" width="100" />
-				<shiro:hasPermission name="work:workPlan:edit">
-					<input id="btnUpload" type="submit" value="上传" />&nbsp;</shiro:hasPermission>
-			</div>
 		</div>
 	</form:form>
 </body>
