@@ -86,25 +86,9 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private boolean isOver; //是否工作处理结束(预结束，关闭才是真正结束)
 	private String feedbackDesc;//当次反馈消息
 	private boolean isReply;//是否回复过
+	private String feedback_id;//反馈ID
+	private String replyContent;//回复内容
 	
-	public boolean getIsReply() {
-		return isReply;
-	}
-	public void setIsReply(boolean isReply) {
-		this.isReply = isReply;
-	}
-	public boolean getIsOver() {
-		return isOver;
-	}
-	public void setIsOver(boolean isOver) {
-		this.isOver = isOver;
-	}
-	public String getFeedbackDesc() {
-		return feedbackDesc;
-	}
-	public void setFeedbackDesc(String feedbackDesc) {
-		this.feedbackDesc = feedbackDesc;
-	}
 	/***************************************************************************************
 	 **********************************Remain受理表数据开始***********************************
 	 ***************************************************************************************/
@@ -124,6 +108,36 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	public String getReplyContent() {
+		return replyContent;
+	}
+	public void setReplyContent(String replyContent) {
+		this.replyContent = replyContent;
+	}
+	public String getFeedback_id() {
+		return feedback_id;
+	}
+	public void setFeedback_id(String feedback_id) {
+		this.feedback_id = feedback_id;
+	}
+	public boolean getIsReply() {
+		return isReply;
+	}
+	public void setIsReply(boolean isReply) {
+		this.isReply = isReply;
+	}
+	public boolean getIsOver() {
+		return isOver;
+	}
+	public void setIsOver(boolean isOver) {
+		this.isOver = isOver;
+	}
+	public String getFeedbackDesc() {
+		return feedbackDesc;
+	}
+	public void setFeedbackDesc(String feedbackDesc) {
+		this.feedbackDesc = feedbackDesc;
+	}
 	public String getEndState() {
 		return endState;
 	}

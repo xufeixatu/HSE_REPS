@@ -458,7 +458,8 @@
 	<!-- 查找 已受理的受理状态为已处理的反馈记录且反馈记录的已回复状态（isReply）为否(false)且工作的指派人为当前用户的工作、受理及最新反馈信息列表 -->
 	<select id="findClosingReply" resultType="WorkPlan">
 		SELECT 
-			<include refid="workPlanColumns1"/>
+			<include refid="workPlanColumns1"/>,
+			wf.id AS "feedback_id"
 		FROM work_plan a
 			<include refid="workPlanJoins1"/>
 			INNER JOIN work_feedback wf ON wri.id = wf.remain_id

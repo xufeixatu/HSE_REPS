@@ -130,6 +130,26 @@ public class WorkPlanController2 extends BaseController {
 		return "modules/work/exec/workRemainnedFeedbackList";
 	}
 	
+	/**
+	 * 进入工作反馈的表单
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"discuss_form"})
+	public String discuss_form(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		WorkPlan wpn = workPlanService.get(workPlan.getId());
+		wpn.setCurrentRemainDeptId(workPlan.getCurrentRemainDeptId());
+		wpn.setRemainId(workPlan.getRemainId());
+		model.addAttribute("workPlan",wpn);
+		return "modules/work/exec/workFeedbackForm";
+	}
 //	@RequiresPermissions("work:workPlan:view")
 //	@RequestMapping(value = { "list", "" })
 //	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {

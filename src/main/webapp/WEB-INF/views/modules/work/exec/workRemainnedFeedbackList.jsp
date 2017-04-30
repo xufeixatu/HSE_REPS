@@ -106,7 +106,7 @@
 				{{row.endState}}
 			</td>
 			<shiro:hasPermission name="work:workPlan:edit"><td>
-   				<a href="${ctx}/work/workPlan2/feedback_form?id={{row.id}}&remainId={{row.remainId}}&planType=${planTypeDict.value}">反馈</a>
+   				<a href="${ctx}/work/workPlan2/discuss_form?feedback_id={{row.feedback_id}}&remainId={{row.remainId}}&planType=${planTypeDict.value}">反馈回复</a>
 			</td></shiro:hasPermission>
 		</tr>
 	</script>
