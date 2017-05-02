@@ -150,6 +150,7 @@ public class WorkPlanController2 extends BaseController {
 		model.addAttribute("workPlan",wpn);
 		return "modules/work/exec/workFeedbackForm";
 	}
+	
 //	@RequiresPermissions("work:workPlan:view")
 //	@RequestMapping(value = { "list", "" })
 //	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
