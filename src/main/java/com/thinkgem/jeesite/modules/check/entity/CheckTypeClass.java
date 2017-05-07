@@ -6,24 +6,23 @@ package com.thinkgem.jeesite.modules.check.entity;
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.persistence.TreeEntity;
 
 /**
  * 检查类别管理Entity
  * @author hehui
- * @version 2017-05-06
+ * @version 2017-05-07
  */
-public class CheckTypeClass extends DataEntity<CheckTypeClass> {
+public class CheckTypeClass extends TreeEntity<CheckTypeClass> {
 	
 	private static final long serialVersionUID = 1L;
-	private String typeId;		// 检查表ID
-	private String typeName;		// 检查的分类名称
-	private String typeDesc;		// 检查分类描述
-	private String sort;		// sort
-	private CheckTypeClass parent;		// parent_id
+	private String checkTypeName;		// 分类名称
+	private String checkTypeDesc;		// 分类描述
+	private String sortNum;		// 排序
+	private CheckTypeClass parent;		// 父类别
 	private String parentIds;		// parent_ids
 	private String craeteBy;		// craete_by
-	private String name;		// 名称
+	private String remark;		// 备注
 	private String obligate1;		// obligate_1
 	private String obligate2;		// obligate_2
 	private String obligate3;		// obligate_3
@@ -36,39 +35,30 @@ public class CheckTypeClass extends DataEntity<CheckTypeClass> {
 		super(id);
 	}
 
-	@Length(min=1, max=64, message="检查表ID长度必须介于 1 和 64 之间")
-	public String getTypeId() {
-		return typeId;
+	@Length(min=1, max=200, message="分类名称长度必须介于 1 和 200 之间")
+	public String getCheckTypeName() {
+		return checkTypeName;
 	}
 
-	public void setTypeId(String typeId) {
-		this.typeId = typeId;
+	public void setCheckTypeName(String checkTypeName) {
+		this.checkTypeName = checkTypeName;
 	}
 	
-	@Length(min=0, max=200, message="检查的分类名称长度必须介于 0 和 200 之间")
-	public String getTypeName() {
-		return typeName;
+	@Length(min=0, max=255, message="分类描述长度必须介于 0 和 255 之间")
+	public String getCheckTypeDesc() {
+		return checkTypeDesc;
 	}
 
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+	public void setCheckTypeDesc(String checkTypeDesc) {
+		this.checkTypeDesc = checkTypeDesc;
 	}
 	
-	@Length(min=0, max=255, message="检查分类描述长度必须介于 0 和 255 之间")
-	public String getTypeDesc() {
-		return typeDesc;
+	public String getSortNum() {
+		return sortNum;
 	}
 
-	public void setTypeDesc(String typeDesc) {
-		this.typeDesc = typeDesc;
-	}
-	
-	public String getSort() {
-		return sort;
-	}
-
-	public void setSort(String sort) {
-		this.sort = sort;
+	public void setSortNum(String sortNum) {
+		this.sortNum = sortNum;
 	}
 	
 	@JsonBackReference
@@ -98,13 +88,13 @@ public class CheckTypeClass extends DataEntity<CheckTypeClass> {
 		this.craeteBy = craeteBy;
 	}
 	
-	@Length(min=0, max=200, message="名称长度必须介于 0 和 200 之间")
-	public String getName() {
-		return name;
+	@Length(min=0, max=255, message="备注长度必须介于 0 和 255 之间")
+	public String getRemark() {
+		return remark;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 	@Length(min=0, max=255, message="obligate_1长度必须介于 0 和 255 之间")
@@ -134,4 +124,7 @@ public class CheckTypeClass extends DataEntity<CheckTypeClass> {
 		this.obligate3 = obligate3;
 	}
 	
+	public String getParentId() {
+		return parent != null && parent.getId() != null ? parent.getId() : "0";
+	}
 }

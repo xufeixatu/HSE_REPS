@@ -3,18 +3,17 @@
 <mapper namespace="com.thinkgem.jeesite.modules.check.dao.CheckTypeClassDao">
     
 	<sql id="checkTypeClassColumns">
-		a.type_id AS "typeId",
-		a.type_name AS "typeName",
-		a.type_desc AS "typeDesc",
-		a.sort AS "sort",
+		a.id AS "id",
+		a.check_type_name AS "checkTypeName",
+		a.check_type_desc AS "checkTypeDesc",
+		a.sort_num AS "sortNum",
 		a.parent_id AS "parent.id",
 		a.parent_ids AS "parentIds",
 		a.craete_by AS "craeteBy",
 		a.create_date AS "createDate",
 		a.update_date AS "updateDate",
 		a.update_by AS "updateBy.id",
-		a.remarks AS "remarks",
-		a.name AS "name",
+		a.remark AS "remark",
 		a.del_flag AS "delFlag",
 		a.obligate_1 AS "obligate1",
 		a.obligate_2 AS "obligate2",
@@ -39,21 +38,19 @@
 		<include refid="checkTypeClassJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="name != null and name != ''">
-				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			<if test="checkTypeName != null and checkTypeName != ''">
+				AND a.check_type_name = #{checkTypeName}
+			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
 			</if>
 		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
 	</select>
 	
 	<select id="findAllList" resultType="CheckTypeClass">
@@ -63,78 +60,73 @@
 		<include refid="checkTypeClassJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
+		</where>
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="CheckTypeClass">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM check_type_class a
+		<include refid="checkTypeClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
 	</select>
 	
 	<insert id="insert">
 		INSERT INTO check_type_class(
-			type_id,
-			type_name,
-			type_desc,
-			sort,
+			id,
+			check_type_name,
+			check_type_desc,
+			sort_num,
 			parent_id,
 			parent_ids,
 			craete_by,
 			create_date,
 			update_date,
 			update_by,
-			remarks,
-			name,
-			del_flag,
-			obligate_1,
-			obligate_2,
-			obligate_3
+			remark,
+			del_flag
 		) VALUES (
-			#{typeId},
-			#{typeName},
-			#{typeDesc},
-			#{sort},
+			#{id},
+			#{checkTypeName},
+			#{checkTypeDesc},
+			#{sortNum},
 			#{parent.id},
 			#{parentIds},
 			#{craeteBy},
 			#{createDate},
 			#{updateDate},
 			#{updateBy.id},
-			#{remarks},
-			#{name},
-			#{delFlag},
-			#{obligate1},
-			#{obligate2},
-			#{obligate3}
+			#{remark},
+			#{delFlag}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE check_type_class SET 	
-			type_id = #{typeId},
-			type_name = #{typeName},
-			type_desc = #{typeDesc},
-			sort = #{sort},
+			check_type_name = #{checkTypeName},
+			check_type_desc = #{checkTypeDesc},
+			sort_num = #{sortNum},
 			parent_id = #{parent.id},
-			parent_ids = #{parentIds},
-			craete_by = #{craeteBy},
-			update_date = #{updateDate},
-			update_by = #{updateBy.id},
-			remarks = #{remarks},
-			name = #{name},
-			obligate_1 = #{obligate1},
-			obligate_2 = #{obligate2},
-			obligate_3 = #{obligate3}
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE check_type_class SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
 		UPDATE check_type_class SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
 	
 </mapper>

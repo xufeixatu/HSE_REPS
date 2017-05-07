@@ -6,7 +6,7 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			//$("#name").focus();
+			$("#name").focus();
 			$("#inputForm").validate({
 				submitHandler: function(form){
 					loading('正在提交，请稍等...');
@@ -15,7 +15,7 @@
 				errorContainer: "#messageBox",
 				errorPlacement: function(error, element) {
 					$("#messageBox").text("输入有误，请先更正。");
-					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+					if (element.is(":checkbox") || element.is(":radio") || element.parent().is(".input-append")){
 						error.appendTo(element.parent().parent());
 					} else {
 						error.insertAfter(element);
@@ -28,81 +28,42 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/check/checkTypeClass/">检查类别列表</a></li>
-		<li class="active"><a href="${ctx}/check/checkTypeClass/form?id=${checkTypeClass.id}">检查类别<shiro:hasPermission name="check:checkTypeClass:edit">${not empty checkTypeClass.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="check:checkTypeClass:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/check/checkTypeClass/form?id=${checkTypeClass.id}&parent.id=${checkTypeClassparent.id}">检查类别<shiro:hasPermission name="check:checkTypeClass:edit">${not empty checkTypeClass.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="check:checkTypeClass:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="checkTypeClass" action="${ctx}/check/checkTypeClass/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">检查表ID：</label>
+			<label class="control-label">分类名称：</label>
 			<div class="controls">
-				<form:input path="typeId" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
+				<form:input path="checkTypeName" htmlEscape="false" maxlength="200" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">检查的分类名称：</label>
+			<label class="control-label">分类描述：</label>
 			<div class="controls">
-				<form:input path="typeName" htmlEscape="false" maxlength="200" class="input-xlarge "/>
+				<form:input path="checkTypeDesc" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">检查分类描述：</label>
+			<label class="control-label">排序：</label>
 			<div class="controls">
-				<form:input path="typeDesc" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:input path="sortNum" htmlEscape="false" class="input-xlarge required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">sort：</label>
+			<label class="control-label">上级父类别:</label>
 			<div class="controls">
-				<form:input path="sort" htmlEscape="false" class="input-xlarge "/>
+				<sys:treeselect id="parent" name="parent.id" value="${checkTypeClass.parent.id}" labelName="parent.name" labelValue="${checkTypeClass.parent.name}"
+					title="父类别" url="/check/checkTypeClass/treeData" extId="${checkTypeClass.id}" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">parent_id：</label>
+			<label class="control-label">备注：</label>
 			<div class="controls">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">parent_ids：</label>
-			<div class="controls">
-				<form:input path="parentIds" htmlEscape="false" maxlength="500" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">craete_by：</label>
-			<div class="controls">
-				<form:input path="craeteBy" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">remarks：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">名称：</label>
-			<div class="controls">
-				<form:input path="name" htmlEscape="false" maxlength="200" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">obligate_1：</label>
-			<div class="controls">
-				<form:input path="obligate1" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">obligate_2：</label>
-			<div class="controls">
-				<form:input path="obligate2" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">obligate_3：</label>
-			<div class="controls">
-				<form:input path="obligate3" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:textarea path="remark" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="form-actions">

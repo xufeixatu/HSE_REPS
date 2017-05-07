@@ -4,16 +4,39 @@
 <head>
 	<title>检查类别管理</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/treetable.jsp" %>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
+			var tpl = $("#treeTableTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+			var data = ${fns:toJson(list)}, ids = [], rootIds = [];
+			for (var i=0; i<data.length; i++){
+				ids.push(data[i].id);
+			}
+			ids = ',' + ids.join(',') + ',';
+			for (var i=0; i<data.length; i++){
+				if (ids.indexOf(','+data[i].parentId+',') == -1){
+					if ((','+rootIds.join(',')+',').indexOf(','+data[i].parentId+',') == -1){
+						rootIds.push(data[i].parentId);
+					}
+				}
+			}
+			for (var i=0; i<rootIds.length; i++){
+				addRow("#treeTableList", tpl, data, rootIds[i], true);
+			}
+			$("#treeTable").treeTable({expandLevel : 5});
 		});
-		function page(n,s){
-			$("#pageNo").val(n);
-			$("#pageSize").val(s);
-			$("#searchForm").submit();
-        	return false;
-        }
+		function addRow(list, tpl, data, pid, root){
+			for (var i=0; i<data.length; i++){
+				var row = data[i];
+				if ((${fns:jsGetVal('row.parentId')}) == pid){
+					$(list).append(Mustache.render(tpl, {
+						dict: {
+						blank123:0}, pid: (root?0:pid), row: row
+					}));
+					addRow(list, tpl, data, row.id);
+				}
+			}
+		}
 	</script>
 </head>
 <body>
@@ -22,46 +45,47 @@
 		<shiro:hasPermission name="check:checkTypeClass:edit"><li><a href="${ctx}/check/checkTypeClass/form">检查类别添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="checkTypeClass" action="${ctx}/check/checkTypeClass/" method="post" class="breadcrumb form-search">
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>名称：</label>
-				<form:input path="name" htmlEscape="false" maxlength="200" class="input-medium"/>
+			<li><label>分类名称：</label>
+				<form:input path="checkTypeName" htmlEscape="false" maxlength="200" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
 	<sys:message content="${message}"/>
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
+	<table id="treeTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>分类名称</th>
+				<th>分类描述</th>
+				<th>排序</th>
 				<th>update_date</th>
-				<th>remarks</th>
-				<th>名称</th>
 				<shiro:hasPermission name="check:checkTypeClass:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
-		<tbody>
-		<c:forEach items="${page.list}" var="checkTypeClass">
-			<tr>
-				<td><a href="${ctx}/check/checkTypeClass/form?id=${checkTypeClass.id}">
-					<fmt:formatDate value="${checkTypeClass.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</a></td>
-				<td>
-					${checkTypeClass.remarks}
-				</td>
-				<td>
-					${checkTypeClass.name}
-				</td>
-				<shiro:hasPermission name="check:checkTypeClass:edit"><td>
-    				<a href="${ctx}/check/checkTypeClass/form?id=${checkTypeClass.id}">修改</a>
-					<a href="${ctx}/check/checkTypeClass/delete?id=${checkTypeClass.id}" onclick="return confirmx('确认要删除该检查类别吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
-			</tr>
-		</c:forEach>
-		</tbody>
+		<tbody id="treeTableList"></tbody>
 	</table>
-	<div class="pagination">${page}</div>
+	<script type="text/template" id="treeTableTpl">
+		<tr id="{{row.id}}" pId="{{pid}}">
+			<td><a href="${ctx}/check/checkTypeClass/form?id={{row.id}}">
+				{{row.checkTypeName}}
+			</a></td>
+			<td>
+				{{row.checkTypeDesc}}
+			</td>
+			<td>
+				{{row.sortNum}}
+			</td>
+			<td>
+				{{row.updateDate}}
+			</td>
+			<shiro:hasPermission name="check:checkTypeClass:edit"><td>
+   				<a href="${ctx}/check/checkTypeClass/form?id={{row.id}}">修改</a>
+				<a href="${ctx}/check/checkTypeClass/delete?id={{row.id}}" onclick="return confirmx('确认要删除该检查类别及所有子检查类别吗？', this.href)">删除</a>
+				<a href="${ctx}/check/checkTypeClass/form?parent.id={{row.id}}">添加下级检查类别</a> 
+			</td></shiro:hasPermission>
+		</tr>
+	</script>
 </body>
 </html>

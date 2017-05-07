@@ -8,30 +8,29 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.service.TreeService;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.check.entity.CheckTypeClass;
 import com.thinkgem.jeesite.modules.check.dao.CheckTypeClassDao;
 
 /**
  * 检查类别管理Service
  * @author hehui
- * @version 2017-05-06
+ * @version 2017-05-07
  */
 @Service
 @Transactional(readOnly = true)
-public class CheckTypeClassService extends CrudService<CheckTypeClassDao, CheckTypeClass> {
+public class CheckTypeClassService extends TreeService<CheckTypeClassDao, CheckTypeClass> {
 
 	public CheckTypeClass get(String id) {
 		return super.get(id);
 	}
 	
 	public List<CheckTypeClass> findList(CheckTypeClass checkTypeClass) {
+		if (StringUtils.isNotBlank(checkTypeClass.getParentIds())){
+			checkTypeClass.setParentIds(","+checkTypeClass.getParentIds()+",");
+		}
 		return super.findList(checkTypeClass);
-	}
-	
-	public Page<CheckTypeClass> findPage(Page<CheckTypeClass> page, CheckTypeClass checkTypeClass) {
-		return super.findPage(page, checkTypeClass);
 	}
 	
 	@Transactional(readOnly = false)
