@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.check.entity;
 
 import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
@@ -16,13 +17,12 @@ import com.thinkgem.jeesite.common.persistence.TreeEntity;
 public class CheckTypeClass extends TreeEntity<CheckTypeClass> {
 	
 	private static final long serialVersionUID = 1L;
-	private String checkTypeName;		// 分类名称
-	private String checkTypeDesc;		// 分类描述
-	private String sortNum;		// 排序
-	private CheckTypeClass parent;		// 父类别
+	private String name;		// 类别名称
+	private String typeDesc;		// 类别描述
+	private Integer sort;		// 排序
+	private CheckTypeClass parent;		// parent_id
 	private String parentIds;		// parent_ids
 	private String craeteBy;		// craete_by
-	private String remark;		// 备注
 	private String obligate1;		// obligate_1
 	private String obligate2;		// obligate_2
 	private String obligate3;		// obligate_3
@@ -35,30 +35,31 @@ public class CheckTypeClass extends TreeEntity<CheckTypeClass> {
 		super(id);
 	}
 
-	@Length(min=1, max=200, message="分类名称长度必须介于 1 和 200 之间")
-	public String getCheckTypeName() {
-		return checkTypeName;
+	@Length(min=1, max=200, message="类别名称长度必须介于 1 和 200 之间")
+	public String getName() {
+		return name;
 	}
 
-	public void setCheckTypeName(String checkTypeName) {
-		this.checkTypeName = checkTypeName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	@Length(min=0, max=255, message="分类描述长度必须介于 0 和 255 之间")
-	public String getCheckTypeDesc() {
-		return checkTypeDesc;
+	@Length(min=0, max=255, message="类别描述长度必须介于 0 和 255 之间")
+	public String getTypeDesc() {
+		return typeDesc;
 	}
 
-	public void setCheckTypeDesc(String checkTypeDesc) {
-		this.checkTypeDesc = checkTypeDesc;
+	public void setTypeDesc(String typeDesc) {
+		this.typeDesc = typeDesc;
 	}
 	
-	public String getSortNum() {
-		return sortNum;
+	@NotNull(message="排序不能为空")
+	public Integer getSort() {
+		return sort;
 	}
 
-	public void setSortNum(String sortNum) {
-		this.sortNum = sortNum;
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 	
 	@JsonBackReference
@@ -86,15 +87,6 @@ public class CheckTypeClass extends TreeEntity<CheckTypeClass> {
 
 	public void setCraeteBy(String craeteBy) {
 		this.craeteBy = craeteBy;
-	}
-	
-	@Length(min=0, max=255, message="备注长度必须介于 0 和 255 之间")
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
 	}
 	
 	@Length(min=0, max=255, message="obligate_1长度必须介于 0 和 255 之间")

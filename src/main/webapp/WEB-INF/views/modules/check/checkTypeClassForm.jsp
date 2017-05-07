@@ -34,22 +34,22 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">分类名称：</label>
+			<label class="control-label">类别名称：</label>
 			<div class="controls">
-				<form:input path="checkTypeName" htmlEscape="false" maxlength="200" class="input-xlarge required"/>
+				<form:input path="name" htmlEscape="false" maxlength="200" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">分类描述：</label>
+			<label class="control-label">类别描述：</label>
 			<div class="controls">
-				<form:input path="checkTypeDesc" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:input path="typeDesc" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">排序：</label>
 			<div class="controls">
-				<form:input path="sortNum" htmlEscape="false" class="input-xlarge required"/>
+				<form:input path="sort" htmlEscape="false" class="input-xlarge required digits"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
@@ -57,13 +57,13 @@
 			<label class="control-label">上级父类别:</label>
 			<div class="controls">
 				<sys:treeselect id="parent" name="parent.id" value="${checkTypeClass.parent.id}" labelName="parent.name" labelValue="${checkTypeClass.parent.name}"
-					title="父类别" url="/check/checkTypeClass/treeData" extId="${checkTypeClass.id}" cssClass="" allowClear="true"/>
+					title="parent_id" url="/check/checkTypeClass/treeData" extId="${checkTypeClass.id}" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">备注：</label>
 			<div class="controls">
-				<form:textarea path="remark" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="form-actions">

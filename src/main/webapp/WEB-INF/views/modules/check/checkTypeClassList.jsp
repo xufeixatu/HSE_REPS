@@ -46,8 +46,8 @@
 	</ul>
 	<form:form id="searchForm" modelAttribute="checkTypeClass" action="${ctx}/check/checkTypeClass/" method="post" class="breadcrumb form-search">
 		<ul class="ul-form">
-			<li><label>分类名称：</label>
-				<form:input path="checkTypeName" htmlEscape="false" maxlength="200" class="input-medium"/>
+			<li><label>类别名称：</label>
+				<form:input path="name" htmlEscape="false" maxlength="200" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -57,8 +57,8 @@
 	<table id="treeTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>分类名称</th>
-				<th>分类描述</th>
+				<th>类别名称</th>
+				<th>类别描述</th>
 				<th>排序</th>
 				<th>update_date</th>
 				<shiro:hasPermission name="check:checkTypeClass:edit"><th>操作</th></shiro:hasPermission>
@@ -69,13 +69,13 @@
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
 			<td><a href="${ctx}/check/checkTypeClass/form?id={{row.id}}">
-				{{row.checkTypeName}}
+				{{row.name}}
 			</a></td>
 			<td>
-				{{row.checkTypeDesc}}
+				{{row.typeDesc}}
 			</td>
 			<td>
-				{{row.sortNum}}
+				{{row.sort}}
 			</td>
 			<td>
 				{{row.updateDate}}
