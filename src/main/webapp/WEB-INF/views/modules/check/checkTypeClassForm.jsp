@@ -54,10 +54,10 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">上级父类别:</label>
+			<label class="control-label">上级检查类别:</label>
 			<div class="controls">
 				<sys:treeselect id="parent" name="parent.id" value="${checkTypeClass.parent.id}" labelName="parent.name" labelValue="${checkTypeClass.parent.name}"
-					title="parent_id" url="/check/checkTypeClass/treeData" extId="${checkTypeClass.id}" cssClass="" allowClear="true"/>
+					title="上级检查类别" url="/check/checkTypeClass/treeData" extId="${checkTypeClass.id}" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">

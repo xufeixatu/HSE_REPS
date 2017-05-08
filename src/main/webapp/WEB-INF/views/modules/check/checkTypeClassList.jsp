@@ -60,7 +60,7 @@
 				<th>类别名称</th>
 				<th>类别描述</th>
 				<th>排序</th>
-				<th>update_date</th>
+				<th>更新时间</th>
 				<shiro:hasPermission name="check:checkTypeClass:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
