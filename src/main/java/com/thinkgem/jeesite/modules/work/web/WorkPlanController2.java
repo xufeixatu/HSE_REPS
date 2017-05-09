@@ -187,7 +187,7 @@ public class WorkPlanController2 extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"dept_feedback_save"})
+	@RequestMapping(value = {"dept_remain_feedback_list"})
 	public String dept_remain_feedback_list(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
@@ -334,7 +334,7 @@ public class WorkPlanController2 extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"dept_workplan_comment_save"})
+	@RequestMapping(value = {"dept_workplan_comment_detail"})
 	public String dept_workplan_comment_detail(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
