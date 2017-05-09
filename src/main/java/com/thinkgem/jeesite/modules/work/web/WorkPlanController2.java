@@ -72,7 +72,279 @@ public class WorkPlanController2 extends BaseController {
 	}
 
 	/**
-	 * 进入工作反馈的表单
+	 * 进入部门工作待受理的列表页
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_remain_list"})
+	public String dept_remain_list(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptRemainList";
+	}
+	
+	/**
+	 * 进入部门工作受理的表单页
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_remain_form"})
+	public String dept_remain_form(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptRemainForm";
+	}
+	
+	/**
+	 * 部门工作受理
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_remain_save"})
+	public String dept_remain_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/workPlanExecuteList";
+	}
+	
+	/**
+	 * 进入已受理部门工作列表页面
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_remainned_list"})
+	public String dept_remainned_list(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptRemainnedList";
+	}
+	
+	/**
+	 * 进入部门工作反馈表单
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_feedback_form"})
+	public String dept_feedback_form(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		return "modules/work/exec/deptFeedbackForm";
+	}
+	
+	/**
+	 * 部门工作反馈保存
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_feedback_save"})
+	public String dept_feedback_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		return "modules/work/exec/deptRemainnedList";
+	}
+	
+	
+	/**
+	 * 查看一项部门工作反馈的列表
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_feedback_save"})
+	public String dept_remain_feedback_list(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		return "modules/work/exec/deptRemainFeedbackList";
+	}
+	
+	/**
+	 * 查看一项部门的一个工作反馈的回复列表
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_remain_feedback_reply_list"})
+	public String dept_remain_feedback_reply_list(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		return "modules/work/exec/deptRemainFeedbackReplyList";
+	}
+	
+	
+	
+	/**
+	 * 进入待关闭回复已反馈部门工作列表页面
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_clos_remainned_feedback_list"})
+	public String dept_clos_remainned_feedback_list(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptClosRemainnedFeedbackList";
+	}
+	
+	
+	
+	/**
+	 * 进入回复已反馈待关闭部门工作表单
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_replay_remain_feedback_form"})
+	public String dept_replay_remain_feedback_form(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptReplayRemainFeedbackForm";
+	}
+	
+	/**
+	 * 回复已反馈待关闭部门工作
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_replay_remain_feedback_save"})
+	public String dept_replay_remain_feedback_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptRemainFeedbackList";
+	}
+	
+	
+	/**
+	 * 进入已关闭已受理反馈部门工作列表
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_closed_remain_feedback_list"})
+	public String dept_closed_remain_feedback_list(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptClosedRemainFeedbackList";
+	}
+	
+	/**
+	 * 进入已关闭已受理反馈部门工作点评表单
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_workplan_comment_form"})
+	public String dept_workplan_comment_form(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptWorkplanCommentForm";
+	}
+	
+	/**
+	 * 对已关闭已受理反馈部门工作点评
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_workplan_comment_save"})
+	public String dept_workplan_comment_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptClosedRemainFeedbackList";
+	}
+	
+	/**
+	 * 对已关闭已受理反馈部门工作点评
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_workplan_comment_save"})
+	public String dept_workplan_comment_detail(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		
+		return "modules/work/exec/deptWorkplanCommentDetail";
+	}
+	
+	/**
+	 * 进入公司工作反馈表单
 	 * @param workPlan
 	 * @param request
 	 * @param response
@@ -144,11 +416,11 @@ public class WorkPlanController2 extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
-		WorkPlan wpn = workPlanService.get(workPlan.getId());
-		wpn.setCurrentRemainDeptId(workPlan.getCurrentRemainDeptId());
-		wpn.setRemainId(workPlan.getRemainId());
-		model.addAttribute("workPlan",wpn);
-		return "modules/work/exec/workFeedbackForm";
+//		WorkPlan wpn = workPlanService.findClosingReply(userid)
+//		wpn.setCurrentRemainDeptId(workPlan.getCurrentRemainDeptId());
+//		wpn.setRemainId(workPlan.getRemainId());
+//		model.addAttribute("workPlan",wpn);
+		return "modules/work/exec/workDiscussForm";
 	}
 	
 //	@RequiresPermissions("work:workPlan:view")

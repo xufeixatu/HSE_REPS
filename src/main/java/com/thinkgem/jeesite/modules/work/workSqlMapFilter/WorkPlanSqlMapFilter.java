@@ -95,12 +95,17 @@ public class WorkPlanSqlMapFilter {
 	 */
 	public void typeDeptFilter(WorkPlan workPlan, Model model) {
 		common(workPlan, model);
-		
+		// 设置根据计划类别（个人计划｜｜部门计划｜｜公司计划）过滤工作计划条件字符串
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("a.plan_type = '");
+		dsf.append(planTypeDict.getId());
+		dsf.append("' ");
 		Office me = UserUtils.getUser().getOffice();
 		dsf.append("and ");
-		dsf.append("a.depts like '");
+		dsf.append("a.depts like '%");
 		dsf.append(me.getId());
-		dsf.append("' ");
+		dsf.append("%' ");
 
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());

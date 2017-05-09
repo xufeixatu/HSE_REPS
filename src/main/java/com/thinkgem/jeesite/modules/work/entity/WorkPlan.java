@@ -4,6 +4,8 @@
 package com.thinkgem.jeesite.modules.work.entity;
 
 import org.hibernate.validator.constraints.Length;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -40,6 +42,9 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private boolean isApproveUpdate;		// 审核人能否更改
 	private boolean isRetainsApproveUpdate;		// 是否保留审核者的更新
 	private String approveOpinion;		// approve_opinion
+	private String myDept;      //当前登陆用户所有部门的name字段
+	private String timeType;		//时间类别
+	
 	/**
 	 * 接受任务时间，已经淘汰不用。因公司任务分派给多个部门，所以同一任务的接受也是多个部门的信息，原设计用单一属性是错误的
 	 */
@@ -108,6 +113,18 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	public String getMyDept() {
+		return myDept;
+	}
+	public void setMyDept(String myDept) {
+		this.myDept = myDept;
+	}
+	public String getTimeType() {
+		return timeType;
+	}
+	public void setTimeType(String timeType) {
+		this.timeType = timeType;
+	}
 	public String getReplyContent() {
 		return replyContent;
 	}
