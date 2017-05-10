@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.check.dao.InspctDao">
+    
+	<sql id="inspctColumns">
+		a.id AS "id",
+		a.type_id AS "typeId",
+		a.check_dept AS "office.id",
+		a.check_person AS "checkPerson",
+		a.check_date AS "checkDate",
+		a.inspection_dept_id AS "inspectionDeptId",
+		a.template_id AS "templateId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.obligate_1 AS "obligate1",
+		a.obligate_2 AS "obligate2",
+		a.obligate_3 AS "obligate3"
+	</sql>
+	
+	<sql id="inspctJoins">
+		LEFT JOIN sys_office o3 ON o3.id = a.check_dept
+		LEFT JOIN sys_office o6 ON o6.id = a.inspection_dept_id
+	</sql>
+    
+	<select id="get" resultType="Inspct">
+		SELECT 
+			<include refid="inspctColumns"/>
+		FROM inspct a
+		<include refid="inspctJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Inspct">
+		SELECT 
+			<include refid="inspctColumns"/>
+		FROM inspct a
+		<include refid="inspctJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="typeId != null and typeId != ''">
+				AND a.type_id = #{typeId}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.check_dept = #{office.id}
+			</if>			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Inspct">
+		SELECT 
+			<include refid="inspctColumns"/>
+		FROM inspct a
+		<include refid="inspctJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO inspct(
+			id,
+			type_id,
+			check_dept,
+			check_person,
+			check_date,
+			inspection_dept_id,
+			template_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{typeId},
+			#{office.id},
+			#{checkPerson},
+			#{checkDate},
+			#{inspectionDeptId},
+			#{templateId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE inspct SET 	
+			type_id = #{typeId},
+			check_dept = #{office.id},
+			check_person = #{checkPerson},
+			inspection_dept_id = #{inspectionDeptId},
+			template_id = #{templateId},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE inspct SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

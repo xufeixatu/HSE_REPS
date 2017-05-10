@@ -161,6 +161,9 @@ public class CheckTemplateController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(CheckTemplate checkTemplate, RedirectAttributes redirectAttributes) {
 		checkTemplateService.delete(checkTemplate);
+		CheckItem checkItem = new CheckItem();
+		checkItem.setTemplateId(checkTemplate.getId());
+		checkItemService.delete(checkItem);
 		addMessage(redirectAttributes, "删除检查模板管理成功");
 		return "redirect:"+Global.getAdminPath()+"/check/checkTemplate/?repage";
 	}
