@@ -21,7 +21,7 @@ public class CheckTemplate extends DataEntity<CheckTemplate> {
 	private String templateDesc;		// 描述
 	private Date uploadTime;		// 上传时间
 	private String uploadPersonId;		// upload_person_id
-	private String usedStatus;		// 是否启用
+	private String usedStatus;		// 是否启用   1:启用，0:不启用
 	private String obligate1;		// obligate_1
 	private String obligate2;		// obligate_2
 	private String obligate3;		// obligate_3

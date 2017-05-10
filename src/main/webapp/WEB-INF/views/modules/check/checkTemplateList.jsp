@@ -56,7 +56,7 @@
 					${checkTemplate.templateDesc}
 				</td>
 				<td>
-					${fns:getDictLabel(checkTemplate.usedStatus, '', '')}
+					${fns:getDictLabel(checkTemplate.usedStatus, 'yes_no', '')}
 				</td>
 				<td>
 					<fmt:formatDate value="${checkTemplate.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

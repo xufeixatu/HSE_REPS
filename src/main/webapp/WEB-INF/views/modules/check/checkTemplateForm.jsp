@@ -30,7 +30,8 @@
 		<li><a href="${ctx}/check/checkTemplate/">检查模板管理列表</a></li>
 		<li class="active"><a href="${ctx}/check/checkTemplate/form?id=${checkTemplate.id}">检查模板管理<shiro:hasPermission name="check:checkTemplate:edit">${not empty checkTemplate.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="check:checkTemplate:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="checkTemplate" action="${ctx}/check/checkTemplate/save" method="post" enctype="multipart/form-data" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="checkTemplate" action="${ctx}/check/checkTemplate/save?" 
+		method="post" enctype="multipart/form-data" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
