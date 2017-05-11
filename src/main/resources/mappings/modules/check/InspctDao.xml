@@ -5,10 +5,12 @@
 	<sql id="inspctColumns">
 		a.id AS "id",
 		a.type_id AS "typeId",
-		a.check_dept AS "office.id",
+		a.check_dept AS "checkOffice.id",
+		a.check_dept AS "checkOfficeId",
 		a.check_person AS "checkPerson",
 		a.check_date AS "checkDate",
-		a.inspection_dept_id AS "inspectionDeptId",
+		a.inspection_dept_id AS "inspectionOffice.id",
+		a.inspection_dept_id AS "inspectionOfficeId",
 		a.template_id AS "templateId",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -21,48 +23,46 @@
 		a.obligate_3 AS "obligate3"
 	</sql>
 	
-	<sql id="inspctJoins">
+<!-- 	<sql id="inspctJoins">
+	    LEFT JOIN check_type_class type ON type.id = a.template_id
 		LEFT JOIN sys_office o3 ON o3.id = a.check_dept
 		LEFT JOIN sys_office o6 ON o6.id = a.inspection_dept_id
-	</sql>
+	</sql> -->
     
 	<select id="get" resultType="Inspct">
 		SELECT 
 			<include refid="inspctColumns"/>
 		FROM inspct a
-		<include refid="inspctJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
 	<select id="findList" resultType="Inspct">
-		SELECT 
-			<include refid="inspctColumns"/>
-		FROM inspct a
-		<include refid="inspctJoins"/>
-		<where>
+	SELECT data.*,office1.name AS checkOfficeName, office2.name AS inspectionOfficeName
+	FROM
+		(SELECT 
+			<include refid="inspctColumns"/>,
+			type.name As typeName,
+			user.name AS checkUserName
+		 FROM inspct a, check_type_class AS type, sys_user AS user
+		 <where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.type_id = type.id
+			AND a.check_person = user.id
 			<if test="typeId != null and typeId != ''">
 				AND a.type_id = #{typeId}
 			</if>
-			<if test="office != null and office.id != null and office.id != ''">
-				AND a.check_dept = #{office.id}
-			</if>			
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
+			<if test="checkOffice != null and checkOffice.id != null and checkOffice.id != ''">
+				AND a.check_dept = #{checkOffice.id}
+			</if>
+		 </where>) AS data
+	LEFT JOIN sys_office office1 ON office1.id = data.checkOfficeId
+	LEFT JOIN sys_office office2 ON office2.id = data.inspectionOfficeId
 	</select>
 	
 	<select id="findAllList" resultType="Inspct">
 		SELECT 
 			<include refid="inspctColumns"/>
 		FROM inspct a
-		<include refid="inspctJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		
@@ -94,10 +94,10 @@
 		) VALUES (
 			#{id},
 			#{typeId},
-			#{office.id},
+			#{checkOffice.id},
 			#{checkPerson},
 			#{checkDate},
-			#{inspectionDeptId},
+			#{inspectionOffice.id},
 			#{templateId},
 			#{createBy.id},
 			#{createDate},
@@ -111,9 +111,9 @@
 	<update id="update">
 		UPDATE inspct SET 	
 			type_id = #{typeId},
-			check_dept = #{office.id},
+			check_dept = #{checkOffice.id},
 			check_person = #{checkPerson},
-			inspection_dept_id = #{inspectionDeptId},
+			inspection_dept_id = #{inspectionOffice.id},
 			template_id = #{templateId},
 			remarks = #{remarks}
 		WHERE id = #{id}

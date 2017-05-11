@@ -20,10 +20,14 @@ public class Inspct extends DataEntity<Inspct> {
 	
 	private static final long serialVersionUID = 1L;
 	private String typeId;		// 检查类别
-	private Office office;		// 归属部门
-	private String checkPerson;		// 检查人
+	private String typeName; //检查类别名称
+	private Office checkOffice;		// 检查部门
+	private String checkOfficeName; // 检查部门名称
+	private Office inspectionOffice;		// 受检部门
+	private String inspectionOfficeName; // 受检部门名称
+	private String checkPerson;		// 检查人id
+	private String checkUserName; //检查人名称
 	private Date checkDate;		// 检查时间
-	private String inspectionDeptId;		// 受检部门
 	private String templateId;		// template_id
 	private String obligate1;		// obligate_1
 	private String obligate2;		// obligate_2
@@ -46,14 +50,6 @@ public class Inspct extends DataEntity<Inspct> {
 		this.typeId = typeId;
 	}
 	
-	public Office getOffice() {
-		return office;
-	}
-
-	public void setOffice(Office office) {
-		this.office = office;
-	}
-	
 	@Length(min=1, max=64, message="检查人长度必须介于 1 和 64 之间")
 	public String getCheckPerson() {
 		return checkPerson;
@@ -71,15 +67,6 @@ public class Inspct extends DataEntity<Inspct> {
 
 	public void setCheckDate(Date checkDate) {
 		this.checkDate = checkDate;
-	}
-	
-	@Length(min=1, max=200, message="受检部门长度必须介于 1 和 200 之间")
-	public String getInspectionDeptId() {
-		return inspectionDeptId;
-	}
-
-	public void setInspectionDeptId(String inspectionDeptId) {
-		this.inspectionDeptId = inspectionDeptId;
 	}
 	
 	@Length(min=1, max=64, message="template_id长度必须介于 1 和 64 之间")
@@ -116,6 +103,54 @@ public class Inspct extends DataEntity<Inspct> {
 
 	public void setObligate3(String obligate3) {
 		this.obligate3 = obligate3;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public Office getCheckOffice() {
+		return checkOffice;
+	}
+
+	public void setCheckOffice(Office checkOffice) {
+		this.checkOffice = checkOffice;
+	}
+
+	public Office getInspectionOffice() {
+		return inspectionOffice;
+	}
+
+	public void setInspectionOffice(Office inspectionOffice) {
+		this.inspectionOffice = inspectionOffice;
+	}
+
+	public String getCheckUserName() {
+		return checkUserName;
+	}
+
+	public void setCheckUserName(String checkUserName) {
+		this.checkUserName = checkUserName;
+	}
+
+	public String getCheckOfficeName() {
+		return checkOfficeName;
+	}
+
+	public void setCheckOfficeName(String checkOfficeName) {
+		this.checkOfficeName = checkOfficeName;
+	}
+
+	public String getInspectionOfficeName() {
+		return inspectionOfficeName;
+	}
+
+	public void setInspectionOfficeName(String inspectionOfficeName) {
+		this.inspectionOfficeName = inspectionOfficeName;
 	}
 	
 }

@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.check.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,8 +21,14 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.check.entity.CheckTemplate;
+import com.thinkgem.jeesite.modules.check.entity.CheckTypeClass;
 import com.thinkgem.jeesite.modules.check.entity.Inspct;
+import com.thinkgem.jeesite.modules.check.service.CheckTemplateService;
+import com.thinkgem.jeesite.modules.check.service.CheckTypeClassService;
 import com.thinkgem.jeesite.modules.check.service.InspctService;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 检查记录管理Controller
@@ -33,6 +41,12 @@ public class InspctController extends BaseController {
 
 	@Autowired
 	private InspctService inspctService;
+	
+	@Autowired
+	private CheckTypeClassService typeClassService;
+	
+	@Autowired
+	private CheckTemplateService checkTemplateService;
 	
 	@ModelAttribute
 	public Inspct get(@RequestParam(required=false) String id) {
@@ -51,6 +65,9 @@ public class InspctController extends BaseController {
 	public String list(Inspct inspct, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<Inspct> page = inspctService.findPage(new Page<Inspct>(request, response), inspct); 
 		model.addAttribute("page", page);
+		CheckTypeClass checkTypeClass = new CheckTypeClass();
+		List<CheckTypeClass> typeClasses = typeClassService.findList(checkTypeClass);
+		model.addAttribute("checkTypes", typeClasses);
 		return "modules/check/inspctList";
 	}
 
@@ -58,6 +75,12 @@ public class InspctController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Inspct inspct, Model model) {
 		model.addAttribute("inspct", inspct);
+		CheckTypeClass checkTypeClass = new CheckTypeClass();
+		List<CheckTypeClass> typeClasses = typeClassService.findList(checkTypeClass);
+		model.addAttribute("checkTypes", typeClasses);
+		CheckTemplate checkTemplate = new CheckTemplate();
+		List<CheckTemplate> templates = checkTemplateService.findList(checkTemplate);
+		model.addAttribute("templates", templates);
 		return "modules/check/inspctForm";
 	}
 
@@ -67,8 +90,10 @@ public class InspctController extends BaseController {
 		if (!beanValidator(model, inspct)){
 			return form(inspct, model);
 		}
+		User currentUser = UserUtils.getUser();
+		inspct.setCheckPerson(currentUser.getId());
 		inspctService.save(inspct);
-		addMessage(redirectAttributes, "保存检查记录管理成功");
+		addMessage(redirectAttributes, "添加检查记录成功");
 		return "redirect:"+Global.getAdminPath()+"/check/inspct/?repage";
 	}
 	

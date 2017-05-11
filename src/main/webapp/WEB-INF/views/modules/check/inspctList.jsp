@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>检查记录管理管理</title>
+	<title>检查记录管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -18,18 +18,22 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/check/inspct/">检查记录管理列表</a></li>
-		<shiro:hasPermission name="check:inspct:edit"><li><a href="${ctx}/check/inspct/form">检查记录管理添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/check/inspct/">检查记录列表</a></li>
+		<shiro:hasPermission name="check:inspct:edit"><li><a href="${ctx}/check/inspct/form">检查记录添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="inspct" action="${ctx}/check/inspct/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 			<li><label>检查部门：</label>
-				<sys:treeselect id="office" name="office.id" value="${inspct.office.id}" labelName="office.name" labelValue="${inspct.office.name}"
+				<sys:treeselect id="checkOffice" name="checkOffice.id" value="${inspct.checkOffice.id}" labelName="checkOffice.name" labelValue="${inspct.checkOffice.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
 			<li><label>检查类别：</label>
+				<form:select path="typeId" class="input-medium">
+					<form:option value="" label="请选择"/>
+					<form:options items="${checkTypes}" itemLabel="name" itemValue="id" htmlEscape="false"/>
+				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -50,22 +54,23 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="inspct">
 			<tr>
-				<td><a href="${ctx}/check/inspct/form?id=${inspct.id}">
-					${inspct.}
-				</a></td>
 				<td>
-					${inspct.checkPerson}
+					${inspct.checkOfficeName}
+				</td>
+				<td>
+					${inspct.checkUserName}
 				</td>
 				<td>
 					<fmt:formatDate value="${inspct.checkDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${inspct.}
+					${inspct.inspectionOfficeName}
 				</td>
 				<td>
-					${inspct.typeId}
+					${inspct.typeName}
 				</td>
 				<shiro:hasPermission name="check:inspct:edit"><td>
+					<a href="${ctx}/check/inspct/form?id=${inspct.id}">查看具体检查项</a>
     				<a href="${ctx}/check/inspct/form?id=${inspct.id}">修改</a>
 					<a href="${ctx}/check/inspct/delete?id=${inspct.id}" onclick="return confirmx('确认要删除该检查记录管理吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>

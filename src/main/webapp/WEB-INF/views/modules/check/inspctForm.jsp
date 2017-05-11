@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>检查记录管理管理</title>
+	<title>检查记录管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/check/inspct/">检查记录管理列表</a></li>
+		<li><a href="${ctx}/check/inspct/">检查记录列表</a></li>
 		<li class="active"><a href="${ctx}/check/inspct/form?id=${inspct.id}">检查记录管理<shiro:hasPermission name="check:inspct:edit">${not empty inspct.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="check:inspct:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="inspct" action="${ctx}/check/inspct/save" method="post" class="form-horizontal">
@@ -36,7 +36,7 @@
 		<div class="control-group">
 			<label class="control-label">检查部门：</label>
 			<div class="controls">
-				<sys:treeselect id="checkoffice" name="office.id" value="${inspct.office.id}" labelName="office.name" labelValue="${inspct.office.name}"
+				<sys:treeselect id="checkOffice" name="checkOffice.id" value="${inspct.checkOffice.id}" labelName="checkOffice.name" labelValue="${inspct.checkOffice.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="required" allowClear="true" notAllowSelectParent="true"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
@@ -53,7 +53,7 @@
 		<div class="control-group">
 			<label class="control-label">受检部门：</label>
 			<div class="controls">
-				<sys:treeselect id="office" name="office.id" value="${inspct.office.id}" labelName="office.name" labelValue="${inspct.office.name}"
+				<sys:treeselect id="inspectionOffice" name="inspectionOffice.id" value="${inspct.inspectionOffice.id}" labelName="inspectionOffice.name" labelValue="${inspct.inspectionOffice.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="required" allowClear="true" notAllowSelectParent="true"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
@@ -61,6 +61,10 @@
 		<div class="control-group">
 			<label class="control-label">检查类别：</label>
 			<div class="controls">
+				<form:select path="typeId" class="input-xlarge required">
+					<form:option value="" label="请选择"/>
+					<form:options items="${checkTypes}" itemLabel="name" itemValue="id" htmlEscape="false"/>
+				</form:select>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
@@ -68,8 +72,8 @@
 			<label class="control-label">检查模板：</label>
 			<div class="controls">
 				<form:select path="templateId" class="input-xlarge required">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:option value="" label="请选择"/>
+					<form:options items="${templates}" itemLabel="templateName" itemValue="id" htmlEscape="false"/>
 				</form:select>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
