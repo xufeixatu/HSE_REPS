@@ -77,12 +77,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 * 受理状态ID
 	 */
 	private String remainStateId;
-	public String getRemainStateId() {
-		return remainStateId;
-	}
-	public void setRemainStateId(String remainStateId) {
-		this.remainStateId = remainStateId;
-	}
+	
 	/**
 	 * 存储受理人ID的临时变量
 	 */
@@ -91,8 +86,13 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private boolean isOver; //是否工作处理结束(预结束，关闭才是真正结束)
 	private String feedbackDesc;//当次反馈消息
 	private boolean isReply;//是否回复过
-	private String feedback_id;//反馈ID
+	private String feedbackId;//反馈ID
+	
+	private Date feedBackTime;//反馈时间
 	private String replyContent;//回复内容
+	private String replyId;//回复ID
+	private User replyPeople;//回复人
+	private Date replyTime;//回复时间
 	
 	/***************************************************************************************
 	 **********************************Remain受理表数据开始***********************************
@@ -113,6 +113,42 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	public String getFeedbackId() {
+		return feedbackId;
+	}
+	public void setFeedbackId(String feedbackId) {
+		this.feedbackId = feedbackId;
+	}
+	public Date getFeedBackTime() {
+		return feedBackTime;
+	}
+	public void setFeedBackTime(Date feedBackTime) {
+		this.feedBackTime = feedBackTime;
+	}
+	public User getReplyPeople() {
+		return replyPeople;
+	}
+	public void setReplyPeople(User replyPeople) {
+		this.replyPeople = replyPeople;
+	}
+	public Date getReplyTime() {
+		return replyTime;
+	}
+	public void setReplyTime(Date replyTime) {
+		this.replyTime = replyTime;
+	}
+	public String getReplyId() {
+		return replyId;
+	}
+	public void setReplyId(String replyId) {
+		this.replyId = replyId;
+	}
+	public String getRemainStateId() {
+		return remainStateId;
+	}
+	public void setRemainStateId(String remainStateId) {
+		this.remainStateId = remainStateId;
+	}
 	public String getMyDept() {
 		return myDept;
 	}
@@ -131,12 +167,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setReplyContent(String replyContent) {
 		this.replyContent = replyContent;
 	}
-	public String getFeedback_id() {
-		return feedback_id;
-	}
-	public void setFeedback_id(String feedback_id) {
-		this.feedback_id = feedback_id;
-	}
+	
 	public boolean getIsReply() {
 		return isReply;
 	}

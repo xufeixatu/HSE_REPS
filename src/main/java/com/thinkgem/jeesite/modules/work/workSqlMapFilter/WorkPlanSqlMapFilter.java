@@ -180,6 +180,28 @@ public class WorkPlanSqlMapFilter {
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}
+	/**
+	 * 待受理部门工作列表的过滤条件
+	 * @param workPlan
+	 * @param model
+	 */
+	public void typeDeptRemainListFilter(WorkPlan workPlan, Model model) {
+		common(workPlan, model);
+		planTypeDict = DictUtils.getDictByValue("department", "type_plan");
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("a.plan_type = '");
+		dsf.append(planTypeDict.getId());
+		dsf.append("' ");
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("a.person_liable_id = '" + UserUtils.getUser().getId() + "' ");
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("wri.id is null");
+		// 将字符串加回到sqlMap.dsf属性
+		sqlMap.put("dsf", dsf.toString());
+	}
 
 	
 }

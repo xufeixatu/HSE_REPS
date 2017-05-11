@@ -7,56 +7,15 @@
 <head>
 <title>工作计划管理</title>
 <meta name="decorator" content="default" />
-<%@include file="/WEB-INF/views/include/treetable.jsp"%>
-<script type="text/javascript">
-		$(document).ready(function() {
-			var tpl = $("#treeTableTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-			var data = ${fns:toJson(list)}, ids = [], rootIds = [];
-			for (var i=0; i<data.length; i++){
-				ids.push(data[i].id);
-			}
-			ids = ',' + ids.join(',') + ',';
-			for (var i=0; i<data.length; i++){
-				if (ids.indexOf(','+data[i].parentId+',') == -1){
-					if ((','+rootIds.join(',')+',').indexOf(','+data[i].parentId+',') == -1){
-						rootIds.push(data[i].parentId);
-					}
-				}
-			}
-			for (var i=0; i<rootIds.length; i++){
-				addRow("#treeTableList", tpl, data, rootIds[i], true);
-			}
-			$("#treeTable").treeTable({expandLevel : 5});
-		});
-		function addRow(list, tpl, data, pid, root){
-			for (var i=0; i<data.length; i++){
-				var row = data[i];
-				if ((${fns:jsGetVal('row.parentId')}) == pid){
-					$(list).append(Mustache.render(tpl, {
-						dict: {
-						blank123:0}, pid: (root?0:pid), row: row,
-					}));
-					addRow(list, tpl, data, row.id);
-				}
-			}
-		}
-	</script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a
-			href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
 		<shiro:hasPermission name="work:workPlan:edit">
-			<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
-				<li><a
-					href="${ctx}/work/workPlan/pending_list?planType=${planTypeDict.value}">待审核${planTypeDict.label}列表</a></li>
-			</c:if>
 			<li><a
-					href="${ctx}/work/workPlan/remain_list?planType=${planTypeDict.value}">待受理${planTypeDict.label}列表</a></li>
-			<li class="active"><a
-					href="${ctx}/work/workPlan/remainned_list?planType=${planTypeDict.value}">已受理${planTypeDict.label}列表</a></li>
+					href="${ctx}/work/workPlan2/dept_remainned_list?planType=${planTypeDict.value}">已受理${planTypeDict.label}列表</a></li>
 			<li><a
-					href="${ctx}/work/workPlan2/remainned_feedback_list?planType=${planTypeDict.value}">待关闭${planTypeDict.label}受理反馈列表</a></li>
+					href="${ctx}/work/workPlan2/dept_remain_feedback_list?id=${list[0].id}&remainId=${list[0].remainId}&planType=${planTypeDict.value}">${planTypeDict.label}反馈信息列表</a></li>
+			<li class="active"><a>回信息列表</a></li>
 		</shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
@@ -75,40 +34,27 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>回复信息</th>
 				<th>工作项</th>
 				<th>责任单位</th>
 				<th>责任人</th>
-				<th>工作状态</th>
-				<th>结束状态</th>
-				<shiro:hasPermission name="work:workPlan:edit">
-					<th>操作</th>
-				</shiro:hasPermission>
+				<th>反馈时间</th>
+				<th>回复时间</th>
 			</tr>
 		</thead>
-		<tbody id="treeTableList"></tbody>
+		<tbody id="treeTableList">
+		<c:forEach items="${list}" var="workPlan" varStatus="status">
+			<tr>
+				<td>
+				<textarea readonly="readonly" rows="3" cols="20">${workPlan.replyContent}</textarea></td>
+				<td>${workPlan.name}</td>
+				<td>${workPlan.remainDeptName}</td>
+				<td>${workPlan.personLiable.name}</td>
+				<td><fmt:formatDate value="${workPlan.feedBackTime}" pattern="yyyy年MM月dd日 hh时mm分ss秒"/></td>
+				<td><fmt:formatDate value="${workPlan.replyTime}" pattern="yyyy年MM月dd日 hh时mm分ss秒"/></td>
+			</tr>
+		</c:forEach>
+		</tbody>
 	</table>
-	<script type="text/template" id="treeTableTpl">
-		<tr id="{{row.id}}" pId="{{pid}}">
-			<td><a href="${ctx}/work/workPlan/detail?id={{row.id}}&planType=${planTypeDict.value}">
-					{{row.name}}
-				</a>
-			</td>
-			<td>
-				{{row.remainDeptName}}
-			</td>
-			<td>
-				{{row.remainName}}
-			</td>
-			<td>
-				{{row.workState}}
-			</td>
-			<td>
-				{{row.endState}}
-			</td>
-			<shiro:hasPermission name="work:workPlan:edit"><td>
-   				<a href="${ctx}/work/workPlan2/feedback_form?id={{row.id}}&remainId={{row.remainId}}&planType=${planTypeDict.value}">反馈</a>
-			</td></shiro:hasPermission>
-		</tr>
-	</script>
 </body>
 </html>

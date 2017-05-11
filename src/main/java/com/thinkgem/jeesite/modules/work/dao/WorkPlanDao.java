@@ -94,7 +94,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 
 	public void remain_insert(WorkPlan workPlan);
 
-	public void remain();
+	public void remain(@Param("id") String id);
 
 	public int remainsCount(@Param("workPlanId") String workPlanId,@Param("remainnerId") String remainnerId,@Param("officeId") String officeId);
 
@@ -125,4 +125,20 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 * @return
 	 */
 	public List<WorkPlan> findClosingReply(@Param("assignerId") String assignerId);
+	/**
+	 *  查看一条部门工作记录的一条受理信息的所有反馈列表
+	 * @param id
+	 * @param remainId
+	 * @return
+	 */
+	public List<WorkPlan> findWorkPlanRemainAllFeedback(@Param("id") java.lang.String id, @Param("remainId") java.lang.String remainId);
+
+	public List<WorkPlan> findWorkPlanRemainFeedbackAllRefly(@Param("id") java.lang.String id,  @Param("remainId") java.lang.String remainId,
+			 @Param("feedback_id") java.lang.String feedback_id);
+
+	public WorkPlan findReplayBy3Id(@Param("id") java.lang.String id,  @Param("remainId") java.lang.String remainId,
+			 @Param("feedback_id") java.lang.String feedback_id);
+
+	public void saveRemainFeedbackReplay(@Param("feedback_id") String feedback_id,@Param("replyContent") String replyContent,
+			@Param("userId") String userId);
 }

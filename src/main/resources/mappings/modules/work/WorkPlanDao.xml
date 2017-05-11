@@ -5,6 +5,7 @@
 	<sql id="workPlanColumns">
 		a.id AS "id",
 		a.work_type_id AS "workType.id",
+		wt.name AS "workType.name",
 		a.required_finish_time AS "requiredFinishTime",
 		a.start_time AS "startTime",
 		a.planed_finish_time AS "planedFinishTime",
@@ -53,6 +54,8 @@
 		LEFT JOIN SYS_OFFICE so ON so.id = pp.office_id
 		LEFT JOIN SYS_DICT sd ON sd.id = a.work_level_id
 		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
+		LEFT JOIN WORK_TYPE wt ON wt.id = a.work_type_id
+		LEFT JOIN work_remain_info wri ON a.id = wri.workplan_id 
 	</sql>
 	
 	<sql id="workPlanColumns1">
@@ -102,6 +105,7 @@
 		so.name AS "remainDeptName",
 		sd.value AS "endState",
 		sd2.label AS "workState",
+		pp.name AS "personLiable.name",
 		wri.id AS "remainId"
 	</sql>
 	<sql id="workPlanJoins1">
@@ -110,6 +114,7 @@
 		INNER JOIN sys_office so ON so.id = wri.remain_dept_id 
 		LEFT JOIN SYS_DICT sd ON sd.id = a.end_state_id
 		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
+		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
 	</sql>
 	
 	
@@ -163,9 +168,7 @@
 					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
 			</if>
 		</where>
-		
 		${sqlMap.dsf}
-		
 		ORDER BY a.work_state_id DESC,a.sort ASC
 	</select>
 	
@@ -383,6 +386,65 @@
 			wri.remain_state_id = '8cee3cf155744bf6bb2a6295d72fad1b'
 		</where>
 	</select>
+	
+	<!-- 查看一条部门工作记录的一条受理信息的所有反馈列表 -->
+	<select id="findWorkPlanRemainAllFeedback" resultType="WorkPlan">
+		SELECT 
+		<include refid="workPlanColumns1"/>,
+		wfb.id AS "feedbackId",
+		wfb.feedback_info AS "feedbackDesc",
+		wfb.feedback_time AS "feedBackTime"
+		FROM work_plan a 
+		<include refid="workPlanJoins1"/>
+		inner join work_feedback wfb on wri.id = wfb.remain_id
+		<where>
+			a.del_flag = '0' AND
+			a.id = #{id} AND 
+			wri.id = #{remainId}
+		</where>
+		order by wfb.feedback_time desc
+	</select>
+	
+	<!-- 查看一条部门工作记录的一个受理的一个工作反馈的所有回复列表  -->
+	<select id="findWorkPlanRemainFeedbackAllRefly" resultType="WorkPlan">
+		SELECT 
+		<include refid="workPlanColumns1"/>,
+		wfb.id AS "feedbackId",
+		wfb.feedback_info AS "feedbackDesc",
+		wfb.feedback_time AS "feedBackTime",
+		wfr.reply_content AS "replyContent",
+		wfr.reply_time AS "replyTime",
+		wfr.reply_people_id AS "replyPeople.id"
+		FROM work_plan a 
+		<include refid="workPlanJoins1"/>
+		inner join work_feedback wfb on wri.id = wfb.remain_id
+		inner join work_feedback_reply wfr on wfr.feedback_id = wfb.id
+		<where>
+			a.del_flag = '0' AND
+			a.id = #{id} AND 
+			wri.id = #{remainId} AND 
+			wfr.feedback_id = #{feedback_id}
+		</where>
+		order by wfr.reply_time desc
+	</select>
+	
+	<!-- 查看一条工作记录的受理的反馈的信息  -->
+	<select id="findReplayBy3Id" resultType="WorkPlan">
+		SELECT 
+		<include refid="workPlanColumns1"/>,
+		wfb.id AS "feedbackId",
+		wfb.feedback_info AS "feedbackDesc",
+		wfb.feedback_time AS "feedBackTime"
+		FROM work_plan a 
+		<include refid="workPlanJoins1"/>
+		inner join work_feedback wfb on wri.id = wfb.remain_id
+		<where>
+			a.del_flag = '0' AND
+			a.id = #{id} AND 
+			wri.id = #{remainId} AND 
+			wfb.id = #{feedback_id}
+		</where>
+	</select>
 
 	<!-- 查询特定工作被分配部门受理的次数 -->
 	<select id="isRemainOver" resultType="int">
@@ -402,6 +464,22 @@
 			a.remainner_id = #{remainnerId}
 		</where>
 	</select>
+	
+	<insert id="saveRemainFeedbackReplay">
+		INSERT INTO work_feedback_reply(
+			id,
+			reply_people_id,
+			reply_content,
+			feedback_id,
+			reply_time
+		) VALUES (
+			UUID(),
+			#{userId},
+			#{replyContent},
+			#{feedback_id},
+			NOW()
+		)
+	</insert>
 	
 	<insert id="remain_insert">
 		INSERT INTO work_remain_info(
@@ -461,7 +539,7 @@
 	<select id="findClosingReply" resultType="WorkPlan">
 		SELECT 
 			<include refid="workPlanColumns1"/>,
-			wf.id AS "feedback_id"
+			wf.id AS "feedbackId"
 		FROM work_plan a
 			<include refid="workPlanJoins1"/>
 			INNER JOIN work_feedback wf ON wri.id = wf.remain_id
