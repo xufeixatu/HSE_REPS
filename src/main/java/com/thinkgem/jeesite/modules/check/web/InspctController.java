@@ -20,10 +20,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.check.entity.CheckItem;
+import com.thinkgem.jeesite.modules.check.entity.CheckItemCheck;
 import com.thinkgem.jeesite.modules.check.entity.CheckTemplate;
 import com.thinkgem.jeesite.modules.check.entity.CheckTypeClass;
 import com.thinkgem.jeesite.modules.check.entity.Inspct;
+import com.thinkgem.jeesite.modules.check.service.CheckItemCheckService;
+import com.thinkgem.jeesite.modules.check.service.CheckItemService;
 import com.thinkgem.jeesite.modules.check.service.CheckTemplateService;
 import com.thinkgem.jeesite.modules.check.service.CheckTypeClassService;
 import com.thinkgem.jeesite.modules.check.service.InspctService;
@@ -47,6 +52,12 @@ public class InspctController extends BaseController {
 	
 	@Autowired
 	private CheckTemplateService checkTemplateService;
+	
+	@Autowired
+	private CheckItemCheckService itemCheckService;
+	
+	@Autowired
+	private CheckItemService checkItemService;
 	
 	@ModelAttribute
 	public Inspct get(@RequestParam(required=false) String id) {
@@ -93,6 +104,18 @@ public class InspctController extends BaseController {
 		User currentUser = UserUtils.getUser();
 		inspct.setCheckPerson(currentUser.getId());
 		inspctService.save(inspct);
+		
+		String templateId = inspct.getTemplateId();
+		CheckItem checkItem = new CheckItem();
+		checkItem.setTemplateId(templateId);
+		List<CheckItem> checkItems = checkItemService.findList(checkItem);
+		for (CheckItem item : checkItems) {
+			CheckItemCheck itemCheck = new CheckItemCheck();
+			itemCheck.setInspctId(inspct.getId());
+			itemCheck.setCheckItemId(item.getId());
+			itemCheck.setCheckTime(DateUtils.getCurrTime());
+			itemCheckService.save(itemCheck);
+		}
 		addMessage(redirectAttributes, "添加检查记录成功");
 		return "redirect:"+Global.getAdminPath()+"/check/inspct/?repage";
 	}
