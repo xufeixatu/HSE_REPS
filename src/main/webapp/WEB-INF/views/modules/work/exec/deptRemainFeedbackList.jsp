@@ -53,7 +53,7 @@
 				<td><fmt:formatDate value="${workPlan.feedBackTime}" pattern="yyyy年MM月dd日 hh时mm分ss秒"/></td>
 				<td>
 				<a href="${ctx}/work/workPlan2/dept_remain_feedback_reply_list?id=${workPlan.id}&remainId=${workPlan.remainId}&feedbackId=${workPlan.feedbackId}&planType=${planTypeDict.value}">查看回复</a>
-				<c:if test="${status.index eq 0}">
+				<c:if test="${status.index eq 0 and not empty param.reply}">
 				<a href="${ctx}/work/workPlan2/dept_replay_remain_feedback_form?id=${workPlan.id}&remainId=${workPlan.remainId}&feedbackId=${workPlan.feedbackId}&planType=${planTypeDict.value}">回复</a>
 				</c:if>
 				</td>

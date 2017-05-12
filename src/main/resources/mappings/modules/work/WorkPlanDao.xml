@@ -550,4 +550,74 @@
 			</where>
 		ORDER BY a.sort ASC
 	</select>
+	
+	<!-- 查找 所有待关闭已受理状态的工作列表 -->
+	<select id="findAllWaitClosingRemainWorkPlan" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns1"/>
+		FROM work_plan a
+			<include refid="workPlanJoins1"/>
+			<where>
+				a.del_flag = '0' AND
+				a.end_state_id = '1564424ef256499bb3faa03033924b2f' AND
+				a.depts like concat('%',#{officeid},'%') AND 
+				a.plan_type = #{plan_type}
+			</where>
+	</select>
+	
+	<!-- 查找 所有已关闭的工作列表 -->
+	<select id="findAllClosedRemainWorkPlan" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns1"/>
+		FROM work_plan a
+			<include refid="workPlanJoins1"/>
+			<where>
+				a.del_flag = '0' AND
+				a.end_state_id = '94236754111945de90fe6a1418edb8e4' AND
+				a.depts like concat('%',#{officeid},'%') AND 
+				a.plan_type = #{plan_type}
+			</where>
+	</select>
+	
+	<!-- 关闭工作计划 -->
+	<update id="closeWorkPlan">
+		UPDATE work_plan SET 
+			end_state_id = '94236754111945de90fe6a1418edb8e4'
+		WHERE id = #{id}
+	</update>
+	<!-- 点评 -->
+	<insert id="commentSave">
+		INSERT INTO work_comment(
+			id,
+			reviewer_id,
+			work_remain_id,
+			comment_content,
+			comment_time,
+			score
+		) VALUES (
+			UUID(),
+			#{userid},
+			#{remainId},
+			#{commentContent},
+			NOW(),
+			#{score}
+		)
+	</insert>
+	
+	<!-- 查看点评 -->
+	<select id="findComment" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns1"/>,
+			wc.comment_content AS "commentContent",
+			wc.score AS "score"
+		FROM work_plan a
+			<include refid="workPlanJoins1"/>
+			inner join work_comment wc on wc.work_remain_id = wri.id
+			<where>
+				a.del_flag = '0' AND
+				wri.id = #{remainId}
+				order by wc.comment_time
+				limit 1
+			</where>
+	</select>
 </mapper>

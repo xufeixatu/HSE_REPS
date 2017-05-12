@@ -141,4 +141,20 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 
 	public void saveRemainFeedbackReplay(@Param("feedback_id") String feedback_id,@Param("replyContent") String replyContent,
 			@Param("userId") String userId);
+
+	public List<WorkPlan> findAllWaitClosingRemainWorkPlan(@Param("officeid") java.lang.String officeid, @Param("plan_type") java.lang.String plan_type);
+
+	public void closeWorkPlan(@Param("id") String id);
+
+	public List<WorkPlan> findAllClosedRemainWorkPlan(@Param("officeid") String officeid, @Param("plan_type") String plan_type);
+	/**
+	 * 
+	 * @param userid 点评人ID
+	 * @param remainId 工作受理ID
+	 * @param commentContent 点评内容
+	 * @param score 成绩
+	 */
+	public void commentSave(@Param("userid") String userid, @Param("remainId") String remainId, @Param("commentContent") String commentContent, @Param("score") int score);
+
+	public WorkPlan findComment(@Param("remainId") String remainId);
 }

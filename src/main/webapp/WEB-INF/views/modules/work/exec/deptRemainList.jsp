@@ -26,7 +26,7 @@
 			<li><a
 					href="${ctx}/work/workPlan2/dept_remainned_list?planType=${planTypeDict.value}">已受理${planTypeDict.label}列表</a></li>
 			<li><a
-					href="${ctx}/work/workPlan2/dept_remainned_feedback_list?planType=${planTypeDict.value}">待关闭${planTypeDict.label}受理反馈列表</a></li>
+					href="${ctx}/work/workPlan2/dept_clos_remainned_feedback_list?planType=${planTypeDict.value}">待关闭${planTypeDict.label}受理反馈列表</a></li>
 			<li><a
 					href="${ctx}/work/workPlan2/dept_closed_remainned_feedback_list?planType=${planTypeDict.value}">已关闭${planTypeDict.label}受理反馈列表</a></li>
 		</shiro:hasPermission>

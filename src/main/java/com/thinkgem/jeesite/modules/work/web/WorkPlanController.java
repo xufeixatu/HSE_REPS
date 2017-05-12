@@ -224,6 +224,8 @@ public class WorkPlanController extends BaseController {
 			if (workPlan.getDepts() == null && workPlan.getPlanType().equals("department")) {
 				workPlan.setDepts(UserUtils.getUser().getOffice());
 			}
+			//把当前用户设置为工作计划指派人
+			workPlan.setAssignerId(UserUtils.getUser().getId());
 			// 获取排序号，最末节点排序号+30
 			if (StringUtils.isBlank(workPlan.getId())) {
 				WorkPlan workPlanChild = new WorkPlan();

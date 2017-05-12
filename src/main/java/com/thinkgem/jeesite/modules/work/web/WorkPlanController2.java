@@ -24,6 +24,7 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 import com.thinkgem.jeesite.modules.work.service.WorkPlanService;
@@ -262,14 +263,28 @@ public class WorkPlanController2 extends BaseController {
 	public String dept_clos_remainned_feedback_list(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		
-		
+		List<WorkPlan> list = workPlanService.findAllWaitClosingRemainWorkPlan(UserUtils.getUser().getOffice().getId(),DictUtils.getDictByValue("department", "type_plan").getId());
+		model.addAttribute("list", list);
 		return "modules/work/exec/deptClosRemainnedFeedbackList";
 	}
 	
 	
-	
-	
+	/**
+	 * 关闭工作
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"dept_remain_is_over_save"})
+	public String dept_remain_is_over_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		workPlanService.closeWorkPlan(workPlan.getId());
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan2/dept_clos_remainned_feedback_list?planType=department";
+	}
 	
 	
 	/**
@@ -281,12 +296,13 @@ public class WorkPlanController2 extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"dept_closed_remain_feedback_list"})
-	public String dept_closed_remain_feedback_list(WorkPlan workPlan, HttpServletRequest request, 
+	@RequestMapping(value = {"dept_closed_remainned_feedback_list"})
+	public String dept_closed_remainned_feedback_list(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		
-		
+		//查找已关闭的工作列表
+		List<WorkPlan> list = workPlanService.findAllClosedRemainWorkPlan(UserUtils.getUser().getOffice().getId(),DictUtils.getDictByValue("department", "type_plan").getId());
+		model.addAttribute("list", list);
 		return "modules/work/exec/deptClosedRemainFeedbackList";
 	}
 	
@@ -303,8 +319,7 @@ public class WorkPlanController2 extends BaseController {
 	public String dept_workplan_comment_form(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		
-		
+		model.addAttribute("workPlan", workPlan);
 		return "modules/work/exec/deptWorkplanCommentForm";
 	}
 	
@@ -322,12 +337,13 @@ public class WorkPlanController2 extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
+		workPlanService.commentSave(UserUtils.getUser().getId(),workPlan.getRemainId(),workPlan.getCommentContent(),workPlan.getScore());
 		
-		return "modules/work/exec/deptClosedRemainFeedbackList";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan2/dept_closed_remain_feedback_list?planType=department";
 	}
 	
 	/**
-	 * 对已关闭已受理反馈部门工作点评
+	 * 查询工作点评
 	 * @param workPlan
 	 * @param request
 	 * @param response
@@ -339,8 +355,8 @@ public class WorkPlanController2 extends BaseController {
 	public String dept_workplan_comment_detail(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		
-		
+		WorkPlan wln = workPlanService.findComment(workPlan.getRemainId());
+		model.addAttribute("workPlan", wln);
 		return "modules/work/exec/deptWorkplanCommentDetail";
 	}
 	

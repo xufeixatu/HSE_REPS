@@ -159,5 +159,45 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	public void saveRemainFeedbackReplay(String feedback_id, String replyContent, String userId) {
 		dao.saveRemainFeedbackReplay(feedback_id,replyContent,userId);
 	}
+	/**
+	 * 查看所有已受理待关闭工作
+	 * @param id
+	 * @return
+	 */
+	public List<WorkPlan> findAllWaitClosingRemainWorkPlan(String officeid,String planType) {
+		return dao.findAllWaitClosingRemainWorkPlan(officeid,planType);
+	}
+	/**
+	 * 关闭工作的方法
+	 * @param id
+	 */
+	@Transactional(readOnly = false)
+	public void closeWorkPlan(String id) {
+		dao.closeWorkPlan(id);
+	}
+	/**
+	 * 查找所有已关闭的工作计划
+	 * @param id
+	 * @param id2
+	 * @return
+	 */
+	public List<WorkPlan> findAllClosedRemainWorkPlan(String officid, String planType) {
+		return dao.findAllClosedRemainWorkPlan(officid, planType);
+	}
+	/**
+	 * 点评
+	 * @param id
+	 * @param remainId
+	 * @param commentContent
+	 * @param score
+	 */
+	@Transactional(readOnly = false)
+	public void commentSave(String id, String remainId, String commentContent, int score) {
+		dao.commentSave(id, remainId, commentContent, score);
+	}
+
+	public WorkPlan findComment(String remainId) {
+		return dao.findComment(remainId);
+	}
 
 }

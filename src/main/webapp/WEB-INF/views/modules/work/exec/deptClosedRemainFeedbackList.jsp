@@ -35,6 +35,9 @@
 					$(list).append(Mustache.render(tpl, {
 						dict: {
 						blank123:0}, pid: (root?0:pid), row: row,
+						manager:function(){
+							return true;
+						}
 					}));
 					addRow(list, tpl, data, row.id);
 				}
@@ -45,18 +48,16 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a
-			href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+			href="${ctx}/work/workPlan/workList/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
 		<shiro:hasPermission name="work:workPlan:edit">
-			<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
-				<li><a
-					href="${ctx}/work/workPlan/pending_list?planType=${planTypeDict.value}">待审核${planTypeDict.label}列表</a></li>
-			</c:if>
 			<li><a
-					href="${ctx}/work/workPlan/remain_list?planType=${planTypeDict.value}">待受理${planTypeDict.label}列表</a></li>
+					href="${ctx}/work/workPlan2/dept_remain_list?planType=${planTypeDict.value}">待受理${planTypeDict.label}列表</a></li>
+			<li><a
+					href="${ctx}/work/workPlan2/dept_remainned_list?planType=${planTypeDict.value}">已受理${planTypeDict.label}列表</a></li>
+			<li><a
+					href="${ctx}/work/workPlan2/dept_clos_remainned_feedback_list?planType=${planTypeDict.value}">待关闭${planTypeDict.label}受理反馈列表</a></li>
 			<li class="active"><a
-					href="${ctx}/work/workPlan/remainned_list?planType=${planTypeDict.value}">已受理${planTypeDict.label}列表</a></li>
-			<li><a
-					href="${ctx}/work/workPlan2/remainned_feedback_list?planType=${planTypeDict.value}">待关闭${planTypeDict.label}受理反馈列表</a></li>
+					href="${ctx}/work/workPlan2/dept_closed_remain_feedback_list?planType=${planTypeDict.value}">已关闭${planTypeDict.label}受理反馈列表</a></li>
 		</shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
@@ -89,7 +90,7 @@
 	</table>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
-			<td><a href="${ctx}/work/workPlan/detail?id={{row.id}}&planType=${planTypeDict.value}">
+			<td><a href="${ctx}/work/workPlan/exec_form?id={{row.id}}&planType=${planTypeDict.value}&noedit=true">
 					{{row.name}}
 				</a>
 			</td>
@@ -106,7 +107,10 @@
 				{{row.endState}}
 			</td>
 			<shiro:hasPermission name="work:workPlan:edit"><td>
-   				<a href="${ctx}/work/workPlan2/feedback_form?id={{row.id}}&remainId={{row.remainId}}&planType=${planTypeDict.value}">反馈</a>
+				{{#manager}}   				
+				<a href="${ctx}/work/workPlan2/dept_workplan_comment_form?id={{row.id}}&remainId={{row.remainId}}&planType=${planTypeDict.value}">点评</a>
+				{{/manager}}   
+				<a href="${ctx}/work/workPlan2/dept_workplan_comment_detail?remainId={{row.remainId}}&planType=${planTypeDict.value}">【查看点评】</a>
 			</td></shiro:hasPermission>
 		</tr>
 	</script>

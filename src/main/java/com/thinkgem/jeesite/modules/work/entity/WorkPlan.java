@@ -87,12 +87,13 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String feedbackDesc;//当次反馈消息
 	private boolean isReply;//是否回复过
 	private String feedbackId;//反馈ID
-	
 	private Date feedBackTime;//反馈时间
 	private String replyContent;//回复内容
 	private String replyId;//回复ID
 	private User replyPeople;//回复人
 	private Date replyTime;//回复时间
+	private String commentContent; //点评内容
+	private int score;//打分
 	
 	/***************************************************************************************
 	 **********************************Remain受理表数据开始***********************************
@@ -113,6 +114,18 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	public String getCommentContent() {
+		return commentContent;
+	}
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
 	public String getFeedbackId() {
 		return feedbackId;
 	}
