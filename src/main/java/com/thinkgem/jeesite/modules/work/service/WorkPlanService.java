@@ -87,8 +87,8 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		 * 如果所有分配该工作的部门均已接受，则将受理状态改为已受理
 		 */
 		String depts = workPlan.getDepts().getId();
-		if (dao.isRemainOver(depts, wrkpln.getId()) == depts.split(",").length) {
-			dao.remain();
+		if (dao.isRemainOver(depts, wrkpln.getRemainWorkPlanId()) == depts.split(",").length) {
+			dao.remain(workPlan.getId());
 		}
 	}
 
@@ -110,11 +110,11 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	}
 
 	@Transactional(readOnly = false)
-	public void feedbackSave(String remainId, String feedbackDesc, String userid,boolean isOver) {
+	public void feedbackSave(String remainId, String feedbackDesc, String userid/*,boolean isOver*/) {
 		dao.feedbackSave(remainId, feedbackDesc, userid);
-		if(isOver){
-			dao.feedback_over(remainId,WorkPlanDao.REMAIN_STATE_PROCESSED);
-		}
+//		if(isOver){
+//			dao.feedback_over(remainId,WorkPlanDao.REMAIN_STATE_PROCESSED);
+//		}
 	}
 	/**
 	 *  查找 已受理的受理状态为已处理的反馈记录且反馈记录的已回复状态（isReply）为否(false)且工作的指派人为当前用户的工作、受理及最新反馈信息列表
@@ -124,6 +124,80 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	public List<WorkPlan> findClosingReply(String userid) {
 		
 		return dao.findClosingReply(userid);
+	}
+	/**
+	 *  查看一条部门工作记录的一条受理信息的所有反馈列表
+	 * @param id
+	 * @param remainId
+	 * @return
+	 */
+	public List<WorkPlan> findWorkPlanRemainAllFeedback(String id, String remainId) {
+		
+		return dao.findWorkPlanRemainAllFeedback(id,remainId);
+	}
+
+	public List<WorkPlan> findWorkPlanRemainFeedbackAllRefly(String id, String remainId, String feedback_id) {
+		return dao.findWorkPlanRemainFeedbackAllRefly(id, remainId, feedback_id);
+	}
+	/**
+	 * 查看一条工作记录的受理的反馈的信息
+	 * @param id
+	 * @param remainId
+	 * @param feedback_id
+	 * @return
+	 */
+	public WorkPlan findReplayBy3Id(String id, String remainId, String feedback_id) {
+		return dao.findReplayBy3Id(id, remainId, feedback_id);
+	}
+	/**
+	 * 保存反馈的回复信息
+	 * @param feedback_id 反馈的ID
+	 * @param replyContent 回复内容
+	 * @param id   回复人ID
+	 */
+	@Transactional(readOnly = false)
+	public void saveRemainFeedbackReplay(String feedback_id, String replyContent, String userId) {
+		dao.saveRemainFeedbackReplay(feedback_id,replyContent,userId);
+	}
+	/**
+	 * 查看所有已受理待关闭工作
+	 * @param id
+	 * @return
+	 */
+	public List<WorkPlan> findAllWaitClosingRemainWorkPlan(String officeid,String planType) {
+		return dao.findAllWaitClosingRemainWorkPlan(officeid,planType);
+	}
+	/**
+	 * 关闭工作的方法
+	 * @param id
+	 */
+	@Transactional(readOnly = false)
+	public void closeWorkPlan(String id) {
+		dao.closeWorkPlan(id);
+	}
+	/**
+	 * 查找所有已关闭的工作计划
+	 * @param id
+	 * @param id2
+	 * @return
+	 */
+	public List<WorkPlan> findAllClosedRemainWorkPlan(String officid, String planType) {
+		return dao.findAllClosedRemainWorkPlan(officid, planType);
+	}
+	/**
+	 * 点评
+	 * @param id
+	 * @param remainId
+	 * @param commentContent
+	 * @param score
+	 */
+	@Transactional(readOnly = false)
+	public void commentSave(String id, String remainId, String commentContent, int score) {
+		dao.commentSave(id, remainId, commentContent, score);
+	}
+
+	public WorkPlan findComment(String remainId) {
+		return dao.findComment(remainId);
 	}
 
 }

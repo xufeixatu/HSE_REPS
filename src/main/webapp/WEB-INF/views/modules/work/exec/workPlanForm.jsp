@@ -70,11 +70,11 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/work/workPlan?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
+		<li><a href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
 		<li class="active"><a
 			href="${ctx}/work/workPlan/form?id=${workPlan.id}&parent.id=${workPlanparent.id}&planType=${planTypeDict.value}">${planTypeDict.label}<shiro:hasPermission
-					name="work:workPlan:edit">${not empty workPlan.id?'修改':'添加'}</shiro:hasPermission>
-				<shiro:lacksPermission name="work:workPlan:edit">查看</shiro:lacksPermission></a></li>
+					name="work:workPlan:edit">内容</shiro:hasPermission>
+			<shiro:lacksPermission name="work:workPlan:edit">查看</shiro:lacksPermission></a></li>
 	</ul>
 	<br />
 	<c:choose>
@@ -92,7 +92,7 @@
 				<div class="control-group">
 					<label class="control-label">工作类别：</label>
 					<div class="controls">
-						<form:input id="worktype" path="workType.id" htmlEscape="false" maxlength="200"
+						<form:input id="worktype" path="workType.name" htmlEscape="false" maxlength="200"
 							class="input-xlarge required" disabled="true"/>
 					</div>
 				</div>
@@ -168,11 +168,8 @@
 				<div class="control-group">
 					<label class="control-label">负责人:</label>
 					<div class="controls">
-						<sys:treeselect id="personLiableId" name="personLiable.id"
-							value="${workPlan.personLiable.id}" labelName="personLiable.name"
-							labelValue="${workPlan.personLiable.name}" title="用户"
-							url="/sys/office/treeData?type=3" allowClear="true"
-							notAllowSelectParent="true"  disabled="true"/>
+						<form:input id="personLiableId" path="personLiable.name" htmlEscape="false" maxlength="200"
+							class="input-xlarge required" disabled="true"/>
 					</div>
 				</div>
 				<div class="control-group">

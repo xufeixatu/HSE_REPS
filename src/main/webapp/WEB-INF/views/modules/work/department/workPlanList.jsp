@@ -100,8 +100,6 @@
 		<shiro:hasPermission name="work:workPlan:edit">
 			<li><a
 				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
-				<li><a
-				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}行动计划</a></li>
 		</shiro:hasPermission>
 		
 	</ul>
@@ -125,7 +123,7 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
+				
 				<th>工作项</th>
 				<th>级别</th>
 				<th>时间要求</th>
@@ -134,18 +132,14 @@
 					<th>责任单位</th>
 				</c:if>
 				<th>责任人</th>
-				<shiro:hasPermission name="work:workPlan:edit">
-					<th>操作</th>
-				</shiro:hasPermission>
+				
 			</tr>
 		</thead>
 		<tbody id="treeTableList"></tbody>
 	</table>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
-			<td>
-				{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
-			</td>
+			
 			<td>{{#edit}}
 					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
 						{{row.name}}
@@ -193,17 +187,6 @@
 			<td>
 				{{row.personLiable.name}}
 			</td>
-			<shiro:hasPermission name="work:workPlan:edit"><td>
-			{{#edit}}
-   				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>
-				<a href="${ctx}/work/workPlan/delete?id={{row.id}}&planType=${planTypeDict.value}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
-				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}&planType=${planTypeDict.value}">添加子工作</a> 
-				<a href="${ctx}/work/workPlan/submitPlan?id={{row.id}}&planType=${planTypeDict.value}" onclick="return submitAll(this)">提交</a>				
-			{{/edit}}
-			{{#pass}}
-				<a href="${ctx}/work/workPlan/assigned_work?id={{row.id}}&planType=${planTypeDict.value}">分配任务</a>	
-			{{/pass}}
-			</td></shiro:hasPermission>
 		</tr>
 	</script>
 	

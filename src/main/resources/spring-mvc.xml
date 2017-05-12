@@ -92,7 +92,7 @@
 			<mvc:exclude-mapping path="${adminPath}/sys/menu/treeData"/>
 			<mvc:exclude-mapping path="${adminPath}/oa/oaNotify/self/count"/>
 			<mvc:exclude-mapping path="${adminPath}/zsk/**"/>
-		<bean class="com.thinkgem.jeesite.modules.zsk.interceptor.ZskInterceptor" />
+			<bean class="com.thinkgem.jeesite.modules.zsk.interceptor.ZskInterceptor" />
 		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="${adminPath}/**" />
