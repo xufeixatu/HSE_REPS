@@ -7,7 +7,7 @@ import com.thinkgem.jeesite.modules.message.dao.MessageDao;
 import com.thinkgem.jeesite.modules.message.dao.MessageDaoImpl;
 import com.thinkgem.jeesite.modules.message.model.Message;
 import com.thinkgem.jeesite.modules.message.msg.Producer;
-
+ 
 import redis.clients.jedis.Jedis;
 
 public class MsgUtils {
