@@ -47,10 +47,8 @@
 				<td>
 					${checkItemCheck.checkContent}
 				</td>
-					${checkItemCheck.checkStandard}
-				</td>
 				<td>
-					${fns:getDictLabel(checkItemCheck.checkResult, '', '')}
+					<form:radiobuttons path="checkItemCheck.checkResult" items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</td>
 				<td>
 					${checkItemCheck.checkPersonName}
