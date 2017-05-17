@@ -100,49 +100,7 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/exec/workPlanExecuteList";
 	}
 
-	/**
-	 * 查询待受理工作
-	 * 
-	 * @param workPlan
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 */
-	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = { "remain_list" })
-	public String remain_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response,
-			Model model) {
-		/**
-		 * 过滤出所有待受理状态的公司级工作计划
-		 */
-		WorkPlanSqlMapFilter.getFilter().typeRemainCompanyWorkPlanyFilter(workPlan, model);
-		List<WorkPlan> list = workPlanService.findList(workPlan);
-		/**
-		 * 查出当前登陆人任负责人的部门
-		 */
-		User cu = UserUtils.getUser();
-		workPlan.setUserId(cu.getId());
-		List<Office> cos = OfficeUtil.getCurrentUserOfficeById(workPlan);
-
-		/**
-		 * 找出指派单位是当前登陆人负责的部门的工作置入列表
-		 */
-		Set<WorkPlan> lst = new HashSet<WorkPlan>();
-		for (WorkPlan wrkPln : list) {
-			for (Office o : cos) {
-				if (wrkPln.getDepts().getId().contains(o.getId())) {
-					// 判断在受理表中当前用户未受理过该工作再添加进待审核列表
-					if (workPlanService.remainsCount(wrkPln.getId(), cu.getId(), o.getId()) == 0) {
-						wrkPln.setCurrentRemainDeptId(o.getId());
-						lst.add(wrkPln);
-					}
-				}
-			}
-		}
-		model.addAttribute("list", lst);
-		return "modules/work/exec/workRemainList";
-	}
+	
 
 	/**
 	 * 进入受理工作表单
@@ -158,32 +116,14 @@ public class WorkPlanController extends BaseController {
 	public String remain_form(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response,
 			Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-
 		WorkPlan wpn = workPlanService.get(workPlan.getId());
 		wpn.setCurrentRemainDeptId(workPlan.getCurrentRemainDeptId());
 		model.addAttribute("workPlan", wpn);
-		return "modules/work/exec/workRemainForm";
+		
+		return "modules/work/workRemainForm";
 	}
 
-	/**
-	 * 已受理工作列表
-	 * 
-	 * @param workPlan
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 */
-	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = { "remainned_list" })
-	public String remainned_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response,
-			Model model) {
-		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		List<WorkPlan> list = workPlanService.findRemainnedWorkPlanList(UserUtils.getUser().getId());
-
-		model.addAttribute("list", list);
-		return "modules/work/exec/workRemainnedList";
-	}
+	
 
 	/**
 	 * 受理(修改end_state为"已受理"状态)工作
@@ -247,6 +187,8 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workPlanForm";
 	}
 
+	
+	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "exec_form")
 	public String exec_form(WorkPlan workPlan, Model model) {
@@ -400,6 +342,26 @@ public class WorkPlanController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage&planType=" + planTypeDict.getValue();
 	}
 
+	
+	/**
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * @param workPlan
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "pending_save")
 	public String pending_save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
@@ -526,5 +488,68 @@ public class WorkPlanController extends BaseController {
 			}
 		}
 		return mapList;
+	}
+	/**
+	 * 查询待受理工作
+	 * 
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = { "remain_list" })
+	public String remain_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
+		/**
+		 * 过滤出所有待受理状态的公司级工作计划
+		 */
+		WorkPlanSqlMapFilter.getFilter().typeRemainCompanyWorkPlanyFilter(workPlan, model);
+		List<WorkPlan> list = workPlanService.findList(workPlan);
+		/**
+		 * 查出当前登陆人任负责人的部门
+		 */
+		User cu = UserUtils.getUser();
+		workPlan.setUserId(cu.getId());
+		List<Office> cos = OfficeUtil.getCurrentUserOfficeById(workPlan);
+
+		/**
+		 * 找出指派单位是当前登陆人负责的部门的工作置入列表
+		 */
+		Set<WorkPlan> lst = new HashSet<WorkPlan>();
+		for (WorkPlan wrkPln : list) {
+			for (Office o : cos) {
+				if (wrkPln.getDepts().getId().contains(o.getId())) {
+					// 判断在受理表中当前用户未受理过该工作再添加进待审核列表
+					if (workPlanService.remainsCount(wrkPln.getId(), cu.getId(), o.getId()) == 0) {
+						wrkPln.setCurrentRemainDeptId(o.getId());
+						lst.add(wrkPln);
+					}
+				}
+			}
+		}
+		model.addAttribute("list", lst);
+		return "modules/work/exec/workRemainList";
+	}
+	
+	/**
+	 * 已受理工作列表
+	 * 
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = { "remainned_list" })
+	public String remainned_list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		List<WorkPlan> list = workPlanService.findRemainnedWorkPlanList(UserUtils.getUser().getId());
+
+		model.addAttribute("list", list);
+		return "modules/work/exec/workRemainnedList";
 	}
 }
