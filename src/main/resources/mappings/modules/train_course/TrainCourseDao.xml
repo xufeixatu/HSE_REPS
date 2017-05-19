@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.train_course.dao.TrainCourseDao">
+    
+	<sql id="trainCourseColumns">
+		a.id AS "id",
+		a.train_plan_extra_id AS "trainPlanExtraId",
+		a.course_type_id AS "courseTypeId",
+		a.cover_id AS "coverId",
+		a.doc_id AS "docId",
+		a.course_name AS "courseName",
+		a.course_dec AS "courseDec",
+		a.course_time AS "courseTime",
+		a.course_count AS "courseCount",
+		a.course_grade AS "courseGrade",
+		a.upload_by AS "uploadBy",
+		a.upload_time AS "uploadTime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.unused_1 AS "unused1",
+		a.unused_2 AS "unused2",
+		a.unused_3 AS "unused3"
+	<!-- 	ac.course_id AS "courseId",
+		ac.attach_name AS "attachName",
+		ac.attach_id AS "attachId", -->
+	</sql>
+	
+	<sql id="trainCourseJoins">
+	   <!--  LEFT JOIN COURSE_CATELOG ac ON ac.courseId = a.id -->
+	</sql>
+    
+	<select id="get" resultType="TrainCourse">
+		SELECT 
+			<include refid="trainCourseColumns"/>
+		FROM train_course a
+		<include refid="trainCourseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TrainCourse">
+		SELECT 
+			<include refid="trainCourseColumns"/>
+		FROM train_course a
+		<include refid="trainCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="courseName != null and courseName != ''">
+				AND a.course_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{courseName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{courseName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{courseName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TrainCourse">
+		SELECT 
+			<include refid="trainCourseColumns"/>
+		FROM train_course a
+		<include refid="trainCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO train_course(
+			id,
+			train_plan_extra_id,
+			course_type_id,
+			cover_id,
+			doc_id,
+			course_name,
+			course_dec,
+			course_time,
+			course_count,
+			course_grade,
+			upload_by,
+			upload_time,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			unused_1,
+			unused_2,
+			unused_3
+		) VALUES (
+			#{id},
+			#{trainPlanExtraId},
+			#{courseTypeId},
+			#{coverId},
+			#{docId},
+			#{courseName},
+			#{courseDec},
+			#{courseTime},
+			#{courseCount},
+			#{courseGrade},
+			#{uploadBy},
+			#{uploadTime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{unused1},
+			#{unused2},
+			#{unused3}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE train_course SET 	
+			cover_id = #{coverId},
+			doc_id = #{docId},
+			course_name = #{courseName},
+			course_dec = #{courseDec},
+			course_time = #{courseTime},
+			upload_by = #{uploadBy},
+			upload_time = #{uploadTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE train_course SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -4,6 +4,8 @@
 package com.thinkgem.jeesite.modules.work.entity;
 
 import org.hibernate.validator.constraints.Length;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -40,6 +42,9 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private boolean isApproveUpdate;		// 审核人能否更改
 	private boolean isRetainsApproveUpdate;		// 是否保留审核者的更新
 	private String approveOpinion;		// approve_opinion
+	private String myDept;      //当前登陆用户所有部门的name字段
+	private String timeType;		//时间类别
+	
 	/**
 	 * 接受任务时间，已经淘汰不用。因公司任务分派给多个部门，所以同一任务的接受也是多个部门的信息，原设计用单一属性是错误的
 	 */
@@ -72,12 +77,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 * 受理状态ID
 	 */
 	private String remainStateId;
-	public String getRemainStateId() {
-		return remainStateId;
-	}
-	public void setRemainStateId(String remainStateId) {
-		this.remainStateId = remainStateId;
-	}
+	
 	/**
 	 * 存储受理人ID的临时变量
 	 */
@@ -86,8 +86,14 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private boolean isOver; //是否工作处理结束(预结束，关闭才是真正结束)
 	private String feedbackDesc;//当次反馈消息
 	private boolean isReply;//是否回复过
-	private String feedback_id;//反馈ID
+	private String feedbackId;//反馈ID
+	private Date feedBackTime;//反馈时间
 	private String replyContent;//回复内容
+	private String replyId;//回复ID
+	private User replyPeople;//回复人
+	private Date replyTime;//回复时间
+	private String commentContent; //点评内容
+	private int score;//打分
 	
 	/***************************************************************************************
 	 **********************************Remain受理表数据开始***********************************
@@ -108,18 +114,73 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	public String getCommentContent() {
+		return commentContent;
+	}
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public String getFeedbackId() {
+		return feedbackId;
+	}
+	public void setFeedbackId(String feedbackId) {
+		this.feedbackId = feedbackId;
+	}
+	public Date getFeedBackTime() {
+		return feedBackTime;
+	}
+	public void setFeedBackTime(Date feedBackTime) {
+		this.feedBackTime = feedBackTime;
+	}
+	public User getReplyPeople() {
+		return replyPeople;
+	}
+	public void setReplyPeople(User replyPeople) {
+		this.replyPeople = replyPeople;
+	}
+	public Date getReplyTime() {
+		return replyTime;
+	}
+	public void setReplyTime(Date replyTime) {
+		this.replyTime = replyTime;
+	}
+	public String getReplyId() {
+		return replyId;
+	}
+	public void setReplyId(String replyId) {
+		this.replyId = replyId;
+	}
+	public String getRemainStateId() {
+		return remainStateId;
+	}
+	public void setRemainStateId(String remainStateId) {
+		this.remainStateId = remainStateId;
+	}
+	public String getMyDept() {
+		return myDept;
+	}
+	public void setMyDept(String myDept) {
+		this.myDept = myDept;
+	}
+	public String getTimeType() {
+		return timeType;
+	}
+	public void setTimeType(String timeType) {
+		this.timeType = timeType;
+	}
 	public String getReplyContent() {
 		return replyContent;
 	}
 	public void setReplyContent(String replyContent) {
 		this.replyContent = replyContent;
 	}
-	public String getFeedback_id() {
-		return feedback_id;
-	}
-	public void setFeedback_id(String feedback_id) {
-		this.feedback_id = feedback_id;
-	}
+	
 	public boolean getIsReply() {
 		return isReply;
 	}
