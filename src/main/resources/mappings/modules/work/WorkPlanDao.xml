@@ -145,9 +145,13 @@
 		WHERE a.id = #{id}
 	</select>
 	
+	<resultMap type="WorkPlan" id="workPlanList">
+		<include refid="workPlanColumns"/>
+	</resultMap>
+	
 	<select id="findList" resultType="WorkPlan">
 		SELECT 
-			<include refid="workPlanColumns"/>
+			*
 		FROM work_plan a
 		<include refid="workPlanJoins"/>
 		<where>

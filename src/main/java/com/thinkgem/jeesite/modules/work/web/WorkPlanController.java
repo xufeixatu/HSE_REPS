@@ -71,6 +71,7 @@ public class WorkPlanController extends BaseController {
 		return entity;
 	}
 
+	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -97,7 +98,7 @@ public class WorkPlanController extends BaseController {
 		List<WorkPlan> list = workPlanService.findList(workPlan);
 
 		model.addAttribute("list", list);
-		return "modules/work/exec/workPlanExecuteList";
+		return "modules/work/workPlanList";
 	}
 
 	
