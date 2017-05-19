@@ -144,11 +144,11 @@
 		<include refid="workPlanJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+	<!-- 
 	<resultMap type="WorkPlan" id="workPlanList">
 		<include refid="workPlanColumns"/>
 	</resultMap>
-	
+	 -->
 	<select id="findList" resultType="WorkPlan">
 		SELECT 
 			*
