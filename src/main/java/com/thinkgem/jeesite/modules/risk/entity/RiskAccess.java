@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.thinkgem.jeesite.modules.risk.entity.risk;
+package com.thinkgem.jeesite.modules.risk.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
@@ -9,12 +9,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 //import org.hibernate.validator.constraints.Length(min=0, max=255, message="风险名称;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
-import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 
 /**
  * riskEntity
  * @author lily
- * @version 2017-05-11
+ * @version 2017-05-18
  */
 public class RiskAccess extends DataEntity<RiskAccess> {
 	
@@ -49,14 +48,36 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	private String reserve2;		// 预留字段2
 	private String reserve3;		// 预留字段3
 	
+	private String lscore;		// L得分
+	private String escore;		// E得分
+	private String cscore;		// C得分
+	
+	public String getLscore() {
+		return lscore;
+	}
+	public void setLscore(String lscore) {
+		this.lscore = lscore;
+	}
+	public String getEscore() {
+		return escore;
+	}
+	public void setEscore(String escore) {
+		this.escore = escore;
+	}
+	public String getCscore() {
+		return cscore;
+	}
+	public void setCscore(String cscore) {
+		this.cscore = cscore;
+	}
 	public RiskAccess() {
 		super();
 	}
-
+//西航  
 	public RiskAccess(String id){
 		super(id);
 	}
-         @ExcelField(title = "编号")
+
 	@Length(min=0, max=255, message="编号长度必须介于 0 和 255 之间")
 	public String getNumber() {
 		return number;
@@ -65,8 +86,8 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-	@ExcelField(title = "年份")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	
+	@JsonFormat(pattern = "yyyy")
 	public Date getYears() {
 		return years;
 	}
@@ -74,7 +95,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setYears(Date years) {
 		this.years = years;
 	}
-	@ExcelField(title = "属地单位")
+	
 	@Length(min=0, max=255, message="属地单位长度必须介于 0 和 255 之间")
 	public String getUnit() {
 		return unit;
@@ -83,7 +104,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	@ExcelField(title = "辨识人")
+	
 	@Length(min=0, max=255, message="辨识人长度必须介于 0 和 255 之间")
 	public String getRecognizeBy() {
 		return recognizeBy;
@@ -92,7 +113,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setRecognizeBy(String recognizeBy) {
 		this.recognizeBy = recognizeBy;
 	}
-	@ExcelField(title = "辨识时间")
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getRecognizeDate() {
 		return recognizeDate;
@@ -110,7 +131,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setRiskType(String riskType) {
 		this.riskType = riskType;
 	}
-	@ExcelField(title = "分类")
+	
 	@Length(min=0, max=255, message="类别长度必须介于 0 和 255 之间")
 	public String getCategory() {
 		return category;
@@ -119,7 +140,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	@ExcelField(title = "场所、设备")
+	
 	@Length(min=0, max=255, message="场所、设备长度必须介于 0 和 255 之间")
 	public String getPlaceDevice() {
 		return placeDevice;
@@ -128,7 +149,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setPlaceDevice(String placeDevice) {
 		this.placeDevice = placeDevice;
 	}
-	@ExcelField(title = "风险名称(环境因素名称/安全风险名称")
+	
 	@Length(min=0, max=255, message="风险名称(环境因素名称/安全风险名称)长度必须介于 0 和 255 之间")
 	public String getRiskName() {
 		return riskName;
@@ -137,7 +158,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setRiskName(String riskName) {
 		this.riskName = riskName;
 	}
-	@ExcelField(title = "作业活动名称/活动、物料、产品")
+	
 	@Length(min=0, max=255, message="作业活动名称/活动、物料、产品、服务长度必须介于 0 和 255 之间")
 	public String getWorkName() {
 		return workName;
@@ -146,7 +167,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setWorkName(String workName) {
 		this.workName = workName;
 	}
-	@ExcelField(title = "危害因素（危险源）")
+	
 	@Length(min=0, max=255, message="危害因素（危险源）长度必须介于 0 和 255 之间")
 	public String getRiskFactors() {
 		return riskFactors;
@@ -236,7 +257,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setWorkflowid(String workflowid) {
 		this.workflowid = workflowid;
 	}
-	@ExcelField(title = "责任单位")
+	
 	@Length(min=0, max=255, message="责任单位长度必须介于 0 和 255 之间")
 	public String getDutyUnit() {
 		return dutyUnit;
@@ -245,7 +266,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setDutyUnit(String dutyUnit) {
 		this.dutyUnit = dutyUnit;
 	}
-	@ExcelField(title = "对应管理方案")
+	
 	@Length(min=0, max=255, message="对应管理方案长度必须介于 0 和 255 之间")
 	public String getManagementPlan() {
 		return managementPlan;
@@ -254,7 +275,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setManagementPlan(String managementPlan) {
 		this.managementPlan = managementPlan;
 	}
-	@ExcelField(title = "影响（可能导致的事故、环境影响）")
+	
 	@Length(min=0, max=255, message="影响（可能导致的事故、环境影响）长度必须介于 0 和 255 之间")
 	public String getAffect() {
 		return affect;
@@ -263,7 +284,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setAffect(String affect) {
 		this.affect = affect;
 	}
-	@ExcelField(title = "措施（采取的消减、控制措施，现有控制方法）")
+	
 	@Length(min=0, max=255, message="措施（采取的消减、控制措施，现有控制方法）长度必须介于 0 和 255 之间")
 	public String getMeasure() {
 		return measure;
@@ -272,7 +293,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setMeasure(String measure) {
 		this.measure = measure;
 	}
-	@ExcelField(title = "排放频率")
+	
 	@Length(min=0, max=255, message="排放频率长度必须介于 0 和 255 之间")
 	public String getFrequency() {
 		return frequency;
@@ -281,7 +302,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setFrequency(String frequency) {
 		this.frequency = frequency;
 	}
-	@ExcelField(title = "触发原因")
+	
 	@Length(min=0, max=255, message="触发原因长度必须介于 0 和 255 之间")
 	public String getReason() {
 		return reason;

@@ -18,11 +18,10 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/risk/risk/riskAccess/">风险列表</a></li>
-	<%-- 	<shiro:hasPermission name="risk:risk:riskAccess:edit"><li><a href="${ctx}/risk/risk/riskAccess/form">risk添加</a></li></shiro:hasPermission> --%>
-		<li ><a href="${ctx}/risk/risk/riskAccess/exportExcel">导出EXCEL</a></li>
+		<li class="active"><a href="${ctx}/risk/riskAccess/">risk列表</a></li>
+		<shiro:hasPermission name="risk:riskAccess:edit"><li><a href="${ctx}/risk/riskAccess/form">risk添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/risk/riskAccess/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -94,13 +93,13 @@
 				<th>排放频率</th>
 				<th>触发原因</th>
 				<th>备注信息</th>
-				<shiro:hasPermission name="risk:risk:riskAccess:edit"><th>操作</th></shiro:hasPermission>
+				<shiro:hasPermission name="risk:riskAccess:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="riskAccess">
 			<tr>
-				<td><a href="${ctx}/risk/risk/riskAccess/form?id=${riskAccess.id}">
+				<td><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">
 					<fmt:formatDate value="${riskAccess.years}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</a></td>
 				<td>
@@ -172,9 +171,9 @@
 				<td>
 					${riskAccess.remarks}
 				</td>
-				<shiro:hasPermission name="risk:risk:riskAccess:edit"><td>
-    				<a href="${ctx}/risk/risk/riskAccess/form?id=${riskAccess.id}">修改</a>
-					<a href="${ctx}/risk/risk/riskAccess/delete?id=${riskAccess.id}" onclick="return confirmx('确认要删除该risk吗？', this.href)">删除</a>
+				<shiro:hasPermission name="risk:riskAccess:edit"><td>
+    				<a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">修改</a>
+					<a href="${ctx}/risk/riskAccess/delete?id=${riskAccess.id}" onclick="return confirmx('确认要删除该risk吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

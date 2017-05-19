@@ -18,14 +18,16 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/risk/risk/riskAccess/">风险列表</a></li>
-	<%-- 	<shiro:hasPermission name="risk:risk:riskAccess:edit"><li><a href="${ctx}/risk/risk/riskAccess/form">risk添加</a></li></shiro:hasPermission> --%>
-		<li ><a href="${ctx}/risk/risk/riskAccess/exportExcel">导出EXCEL</a></li>
+		<li class="active"><a href="${ctx}/risk/riskAccess/">risk列表</a></li>
+		<shiro:hasPermission name="risk:riskAccess:edit"><li><a href="${ctx}/risk/riskAccess/form">risk添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/risk/riskAccess/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>危害辨识项ID：</label>
+				<form:input path="id" htmlEscape="false" maxlength="64" class="input-medium"/>
+			</li>
 			<li><label>编号：</label>
 				<form:input path="number" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
@@ -84,20 +86,20 @@
 				<th>评价结果ID</th>
 				<th>是否重大风险</th>
 				<th>风险等级</th>
-			<!-- 	<th>责任单位</th>
+				<th>责任单位</th>
 				<th>对应管理方案</th>
 				<th>影响（可能导致的事故、环境影响）</th>
 				<th>措施（采取的消减、控制措施，现有控制方法）</th>
 				<th>排放频率</th>
 				<th>触发原因</th>
-				<th>备注信息</th> -->
-				<shiro:hasPermission name="risk:risk:riskAccess:edit"><th>操作</th></shiro:hasPermission>
+				<th>备注信息</th>
+				<shiro:hasPermission name="risk:riskAccess:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="riskAccess">
 			<tr>
-				<td><a href="${ctx}/risk/risk/riskAccess/form?id=${riskAccess.id}">
+				<td><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">
 					<fmt:formatDate value="${riskAccess.years}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</a></td>
 				<td>
@@ -148,7 +150,7 @@
 				<td>
 					${fns:getDictLabel(riskAccess.riskLevel, '', '')}
 				</td>
-<%-- 				<td>
+				<td>
 					${fns:getDictLabel(riskAccess.dutyUnit, '', '')}
 				</td>
 				<td>
@@ -168,11 +170,10 @@
 				</td>
 				<td>
 					${riskAccess.remarks}
-				</td> --%>
-				<shiro:hasPermission name="risk:risk:riskAccess:edit"><td>
-				             <a href="${ctx}/risk/risk/riskAccess/form?id=${riskAccess.id}">分析</a>
-    				<a href="${ctx}/risk/risk/riskAccess/form?id=${riskAccess.id}">修改</a>
-					<a href="${ctx}/risk/risk/riskAccess/delete?id=${riskAccess.id}" onclick="return confirmx('确认要删除该risk吗？', this.href)">删除</a>
+				</td>
+				<shiro:hasPermission name="risk:riskAccess:edit"><td>
+    				<a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">修改</a>
+					<a href="${ctx}/risk/riskAccess/delete?id=${riskAccess.id}" onclick="return confirmx('确认要删除该risk吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
