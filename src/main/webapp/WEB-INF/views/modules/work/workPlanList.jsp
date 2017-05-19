@@ -100,6 +100,8 @@
 		<shiro:hasPermission name="work:workPlan:edit">
 			<li><a
 				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
+				<li><a
+				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}行动计划</a></li>
 		</shiro:hasPermission>
 		
 	</ul>

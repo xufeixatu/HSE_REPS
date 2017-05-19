@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.sys.web;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.security.shiro.session.SessionDAO;
 import com.thinkgem.jeesite.common.servlet.ValidateCodeServlet;
@@ -27,9 +30,17 @@ import com.thinkgem.jeesite.common.utils.CookieUtils;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.message.dao.MessageDao;
+import com.thinkgem.jeesite.modules.message.dao.MessageDaoImpl;
+import com.thinkgem.jeesite.modules.message.model.Message;
+import com.thinkgem.jeesite.modules.message.msg.Callback;
+import com.thinkgem.jeesite.modules.message.msg.Consumer;
+import com.thinkgem.jeesite.modules.message.utils.Constant;
 import com.thinkgem.jeesite.modules.sys.security.FormAuthenticationFilter;
 import com.thinkgem.jeesite.modules.sys.security.SystemAuthorizingRealm.Principal;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+
+import redis.clients.jedis.Jedis;
 
 /**
  * 登录Controller
@@ -38,7 +49,8 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
  */
 @Controller
 public class LoginController extends BaseController{
-	
+	Gson gson = new Gson();
+	MessageDao md = new MessageDaoImpl();
 	@Autowired
 	private SessionDAO sessionDAO;
 	
@@ -140,7 +152,8 @@ public class LoginController extends BaseController{
 		if (logger.isDebugEnabled()){
 			logger.debug("show index, active session size: {}", sessionDAO.getActiveSessions(false).size());
 		}
-		
+		setListenner(request, response);
+
 		// 如果已登录，再次访问主页，则退出原账号。
 		if (Global.TRUE.equals(Global.getConfig("notAllowRefreshIndex"))){
 			String logined = CookieUtils.getCookie(request, "LOGINED");
@@ -182,7 +195,35 @@ public class LoginController extends BaseController{
 //		System.out.println("==========================b");
 		return "modules/sys/sysIndex";
 	}
-	
+	/**
+	 * 设置监听
+	 */
+	private void setListenner(final HttpServletRequest request, final HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		final String userId = UserUtils.getUser().getId();
+		final List<Message> msgList = new ArrayList<Message>();
+		System.out.println("===============设置监听==============");
+		Thread subThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Consumer c = new Consumer(new Jedis(Constant.host, Constant.port), userId, userId);
+				// String m = null;
+				c.consume(new Callback() {
+					@Override
+					public void onMessage(String message) {
+						Message msg = gson.fromJson(message, Message.class);
+						if (msg.getReceivedId().equals(userId)) {
+							msgList.add(msg);
+							System.out.println(msgList);
+							request.getSession().setAttribute("msgList", msgList);
+						}
+					}
+				});
+			}
+		});
+		subThread.start();
+	}
+
 	/**
 	 * 获取主题方案
 	 */

@@ -68,13 +68,13 @@
 				<form:textarea path="descInfo" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">文件类型：</label>
 			<div class="controls">
 				<form:input path="docType" htmlEscape="false" maxlength="10" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
-		</div>
+		</div> --%>
 		<hr>
 		<%--  <div class="control-group">
 			<label class="control-label">版本号码：</label>
