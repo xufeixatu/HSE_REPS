@@ -340,6 +340,17 @@
 		        	</li>
 		        	<li>【课程大纲】
 		        		<ol>
+		        	<%-- 	
+		        		<c:forEach items="${page.list}" var="courseCatelog">
+							<tr>
+								<td><a href="${ctx}/train_course/trainCourse2/list?id=${trainCourse.id}">
+									${courseCatelog.attachName}
+								</a></td>
+								<td>
+									${courseCatelog.attachId}
+								</td>
+							</tr>
+						</c:forEach> --%>
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>

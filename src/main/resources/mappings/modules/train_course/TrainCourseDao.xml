@@ -24,9 +24,13 @@
 		a.unused_1 AS "unused1",
 		a.unused_2 AS "unused2",
 		a.unused_3 AS "unused3"
+	<!-- 	ac.course_id AS "courseId",
+		ac.attach_name AS "attachName",
+		ac.attach_id AS "attachId", -->
 	</sql>
 	
 	<sql id="trainCourseJoins">
+	   <!--  LEFT JOIN COURSE_CATELOG ac ON ac.courseId = a.id -->
 	</sql>
     
 	<select id="get" resultType="TrainCourse">
