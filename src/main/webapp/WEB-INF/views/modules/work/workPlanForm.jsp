@@ -66,7 +66,9 @@
 		var message = "<font color='red'>计划起止时间、要求结束时间、频次选择一种时间类别............</font>";
 		$("#" + me.name + "_message").html(message).hide(15000);
 	}
+	
 </script>
+
 </head>
 <body>
 	<ul class="nav nav-tabs">

@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.work.web;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +56,23 @@ public class WorkPlanController2 extends BaseController {
 		return entity;
 	}
 
+	/**
+	 * 进入工作受理的表单页
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"my_asigned_work_list"})
+	public String my_asigned_work_list(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		return "modules/work/workIndex";
+	}
+	
 	/**
 	 * 进入工作受理的表单页
 	 * @param workPlan

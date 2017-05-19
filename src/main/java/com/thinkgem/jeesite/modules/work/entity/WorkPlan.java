@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.work.entity;
 
 import org.hibernate.validator.constraints.Length;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
@@ -21,6 +22,9 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
  */
 public class WorkPlan extends TreeEntity<WorkPlan> {
 	private static final long serialVersionUID = 1L;
+	
+	private ArrayList<WorkPlan> childWorkPlan = new ArrayList<WorkPlan>();
+	
 	private WorkType workType;		// 工作类别
 	private Date requiredFinishTime;		// 要求结束时间
 	private Date startTime;		// 工作开始时间
@@ -552,7 +556,12 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setDepts(Office depts) {
 		this.depts = depts;
 	}
-	
+	public ArrayList<WorkPlan> getChildWorkPlan() {
+		return childWorkPlan;
+	}
+	public void setChildWorkPlan(ArrayList<WorkPlan> childWorkPlan) {
+		this.childWorkPlan = childWorkPlan;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
