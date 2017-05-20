@@ -32,6 +32,9 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	private String unused1;		// unused_1
 	private String unused2;		// unused_2
 	private String unused3;		// unused_3
+	private String courseId;		// 课程id
+	private String attachName;		// 附件名称
+	private String attachId;		// 附件id
 	
 	public TrainCourse() {
 		super();
@@ -166,6 +169,32 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 
 	public void setUnused3(String unused3) {
 		this.unused3 = unused3;
+	}
+	@Length(min=0, max=64, message="课程id长度必须介于 0 和 64 之间")
+	public String getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(String courseId) {
+		this.courseId = courseId;
+	}
+	
+	@Length(min=0, max=255, message="附件名称长度必须介于 0 和 255 之间")
+	public String getAttachName() {
+		return attachName;
+	}
+
+	public void setAttachName(String attachName) {
+		this.attachName = attachName;
+	}
+	
+	@Length(min=0, max=64, message="附件id长度必须介于 0 和 64 之间")
+	public String getAttachId() {
+		return attachId;
+	}
+
+	public void setAttachId(String attachId) {
+		this.attachId = attachId;
 	}
 	
 }

@@ -23,14 +23,14 @@
 		a.del_flag AS "delFlag",
 		a.unused_1 AS "unused1",
 		a.unused_2 AS "unused2",
-		a.unused_3 AS "unused3"
-	<!-- 	ac.course_id AS "courseId",
-		ac.attach_name AS "attachName",
-		ac.attach_id AS "attachId", -->
+		a.unused_3 AS "unused3",
+		cct.course_id AS "courseId",
+		cct.attach_name AS "attachName",
+		cct.attach_id AS "attachId"
 	</sql>
 	
 	<sql id="trainCourseJoins">
-	   <!--  LEFT JOIN COURSE_CATELOG ac ON ac.courseId = a.id -->
+	    LEFT JOIN COURSE_CATELOG cct ON cct.course_id = a.id
 	</sql>
     
 	<select id="get" resultType="TrainCourse">

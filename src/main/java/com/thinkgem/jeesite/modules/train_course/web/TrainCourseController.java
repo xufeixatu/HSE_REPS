@@ -3,6 +3,10 @@
  */
 package com.thinkgem.jeesite.modules.train_course.web;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +23,7 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
 import com.thinkgem.jeesite.modules.train_course.service.TrainCourseService;
 
@@ -57,6 +62,14 @@ public class TrainCourseController extends BaseController {
 	@RequiresPermissions("train_course:trainCourse:view")
 	@RequestMapping(value = "form")
 	public String form(TrainCourse trainCourse, Model model) {
+		
+		trainCourse.setUploadBy(UserUtils.getUser().getName());
+		
+		Date upload_time = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dateFormat.format(upload_time);
+		trainCourse.setUploadTime(upload_time);
+		
 		model.addAttribute("trainCourse", trainCourse);
 		return "modules/train_course/trainCourseForm";
 	}

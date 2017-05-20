@@ -71,9 +71,12 @@
 		}
 		.course-detail > img{
 			width:46%;
-			height:98%;
+			height:96%;
 			display:inline-block;
 			float:left;
+			margin-left: 5px;
+			margin-top: 10px;
+			margin-bottom: 20px;
 		}
 		.course-detail-text{
 			width:46%;
@@ -86,7 +89,7 @@
 			color:#FFFFFF;
 			font-size:36px;
 			display:block;
-			margin-top:10px;
+			margin-top:40px;
 		}
 		
 		.course-detail-text-progress{
@@ -100,7 +103,7 @@
 			background-color:#eead4f;
 		}
 		.course-detail-text-status{
-			margin-top:100px;
+			margin-top:60px;
 			width:100%;
 			height:100px;
 			background-color:#514375;
@@ -124,7 +127,7 @@
 			display:block;
 			text-align:center;
 			border-right:1px solid #999999;
-			margin-top:10%;
+			margin-top:16%;
 		}
 		.course-detail-text-status-time-text{
 			display:block;
@@ -134,7 +137,7 @@
 		.course-detail-text-status-study-number{
 			display:block;
 			text-align:center;
-			margin-top:7%;
+			margin-top:16%;
 		}
 		.course-detail-text-status-study-text{
 			display:block;
@@ -156,6 +159,7 @@
 			margin:0px;
 			padding:0px;
 			width:100%;
+			height: 83px;
 		}
 		.course-detail-text-operate > ul li{
 			float:left;
@@ -166,22 +170,30 @@
 		}
 		.course-detail-text-operate > ul li.continue button{
 			width:100%;
+			height: 111%;
+			font-size: 20px;
+    		letter-spacing: 5px;
 		}
-		.course-detail-text-operate > ul li.focus{
-			width:15%;
-			padding:4px 13px;
-		}
+ 		.course-detail-text-operate > ul li.focus{
+		    width: 13%;
+		    height: 111%;
+		    padding: 4px 13px;
+		    line-height: 42px;
+		    margin-left: 47px;
+		} 
 		.course-detail-text-operate > ul li.recommend{
 			padding:4px 13px;
+			height: 111%;
 		}
-		.course-detail-text-operate > ul li.focus a,
+ 		.course-detail-text-operate > ul li.focus a, 
 		.course-detail-text-operate > ul li.recommend a{
 			text-align:center;
 			color:#FFFFFF;
 			font-size:16px;
 		}
 		#tblMain{
-			font-size:24px;
+			font-size: 32px;
+			line-height: 48px;
 		}
 		#tblMain tr td{
 			color:#FFFFFF;
@@ -298,8 +310,8 @@
 				</div>
 			</div>
 			<div class="course-detail-text-progress">
-			    <div class="course-detail-text-progress-bar" role="progressbar" id="progress-value" value="${trainCourse.courseGrade}*10"></div>
-			    <span class="course-detail-text-progress-bar-text">${trainCourse.courseGrade*10}% 完成</span>
+			    <div class="course-detail-text-progress-bar" role="progressbar" id="progress-value" value="40"></div>
+			    <span class="course-detail-text-progress-bar-text">40% 完成</span>
 			</div>
 			<div class="course-detail-text-operate">
 				<ul>
@@ -340,17 +352,20 @@
 		        	</li>
 		        	<li>【课程大纲】
 		        		<ol>
-		        	<%-- 	
-		        		<c:forEach items="${page.list}" var="courseCatelog">
-							<tr>
-								<td><a href="${ctx}/train_course/trainCourse2/list?id=${trainCourse.id}">
-									${courseCatelog.attachName}
-								</a></td>
-								<td>
-									${courseCatelog.attachId}
-								</td>
-							</tr>
-						</c:forEach> --%>
+		        	<c:set var="testString" value="|/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4|/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4|/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4"/>
+					
+					<c:forTokens items="${testString}" delims="|" var="videoHref">
+						<li>
+							<a href="http://localhost:8080${videoHref}">
+							
+								<c:set var="videoHrefString" value="${videoHref}"/>													
+								<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
+								${videoId}
+							</a>
+						</li>
+					</c:forTokens>
+					
+		        			<!-- <li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
@@ -364,8 +379,7 @@
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
 		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
+		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li> -->
 		        		</ol>
 		        	</li>
 		        </ul>

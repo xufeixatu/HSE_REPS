@@ -71,7 +71,7 @@
 		<div class="control-group">
 			<label class="control-label">上传人：</label>
 			<div class="controls">
-				<form:input path="uploadBy" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
+				<form:input path="uploadBy" htmlEscape="false" maxlength="64" class="input-xlarge required" disabled = "true"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 			<div class="controls">
 				<input name="uploadTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
 					value="<fmt:formatDate value="${trainCourse.uploadTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});" disabled = "true"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
