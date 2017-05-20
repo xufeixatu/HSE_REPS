@@ -352,41 +352,45 @@
 		        	</li>
 		        	<li>【课程大纲】
 		        		<ol>
-		        	<c:set var="testString" value="|/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4|/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4|/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4"/>
-					
-					<c:forTokens items="${testString}" delims="|" var="videoHref">
-						<li>
-							<a href="http://localhost:8080${videoHref}">
+				        	<c:set var="testString" value="${trainCourse.docId}"/>
 							
-								<c:set var="videoHrefString" value="${videoHref}"/>													
-								<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
-								${videoId}
-							</a>
-						</li>
-					</c:forTokens>
-					
-		        			<!-- <li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li> -->
+							<c:forTokens items="${testString}" delims="|" var="videoHref">
+								<li>
+									<!-- 字符串截取获取最后的文件名，并显示 -->
+									<c:set var="videoHrefString" value="${videoHref}"/>													
+									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
+									<c:forEach items="${videoId}" var="videoName" begin="8" >
+										${videoName}
+									</c:forEach>									
+								</li>
+							</c:forTokens>				        		
 		        		</ol>
 		        	</li>
 		        </ul>
 		    </div>
 		    <div class="tab-pane fade" id="chapter">
-		        <ul>
-		        	<li>
+		        <ul>		        
+					<c:set var="testString" value="${trainCourse.docId}"/>
+							
+					<c:forTokens items="${testString}" delims="|" var="videoHref">
+					<li>
+						<span class="chapter-time">05:20</span>
+						<span class="chapetr-item">
+						<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->		
+							<a href="http://localhost:8080${videoHref}">
+						
+								<!-- 字符串截取获取最后的文件名，并显示 -->
+								<c:set var="videoHrefString" value="${videoHref}"/>													
+								<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
+								<c:forEach items="${videoId}" var="videoName" begin="8" >
+									${videoName}
+								</c:forEach>
+							</a>
+						</span>
+						<span class="chapter-circle-finish"></span>
+					</li>
+							</c:forTokens>			
+		        	<!-- <li>
 		        		<span class="chapter-time">05:20</span>
 		        		<span class="chapetr-item">1、事实而非</span>
 		        		<span class="chapter-circle"></span>
@@ -430,7 +434,7 @@
 		        		<span class="chapter-time">05:20</span>
 		        		<span class="chapetr-item">1、事实而非</span>
 		        		<span class="chapter-circle-finish"></span>
-		        	</li>
+		        	</li> -->
 		        </ul>
 		    </div>
 		</div>
