@@ -2,6 +2,8 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
+
+<!-- 提交测试 -->
 	<title>培训课件上传与查看管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
