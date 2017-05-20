@@ -17,8 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.check.entity.Question;
 import com.thinkgem.jeesite.modules.check.service.QuestionService;
 import com.thinkgem.jeesite.modules.sys.entity.User;
@@ -77,27 +77,19 @@ public class QuestionController extends BaseController {
 				view = "questionAuditView";
 			}
 			// 修改环节
-			else if ("modify".equals(taskDefKey)){
+			else if ("problem_report_modify".equals(taskDefKey)){
 				view = "questionForm";
 			}
 			// 审核环节
-			else if ("audit".equals(taskDefKey)){
+			else if ("problem_report_audit01".equals(taskDefKey)){
 				view = "questionAudit";
 			}
 			// 审核环节2
-			else if ("audit2".equals(taskDefKey)){
+			else if ("problem_report_audit02".equals(taskDefKey)){
 				view = "questionAudit";
 			}
 			// 审核环节3
-			else if ("audit3".equals(taskDefKey)){
-				view = "questionAudit";
-			}
-			// 审核环节4
-			else if ("audit4".equals(taskDefKey)){
-				view = "questionAudit";
-			}
-			// 兑现环节
-			else if ("apply_end".equals(taskDefKey)){
+			else if ("problem_report_audit03".equals(taskDefKey)){
 				view = "questionAudit";
 			}
 		}
@@ -117,6 +109,18 @@ public class QuestionController extends BaseController {
 //		addMessage(redirectAttributes, "保存监督检查问题上报成功");
 //		return "redirect:"+Global.getAdminPath()+"/check/question/?repage";
 	}
+	
+	@RequiresPermissions("check:question:edit")
+	@RequestMapping(value = "saveAudit")
+	public String saveAudit(Question question, Model model) {
+		if (StringUtils.isBlank(question.getAct().getFlag())
+				|| StringUtils.isBlank(question.getAct().getComment())){
+			addMessage(model, "请填写意见");
+			return form(question, model);
+		}
+		questionService.auditSave(question);
+		return "redirect:" + adminPath + "/act/task/todo/";
+	}	
 	
 	@RequiresPermissions("check:question:edit")
 	@RequestMapping(value = "delete")

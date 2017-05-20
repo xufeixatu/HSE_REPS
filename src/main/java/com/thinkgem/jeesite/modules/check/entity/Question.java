@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thinkgem.jeesite.common.persistence.ActEntity;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
@@ -43,7 +44,16 @@ public class Question extends ActEntity<Question> {
 	private String rectifierLeaderComment;		// 整改部门负责人意见
 	private String rectifierComment;		// 整改者意见
 	private User user;
+	private Office rectifierOffice; //受检单位
 	
+	public Office getRectifierOffice() {
+		return rectifierOffice;
+	}
+
+	public void setRectifierOffice(Office rectifierOffice) {
+		this.rectifierOffice = rectifierOffice;
+	}
+
 	public User getUser() {
 		return user;
 	}

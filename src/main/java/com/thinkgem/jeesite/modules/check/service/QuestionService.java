@@ -63,18 +63,21 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		if (StringUtils.isBlank(question.getId())){
 			question.preInsert();
 			dao.insert(question);
+		    String hh = ActUtils.PD_QUESTION_AUDIT[0];
+			Map<String, Object> vars = Maps.newHashMap();
+			vars.put("userId", "thinkgem");
 			// 启动流程
-			actTaskService.startProcess(ActUtils.PD_TEST_AUDIT[0], ActUtils.PD_TEST_AUDIT[1], question.getId(), question.getQuestionDesc());
+			actTaskService.startProcess(ActUtils.PD_QUESTION_AUDIT[0], ActUtils.PD_QUESTION_AUDIT[1], question.getId(), "上报问题处理", vars);
 		}
 		// 重新编辑申请		
 		else{
 			question.preUpdate();
 			dao.update(question);
-			question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[重申] ":"[销毁] ")+question.getAct().getComment());
+			question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[重新上报] ":"[关闭问题] ")+question.getAct().getComment());
 			// 完成流程任务
 			Map<String, Object> vars = Maps.newHashMap();
 			vars.put("pass", "yes".equals(question.getAct().getFlag())? "1" : "0");
-			actTaskService.complete(question.getAct().getTaskId(), question.getAct().getProcInsId(), question.getAct().getComment(), question.getQuestionDesc(), vars);
+			actTaskService.complete(question.getAct().getTaskId(), question.getAct().getProcInsId(), question.getAct().getComment(), "上报问题处理", vars);
 		}
 	}
 
@@ -86,7 +89,7 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 	public void auditSave(Question question) {
 		
 		// 设置意见
-		question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[同意] ":"[驳回] ")+question.getAct().getComment());
+		question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[同意] ":"[不同意] ")+question.getAct().getComment());
 		
 		question.preUpdate();
 		
@@ -94,24 +97,17 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		String taskDefKey = question.getAct().getTaskDefKey();
 
 		// 审核环节
-		if ("audit".equals(taskDefKey)){
-			question.setReporterComment(question.getAct().getComment());
-			dao.update(question);
-		}
-		else if ("audit2".equals(taskDefKey)){
+		if ("problem_report_audit01".equals(taskDefKey)){
 			question.setReporterLeaderComment(question.getAct().getComment());
 			dao.update(question);
 		}
-		else if ("audit3".equals(taskDefKey)){
+		else if ("problem_report_audit02".equals(taskDefKey)){
 			question.setRectifierLeaderComment(question.getAct().getComment());
 			dao.update(question);
 		}
-		else if ("audit4".equals(taskDefKey)){
+		else if ("problem_report_audit03".equals(taskDefKey)){
 			question.setRectifierComment(question.getAct().getComment());
 			dao.update(question);
-		}
-		else if ("apply_end".equals(taskDefKey)){
-			
 		}
 		// 未知环节，直接返回
 		else{
