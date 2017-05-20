@@ -78,6 +78,10 @@ public class QuestionController extends BaseController {
 		
 		String view = "questionForm";
 		
+//		if(StringUtils.isNotEmpty(question.getId())) {
+//			question = questionService.get(question.getId());
+//		}
+//		
 		// 查看审批申请单
 		if (StringUtils.isNotBlank(question.getId())){
 
@@ -91,6 +95,9 @@ public class QuestionController extends BaseController {
 			// 修改环节
 			else if ("problem_report_modify".equals(taskDefKey)){
 				view = "questionForm";
+			}
+			else if ("problem_report_audit".equals(taskDefKey)){
+				view = "questionAudit";
 			}
 			// 审核环节
 			else if ("problem_report_audit01".equals(taskDefKey)){

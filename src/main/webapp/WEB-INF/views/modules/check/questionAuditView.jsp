@@ -28,7 +28,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/check/question/">上报问题列表</a></li>
-		<li class="active">上报问题详情</li>
+		<li class="active"><a href="${ctx}/check/question/form/?procInsId=${testAudit.procInsId}">处理详情</a></li>
 	</ul>
 	<form:form class="form-horizontal">
 		<sys:message content="${message}"/>
@@ -42,25 +42,22 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="tit">问题分类</td>
+					<td class="tit">检查类别</td>
 					<td>
-						${question.questionDesc}
+						${question.checkTypeClass.name}
 					</td>
 					<td class="tit">问题级别</td>
 					<td>
-						${question.questionDesc}				
+						${fns:getDictLabel(question.questionLevelId, 'problem_level', '')}	
 					</td>
 				</tr>			
 				<tr>
 					<td class="tit">上传照片</td>
 					<td>
-						<form:hidden id="question.questionDesc" path="" htmlEscape="false" class="input-xlarge"/>
-						<sys:ckfinder input="filePath" type="files" uploadPath="" selectMultiple="true"/>
-						<span class="help-inline"><font color="red">*</font> </span>					
 					</td>
 					<td class="tit">受检部门</td>
 					<td>
-						${question.questionDesc}				
+						${question.checkedOffice.name}				
 					</td>
 				</tr>			
 				<tr>

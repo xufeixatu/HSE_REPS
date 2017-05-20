@@ -67,10 +67,13 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 			//设置上报问题者的ID
 			User currentUser = UserUtils.getUser();
 			question.setReportUserId(currentUser.getId());
+			question.setReporterComment(question.getAct().getComment());//上报问题意见
 			dao.insert(question);
 			
 			Map<String, Object> vars = Maps.newHashMap();
-			vars.put("userId", question.getCurrentAuditUser().getLoginName());
+			String currentAuditUserId = question.getCurrentAuditUser().getId();
+			String currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
+			vars.put("userId", currentAuditUserLoginName);
 
 			// 启动流程
 			actTaskService.startProcess(ActUtils.PD_QUESTION_AUDIT[0], ActUtils.PD_QUESTION_AUDIT[1], question.getId(), "上报问题处理", vars);
@@ -103,16 +106,20 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		String taskDefKey = question.getAct().getTaskDefKey();
 
 		// 审核环节
-		if ("problem_report_audit01".equals(taskDefKey)){
+		if ("problem_report_audit".equals(taskDefKey)){
 			question.setReporterLeaderComment(question.getAct().getComment());
 			dao.update(question);
-		}
-		else if ("problem_report_audit02".equals(taskDefKey)){
+		}		
+		else if ("problem_report_audit01".equals(taskDefKey)){
 			question.setRectifierLeaderComment(question.getAct().getComment());
 			dao.update(question);
 		}
-		else if ("problem_report_audit03".equals(taskDefKey)){
+		else if ("problem_report_audit02".equals(taskDefKey)){
 			question.setRectifierComment(question.getAct().getComment());
+			dao.update(question);
+		}
+		else if ("problem_report_audit03".equals(taskDefKey)){
+			question.setReporterComment(question.getAct().getComment());
 			dao.update(question);
 		}
 		// 未知环节，直接返回
@@ -122,6 +129,9 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		// 提交流程任务
 		Map<String, Object> vars = Maps.newHashMap();
 		vars.put("pass", "yes".equals(question.getAct().getFlag())? "1" : "0");
+		String currentAuditUserId = question.getCurrentAuditUser().getId();
+		String currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
+		vars.put("userId", currentAuditUserLoginName);
 		actTaskService.complete(question.getAct().getTaskId(), question.getAct().getProcInsId(), question.getAct().getComment(), vars);
 //		vars.put("var_test", "yes_no_test2");
 //		actTaskService.getProcessEngine().getTaskService().addComment(testAudit.getAct().getTaskId(), testAudit.getAct().getProcInsId(), testAudit.getAct().getComment());

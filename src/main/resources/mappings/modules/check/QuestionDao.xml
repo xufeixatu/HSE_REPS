@@ -49,10 +49,8 @@
 	</sql>
     
 	<select id="get" resultType="Question">
-		SELECT 
-			<include refid="questionColumns"/>
+		SELECT a.*
 		FROM question a
-		<include refid="questionJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	

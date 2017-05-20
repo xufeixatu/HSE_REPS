@@ -49,27 +49,25 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="tit">问题分类</td>
+					<td class="tit">检查类别</td>
 					<td>
-						${question.questionDesc}
+						${question.checkTypeClass.name}
 					</td>
 					<td class="tit">问题级别</td>
 					<td>
-						${question.questionDesc}				
+						${fns:getDictLabel(question.questionLevelId, 'problem_level', '')}				
 					</td>
 				</tr>			
 				<tr>
 					<td class="tit">上传照片</td>
 					<td>
-						<form:hidden id="filePath" path="" htmlEscape="false" class="input-xlarge"/>
-						<sys:ckfinder input="filePath" type="files" uploadPath="" selectMultiple="true"/>
-						<span class="help-inline"><font color="red">*</font> </span>					
+										
 					</td>
 					<td class="tit">受检部门</td>
 					<td>
-						${question.questionDesc}				
+						${question.checkedOffice.name}					
 					</td>
-				</tr>			
+				</tr>
 				<tr>
 					<td class="tit">检查人意见</td>
 					<td colspan="5">
@@ -93,7 +91,16 @@
 					<td colspan="5">
 						${question.rectifierComment}
 					</td>
-				</tr>				
+				</tr>
+				<tr>
+					<td class="tit">处理人</td>
+					<td>
+		                <sys:treeselect id="currentAuditUser" name="currentAuditUser.id" value="${question.currentAuditUser.id}" 
+		                labelName="currentAuditUser.name" labelValue="${question.currentAuditUser.name}"
+							title="用户" url="/sys/office/treeData?type=3" cssClass="required" notAllowSelectParent="true"/>
+						<span class="help-inline"><font color="red">*</font> </span>					
+					</td>					
+				</tr>								
 				<tr>
 					<td class="tit">您的意见</td>
 					<td colspan="5">
