@@ -81,7 +81,12 @@
 	
 	<!-- 依赖项定义 -->
 	<dependencies>
-	
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		
 		<!-- SPRING begin -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -143,6 +148,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${validator.version}</version>
+			<scope>compile</scope>
 		</dependency>
 		<!-- SPRING end -->
 		

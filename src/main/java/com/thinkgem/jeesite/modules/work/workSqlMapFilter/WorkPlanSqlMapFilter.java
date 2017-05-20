@@ -95,12 +95,17 @@ public class WorkPlanSqlMapFilter {
 	 */
 	public void typeDeptFilter(WorkPlan workPlan, Model model) {
 		common(workPlan, model);
-		
+		// 设置根据计划类别（个人计划｜｜部门计划｜｜公司计划）过滤工作计划条件字符串
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("a.plan_type = '");
+		dsf.append(planTypeDict.getId());
+		dsf.append("' ");
 		Office me = UserUtils.getUser().getOffice();
 		dsf.append("and ");
-		dsf.append("a.depts like '");
+		dsf.append("a.depts like '%");
 		dsf.append(me.getId());
-		dsf.append("' ");
+		dsf.append("%' ");
 
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
@@ -172,6 +177,28 @@ public class WorkPlanSqlMapFilter {
 		dsf.append("and");
 		dsf.append(" ");
 		dsf.append("a.end_state_id = '042bb2ce059249729da41c7995e4381b' ");
+		// 将字符串加回到sqlMap.dsf属性
+		sqlMap.put("dsf", dsf.toString());
+	}
+	/**
+	 * 待受理部门工作列表的过滤条件
+	 * @param workPlan
+	 * @param model
+	 */
+	public void typeDeptRemainListFilter(WorkPlan workPlan, Model model) {
+		common(workPlan, model);
+		planTypeDict = DictUtils.getDictByValue("department", "type_plan");
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("a.plan_type = '");
+		dsf.append(planTypeDict.getId());
+		dsf.append("' ");
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("a.person_liable_id = '" + UserUtils.getUser().getId() + "' ");
+		dsf.append("and");
+		dsf.append(" ");
+		dsf.append("wri.id is null");
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}

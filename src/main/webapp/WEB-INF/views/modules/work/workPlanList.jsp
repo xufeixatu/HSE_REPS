@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+
 <html>
 <head>
 <title>工作计划管理</title>
@@ -44,6 +45,28 @@
 						pass:function(){
 							return row.workStateId == '0374ed53f5034055943e0381aca4c22a' && 
 							 	   row.endStateId == null;
+						},
+						start_time:function(){
+							return row.startTime != null && row.startTime != "";
+						},
+						required_finish_time:function(){
+							
+							return row.requiredFinishTime != null && row.requiredFinishTime != "";
+						},
+						frequency:function(){
+							return row.frequency != null && row.frequency != "";
+						},
+						other:function(){
+							return (row.startTime == null || row.startTime == "") &&
+								   (row.requiredFinishTime == null || row.requiredFinishTime == "") &&
+								   (row.frequency == null || row.frequency == "");
+						},
+						show_dept:function(){
+							return ${workPlan.planType eq 'compnay'};
+						},
+						current_year:function(){
+							var y = new Date().getFullYear();
+							return y + "-" + "12-31 23:59:59";
 						}
 					}));
 					addRow(list, tpl, data, row.id);
@@ -78,6 +101,8 @@
 		<shiro:hasPermission name="work:workPlan:edit">
 			<li><a
 				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
+				<li><a
+				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}行动计划</a></li>
 		</shiro:hasPermission>
 		
 	</ul>
@@ -97,6 +122,42 @@
 		</ul>
 	</form:form>
 	<sys:message content="${message}" />
+	<c:forEach items="${list}" var="workPlan">
+		<div class="table_item">
+			<div id="b">
+				<div>
+					<img src="/HSE/static/images/open.jpg" onclick="showTree(this);" />
+					<input type="checkbox" />${workPlan.name} <span style="color:#9B9B9B">【${workPlan.workState}】</span>
+					<shiro:hasPermission name="work:workPlan:edit">
+						<span style="float: right;color: blue;">修改 删除</span>
+					</shiro:hasPermission>
+				</div>
+				<div></div>
+				<div>
+					<div>${workPlan.workDesc}</div>
+					<div>责任单位：${fns:getOfficeNameById(workPlan.depts.id)}    
+					          责任人：${workPlan.personLiable }  
+						 完成时间：<c:choose>
+						  			<c:when test="${not empty workPlan.startTime}"><fmt:formatDate value="${workPlan.startTime}" pattern="yyyy年MM月dd日"/>-<fmt:formatDate value="${workPlan.planedFinishTime}" pattern="yyyy年MM月dd日"/></c:when>
+						  			<c:when test="${not empty workPlan.requiredFinishTime}"><fmt:formatDate value="${workPlan.requiredFinishTime}" pattern="yyyy年MM月dd日"/>前</c:when>
+						  			<c:when test="${not empty workPlan.frequency}">${workPlan.frequency}月执行</c:when>
+						  			<c:otherwise>
+						  				<jsp:useBean id="currentDate" class="java.util.Date"/>
+						  				<fmt:formatDate value="${currentDate}" pattern="yyyy"/>年12月31日前
+						  			</c:otherwise>
+						  		  </c:choose>
+					</div>
+				</div>
+				<div>
+					<img src="/HSE/static/images/mesg.jpg" /><img src="/HSE/static/images/feedback.jpg" />
+				</div>
+				<div>
+					已经监督检查了不少女员工的卫生状况。确实不容乐观。革命尚未成功，同志还需努力。
+					<div>责任单位：作业一区 责任人：张小宝 完成时间：2017-05-17</div>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
 	<table id="treeTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
@@ -104,10 +165,11 @@
 				<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
 				<th>工作项</th>
 				<th>级别</th>
-				<th>频次</th>
-				<th>计划完成时间</th>
+				<th>时间要求</th>
 				<th>状态</th>
-				<th>责任单位</th>
+				<c:if test="${workPlan.planType eq 'company'}">
+					<th>责任单位</th>
+				</c:if>
 				<th>责任人</th>
 				<shiro:hasPermission name="work:workPlan:edit">
 					<th>操作</th>
@@ -135,18 +197,36 @@
 			<td>
 				{{row.workLevel}}
 			</td>
+			{{#frequency}}
 			<td>
-				{{row.frequency}}
+				{{row.frequency}} 月执行工作计划
 			</td>
+			{{/frequency}}
+			{{#start_time}}
 			<td>
+				{{row.startTime}}
+				至
 				{{row.planedFinishTime}}
 			</td>
+			{{/start_time}}
+			{{#required_finish_time}}
+			<td>
+				要求 {{row.requiredFinishTime}} 前完成
+			</td>
+			{{/required_finish_time}}
+			{{#other}}
+			<td>
+				要求 {{current_year}} 完成
+			</td>
+			{{/other}}
 			<td>
 				{{row.workState}}
 			</td>
+			{{#show_dept}}
 			<td>
 				{{row.depts.name}}
 			</td>
+			{{/show_dept}}
 			<td>
 				{{row.personLiable.name}}
 			</td>
