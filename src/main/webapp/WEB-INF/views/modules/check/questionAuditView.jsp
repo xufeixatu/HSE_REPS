@@ -54,7 +54,7 @@
 				<tr>
 					<td class="tit">上传照片</td>
 					<td>
-						<form:hidden id="filePath" path="" htmlEscape="false" class="input-xlarge"/>
+						<form:hidden id="question.questionDesc" path="" htmlEscape="false" class="input-xlarge"/>
 						<sys:ckfinder input="filePath" type="files" uploadPath="" selectMultiple="true"/>
 						<span class="help-inline"><font color="red">*</font> </span>					
 					</td>

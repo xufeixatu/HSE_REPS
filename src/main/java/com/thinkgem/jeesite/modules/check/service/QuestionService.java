@@ -18,6 +18,8 @@ import com.thinkgem.jeesite.modules.act.service.ActTaskService;
 import com.thinkgem.jeesite.modules.act.utils.ActUtils;
 import com.thinkgem.jeesite.modules.check.dao.QuestionDao;
 import com.thinkgem.jeesite.modules.check.entity.Question;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 监督检查问题上报Service
@@ -62,10 +64,14 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		// 申请发起
 		if (StringUtils.isBlank(question.getId())){
 			question.preInsert();
+			//设置上报问题者的ID
+			User currentUser = UserUtils.getUser();
+			question.setReportUserId(currentUser.getId());
 			dao.insert(question);
-		    String hh = ActUtils.PD_QUESTION_AUDIT[0];
+			
 			Map<String, Object> vars = Maps.newHashMap();
-			vars.put("userId", "thinkgem");
+			vars.put("userId", question.getCurrentAuditUser().getLoginName());
+
 			// 启动流程
 			actTaskService.startProcess(ActUtils.PD_QUESTION_AUDIT[0], ActUtils.PD_QUESTION_AUDIT[1], question.getId(), "上报问题处理", vars);
 		}
@@ -89,7 +95,7 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 	public void auditSave(Question question) {
 		
 		// 设置意见
-		question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[同意] ":"[不同意] ")+question.getAct().getComment());
+		question.getAct().setComment(question.getAct().getComment());
 		
 		question.preUpdate();
 		

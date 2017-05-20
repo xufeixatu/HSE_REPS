@@ -52,13 +52,14 @@
 				<tr>
 					<td class="tit">检查类别</td>
 					<td>
-						<sys:treeselect id="selected" name="questionClassId" value="${checkTypeClass.id}" labelName="selected.name" labelValue="${checkTypeClass.name}"
-							title="检查类别" url="/check/checkTypeClass/treeData" extId="${checkTypeClass.id}" cssClass="required" allowClear="true"/>
+						<sys:treeselect id="checkTypeClass" name="checkTypeClassId" value="${question.checkTypeClass.id}" 
+							labelName="checkTypeClass.name" labelValue="${question.checkTypeClass.name}"
+							title="检查类别" url="/check/checkTypeClass/treeData" extId="${question.checkTypeClass.id}" cssClass="required" allowClear="true"/>
 							<span class="help-inline"><font color="red">*</font></span>							
 					</td>
 					<td class="tit">问题级别</td>
 					<td>
-						<form:select path="questionClassId" class="input-xlarge required">
+						<form:select path="questionLevelId" class="input-xlarge required">
 							<form:option value="" label=""/>
 							<form:options items="${fns:getDictList('problem_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 						</form:select>
@@ -73,10 +74,20 @@
 					</td>
 					<td class="tit">受检部门</td>
 					<td>
-						<sys:treeselect id="rectifierOffice" name="rectifierOffice.id" value="${question.rectifierOffice.id}" labelName="rectifierOffice.name" labelValue="${question.rectifierOffice.name}"
+						<sys:treeselect id="checkedOffice" name="checkedOffice.id" value="${question.checkedOffice.id}" 
+						labelName="checkedOffice.name" labelValue="${question.checkedOffice.name}"
 							title="部门" url="/sys/office/treeData?type=2" cssClass="required" allowClear="true" notAllowSelectParent="true"/>
 						<span class="help-inline"><font color="red">*</font></span>						
 					</td>
+				</tr>
+				<tr>
+					<td class="tit">处理人</td>
+					<td>
+		                <sys:treeselect id="currentAuditUser" name="currentAuditUser.id" value="${question.currentAuditUser.id}" 
+		                labelName="currentAuditUser.name" labelValue="${question.currentAuditUser.name}"
+							title="用户" url="/sys/office/treeData?type=3" cssClass="required" notAllowSelectParent="true"/>
+						<span class="help-inline"><font color="red">*</font> </span>					
+					</td>					
 				</tr>
 				<tr>
 					<td class="tit">您的意见</td>

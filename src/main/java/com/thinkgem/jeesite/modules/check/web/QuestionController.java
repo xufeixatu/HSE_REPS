@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.check.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -56,6 +58,16 @@ public class QuestionController extends BaseController {
 			question.setCreateBy(user);
 		}
 		Page<Question> page = questionService.findPage(new Page<Question>(request, response), question); 
+		List<Question> questions = page.getList();
+		try {
+			for (Question ques : questions) {
+				User reportUser = UserUtils.get(ques.getReportUserId());
+				ques.setReportUserName(reportUser.getName());
+				ques.setReportUserOfficeName(reportUser.getOffice().getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		model.addAttribute("page", page);
 		return "modules/check/questionList";
 	}
@@ -104,7 +116,7 @@ public class QuestionController extends BaseController {
 			return form(question, model);
 		}
 		questionService.save(question);
-		addMessage(redirectAttributes, "提交审批'" + question.getUser().getName() + "'成功");
+		addMessage(redirectAttributes, "提交审批'" + question.getCurrentAuditUser().getName() + "'成功");
 		return "redirect:" + adminPath + "/act/task/todo/";
 //		addMessage(redirectAttributes, "保存监督检查问题上报成功");
 //		return "redirect:"+Global.getAdminPath()+"/check/question/?repage";

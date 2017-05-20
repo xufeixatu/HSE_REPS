@@ -38,6 +38,7 @@
 				<th>检查部门</th>
 				<th>检查人</th>
 				<th>检查时间</th>
+				<th>问题级别</th>
 				<th>受理状态</th>
 				<shiro:hasPermission name="check:question:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -46,26 +47,28 @@
 		<c:forEach items="${page.list}" var="question">
 			<tr>
 				<td>
-					${question.questionClassId}
+					${question.checkTypeClass.name}
 				</td>
 				<td>
-					${question.rectifierOffice.name}
+					${question.checkedOffice.name}
 				</td>
 				<td>
-					${question.remarks}
+					${question.reportUserOfficeName}
 				</td>
 				<td>
-					${question.remarks}
+					${question.reportUserName}
 				</td>
 				<td>
-					${question.remarks}
+					<fmt:formatDate value="${question.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${question.remarks}
+					${fns:getDictLabel(question.questionLevelId, 'problem_level', '')}
+				</td>				
+				<td>
+					${fns:getDictLabel(question.stateId, 'problem_status', '')}
 				</td>																
 				<shiro:hasPermission name="check:question:edit"><td>
     				<a href="${ctx}/check/question/form?id=${question.id}">详情</a>
-					<a href="${ctx}/check/question/delete?id=${question.id}" onclick="return confirmx('确认要删除该检查问题上报吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
