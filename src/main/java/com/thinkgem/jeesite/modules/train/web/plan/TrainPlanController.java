@@ -145,7 +145,6 @@ public class TrainPlanController extends BaseController {
 			for (TrainPlan trainPlan : list){
 				try{
 					trainPlanService.save(trainPlan);
-					failureMsg.append("<br/>XXX "+trainPlan.getName()+" 已存在; ");
 					failureNum++;
 					
 				}catch(ConstraintViolationException ex){
