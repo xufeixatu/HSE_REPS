@@ -52,15 +52,59 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<td></td>
+				<td>人员分类</td>
+				<td>序号</td>
+				<td>HSE培训管理信息</td>
+				<c:forEach items="${trainContentList}" var="trainContent">
+					<td>${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
+				</c:forEach>
+			</tr>
+			<tr>
+				<td>人员分类</td>
+				<td>序号</td>
+				<td>HSE培训管理信息</td>
 				<c:forEach items="${trainContentList}" var="trainContent">
 					<td>${trainContent.name}</td>
+				</c:forEach>
+			</tr>
+			<tr>
+				<td>课程基本信息</td>
+				<td>1</td>
+				<td>初次培训课时要求（小时）</td>
+				<c:forEach items="${trainContentList}" var="trainContent">
+					<td>${trainContent.firstPeriod}</td>
+				</c:forEach>
+			</tr>
+			<tr>
+				<td>课程基本信息</td>
+				<td>2</td>
+				<td>复培课时/频率（小时/N年）</td>
+				<c:forEach items="${trainContentList}" var="trainContent">
+					<td>${trainContent.nextPeriod}</td>
+				</c:forEach>
+			</tr>
+			<tr>
+				<td>课程基本信息</td>
+				<td>3</td>
+				<td>培训组织单位</td>
+				<c:forEach items="${trainContentList}" var="trainContent">
+					<td>${trainContent.organizer}</td>
+				</c:forEach>
+			</tr>
+			<tr>
+				<td>课程基本信息</td>
+				<td>4</td>
+				<td>培训完成要求（职前/职后）</td>
+				<c:forEach items="${trainContentList}" var="trainContent">
+					<td>${fns:getDictLabel(trainContent.requirement, 'train_content_requirement', '')}</td>
 				</c:forEach>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${trainJobList}" var="trainJob">
 			<tr>
+				<td>${trainJob.name}</td>
+				<td>${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
 				<td>${trainJob.name}</td>
 				<c:forEach items="${trainContentList}" var="trainContent">
 					<td>
