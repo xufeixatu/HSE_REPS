@@ -52,7 +52,7 @@
 				<tr>
 					<td class="tit">检查类别</td>
 					<td>
-						<sys:treeselect id="checkTypeClass" name="checkTypeClassId" value="${question.checkTypeClass.id}" 
+						<sys:treeselect id="checkTypeClass" name="checkTypeClass.id" value="${question.checkTypeClass.id}" 
 							labelName="checkTypeClass.name" labelValue="${question.checkTypeClass.name}"
 							title="检查类别" url="/check/checkTypeClass/treeData" extId="${question.checkTypeClass.id}" cssClass="required" allowClear="true"/>
 							<span class="help-inline"><font color="red">*</font></span>							
@@ -119,7 +119,7 @@
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 		<c:if test="${not empty question.id}">
-			<act:histoicFlow procInsId="${question.act.procInsId}" />
+			<act:histoicFlow procInsId="${question.procInsId}" />
 		</c:if>		
 	</form:form>
 </body>

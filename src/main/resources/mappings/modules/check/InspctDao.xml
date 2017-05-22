@@ -4,7 +4,7 @@
     
 	<sql id="inspctColumns">
 		a.id AS "id",
-		a.type_id AS "typeId",
+		a.type_id AS "checkTypeClass.id",
 		a.check_dept AS "checkOffice.id",
 		a.check_dept AS "checkOfficeId",
 		a.check_person AS "checkPerson",
@@ -93,7 +93,7 @@
 			del_flag
 		) VALUES (
 			#{id},
-			#{typeId},
+			#{checkTypeClass.id},
 			#{checkOffice.id},
 			#{checkPerson},
 			#{checkDate},
@@ -110,7 +110,7 @@
 	
 	<update id="update">
 		UPDATE inspct SET 	
-			type_id = #{typeId},
+			type_id = #{checkTypeClass.id},
 			check_dept = #{checkOffice.id},
 			check_person = #{checkPerson},
 			inspection_dept_id = #{inspectionOffice.id},

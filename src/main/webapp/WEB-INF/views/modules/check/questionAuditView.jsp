@@ -86,7 +86,7 @@
 				</tr>				
 			</table>
 		</fieldset>
-		<act:histoicFlow procInsId="${question.act.procInsId}" />
+		<act:histoicFlow procInsId="${question.procInsId}" />
 		<div class="form-actions">
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>

@@ -100,11 +100,12 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		
 		// 设置意见
 		question.getAct().setComment(question.getAct().getComment());
-		
 		question.preUpdate();
 		
 		// 对不同环节的业务逻辑进行操作
 		String taskDefKey = question.getAct().getTaskDefKey();
+		// 当前环节处理人
+		String currentAuditUserLoginName = "";
 
 		// 审核环节
 		if ("problem_report_audit".equals(taskDefKey)){
@@ -112,16 +113,22 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 			if("yes".equals(question.getAct().getFlag())) {
 				question.setStateId("2");//问题受理中
 			}
+			String currentAuditUserId = question.getCurrentAuditUser().getId();
+			currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
 			dao.update(question);
 		}		
 		else if ("problem_report_audit01".equals(taskDefKey)){
 			question.setRectifierLeaderComment(question.getAct().getComment());
 			question.setStateId("3");//问题处理中
+			String currentAuditUserId = question.getCurrentAuditUser().getId();
+			currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
 			dao.update(question);
 		}
 		else if ("problem_report_audit02".equals(taskDefKey)){
 			question.setRectifierComment(question.getAct().getComment());
 			question.setStateId("4");//问题待关闭
+			String currentAuditUserId = question.getCurrentAuditUser().getId();
+			currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
 			dao.update(question);
 		}
 		else if ("problem_report_audit03".equals(taskDefKey)){
@@ -129,6 +136,8 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 			if("yes".equals(question.getAct().getFlag())) {
 				question.setStateId("5");//问题已关闭
 			}
+			String currentAuditUserId = question.getReportUserId();
+			currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
 			dao.update(question);
 		}
 		// 未知环节，直接返回
@@ -138,8 +147,6 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		// 提交流程任务
 		Map<String, Object> vars = Maps.newHashMap();
 		vars.put("pass", "yes".equals(question.getAct().getFlag())? "1" : "0");
-		String currentAuditUserId = question.getCurrentAuditUser().getId();
-		String currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
 		vars.put("userId", currentAuditUserLoginName);
 		actTaskService.complete(question.getAct().getTaskId(), question.getAct().getProcInsId(), question.getAct().getComment(), vars);
 //		vars.put("var_test", "yes_no_test2");
