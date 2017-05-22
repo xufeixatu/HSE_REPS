@@ -68,6 +68,7 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 			User currentUser = UserUtils.getUser();
 			question.setReportUserId(currentUser.getId());
 			question.setReporterComment(question.getAct().getComment());//上报问题意见
+			question.setStateId("1");//问题审批中
 			dao.insert(question);
 			
 			Map<String, Object> vars = Maps.newHashMap();
@@ -108,18 +109,26 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		// 审核环节
 		if ("problem_report_audit".equals(taskDefKey)){
 			question.setReporterLeaderComment(question.getAct().getComment());
+			if("yes".equals(question.getAct().getFlag())) {
+				question.setStateId("2");//问题受理中
+			}
 			dao.update(question);
 		}		
 		else if ("problem_report_audit01".equals(taskDefKey)){
 			question.setRectifierLeaderComment(question.getAct().getComment());
+			question.setStateId("3");//问题处理中
 			dao.update(question);
 		}
 		else if ("problem_report_audit02".equals(taskDefKey)){
 			question.setRectifierComment(question.getAct().getComment());
+			question.setStateId("4");//问题待关闭
 			dao.update(question);
 		}
 		else if ("problem_report_audit03".equals(taskDefKey)){
 			question.setReporterComment(question.getAct().getComment());
+			if("yes".equals(question.getAct().getFlag())) {
+				question.setStateId("5");//问题已关闭
+			}
 			dao.update(question);
 		}
 		// 未知环节，直接返回

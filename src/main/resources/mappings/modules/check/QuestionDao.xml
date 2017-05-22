@@ -49,8 +49,10 @@
 	</sql>
     
 	<select id="get" resultType="Question">
-		SELECT a.*
+		SELECT 
+			<include refid="questionColumns"/>
 		FROM question a
+		<include refid="questionJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
@@ -190,8 +192,11 @@
 	        update_by = #{updateBy.id}, 
 	      </if>	
 	      <if test="updateDate != null" >
-	        update_date = #{updateDate}
-	      </if>		            	      	           	      	      
+	        update_date = #{updateDate},
+	      </if>		            	      	      
+	      <if test="stateId != null" >
+	        state_id = #{stateId}
+	      </if>		      
 	    </set>
 		WHERE id = #{id}
 	</update>
