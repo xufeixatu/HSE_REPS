@@ -103,8 +103,8 @@
 		<tbody>
 		<c:forEach items="${trainJobList}" var="trainJob">
 			<tr>
-				<td>${trainJob.name}</td>
 				<td>${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
+				<td>${trainJob.sn}</td>
 				<td>${trainJob.name}</td>
 				<c:forEach items="${trainContentList}" var="trainContent">
 					<td>
