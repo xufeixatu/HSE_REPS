@@ -92,7 +92,7 @@ public class RiskAccessController extends BaseController {
 		}
 	        
 		riskAccessService.save(riskAccess);
-		addMessage(redirectAttributes, "保存risk成功");
+		addMessage(redirectAttributes, "保存风险成功");
 		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/?repage";
 	}
 	

@@ -31,7 +31,7 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<form:hidden path="riskType"  value=“ 2” />
+		<input  type="hidden"  name="riskType"  value="2" />
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">场所、设备：</label>

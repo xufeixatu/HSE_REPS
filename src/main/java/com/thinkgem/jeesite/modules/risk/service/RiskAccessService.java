@@ -67,6 +67,16 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 			}else {
 				entity.setRiskLevel("1");
 			}
+			
+			//判断是否重大风险
+			if(dscore>=160){
+				riskAccess.setIsHeaverisk("1");
+			}else{
+				riskAccess.setIsHeaverisk("0");
+			}
+			
+			
+			
 			List<RiskAccess> risk = findList(riskAccess);
 			
 			String id=risk.get(0).getId();
@@ -85,7 +95,7 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 		super.delete(riskAccess);
 	}
 	/**
-	 * 得到评分
+	 * 分析
 	 * @param riskAccess
 	 * @return
 	 */
@@ -102,6 +112,7 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 		riskAccess.setEscore(riskSaferesult.getEscore());
 		riskAccess.setCscore(riskSaferesult.getCscore());
 		
+		super.save(riskAccess);
 		//return riskAccess;
 	}
 	

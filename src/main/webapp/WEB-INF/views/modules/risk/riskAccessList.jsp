@@ -45,7 +45,7 @@
 			<li><label>风险等级：</label>
 				<form:select path="riskLevel" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:options items="${fns:getDictList('risk_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -107,7 +107,7 @@
 				</td>
 
 				<td>
-					${fns:getDictLabel(riskAccess.riskLevel, '', '')}
+					${fns:getDictLabel(riskAccess.riskLevel, 'risk_level', '')}
 				</td>
 				<td>
 					${fns:getDictLabel(riskAccess.isHeaverisk, 'heave_flag', '')}
