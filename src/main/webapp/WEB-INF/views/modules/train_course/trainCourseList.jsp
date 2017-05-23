@@ -97,6 +97,7 @@
 		}
 		.course > a >img{
 			width:100%;
+			height:160px;
 		}
 		.course > .course-text{
 			height:auto;

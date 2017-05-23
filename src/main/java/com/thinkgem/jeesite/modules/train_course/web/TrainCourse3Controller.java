@@ -28,8 +28,8 @@ import com.thinkgem.jeesite.modules.train_course.service.TrainCourseService;
  * @version 2017-05-17
  */
 @Controller
-@RequestMapping(value = "${adminPath}/train_course/trainCourse2")
-public class TrainCourse2Controller extends BaseController {
+@RequestMapping(value = "${adminPath}/train_course/trainCourse3")
+public class TrainCourse3Controller extends BaseController {
 
 	@Autowired
 	private TrainCourseService trainCourseService;
@@ -46,22 +46,22 @@ public class TrainCourse2Controller extends BaseController {
 		return entity;
 	}
 	
-	@RequiresPermissions("train_course:trainCourse2:view")
+	@RequiresPermissions("train_course:trainCourse3:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(TrainCourse trainCourse, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<TrainCourse> page = trainCourseService.findPage(new Page<TrainCourse>(request, response), trainCourse); 
 		model.addAttribute("page", page);
-		return "modules/train_course/trainCourse2List";
+		return "modules/train_course/trainCourse3List";
 	}
 
-	@RequiresPermissions("train_course:trainCourse2:view")
+	@RequiresPermissions("train_course:trainCourse3:view")
 	@RequestMapping(value = "form")
 	public String form(TrainCourse trainCourse, Model model) {
 		model.addAttribute("trainCourse", trainCourse);
-		return "modules/train_course/trainCourse2Form";
+		return "modules/train_course/trainCourse3Form";
 	}
 
-	@RequiresPermissions("train_course:trainCourse2:edit")
+	@RequiresPermissions("train_course:trainCourse3:edit")
 	@RequestMapping(value = "save")
 	public String save(TrainCourse trainCourse, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, trainCourse)){
@@ -69,15 +69,15 @@ public class TrainCourse2Controller extends BaseController {
 		}
 		trainCourseService.save(trainCourse);
 		addMessage(redirectAttributes, "保存培训课件上传与查看成功");
-		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse2/?repage";
+		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse3/?repage";
 	}
 	
-	@RequiresPermissions("train_course:trainCourse2:edit")
+	@RequiresPermissions("train_course:trainCourse3:edit")
 	@RequestMapping(value = "delete")
 	public String delete(TrainCourse trainCourse, RedirectAttributes redirectAttributes) {
 		trainCourseService.delete(trainCourse);
 		addMessage(redirectAttributes, "删除培训课件上传与查看成功");
-		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse2/?repage";
+		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse3/?repage";
 	}
 
 }

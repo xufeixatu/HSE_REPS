@@ -2,8 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-
-<!-- 提交测试 -->
+s
 	<title>培训课件上传与查看管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
@@ -170,9 +169,11 @@
 			width:40%;
 			height:50px;
 		}
-		.course-detail-text-operate > ul li.continue button{
+		.course-detail-text-operate > ul li.continue a{
+			display:block;
 			width:100%;
 			height: 111%;
+			line-height:300%;
 			font-size: 20px;
     		letter-spacing: 5px;
 		}
@@ -182,6 +183,7 @@
 		    padding: 4px 13px;
 		    line-height: 42px;
 		    margin-left: 47px;
+		    margin-top: 6px;
 		} 
 		.course-detail-text-operate > ul li.recommend{
 			padding:4px 13px;
@@ -318,7 +320,7 @@
 			<div class="course-detail-text-operate">
 				<ul>
 					<li class="continue">
-						<button type="button" class="btn btn-success">继续学习</button>
+						<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}"   class="btn btn-success">继续学习</a>
 					</li>
 					<li class="focus">
 						<a>星级评分</a>
@@ -375,68 +377,24 @@
 					<c:set var="testString" value="${trainCourse.docId}"/>
 							
 					<c:forTokens items="${testString}" delims="|" var="videoHref">
-					<li>
-						<span class="chapter-time">05:20</span>
-						<span class="chapetr-item">
-						<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->		
-							<a href="http://localhost:8080${videoHref}">
-						
-								<!-- 字符串截取获取最后的文件名，并显示 -->
-								<c:set var="videoHrefString" value="${videoHref}"/>													
-								<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
-								<c:forEach items="${videoId}" var="videoName" begin="8" >
-									${videoName}
-								</c:forEach>
-							</a>
-						</span>
-						<span class="chapter-circle-finish"></span>
-					</li>
-							</c:forTokens>			
-		        	<!-- <li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle-finish"></span>
-		        	</li> -->
+						<li>
+							<span class="chapter-time">05:20</span>
+							<span class="chapetr-item">
+							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
+							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
+								<%-- <a href="http://localhost:8080${videoHref}"> --%>
+							
+									<!-- 字符串截取获取最后的文件名，并显示 -->
+									<c:set var="videoHrefString" value="${videoHref}"/>													
+									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
+									<c:forEach items="${videoId}" var="videoName" begin="8" >
+										${videoName}
+									</c:forEach>
+								</a>
+							</span>
+							<span class="chapter-circle-finish"></span>
+						</li>
+					</c:forTokens>			
 		        </ul>
 		    </div>
 		</div>
