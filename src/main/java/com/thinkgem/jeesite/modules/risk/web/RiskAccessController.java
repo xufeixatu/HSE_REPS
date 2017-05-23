@@ -81,7 +81,7 @@ public class RiskAccessController extends BaseController {
 
 	/**
 	 * 风险分析
-	 * @param riskAccess
+	 * @param riskAccess 
 	 * @param model
 	 * @return
 	 */
@@ -91,6 +91,20 @@ public class RiskAccessController extends BaseController {
 		riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/riskAccessAnalyseForm";
+	}
+
+	/**
+	 * 环境因素分析
+	 * @param riskAccess 
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("risk:riskAccess:view")
+	@RequestMapping(value = "analyse_envir")
+	public String analyse_envir(RiskAccess riskAccess, Model model) {
+		riskAccessService.analyse_envir(riskAccess);
+		model.addAttribute("riskAccess", riskAccess);
+		return "modules/risk/riskAccessEnvirAnalyseForm";
 	}
 
 	@RequiresPermissions("risk:riskAccess:view")

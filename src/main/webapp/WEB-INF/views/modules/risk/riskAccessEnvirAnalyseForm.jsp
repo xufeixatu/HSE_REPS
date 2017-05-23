@@ -27,11 +27,11 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">环境危害辨识<shiro:hasPermission name="risk:riskAccess:edit">${not empty riskAccess.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="risk:riskAccess:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">环境危害辨识<shiro:hasPermission name="risk:riskAccess:edit">${not empty riskAccess.id?'分析':'添加'}</shiro:hasPermission><shiro:lacksPermission name="risk:riskAccess:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<input name="riskType" type="hidden" value="1" />
+		<input name="riskType" type="hidden" value="3" />
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">类别：</label>

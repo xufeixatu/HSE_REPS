@@ -120,5 +120,10 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 		super.save(riskAccess);
 		//return riskAccess;
 	}
+
+	public void analyse_envir(RiskAccess riskAccess) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

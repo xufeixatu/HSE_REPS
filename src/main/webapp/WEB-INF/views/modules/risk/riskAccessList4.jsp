@@ -30,16 +30,15 @@
 			<li><label>年份：</label>
 				<form:input path="years" htmlEscape="false" class="input-medium"/>
 			</li>
-
-			<li><label>场所、设备：</label>
-				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-medium"/>
-			</li>
-
-			<li><label>风险等级：</label>
-				<form:select path="riskLevel" class="input-medium">
+			<li><label>属地单位：</label>
+				<form:select path="unit" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
+			</li>
+
+			<li><label>场所、设备：</label>
+				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>

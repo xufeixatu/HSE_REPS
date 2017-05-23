@@ -51,11 +51,12 @@
 				<th>属地单位</th>
 				<th>辨识人</th>
 				<th>辨识日期</th>
-				<th>作业活动名称/活动、物料、产品、服务</th>
+				<th>场所、活动、设备、物料</th>
 				<th>危害因素</th>
+				<th>可能产生的环境影响</th>
 				<th>时态</th>
 				<th>状态</th>
-				<th>可能导致的后果</th>
+				<th>当前处理现状与排向</th>
 				<th>是非判断</th>
 				<th>评价等级</th>
 				<th>是否重要环境因素</th>
@@ -104,7 +105,7 @@
 					${fns:getDictLabel(riskAccess.isHeaverisk, 'risk_heave_flag', '')}
 				</td>
 				<shiro:hasPermission name="risk:riskAccess:edit"><td>
-				             <a href="${ctx}/risk/riskAccess/analyse?id=${riskAccess.id}">分析</a>
+				             <a href="${ctx}/risk/riskAccess/analyse_envir?id=${riskAccess.id}">分析</a>
     				<a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">修改</a>
 					<a href="${ctx}/risk/riskAccess/delete?id=${riskAccess.id}" onclick="return confirmx('确认要删除该因素吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
