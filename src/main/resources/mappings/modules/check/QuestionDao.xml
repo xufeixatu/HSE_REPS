@@ -7,7 +7,7 @@
 		a.check_item_id AS "checkItemId",
 		a.create_date AS "createDate",
 		a.question_desc AS "questionDesc",
-		a.question_class_id AS "questionClassId",
+		a.check_type_class_id AS "checkTypeClassId",
 		a.question_level_id AS "questionLevelId",
 		a.inspection_dept_type_id AS "inspectionDeptTypeId",
 		a.state_id AS "stateId",
@@ -32,10 +32,20 @@
 		a.reporter_comment AS "reporterComment",
 		a.reporter_leader_comment AS "reporterLeaderComment",
 		a.rectifier_leader_comment AS "rectifierLeaderComment",
-		a.rectifier_comment AS "rectifierComment"
+		a.rectifier_comment AS "rectifierComment",
+		u.id AS "currentAuditUser.id", 
+		u.name AS "currentAuditUser.name", 
+		o.id AS "checkedOffice.id", 
+		o.name AS "checkedOffice.name",
+		type_class.id AS "checkTypeClass.id",
+		type_class.name AS "checkTypeClass.name",
+		a.report_user_id AS "reportUserId"
 	</sql>
 	
 	<sql id="questionJoins">
+		JOIN sys_user u ON u.id=a.current_audit_user_id
+		JOIN sys_office o ON o.id=a.checked_office_id
+		JOIN check_type_class type_class ON type_class.id = a.check_type_class_id
 	</sql>
     
 	<select id="get" resultType="Question">
@@ -88,7 +98,7 @@
 			check_item_id,
 			create_date,
 			question_desc,
-			question_class_id,
+			check_type_class_id,
 			question_level_id,
 			inspection_dept_type_id,
 			state_id,
@@ -113,13 +123,16 @@
 			reporter_comment,
 			reporter_leader_comment,
 			rectifier_leader_comment,
-			rectifier_comment
+			rectifier_comment,
+			report_user_id,
+			current_audit_user_id,
+			checked_office_id
 		) VALUES (
 			#{id},
 			#{checkItemId},
 			#{createDate},
 			#{questionDesc},
-			#{questionClassId},
+			#{checkTypeClass.id},
 			#{questionLevelId},
 			#{inspectionDeptTypeId},
 			#{stateId},
@@ -144,7 +157,10 @@
 			#{reporterComment},
 			#{reporterLeaderComment},
 			#{rectifierLeaderComment},
-			#{rectifierComment}
+			#{rectifierComment},
+			#{reportUserId},
+			#{currentAuditUser.id},
+			#{checkedOffice.id}
 		)
 	</insert>
 	
@@ -154,8 +170,8 @@
 	      <if test="questionDesc != null" >
 	        question_desc = #{questionDesc},
 	      </if>
-	      <if test="questionClassId != null" >
-	        question_class_id = #{questionClassId},
+	      <if test="checkTypeClassId != null" >
+	        check_type_class_id = #{checkTypeClassId},
 	      </if>
 	      <if test="questionLevelId != null" >
 	        question_level_id = #{questionLevelId},
@@ -176,8 +192,11 @@
 	        update_by = #{updateBy.id}, 
 	      </if>	
 	      <if test="updateDate != null" >
-	        update_date = #{updateDate}
-	      </if>		            	      	           	      	      
+	        update_date = #{updateDate},
+	      </if>		            	      	      
+	      <if test="stateId != null" >
+	        state_id = #{stateId}
+	      </if>		      
 	    </set>
 		WHERE id = #{id}
 	</update>

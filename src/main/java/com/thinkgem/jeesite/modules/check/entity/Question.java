@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thinkgem.jeesite.common.persistence.ActEntity;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
@@ -21,7 +22,7 @@ public class Question extends ActEntity<Question> {
 	private static final long serialVersionUID = 1L;
 	private String checkItemId;		// check_item_id
 	private String questionDesc;		// 问题描述
-	private String questionClassId;		// 问题类别
+	private String checkTypeClassId;	// 检查类别
 	private String questionLevelId;		// 问题级别
 	private String inspectionDeptTypeId;		// 引用数据字典的ID，该类别引用的是内部单位，则受检单位ID是公司部门ID，否则是承包商的名称或ID            此字段应在问题表中
 	private String stateId;		// 该问题的处理状态有：受理中，审批中，待关闭，已关闭。
@@ -42,14 +43,69 @@ public class Question extends ActEntity<Question> {
 	private String reporterLeaderComment;		// 问题上报者部门负责人意见
 	private String rectifierLeaderComment;		// 整改部门负责人意见
 	private String rectifierComment;		// 整改者意见
-	private User user;
+	private String reportUserId;  //问题上报者ID
+	private String reportUserName;  //问题上报者name
+	private String reportUserOfficeName;  //问题上报者部门name
+	private String currentAuditUserId;  //当前流程执行人ID
 	
-	public User getUser() {
-		return user;
+	private User currentAuditUser; //当前流程执行人
+	private Office checkedOffice; //受检部门
+	private CheckTypeClass checkTypeClass;
+	
+	public String getReportUserName() {
+		return reportUserName;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setReportUserName(String reportUserName) {
+		this.reportUserName = reportUserName;
+	}
+
+	public String getReportUserOfficeName() {
+		return reportUserOfficeName;
+	}
+
+	public void setReportUserOfficeName(String reportUserOfficeName) {
+		this.reportUserOfficeName = reportUserOfficeName;
+	}
+
+	public CheckTypeClass getCheckTypeClass() {
+		return checkTypeClass;
+	}
+
+	public void setCheckTypeClass(CheckTypeClass checkTypeClass) {
+		this.checkTypeClass = checkTypeClass;
+	}
+
+	public User getCurrentAuditUser() {
+		return currentAuditUser;
+	}
+
+	public void setCurrentAuditUser(User currentAuditUser) {
+		this.currentAuditUser = currentAuditUser;
+	}
+
+	public Office getCheckedOffice() {
+		return checkedOffice;
+	}
+
+	public void setCheckedOffice(Office checkedOffice) {
+		this.checkedOffice = checkedOffice;
+	}
+
+	public String getReportUserId() {
+		return reportUserId;
+	}
+
+	public void setReportUserId(String reportUserId) {
+		this.reportUserId = reportUserId;
+	}
+
+	public String getCurrentAuditUserId() {
+		return currentAuditUserId;
+	}
+
+	public void setCurrentAuditUserId(String currentAuditUserId) {
+		this.currentAuditUserId = currentAuditUserId;
 	}
 
 	public Question() {
@@ -78,15 +134,14 @@ public class Question extends ActEntity<Question> {
 		this.questionDesc = questionDesc;
 	}
 	
-	@Length(min=0, max=255, message="问题类别长度必须介于 0 和 255 之间")
-	public String getQuestionClassId() {
-		return questionClassId;
+	public String getCheckTypeClassId() {
+		return checkTypeClassId;
 	}
 
-	public void setQuestionClassId(String questionClassId) {
-		this.questionClassId = questionClassId;
+	public void setCheckTypeClassId(String checkTypeClassId) {
+		this.checkTypeClassId = checkTypeClassId;
 	}
-	
+
 	@Length(min=0, max=64, message="问题级别长度必须介于 0 和 64 之间")
 	public String getQuestionLevelId() {
 		return questionLevelId;

@@ -18,6 +18,8 @@ import com.thinkgem.jeesite.modules.act.service.ActTaskService;
 import com.thinkgem.jeesite.modules.act.utils.ActUtils;
 import com.thinkgem.jeesite.modules.check.dao.QuestionDao;
 import com.thinkgem.jeesite.modules.check.entity.Question;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 监督检查问题上报Service
@@ -62,19 +64,30 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		// 申请发起
 		if (StringUtils.isBlank(question.getId())){
 			question.preInsert();
+			//设置上报问题者的ID
+			User currentUser = UserUtils.getUser();
+			question.setReportUserId(currentUser.getId());
+			question.setReporterComment(question.getAct().getComment());//上报问题意见
+			question.setStateId("1");//问题审批中
 			dao.insert(question);
+			
+			Map<String, Object> vars = Maps.newHashMap();
+			String currentAuditUserId = question.getCurrentAuditUser().getId();
+			String currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
+			vars.put("userId", currentAuditUserLoginName);
+
 			// 启动流程
-			actTaskService.startProcess(ActUtils.PD_TEST_AUDIT[0], ActUtils.PD_TEST_AUDIT[1], question.getId(), question.getQuestionDesc());
+			actTaskService.startProcess(ActUtils.PD_QUESTION_AUDIT[0], ActUtils.PD_QUESTION_AUDIT[1], question.getId(), "上报问题处理", vars);
 		}
 		// 重新编辑申请		
 		else{
 			question.preUpdate();
 			dao.update(question);
-			question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[重申] ":"[销毁] ")+question.getAct().getComment());
+			question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[重新上报] ":"[关闭问题] ")+question.getAct().getComment());
 			// 完成流程任务
 			Map<String, Object> vars = Maps.newHashMap();
 			vars.put("pass", "yes".equals(question.getAct().getFlag())? "1" : "0");
-			actTaskService.complete(question.getAct().getTaskId(), question.getAct().getProcInsId(), question.getAct().getComment(), question.getQuestionDesc(), vars);
+			actTaskService.complete(question.getAct().getTaskId(), question.getAct().getProcInsId(), question.getAct().getComment(), "上报问题处理", vars);
 		}
 	}
 
@@ -86,32 +99,46 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 	public void auditSave(Question question) {
 		
 		// 设置意见
-		question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[同意] ":"[驳回] ")+question.getAct().getComment());
-		
+		question.getAct().setComment(question.getAct().getComment());
 		question.preUpdate();
 		
 		// 对不同环节的业务逻辑进行操作
 		String taskDefKey = question.getAct().getTaskDefKey();
+		// 当前环节处理人
+		String currentAuditUserLoginName = "";
 
 		// 审核环节
-		if ("audit".equals(taskDefKey)){
-			question.setReporterComment(question.getAct().getComment());
-			dao.update(question);
-		}
-		else if ("audit2".equals(taskDefKey)){
+		if ("problem_report_audit".equals(taskDefKey)){
 			question.setReporterLeaderComment(question.getAct().getComment());
+			if("yes".equals(question.getAct().getFlag())) {
+				question.setStateId("2");//问题受理中
+			}
+			String currentAuditUserId = question.getCurrentAuditUser().getId();
+			currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
 			dao.update(question);
-		}
-		else if ("audit3".equals(taskDefKey)){
+		}		
+		else if ("problem_report_audit01".equals(taskDefKey)){
 			question.setRectifierLeaderComment(question.getAct().getComment());
+			question.setStateId("3");//问题处理中
+			String currentAuditUserId = question.getCurrentAuditUser().getId();
+			currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
 			dao.update(question);
 		}
-		else if ("audit4".equals(taskDefKey)){
+		else if ("problem_report_audit02".equals(taskDefKey)){
 			question.setRectifierComment(question.getAct().getComment());
+			question.setStateId("4");//问题待关闭
+			String currentAuditUserId = question.getCurrentAuditUser().getId();
+			currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
 			dao.update(question);
 		}
-		else if ("apply_end".equals(taskDefKey)){
-			
+		else if ("problem_report_audit03".equals(taskDefKey)){
+			question.setReporterComment(question.getAct().getComment());
+			if("yes".equals(question.getAct().getFlag())) {
+				question.setStateId("5");//问题已关闭
+			}
+			String currentAuditUserId = question.getReportUserId();
+			currentAuditUserLoginName = UserUtils.get(currentAuditUserId).getLoginName();
+			dao.update(question);
 		}
 		// 未知环节，直接返回
 		else{
@@ -120,6 +147,7 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		// 提交流程任务
 		Map<String, Object> vars = Maps.newHashMap();
 		vars.put("pass", "yes".equals(question.getAct().getFlag())? "1" : "0");
+		vars.put("userId", currentAuditUserLoginName);
 		actTaskService.complete(question.getAct().getTaskId(), question.getAct().getProcInsId(), question.getAct().getComment(), vars);
 //		vars.put("var_test", "yes_no_test2");
 //		actTaskService.getProcessEngine().getTaskService().addComment(testAudit.getAct().getTaskId(), testAudit.getAct().getProcInsId(), testAudit.getAct().getComment());

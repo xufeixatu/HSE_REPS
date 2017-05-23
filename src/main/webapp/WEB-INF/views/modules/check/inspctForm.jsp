@@ -61,11 +61,10 @@
 		<div class="control-group">
 			<label class="control-label">检查类别：</label>
 			<div class="controls">
-				<form:select path="typeId" class="input-xlarge required">
-					<form:option value="" label="请选择"/>
-					<form:options items="${checkTypes}" itemLabel="name" itemValue="id" htmlEscape="false"/>
-				</form:select>
-				<span class="help-inline"><font color="red">*</font> </span>
+				<sys:treeselect id="checkTypeClass" name="checkTypeClass.id" value="${inspct.checkTypeClass.id}" 
+					labelName="checkTypeClass.name" labelValue="${inspct.checkTypeClass.name}"
+					title="检查类别" url="/check/checkTypeClass/treeData" extId="${inspct.checkTypeClass.id}" cssClass="required" allowClear="true"/>
+				<span class="help-inline"><font color="red">*</font></span>				
 			</div>
 		</div>
 		<div class="control-group">
