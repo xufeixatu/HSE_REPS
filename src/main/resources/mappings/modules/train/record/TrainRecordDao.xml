@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.train.dao.record.TrainRecordDao">
+    
+	<sql id="trainRecordColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.object_office_id AS "objectOffice.id",
+		a.train_time AS "trainTime",
+		a.subject_office_id AS "subjectOffice.id",
+		a.plan_number AS "planNumber",
+		a.train_duration AS "trainDuration",
+		a.contact AS "contact.id",
+		a.status AS "status",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.is_exam AS "isExam",
+		a.exam_time AS "examTime",
+		a.exam_duration AS "examDuration",
+		a.pass AS "pass",
+		a.is_plan AS "isPlan",
+		a.plan_id AS "plan.id",
+		plan.name AS "plan.name",
+		a.files AS "files",
+		u8.name AS "contact.name",
+		office_obj.name AS "objectOffice.name",
+		office_subj.name AS "subjectOffice.name"
+	</sql>
+	
+	<sql id="trainRecordJoins">
+		LEFT JOIN sys_user u8 ON u8.id = a.contact
+		LEFT JOIN train_plan plan ON plan.id = a.plan_id
+		LEFT JOIN sys_office office_obj ON office_obj.id = a.object_office_id
+		LEFT JOIN sys_office office_subj ON office_subj.id = a.subject_office_id
+	</sql>
+    
+	<select id="get" resultType="TrainRecord">
+		SELECT 
+			<include refid="trainRecordColumns"/>
+		FROM train_record a
+		<include refid="trainRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TrainRecord">
+		SELECT 
+			<include refid="trainRecordColumns"/>
+		FROM train_record a
+		<include refid="trainRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="objectOffice != null and objectOffice.id != null and objectOffice.id != ''">
+				AND a.object_office_id = #{objectOffice.id}
+			</if>
+			<if test="subjectOffice != null and subjectOffice.id != null and subjectOffice.id != ''">
+				AND a.subject_office_id = #{subjectOffice.id}
+			</if>
+			<if test="contact != null and contact.id != null and contact.id != ''">
+				AND a.contact = #{contact.id}
+			</if>
+			<if test="beginTrainTime != null and endTrainTime != null and beginTrainTime != '' and endTrainTime != ''">
+				AND a.train_time BETWEEN #{beginTrainTime} AND #{endTrainTime}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="plan != null and plan.id != null and plan.id != ''">
+				AND a.plan_id = #{plan.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TrainRecord">
+		SELECT 
+			<include refid="trainRecordColumns"/>
+		FROM train_record a
+		<include refid="trainRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO train_record(
+			id,
+			name,
+			object_office_id,
+			train_time,
+			subject_office_id,
+			plan_number,
+			train_duration,
+			contact,
+			status,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			is_exam,
+			exam_time,
+			exam_duration,
+			pass,
+			is_plan,
+			plan_id
+		) VALUES (
+			#{id},
+			#{name},
+			#{objectOffice.id},
+			#{trainTime},
+			#{subjectOffice.id},
+			#{planNumber},
+			#{trainDuration},
+			#{contact.id},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{isExam},
+			#{examTime},
+			#{examDuration},
+			#{pass},
+			#{isPlan},
+			#{plan.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE train_record SET 	
+			name = #{name},
+			object_office_id = #{objectOffice.id},
+			train_time = #{trainTime},
+			subject_office_id = #{subjectOffice.id},
+			plan_number = #{planNumber},
+			train_duration = #{trainDuration},
+			contact = #{contact.id},
+			status = #{status},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			is_exam = #{isExam},
+			exam_time = #{examTime},
+			exam_duration = #{examDuration},
+			pass = #{pass},
+			is_plan = #{isPlan},
+			plan_id = #{plan.id},
+			files = #{files}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE train_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

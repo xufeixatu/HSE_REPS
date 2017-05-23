@@ -145,6 +145,7 @@
     <example>${fns:getDictListJson(type)}</example>  
   </function>
   
+<<<<<<< HEAD
   <function>
     <description>根据ＩＤ获取字典对象</description>
     <name>getDictByID</name>
@@ -169,6 +170,8 @@
     <example>${fns:getOfficeNameById(id)}</example>  
   </function>
   
+=======
+>>>>>>> refs/remotes/origin/master
   <!-- Encodes -->
   <function>
     <description>URL编码</description>
