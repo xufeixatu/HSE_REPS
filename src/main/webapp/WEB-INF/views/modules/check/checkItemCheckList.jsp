@@ -34,34 +34,18 @@
 		<thead>
 			<tr>
 				<th>检查内容</th>
-				<th>检查结果</th>
-				<th>检查人</th>
-				<th>检查时间</th>
-				<th>上报状态</th>
-				<shiro:hasPermission name="check:checkItemCheck:edit"><th>操作</th></shiro:hasPermission>
+				<th>是否符合标准</th>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="checkItemCheck">
 			<tr>
-				<td>
+				<td width="80%">
 					${checkItemCheck.checkContent}
 				</td>
-				<td>
+				<td width="20%">
 					<form:radiobuttons path="checkItemCheck.checkResult" items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</td>
-				<td>
-					${checkItemCheck.checkPersonName}
-				</td>				
-				<td>
-					<fmt:formatDate value="${checkItemCheck.checkTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
-					${fns:getDictLabel(checkItemCheck.reportStatus, '', '')}
-				</td>
-				<shiro:hasPermission name="check:checkItemCheck:edit"><td>
-    				<a href="${ctx}/check/checkItemCheck/form?id=${checkItemCheck.id}">上报问题</a>
-				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
 		</tbody>
