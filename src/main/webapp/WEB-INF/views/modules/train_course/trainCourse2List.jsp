@@ -2,6 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
+s
 	<title>培训课件上传与查看管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
@@ -71,9 +72,12 @@
 		}
 		.course-detail > img{
 			width:46%;
-			height:98%;
+			height:96%;
 			display:inline-block;
 			float:left;
+			margin-left: 5px;
+			margin-top: 10px;
+			margin-bottom: 20px;
 		}
 		.course-detail-text{
 			width:46%;
@@ -86,7 +90,7 @@
 			color:#FFFFFF;
 			font-size:36px;
 			display:block;
-			margin-top:10px;
+			margin-top:40px;
 		}
 		
 		.course-detail-text-progress{
@@ -100,7 +104,7 @@
 			background-color:#eead4f;
 		}
 		.course-detail-text-status{
-			margin-top:100px;
+			margin-top:60px;
 			width:100%;
 			height:100px;
 			background-color:#514375;
@@ -124,7 +128,7 @@
 			display:block;
 			text-align:center;
 			border-right:1px solid #999999;
-			margin-top:10%;
+			margin-top:16%;
 		}
 		.course-detail-text-status-time-text{
 			display:block;
@@ -134,7 +138,7 @@
 		.course-detail-text-status-study-number{
 			display:block;
 			text-align:center;
-			margin-top:7%;
+			margin-top:16%;
 		}
 		.course-detail-text-status-study-text{
 			display:block;
@@ -156,6 +160,7 @@
 			margin:0px;
 			padding:0px;
 			width:100%;
+			height: 83px;
 		}
 		.course-detail-text-operate > ul li{
 			float:left;
@@ -164,24 +169,35 @@
 			width:40%;
 			height:50px;
 		}
-		.course-detail-text-operate > ul li.continue button{
+		.course-detail-text-operate > ul li.continue a{
+			display:block;
 			width:100%;
+			height: 111%;
+			line-height:300%;
+			font-size: 20px;
+    		letter-spacing: 5px;
 		}
-		.course-detail-text-operate > ul li.focus{
-			width:15%;
-			padding:4px 13px;
-		}
+ 		.course-detail-text-operate > ul li.focus{
+		    width: 13%;
+		    height: 111%;
+		    padding: 4px 13px;
+		    line-height: 42px;
+		    margin-left: 47px;
+		    margin-top: 6px;
+		} 
 		.course-detail-text-operate > ul li.recommend{
 			padding:4px 13px;
+			height: 111%;
 		}
-		.course-detail-text-operate > ul li.focus a,
+ 		.course-detail-text-operate > ul li.focus a, 
 		.course-detail-text-operate > ul li.recommend a{
 			text-align:center;
 			color:#FFFFFF;
 			font-size:16px;
 		}
 		#tblMain{
-			font-size:24px;
+			font-size: 32px;
+			line-height: 48px;
 		}
 		#tblMain tr td{
 			color:#FFFFFF;
@@ -298,13 +314,13 @@
 				</div>
 			</div>
 			<div class="course-detail-text-progress">
-			    <div class="course-detail-text-progress-bar" role="progressbar" id="progress-value" value="${trainCourse.courseGrade}*10"></div>
-			    <span class="course-detail-text-progress-bar-text">${trainCourse.courseGrade*10}% 完成</span>
+			    <div class="course-detail-text-progress-bar" role="progressbar" id="progress-value" value="40"></div>
+			    <span class="course-detail-text-progress-bar-text">40% 完成</span>
 			</div>
 			<div class="course-detail-text-operate">
 				<ul>
 					<li class="continue">
-						<button type="button" class="btn btn-success">继续学习</button>
+						<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}"   class="btn btn-success">继续学习</a>
 					</li>
 					<li class="focus">
 						<a>星级评分</a>
@@ -340,83 +356,45 @@
 		        	</li>
 		        	<li>【课程大纲】
 		        		<ol>
-		        	<%-- 	
-		        		<c:forEach items="${page.list}" var="courseCatelog">
-							<tr>
-								<td><a href="${ctx}/train_course/trainCourse2/list?id=${trainCourse.id}">
-									${courseCatelog.attachName}
-								</a></td>
-								<td>
-									${courseCatelog.attachId}
-								</td>
-							</tr>
-						</c:forEach> --%>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
-		        			<li>通过本课程的学习，能够使我们具有合乎形象的礼仪和合乎礼仪的形象这两个必备素质。</li>
+				        	<c:set var="testString" value="${trainCourse.docId}"/>
+							
+							<c:forTokens items="${testString}" delims="|" var="videoHref">
+								<li>
+									<!-- 字符串截取获取最后的文件名，并显示 -->
+									<c:set var="videoHrefString" value="${videoHref}"/>													
+									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
+									<c:forEach items="${videoId}" var="videoName" begin="8" >
+										${videoName}
+									</c:forEach>									
+								</li>
+							</c:forTokens>				        		
 		        		</ol>
 		        	</li>
 		        </ul>
 		    </div>
 		    <div class="tab-pane fade" id="chapter">
-		        <ul>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle"></span>
-		        	</li>
-		        	<li>
-		        		<span class="chapter-time">05:20</span>
-		        		<span class="chapetr-item">1、事实而非</span>
-		        		<span class="chapter-circle-finish"></span>
-		        	</li>
+		        <ul>		        
+					<c:set var="testString" value="${trainCourse.docId}"/>
+							
+					<c:forTokens items="${testString}" delims="|" var="videoHref">
+						<li>
+							<span class="chapter-time">05:20</span>
+							<span class="chapetr-item">
+							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
+							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
+								<%-- <a href="http://localhost:8080${videoHref}"> --%>
+							
+									<!-- 字符串截取获取最后的文件名，并显示 -->
+									<c:set var="videoHrefString" value="${videoHref}"/>													
+									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
+									<c:forEach items="${videoId}" var="videoName" begin="8" >
+										${videoName}
+									</c:forEach>
+								</a>
+							</span>
+							<span class="chapter-circle-finish"></span>
+						</li>
+					</c:forTokens>			
 		        </ul>
 		    </div>
 		</div>

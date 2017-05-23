@@ -71,7 +71,7 @@
 		<div class="control-group">
 			<label class="control-label">上传人：</label>
 			<div class="controls">
-				<form:input path="uploadBy" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
+				<form:input path="uploadBy" htmlEscape="false" maxlength="64" class="input-xlarge required" disabled = "true"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>

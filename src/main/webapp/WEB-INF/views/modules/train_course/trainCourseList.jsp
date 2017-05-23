@@ -17,6 +17,50 @@
 			$("#searchForm").submit();
         	return false;
         }
+		
+		$(document).ready(function() {
+			 var getprogressvalue = $("#progress-value").attr('value');
+		     $("#progress-value").css("width",getprogressvalue+"%");
+		});
+		
+		function ArrayIndexOf(arr, element) {
+	        for (var i = 0; i < arr.length; i++) { 
+	           if (arr[i] == element) {
+	                return i;    
+	            }   
+	        }   
+	        return -1; 
+	       } 
+		
+	    function GetTds() {
+	          var tbl = document.getElementById("tblMain");
+	          var tds = tbl.getElementsByTagName("td");
+	             return tds;
+	               }  
+	     function InitEvent() {
+	          var tds=GetTds();
+	             for (var i = 0; i < tds.length; i++) {
+	                  var td = tds[i];
+	                     td.onmouseover = TdOnclick;
+	                         td.style.cursor = "pointer";
+	                             }  
+	                         }  
+	     function TdOnclick() {
+	          var tds = GetTds();
+	          var index = ArrayIndexOf(tds, this);   
+	          for (var i = 0; i <=index; i++) {    
+	          	   var td = tds[i];    
+	          	   td.innerHTML = "★";
+	          	   $(td).css("color","#fdec0b");
+	          	}   
+	          for (var j = index + 1; j < tds.length; j++) {
+	               var td = tds[j];    
+	               td.innerHTML = "☆";
+	               $(td).css("color","#FFFFFF");
+	                }  
+	            } 
+
+		
 	</script>
 	<style type="text/css">
 		a{
@@ -53,6 +97,7 @@
 		}
 		.course > a >img{
 			width:100%;
+			height:160px;
 		}
 		.course > .course-text{
 			height:auto;
@@ -87,6 +132,12 @@
 			width:25%;
 			float:right;
 			font-size:12px;
+		}
+		#tblMain{
+			font-size:24px;
+		}
+		#tblMain tr td{
+			color:#fdec0b;
 		}
 		.pagination{
 			text-align:center;
@@ -128,10 +179,14 @@
 		  		 			<span class="course-text-count-time">${trainCourse.courseTime}课时</span>
 		  		 			<span class="course-text-count-study">${trainCourse.courseCount}学习</span>
 		  		 		</span>
-		  		 		<span class="course-text-operate">
+			  		 	<span class="star" onmouseover="InitEvent()" >
+							<table id="tblMain"><tr><td>★</td><td>★</td><td>★</td><td>★</td><td>★</td></tr>
+		    				</table>
+						</span>
+<%-- 		  		 		<span class="course-text-operate">
 		  		 			<a class="course-text-operate-modify" href="${ctx}/train_course/trainCourse/form?id=${trainCourse.id}">修改</a>
 		  		 			<a class="course-text-operate-delete" href="${ctx}/train_course/trainCourse/delete?id=${trainCourse.id}" onclick="return confirmx('确认要删除该培训课件上传与查看吗？', this.href)">删除</a>
-		  		 		</span>
+		  		 		</span> --%>
 		  		 	</div>
 		  		 	
 		  		 </div>
