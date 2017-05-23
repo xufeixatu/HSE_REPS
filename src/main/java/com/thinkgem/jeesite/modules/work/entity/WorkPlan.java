@@ -59,6 +59,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String endStateId;		// 结束状态
 	private String frequency;		// 频次
 	private String planType;     //计划类型：如个人计划，部门计划，公司计划
+
 	private String workLevel; //级别
 	private boolean workSubmit = false;//是否提交
 	private boolean noedit = false; //是否不可编辑
@@ -81,6 +82,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 * 受理状态ID
 	 */
 	private String remainStateId;
+
 	
 	/**
 	 * 存储受理人ID的临时变量

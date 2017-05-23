@@ -41,6 +41,7 @@
 		a.create_date AS "createDate",
 		a.sort AS "sort",
 		a.name AS "name",
+<!-- <<<<<<< HEAD -->
 		a.plan_type as "planType",
 		a.work_submit as "workSubmit",
 		a.parent_ids AS "parentIds",
@@ -48,8 +49,13 @@
 		sd.label AS "workLevel",
 		sd2.label AS "workState",
 		so.name AS "myDept"
+<!-- =======
+		a.plan_type as "workPlan",
+		a.parent_ids AS "parentIds"
+>>>>>>> refs/remotes/origin/master -->
 	</sql>
 	<sql id="workPlanJoins">
+<!-- <<<<<<< HEAD -->
 		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
 		LEFT JOIN SYS_OFFICE so ON so.id = pp.office_id
 		LEFT JOIN SYS_DICT sd ON sd.id = a.work_level_id
@@ -135,6 +141,8 @@
 		a.name AS "name"
 	</sql>
 	<sql id="workRemainJoins">
+<!-- =======
+>>>>>>> refs/remotes/origin/master -->
 	</sql>
     
 	<select id="get" resultType="WorkPlan">

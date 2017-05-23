@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.train.dao.matrix.TrainNeedMatrixDao">
+    
+	<sql id="trainNeedMatrixColumns">
+		a.id AS "id",
+		a.version AS "version",
+		a.job_id AS "trainJob.id",
+		a.content_id AS "trainContent.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		j1.name AS "trainJob.name",
+		j1.sn AS "trainJob.sn",
+		c1.name AS "trainContent.name",
+		c1.sn AS "trainContent.sn"
+	</sql>
+	
+	<sql id="trainNeedMatrixJoins">
+		LEFT JOIN train_job j1 ON j1.id = a.job_id
+		LEFT JOIN train_content c1 ON c1.id = a.content_id
+	</sql>
+    
+	<select id="get" resultType="TrainNeedMatrix">
+		SELECT 
+			<include refid="trainNeedMatrixColumns"/>
+		FROM train_need_matrix a
+		<include refid="trainNeedMatrixJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TrainNeedMatrix">
+		SELECT 
+			<include refid="trainNeedMatrixColumns"/>
+		FROM train_need_matrix a
+		<include refid="trainNeedMatrixJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="trainJob != null and trainJob.id != null and trainJob.id != ''">
+				AND a.job_id = #{trainJob.id}
+			</if>
+			<if test="trainContent != null and trainContent.id != null and trainContent.id != ''">
+				AND a.content_id = #{trainContent.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TrainNeedMatrix">
+		SELECT 
+			<include refid="trainNeedMatrixColumns"/>
+		FROM train_need_matrix a
+		<include refid="trainNeedMatrixJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO train_need_matrix(
+			id,
+			version,
+			job_id,
+			content_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{version},
+			#{trainJob.id},
+			#{trainContent.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE train_need_matrix SET 	
+			version = #{version},
+			job_id = #{trainJob.id},
+			content_id = #{trainContent.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE train_need_matrix SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

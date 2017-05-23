@@ -144,7 +144,7 @@
     <function-signature>java.lang.String getDictListJson(java.lang.String)</function-signature>
     <example>${fns:getDictListJson(type)}</example>  
   </function>
-  
+
   <function>
     <description>根据ＩＤ获取字典对象</description>
     <name>getDictByID</name>

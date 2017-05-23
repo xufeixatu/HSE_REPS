@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.train.dao.record.TrainRecordScoreDao">
+    
+	<sql id="trainRecordScoreColumns">
+		a.id AS "id",
+		a.record_id AS "record.id",
+		a.user_id AS "user.id",
+		a.score AS "score",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		b.name AS "record.name",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="trainRecordScoreJoins">
+		LEFT JOIN train_record b ON b.id = a.record_id
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="TrainRecordScore">
+		SELECT 
+			<include refid="trainRecordScoreColumns"/>
+		FROM train_record_score a
+		<include refid="trainRecordScoreJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TrainRecordScore">
+		SELECT 
+			<include refid="trainRecordScoreColumns"/>
+		FROM train_record_score a
+		<include refid="trainRecordScoreJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="record != null and record.id != null and record.id != ''">
+				AND a.record_id = #{record.id}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TrainRecordScore">
+		SELECT 
+			<include refid="trainRecordScoreColumns"/>
+		FROM train_record_score a
+		<include refid="trainRecordScoreJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO train_record_score(
+			id,
+			record_id,
+			user_id,
+			score,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{record.id},
+			#{user.id},
+			#{score},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE train_record_score SET 	
+			record_id = #{record.id},
+			user_id = #{user.id},
+			score = #{score},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE train_record_score SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE record_id = #{record.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

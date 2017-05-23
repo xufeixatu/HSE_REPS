@@ -25,8 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
@@ -71,13 +71,54 @@ public class WorkPlanController extends BaseController {
 		return entity;
 	}
 
-	
+//<<<<<<< HEAD
+//	
+//=======
+//	/**
+//	 * 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+//	 * 
+//	 * @param workPlan
+//	 * @param model
+//	 */
+//	private void updateSqlMapDsf(WorkPlan workPlan, Model model) {
+//		Dict planTypeDict = DictUtils.getDictByValue(workPlan.getPlanType(), "type_plan");
+//		model.addAttribute(PLAN_TYPE_DICT_KEY, planTypeDict);
+//		Map<String, String> sqlMap = workPlan.getSqlMap();
+//		StringBuffer dsf = new StringBuffer();
+//		if (sqlMap.get("dsf") != null && !"".equals(sqlMap.get("dsf"))) {
+//			dsf.append(sqlMap.get("dsf"));
+//			dsf.append(" ");
+//		}
+//
+//		// 设置根据计划类别（个人计划｜｜部门计划｜｜公司计划）过滤工作计划条件字符串
+//		dsf.append("and");
+//		dsf.append(" ");
+//		dsf.append("plan_type = '");
+//		dsf.append(planTypeDict.getId());
+//		dsf.append("'");
+//
+//		// 只看本人创建的数据
+//		dsf.append(" and ");
+//		dsf.append("create_by = '");
+//		dsf.append(UserUtils.getUser().getId());
+//		dsf.append("'");
+//
+//		// 将字符串加回到sqlMap.dsf属性
+//		sqlMap.put("dsf", dsf.toString());
+//	}
+//
+//>>>>>>> refs/remotes/origin/master
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+//<<<<<<< HEAD
 		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
 		
+//=======
+//		updateSqlMapDsf(workPlan, model);
+//
+//>>>>>>> refs/remotes/origin/master
 		List<WorkPlan> list = workPlanService.findList(workPlan);
 
 		model.addAttribute("list", list);
@@ -85,6 +126,7 @@ public class WorkPlanController extends BaseController {
 	}
 
 	@RequiresPermissions("work:workPlan:view")
+//<<<<<<< HEAD
 	@RequestMapping(value = { "workList" })
 	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		if ("personal".equals(workPlan.getPlanType())) {
@@ -146,10 +188,15 @@ public class WorkPlanController extends BaseController {
 	}
 
 	@RequiresPermissions("work:workPlan:view")
+
 	@RequestMapping(value = "form")
 	public String form(WorkPlan workPlan, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+//<<<<<<< HEAD
 		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
+//=======
+//		updateSqlMapDsf(workPlan, model);
+//>>>>>>> refs/remotes/origin/master
 
 		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
 			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
@@ -285,6 +332,7 @@ public class WorkPlanController extends BaseController {
 		return list(wp, request, response, model);
 	}
 
+//<<<<<<< HEAD
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "detail")
 	public String detail(WorkPlan workPlan, Model model) {
@@ -322,7 +370,9 @@ public class WorkPlanController extends BaseController {
 		model.addAttribute("workPlan", workPlan);
 		return "modules/work/exec/workPlanDetail";
 	}
-
+//
+//=======
+//>>>>>>> refs/remotes/origin/master
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "save")
 	public String save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
@@ -490,6 +540,7 @@ public class WorkPlanController extends BaseController {
 		}
 		return mapList;
 	}
+//<<<<<<< HEAD
 	/**
 	 * 查询待受理工作
 	 * 
@@ -553,4 +604,7 @@ public class WorkPlanController extends BaseController {
 		model.addAttribute("list", list);
 		return "modules/work/exec/workRemainnedList";
 	}
+//=======
+//
+//>>>>>>> refs/remotes/origin/master
 }
