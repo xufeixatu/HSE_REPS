@@ -46,11 +46,11 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">作业活动名称/活动、物料、产品、服务：</label>
+			<label class="control-label">作业活动名称：</label>
 			<div class="controls">
 				<form:input path="workName" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
-		</div>
+		</div> 
 		<div class="control-group">
 			<label class="control-label">危险源：</label>
 			<div class="controls">
@@ -60,13 +60,13 @@
 		<div class="control-group">
 			<label class="control-label">时态：</label>
 			<div class="controls">
-				<form:radiobuttons path="tense" items="${fns:getDictList('tense_Type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:radiobuttons path="tense" items="${fns:getDictList('risk_tense_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">状态：</label>
 			<div class="controls">
-				<form:radiobuttons path="status" items="${fns:getDictList('status_Type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:radiobuttons path="status" items="${fns:getDictList('risk_status_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -78,7 +78,7 @@
 	          <div class="control-group">
 			<label class="control-label">是非判断：</label>
 			<div class="controls">
-				<form:radiobuttons path="judgeTf" items="${fns:getDictList('is_flag')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:radiobuttons path="judgeTf" items="${fns:getDictList('risk_is_flag')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 	        </div>
 	        
@@ -126,7 +126,7 @@
 	             
 	             </div>
 		<div class="control-group">
-			<label class="control-label">影响（可能导致的事故）：</label>
+			<label class="control-label">可能导致的事故：</label>
 			<div class="controls">
 				<form:textarea path="affect" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>

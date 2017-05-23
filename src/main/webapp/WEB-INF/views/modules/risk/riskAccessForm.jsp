@@ -34,15 +34,6 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">类别：</label>
-			<div class="controls">
-				<form:select path="category" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('risk_class')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">场所、设备：</label>
 			<div class="controls">
 				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-xlarge "/>
@@ -69,13 +60,13 @@
 		<div class="control-group">
 			<label class="control-label">时态：</label>
 			<div class="controls">
-				<form:radiobuttons path="tense" items="${fns:getDictList('tense_Type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:radiobuttons path="tense" items="${fns:getDictList('risk_status_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">状态：</label>
 			<div class="controls">
-				<form:radiobuttons path="status" items="${fns:getDictList('status_Type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:radiobuttons path="status" items="${fns:getDictList('risk_status_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -87,7 +78,7 @@
 		<div class="control-group">
 			<label class="control-label">是非判断：</label>
 			<div class="controls">
-				<form:radiobuttons path="judgeTf" items="${fns:getDictList('is_flag')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:radiobuttons path="judgeTf" items="${fns:getDictList('risk_is_flag')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 

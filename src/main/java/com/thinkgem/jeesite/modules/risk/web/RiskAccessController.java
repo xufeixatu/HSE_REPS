@@ -52,7 +52,24 @@ public class RiskAccessController extends BaseController {
 	public String list(RiskAccess riskAccess, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<RiskAccess> page = riskAccessService.findPage(new Page<RiskAccess>(request, response), riskAccess); 
 		model.addAttribute("page", page);
-		return "modules/risk/riskAccessList";
+		if(riskAccess==null||riskAccess.getRiskType()==null){
+			return "modules/risk/riskAccessList";		
+		}else if(riskAccess.getRiskType().equals("0")){
+			return "modules/risk/riskAccessList";			
+		}else if(riskAccess.getRiskType().equals("1")){
+			return "modules/risk/riskAccessList2";			
+		}
+		else if(riskAccess.getRiskType().equals("2")){
+			return "modules/risk/riskAccessList3";			
+		}
+		else if(riskAccess.getRiskType().equals("3")){
+			return "modules/risk/riskAccessList4";			
+		}
+		else if(riskAccess.getRiskType().equals("4")){
+			return "modules/risk/riskAccessList5";			
+		}else{
+			return "modules/risk/riskAccessList";		
+		}
 	}
 	
 	@RequiresPermissions("risk:riskAccess:view")
@@ -100,7 +117,7 @@ public class RiskAccessController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(RiskAccess riskAccess, RedirectAttributes redirectAttributes) {
 		riskAccessService.delete(riskAccess);
-		addMessage(redirectAttributes, "删除risk成功");
+		addMessage(redirectAttributes, "删除成功");
 		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/?repage";
 	}
 

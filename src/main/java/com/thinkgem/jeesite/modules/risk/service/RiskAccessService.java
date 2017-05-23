@@ -78,7 +78,12 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 			
 			
 			List<RiskAccess> risk = findList(riskAccess);
-			
+			//如果为空，先保存再查出来
+			if(risk.isEmpty()||risk==null){
+				super.save(riskAccess);
+				risk = findList(riskAccess);
+			}
+	
 			String id=risk.get(0).getId();
 			entity.setRecognizeid(id);
 			entity.preInsert();
