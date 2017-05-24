@@ -28,6 +28,8 @@ public class TrainPlanService extends CrudService<TrainPlanDao, TrainPlan> {
 
 	@Autowired
 	private TrainRecordService trainRecordService;
+	@Autowired
+	private TrainPlanDao trainPlanDao;
 	
 	public TrainPlan get(String id) {
 		return super.get(id);
@@ -79,7 +81,8 @@ public class TrainPlanService extends CrudService<TrainPlanDao, TrainPlan> {
 		trainPlan.getSqlMap().put("dsf", dataScopeFilter(trainPlan.getCurrentUser(), "o", "a"));
 		// 设置分页参数
 		trainPlan.setPage(page);
-		// 执行分页查询		page.setList(TrainPlanDao.findList(user));
+		// 执行分页查询		
+		page.setList(trainPlanDao.findList(trainPlan));
 		return page;
 	}
 
