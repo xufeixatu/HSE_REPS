@@ -44,7 +44,13 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	
 	@Transactional(readOnly = false)
 	public void save(RiskAccess riskAccess) {
+		riskAccess.setYears(new Date());
+		riskAccess.setRecognizeDate(new Date());
+		riskAccess.setRecognizeBy(UserUtils.getUser().getName());
+		riskAccess.setUnit(UserUtils.getUser().getOffice().getName());
 		super.save(riskAccess);
+		
+		
 		String lscore = riskAccess.getLscore();
 		String escore = riskAccess.getEscore();
 		String cscore = riskAccess.getCscore();
@@ -94,10 +100,6 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 			riskSaferesultDao.insert(entity);
 			riskAccess.setAccessid(entity.getId());
 			riskAccess.setRiskLevel(entity.getRiskLevel());
-			riskAccess.setYears(new Date(2017, 0, 0));
-			riskAccess.setRecognizeDate(new Date());
-			riskAccess.setRecognizeBy(UserUtils.getUser().getName());
-			riskAccess.setUnit(UserUtils.getUser().getOffice().getName());
 			super.save(riskAccess);
 		}
 	}

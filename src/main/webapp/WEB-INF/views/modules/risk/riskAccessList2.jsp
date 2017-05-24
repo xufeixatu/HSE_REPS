@@ -70,7 +70,7 @@
 					<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>
 				</a></td>
 				<td>
-					${fns:getDictLabel(riskAccess.unit, '', '')}
+					${riskAccess.unit}
 				</td>
 				<td>
 					${riskAccess.recognizeBy}
