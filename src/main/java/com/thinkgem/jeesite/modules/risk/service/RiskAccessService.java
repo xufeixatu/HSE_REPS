@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.risk.service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.risk.entity.RiskAccess;
 import com.thinkgem.jeesite.modules.risk.entity.RiskSaferesult;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.risk.dao.RiskAccessDao;
 import com.thinkgem.jeesite.modules.risk.dao.RiskSaferesultDao;
 
@@ -91,6 +94,10 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 			riskSaferesultDao.insert(entity);
 			riskAccess.setAccessid(entity.getId());
 			riskAccess.setRiskLevel(entity.getRiskLevel());
+			riskAccess.setYears(new Date(2017, 0, 0));
+			riskAccess.setRecognizeDate(new Date());
+			riskAccess.setRecognizeBy(UserUtils.getUser().getName());
+			riskAccess.setUnit(UserUtils.getUser().getOffice().getName());
 			super.save(riskAccess);
 		}
 	}
