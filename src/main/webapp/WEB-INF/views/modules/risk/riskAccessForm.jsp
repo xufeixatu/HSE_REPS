@@ -23,6 +23,27 @@
 				}
 			});
 		});
+		function autoPingjia(){
+			 var lscore=$('#lscore option:selected').val();
+			 var escore=$('#escore option:selected').val();
+			 var cscore=$('#cscore option:selected').val();
+			  if(lscore>0&&escore>0&&cscore>0){
+				var dscore=lscore*escore*cscore;
+				if(dscore>=320){
+					$("#riskLevel option[value='5']").attr("selected","selected");
+				}else if(dscore>=160){
+					$("#riskLevel option[value='4']").attr("selected","selected");		
+				}else if(dscore>=70){
+					$("#riskLevel option[value='3']").attr("selected", "selected");
+				}else if(dscore>=20){
+					$("#riskLevel option[value='2']").attr("selected", "selected");	
+				}else {
+					$("#riskLevel option[value='1']").attr("selected", "selected");
+				}
+				
+				
+			 } 
+		}
 	</script>
 </head>
 <body>
@@ -83,31 +104,53 @@
 		</div>
 
 		<!-- 	lec法则  开始-->
-		<div class="control-group">   
-			<label class="control-label">L(可能性)</label>
-			<div class="controls">
-				<form:select path="lscore" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('risk_lscore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+		<ul id="myTab" class="nav nav-tabs">
+			<li class="active">
+				<a href="#lec" data-toggle="tab"> LEC法则</a>
+			</li>
+			<li><a href="#ms" data-toggle="tab">MS法则</a></li>
+		</ul>
+		<div id="myTabContent" class="tab-content">
+			<div class="tab-pane fade in active" id="lec"  onchange="autoPingjia()" >
+				<div class="control-group">   
+					<label class="control-label">L(可能性)</label>
+					<div class="controls">
+						<form:select path="lscore"    class="input-xlarge ">
+							<form:option value="" label=""/>
+							<form:options items="${fns:getDictList('risk_lscore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+						</form:select>
+					</div>
+					<label class="control-label">E(频繁程度)</label>
+					<div class="controls">
+						<form:select path="escore"  class="input-xlarge ">
+							<form:option value="" label=""/>
+							<form:options items="${fns:getDictList('risk_escore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+						</form:select>
+					</div>
+					<label class="control-label">C(可能导致后果)</label>
+					<div class="controls">
+						<form:select path="cscore"   class="input-xlarge ">
+							<form:option value="" label=""/>
+							<form:options items="${fns:getDictList('risk_cscore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+						</form:select>
+					</div>
+				</div>		
 			</div>
-
-			<label class="control-label">E(频繁程度)</label>
-			<div class="controls">
-				<form:select path="escore" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('risk_escore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+			<!-- ms法则 -->
+			<div class="tab-pane fade" id="ms">
+				<p>ms</p>
 			</div>
-
-			<label class="control-label">C(可能导致后果)</label>
+		
+		</div>
+		<div class="control-group">
+			<label class="control-label">自动评价结果：</label>
 			<div class="controls">
-				<form:select path="cscore" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('risk_cscore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+			<form:select path="riskLevel"   class="input-xlarge ">
+					<form:options items="${fns:getDictList('risk_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+			</form:select>
+			
 			</div>
-		</div>		
+		</div>
 
 <!-- 	lec法则  结束-->
 		<div class="control-group">
