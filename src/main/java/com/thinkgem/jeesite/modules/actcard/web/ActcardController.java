@@ -25,7 +25,7 @@ import com.thinkgem.jeesite.modules.actcard.service.ActcardService;
 /**
  * ACT卡Controller
  * @author 岳鑫
- * @version 2017-05-23
+ * @version 2017-05-30
  */
 @Controller
 @RequestMapping(value = "${adminPath}/actcard/actcard")
@@ -57,37 +57,8 @@ public class ActcardController extends BaseController {
 	@RequiresPermissions("actcard:actcard:view")
 	@RequestMapping(value = "form")
 	public String form(Actcard actcard, Model model) {
-		
-		String view = "actcardForm";
-		
-		// 查看审批申请单
-		if (StringUtils.isNotBlank(actcard.getId())){//.getAct().getProcInsId())){
-
-			// 环节编号
-			String taskDefKey = actcard.getAct().getTaskDefKey();
-			
-			// 查看工单
-			if(actcard.getAct().isFinishTask()){
-				view = "actcardView";
-			}
-			// 修改环节
-			else if ("modify".equals(taskDefKey)){
-				view = "actcardForm";
-			}
-			// 指定解决人员环节
-			else if ("appoint".equals(taskDefKey)){
-				view = "actcardAppoint";
-			}
-			// 解决环节
-			else if ("solve".equals(taskDefKey)){
-				view = "actcardSolve";
-			}
-
-		}
-
 		model.addAttribute("actcard", actcard);
-		return "modules/actcard/" + view;
-
+		return "modules/actcard/actcardForm";
 	}
 
 	@RequiresPermissions("actcard:actcard:edit")

@@ -4,14 +4,13 @@
     
 	<sql id="actcardColumns">
 		a.id AS "id",
-		a.territorial_office_id AS "territorialOffice.id",
-		a.proc_ins_id AS "act.id", 
+		a.proc_ins_id AS "procInsId",
 		a.unsafe_acts AS "unsafeActs",
 		a.measure AS "measure",
 		a.safety_acts AS "safetyActs",
 		a.suggestions AS "suggestions",
 		a.reporter AS "reporter",
-		a.reporter_office AS "reporterOffice.id",
+		a.reporter_office AS "reporterOffice",
 		a.reporting_time AS "reportingTime",
 		a.rectification_result AS "rectificationResult",
 		a.closer AS "closer.id",
@@ -23,24 +22,27 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
+		a.territorial_office_id AS "territorialOffice.id",
 		a.report_pic AS "reportPic",
 		a.rectification_pic AS "rectificationPic",
-		a.actcard_unsafe_event_id AS "actcardUnsafeEvent.id",
-		a.actcard_unsafe_event_child_id AS "actcardUnsafeEventChild.id",
-		aue1.name AS "actcardUnsafeEvent.name",
-		aue2.name AS "actcardUnsafeEventChild.name",
+		a.actcard_unsafe_event_id AS "actcardUnsafeEventId",
+		a.actcard_unsafe_event_child_id AS "actcardUnsafeEventChildId",
 		a.solver AS "solver.id",
-		o2.name AS "territorialOffice.name",
-		o8.name AS "reporterOffice.name",
-		u24.name AS "solver.name"
+		a.user_id AS "user.id",
+		a.office_id AS "office.id",
+		u11.name AS "closer.name",
+		o20.name AS "territorialOffice.name",
+		u25.name AS "solver.name",
+		u26.name AS "user.name",
+		o27.name AS "office.name"
 	</sql>
 	
 	<sql id="actcardJoins">
-		LEFT JOIN sys_office o2 ON o2.id = a.territorial_office_id
-		LEFT JOIN sys_office o8 ON o8.id = a.reporter_office
-		LEFT JOIN sys_user u24 ON u24.id = a.solver
-		LEFT JOIN actcard_unsafe_event aue1 ON aue1.id = a.actcard_unsafe_event_id
-		LEFT JOIN actcard_unsafe_event aue2 ON aue2.id = a.actcard_unsafe_event_child_id
+		LEFT JOIN sys_user u11 ON u11.id = a.closer
+		LEFT JOIN sys_office o20 ON o20.id = a.territorial_office_id
+		LEFT JOIN sys_user u25 ON u25.id = a.solver
+		LEFT JOIN sys_user u26 ON u26.id = a.user_id
+		LEFT JOIN sys_office o27 ON o27.id = a.office_id
 	</sql>
     
 	<select id="get" resultType="Actcard">
@@ -64,44 +66,17 @@
 					<if test="dbName == 'mssql'">'%'+#{unsafeActs}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{unsafeActs},'%')</if>
 			</if>
-			<if test="measure != null and measure != ''">
-				AND a.measure LIKE 
-					<if test="dbName == 'oracle'">'%'||#{measure}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{measure}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{measure},'%')</if>
-			</if>
-			<if test="safetyActs != null and safetyActs != ''">
-				AND a.safety_acts LIKE 
-					<if test="dbName == 'oracle'">'%'||#{safetyActs}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{safetyActs}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{safetyActs},'%')</if>
-			</if>
-			<if test="suggestions != null and suggestions != ''">
-				AND a.suggestions LIKE 
-					<if test="dbName == 'oracle'">'%'||#{suggestions}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{suggestions}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{suggestions},'%')</if>
-			</if>
 			<if test="reporter != null and reporter != ''">
 				AND a.reporter LIKE 
 					<if test="dbName == 'oracle'">'%'||#{reporter}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{reporter}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{reporter},'%')</if>
 			</if>
-			<if test="reporterOffice != null and reporterOffice.id != null and reporterOffice.id != ''">
-				AND a.reporter_office = #{reporterOffice.id}
-			</if>
-			<if test="reportingTime != null and reportingTime != ''">
-				AND a.reporting_time = #{reportingTime}
-			</if>
-			<if test="closer != null and closer.id != null and closer.id != ''">
-				AND a.closer = #{closer.id}
-			</if>
-			<if test="closeTime != null and closeTime != ''">
-				AND a.close_time = #{closeTime}
-			</if>
 			<if test="state != null and state != ''">
 				AND a.state = #{state}
+			</if>
+			<if test="territorialOffice != null and territorialOffice.id != null and territorialOffice.id != ''">
+				AND a.territorial_office_id = #{territorialOffice.id}
 			</if>
 		</where>
 		<choose>
@@ -135,7 +110,6 @@
 	<insert id="insert">
 		INSERT INTO actcard(
 			id,
-			territorial_office_id,
 			unsafe_acts,
 			measure,
 			safety_acts,
@@ -153,20 +127,22 @@
 			update_date,
 			remarks,
 			del_flag,
+			territorial_office_id,
 			report_pic,
 			rectification_pic,
 			actcard_unsafe_event_id,
 			actcard_unsafe_event_child_id,
-			solver
+			solver,
+			user_id,
+			office_id
 		) VALUES (
 			#{id},
-			#{territorialOffice.id},
 			#{unsafeActs},
 			#{measure},
 			#{safetyActs},
 			#{suggestions},
 			#{reporter},
-			#{reporterOffice.id},
+			#{reporterOffice},
 			#{reportingTime},
 			#{rectificationResult},
 			#{closer.id},
@@ -178,23 +154,25 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
+			#{territorialOffice.id},
 			#{reportPic},
 			#{rectificationPic},
-			#{actcardUnsafeEvent.id},
-			#{actcardUnsafeEventChild.id},
-			#{solver.id}
+			#{actcardUnsafeEventId},
+			#{actcardUnsafeEventChildId},
+			#{solver.id},
+			#{user.id},
+			#{office.id}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE actcard SET 	
-			territorial_office_id = #{territorialOffice.id},
 			unsafe_acts = #{unsafeActs},
 			measure = #{measure},
 			safety_acts = #{safetyActs},
 			suggestions = #{suggestions},
 			reporter = #{reporter},
-			reporter_office = #{reporterOffice.id},
+			reporter_office = #{reporterOffice},
 			reporting_time = #{reportingTime},
 			rectification_result = #{rectificationResult},
 			closer = #{closer.id},
@@ -203,11 +181,14 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
+			territorial_office_id = #{territorialOffice.id},
 			report_pic = #{reportPic},
 			rectification_pic = #{rectificationPic},
-			actcard_unsafe_event_id = #{actcardUnsafeEvent.id},
-			actcard_unsafe_event_child_id = #{actcardUnsafeEventChild.id},
-			solver = #{solver.id}
+			actcard_unsafe_event_id = #{actcardUnsafeEventId},
+			actcard_unsafe_event_child_id = #{actcardUnsafeEventChildId},
+			solver = #{solver.id},
+			user_id = #{user.id},
+			office_id = #{office.id}
 		WHERE id = #{id}
 	</update>
 	

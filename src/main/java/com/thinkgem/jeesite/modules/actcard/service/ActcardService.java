@@ -5,28 +5,22 @@ package com.thinkgem.jeesite.modules.actcard.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
-import com.thinkgem.jeesite.modules.act.service.ActTaskService;
-import com.thinkgem.jeesite.modules.act.utils.ActUtils;
 import com.thinkgem.jeesite.modules.actcard.dao.ActcardDao;
 
 /**
  * ACT卡Service
  * @author 岳鑫
- * @version 2017-05-23
+ * @version 2017-05-30
  */
 @Service
 @Transactional(readOnly = true)
 public class ActcardService extends CrudService<ActcardDao, Actcard> {
-	
-	@Autowired
-	private ActTaskService actTaskService;
 
 	public Actcard get(String id) {
 		return super.get(id);
@@ -43,7 +37,6 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 	@Transactional(readOnly = false)
 	public void save(Actcard actcard) {
 		super.save(actcard);
-		//actTaskService.startProcess(ActUtils.PD_ACTCARD_PROCESS[0], ActUtils.PD_ACTCARD_PROCESS[1], actcard.getId(), "ACT卡");
 	}
 	
 	@Transactional(readOnly = false)

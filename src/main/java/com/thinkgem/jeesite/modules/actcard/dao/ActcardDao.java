@@ -10,7 +10,7 @@ import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
 /**
  * ACT卡DAO接口
  * @author 岳鑫
- * @version 2017-05-23
+ * @version 2017-05-30
  */
 @MyBatisDao
 public interface ActcardDao extends CrudDao<Actcard> {
