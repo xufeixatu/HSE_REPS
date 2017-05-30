@@ -51,7 +51,7 @@
 			<label class="control-label">不安全事件分类：</label>
 			<div class="controls">
 				<sys:treeselect id="actcardUnsafeEvent" name="actcardUnsafeEvent.id" value="${actcard.actcardUnsafeEvent.id}" labelName="actcardUnsafeEvent.name" labelValue="${actcard.actcardUnsafeEvent.name}" 
-							title="不安全事件分类" url="/actcard/actcard/treeData" cssClass="required recipient" cssStyle="width:150px" 
+							title="不安全事件分类" url="/actcard/actcardUnsafeEvent/treeData" cssClass="required recipient" cssStyle="width:150px" 
 							allowClear="true" notAllowSelectParent="true" smallBtn="false" checked="true" />
 			</div>
 		</div>
@@ -59,7 +59,7 @@
 			<label class="control-label">不安全事件分类子类：</label>
 			<div class="controls">
 				<sys:treeselect id="actcardUnsafeEventChild" name="actcardUnsafeEventChild.id" value="${actcard.actcardUnsafeEventChild.id}" labelName="actcardUnsafeEventChild.name" labelValue="${actcard.actcardUnsafeEventChild.name}" 
-							title="不安全事件分类子类" url="/actcard/actcard/treeData" cssClass="required recipient" cssStyle="width:150px" 
+							title="不安全事件分类子类" url="/actcard/actcardUnsafeEvent/treeData" cssClass="required recipient" cssStyle="width:150px" 
 							allowClear="true" notAllowSelectParent="true" smallBtn="false" checked="true" />
 			</div>
 		</div>
