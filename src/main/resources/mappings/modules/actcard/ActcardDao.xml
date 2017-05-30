@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.actcard.dao.ActcardDao">
+    
+	<sql id="actcardColumns">
+		a.id AS "id",
+		a.territorial_office_id AS "territorialOffice.id",
+		a.proc_ins_id AS "act.id", 
+		a.unsafe_acts AS "unsafeActs",
+		a.measure AS "measure",
+		a.safety_acts AS "safetyActs",
+		a.suggestions AS "suggestions",
+		a.reporter AS "reporter",
+		a.reporter_office AS "reporterOffice.id",
+		a.reporting_time AS "reportingTime",
+		a.rectification_result AS "rectificationResult",
+		a.closer AS "closer.id",
+		a.close_time AS "closeTime",
+		a.state AS "state",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.report_pic AS "reportPic",
+		a.rectification_pic AS "rectificationPic",
+		a.actcard_unsafe_event_id AS "actcardUnsafeEvent.id",
+		a.actcard_unsafe_event_child_id AS "actcardUnsafeEventChild.id",
+		aue1.name AS "actcardUnsafeEvent.name",
+		aue2.name AS "actcardUnsafeEventChild.name",
+		a.solver AS "solver.id",
+		o2.name AS "territorialOffice.name",
+		o8.name AS "reporterOffice.name",
+		u24.name AS "solver.name"
+	</sql>
+	
+	<sql id="actcardJoins">
+		LEFT JOIN sys_office o2 ON o2.id = a.territorial_office_id
+		LEFT JOIN sys_office o8 ON o8.id = a.reporter_office
+		LEFT JOIN sys_user u24 ON u24.id = a.solver
+		LEFT JOIN actcard_unsafe_event aue1 ON aue1.id = a.actcard_unsafe_event_id
+		LEFT JOIN actcard_unsafe_event aue2 ON aue2.id = a.actcard_unsafe_event_child_id
+	</sql>
+    
+	<select id="get" resultType="Actcard">
+		SELECT 
+			<include refid="actcardColumns"/>
+		FROM actcard a
+		<include refid="actcardJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Actcard">
+		SELECT 
+			<include refid="actcardColumns"/>
+		FROM actcard a
+		<include refid="actcardJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="unsafeActs != null and unsafeActs != ''">
+				AND a.unsafe_acts LIKE 
+					<if test="dbName == 'oracle'">'%'||#{unsafeActs}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{unsafeActs}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{unsafeActs},'%')</if>
+			</if>
+			<if test="measure != null and measure != ''">
+				AND a.measure LIKE 
+					<if test="dbName == 'oracle'">'%'||#{measure}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{measure}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{measure},'%')</if>
+			</if>
+			<if test="safetyActs != null and safetyActs != ''">
+				AND a.safety_acts LIKE 
+					<if test="dbName == 'oracle'">'%'||#{safetyActs}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{safetyActs}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{safetyActs},'%')</if>
+			</if>
+			<if test="suggestions != null and suggestions != ''">
+				AND a.suggestions LIKE 
+					<if test="dbName == 'oracle'">'%'||#{suggestions}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{suggestions}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{suggestions},'%')</if>
+			</if>
+			<if test="reporter != null and reporter != ''">
+				AND a.reporter LIKE 
+					<if test="dbName == 'oracle'">'%'||#{reporter}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{reporter}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{reporter},'%')</if>
+			</if>
+			<if test="reporterOffice != null and reporterOffice.id != null and reporterOffice.id != ''">
+				AND a.reporter_office = #{reporterOffice.id}
+			</if>
+			<if test="reportingTime != null and reportingTime != ''">
+				AND a.reporting_time = #{reportingTime}
+			</if>
+			<if test="closer != null and closer.id != null and closer.id != ''">
+				AND a.closer = #{closer.id}
+			</if>
+			<if test="closeTime != null and closeTime != ''">
+				AND a.close_time = #{closeTime}
+			</if>
+			<if test="state != null and state != ''">
+				AND a.state = #{state}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Actcard">
+		SELECT 
+			<include refid="actcardColumns"/>
+		FROM actcard a
+		<include refid="actcardJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO actcard(
+			id,
+			territorial_office_id,
+			unsafe_acts,
+			measure,
+			safety_acts,
+			suggestions,
+			reporter,
+			reporter_office,
+			reporting_time,
+			rectification_result,
+			closer,
+			close_time,
+			state,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			report_pic,
+			rectification_pic,
+			actcard_unsafe_event_id,
+			actcard_unsafe_event_child_id,
+			solver
+		) VALUES (
+			#{id},
+			#{territorialOffice.id},
+			#{unsafeActs},
+			#{measure},
+			#{safetyActs},
+			#{suggestions},
+			#{reporter},
+			#{reporterOffice.id},
+			#{reportingTime},
+			#{rectificationResult},
+			#{closer.id},
+			#{closeTime},
+			#{state},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{reportPic},
+			#{rectificationPic},
+			#{actcardUnsafeEvent.id},
+			#{actcardUnsafeEventChild.id},
+			#{solver.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE actcard SET 	
+			territorial_office_id = #{territorialOffice.id},
+			unsafe_acts = #{unsafeActs},
+			measure = #{measure},
+			safety_acts = #{safetyActs},
+			suggestions = #{suggestions},
+			reporter = #{reporter},
+			reporter_office = #{reporterOffice.id},
+			reporting_time = #{reportingTime},
+			rectification_result = #{rectificationResult},
+			closer = #{closer.id},
+			close_time = #{closeTime},
+			state = #{state},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			report_pic = #{reportPic},
+			rectification_pic = #{rectificationPic},
+			actcard_unsafe_event_id = #{actcardUnsafeEvent.id},
+			actcard_unsafe_event_child_id = #{actcardUnsafeEventChild.id},
+			solver = #{solver.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE actcard SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

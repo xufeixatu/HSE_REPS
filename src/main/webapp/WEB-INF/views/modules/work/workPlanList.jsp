@@ -135,7 +135,7 @@
 				<div></div>
 				<div>
 					<div>${workPlan.workDesc}</div>
-					<div>责任单位：${fns:getOfficeNameById(workPlan.depts.id)}    
+					<div>责任单位：<%-- ${fns:getOfficeNameById(workPlan.depts.id)}  --%>   
 					          责任人：${workPlan.personLiable }  
 						 完成时间：<c:choose>
 						  			<c:when test="${not empty workPlan.startTime}"><fmt:formatDate value="${workPlan.startTime}" pattern="yyyy年MM月dd日"/>-<fmt:formatDate value="${workPlan.planedFinishTime}" pattern="yyyy年MM月dd日"/></c:when>
@@ -162,7 +162,6 @@
 		class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-<<<<<<< HEAD
 				<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
 				<th>工作项</th>
 				<th>级别</th>
@@ -175,26 +174,15 @@
 				<shiro:hasPermission name="work:workPlan:edit">
 					<th>操作</th>
 				</shiro:hasPermission>
-=======
-				<th>备注</th>
-				<th>更新时间</th>
-				<th>标题</th>
-				<shiro:hasPermission name="work:workPlan:edit"><th>操作</th></shiro:hasPermission>
->>>>>>> refs/remotes/origin/master
+
 			</tr>
 		</thead>
 		<tbody id="treeTableList"></tbody>
 	</table>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
-<<<<<<< HEAD
-=======
-			<td><a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">
-				{{row.remarks}}
-			</a></td>
->>>>>>> refs/remotes/origin/master
+
 			<td>
-<<<<<<< HEAD
 				{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
 			<td>{{#edit}}
@@ -207,12 +195,8 @@
 						{{row.name}}
 					</a>
 				{{/no_edit}}
-=======
-				{{row.updateDate}}
->>>>>>> refs/remotes/origin/master
 			</td>
 			<td>
-<<<<<<< HEAD
 				{{row.workLevel}}
 			</td>
 			{{#frequency}}
@@ -247,9 +231,6 @@
 			{{/show_dept}}
 			<td>
 				{{row.personLiable.name}}
-=======
-				{{row.name}}
->>>>>>> refs/remotes/origin/master
 			</td>
 			<shiro:hasPermission name="work:workPlan:edit"><td>
 			{{#edit}}
