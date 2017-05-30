@@ -66,6 +66,8 @@ import com.thinkgem.jeesite.modules.act.service.creator.SimpleRuntimeActivityDef
 import com.thinkgem.jeesite.modules.act.utils.ActUtils;
 import com.thinkgem.jeesite.modules.act.utils.ProcessDefCache;
 import com.thinkgem.jeesite.modules.act.utils.ProcessDefUtils;
+import com.thinkgem.jeesite.modules.actcard.dao.ActcardDao;
+import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
@@ -78,6 +80,8 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 @Transactional(readOnly = true)
 public class ActTaskService extends BaseService {
 
+	@Autowired
+	private ActcardDao actcardDao;
 	@Autowired
 	private ActDao actDao;
 
@@ -166,6 +170,17 @@ public class ActTaskService extends BaseService {
 //			e.setProcIns(runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult());
 //			e.setProcExecUrl(ActUtils.getProcExeUrl(task.getProcessDefinitionId()));
 			e.setStatus("claim");
+			
+			String processInstanceId = task.getProcessInstanceId();
+			ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).active().singleResult();
+			String businessKey = processInstance.getBusinessKey();
+			Actcard actcard = actcardDao.get(businessKey.replaceAll("actcard:", ""));
+			System.out.println(businessKey);
+			if(null != actcard && null != actcard.getOffice() && !actcard.getOffice().equals(UserUtils.getUser().getOffice())){
+				System.out.println(actcard.getOffice());
+				continue;
+			}
+			
 			result.add(e);
 		}
 		return result;

@@ -152,6 +152,7 @@ public class Actcard extends DataEntity<Actcard> {
 		this.state = state;
 	}
 	
+	@NotNull(message="属地单位不能为空")
 	public Office getTerritorialOffice() {
 		return territorialOffice;
 	}
