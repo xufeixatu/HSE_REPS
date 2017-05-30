@@ -4,7 +4,7 @@
     
 	<sql id="questionColumns">
 		a.id AS "id",
-		a.check_item_id AS "checkItemId",
+		a.check_item_check_id AS "checkItemCheckId",
 		a.create_date AS "createDate",
 		a.question_desc AS "questionDesc",
 		a.check_type_class_id AS "checkTypeClassId",
@@ -95,7 +95,7 @@
 	<insert id="insert">
 		INSERT INTO question(
 			id,
-			check_item_id,
+			check_item_check_id,
 			create_date,
 			question_desc,
 			check_type_class_id,
@@ -129,7 +129,7 @@
 			checked_office_id
 		) VALUES (
 			#{id},
-			#{checkItemId},
+			#{checkItemCheckId},
 			#{createDate},
 			#{questionDesc},
 			#{checkTypeClass.id},

@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/check/question/">上报问题列表</a></li>
+		<%-- <li><a href="${ctx}/check/question/">上报问题列表</a></li> --%>
 		<li class="active"><a href="${ctx}/check/question/form?id=${question.id}">检查问题<shiro:hasPermission name="check:question:edit">${not empty question.id?'修改':'上报'}</shiro:hasPermission><shiro:lacksPermission name="check:question:edit">查看</shiro:lacksPermission></a></li>
 	</ul>
 	<form:form id="inputForm" modelAttribute="question" action="${ctx}/check/question/save" method="post" class="form-horizontal">
@@ -38,9 +38,9 @@
 		<form:hidden path="act.procInsId"/>
 		<form:hidden path="act.procDefId"/>
 		<form:hidden id="flag" path="act.flag"/>
+		<form:hidden path="checkItemCheckId"/>
 		<sys:message content="${message}"/>
 		<fieldset>
-			<legend>问题上报</legend>
 			<table class="table-form">
 				<tr>
 					<td class="tit">问题描述</td>
@@ -116,7 +116,6 @@
 					<input id="btnSubmit2" class="btn btn-inverse" type="submit" value="销毁流程" onclick="$('#flag').val('no')"/>&nbsp;
 				</c:if>
 			</shiro:hasPermission>
-			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 		<c:if test="${not empty question.id}">
 			<act:histoicFlow procInsId="${question.procInsId}" />
