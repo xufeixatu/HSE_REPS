@@ -23,6 +23,10 @@ public class ActcardReview extends DataEntity<ActcardReview> {
 	public ActcardReview(String id){
 		super(id);
 	}
+	
+	public ActcardReview(Actcard actcard) {
+		this.actcard = actcard;
+	}
 
 	public String getContent() {
 		return content;

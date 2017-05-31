@@ -5,9 +5,14 @@ package com.thinkgem.jeesite.modules.actcard.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.common.collect.Lists;
+
 import javax.validation.constraints.NotNull;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.train.entity.record.TrainRecordCourseware;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -40,6 +45,8 @@ public class Actcard extends DataEntity<Actcard> {
 	private User solver;		// 整改人
 	private User user;		// user_id
 	private Office office;		// office_id
+	private List<ActcardReview> actcardReviewList = Lists.newArrayList();		// 评阅列表
+	
 	
 	public Actcard() {
 		super();
@@ -217,6 +224,14 @@ public class Actcard extends DataEntity<Actcard> {
 
 	public void setOffice(Office office) {
 		this.office = office;
+	}
+
+	public List<ActcardReview> getActcardReviewList() {
+		return actcardReviewList;
+	}
+
+	public void setActcardReviewList(List<ActcardReview> actcardReviewList) {
+		this.actcardReviewList = actcardReviewList;
 	}
 	
 }
