@@ -198,7 +198,7 @@
 				</div>
 			</div>
 		</c:if>
-		<c:if test='${actcard.state == "等待关闭"}'>
+		<c:if test='${actcard.state == "关闭问题"}'>
 			<div class="control-group">
 				<label class="control-label">质量安全环保科回复：</label>
 				<div class="controls">

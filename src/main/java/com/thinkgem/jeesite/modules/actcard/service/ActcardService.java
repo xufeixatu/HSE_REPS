@@ -18,6 +18,7 @@ import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
 import com.thinkgem.jeesite.modules.actcard.entity.ActcardReview;
+import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
 import com.thinkgem.jeesite.modules.train.entity.record.TrainRecordCourseware;
 import com.thinkgem.jeesite.modules.train.entity.record.TrainRecordScore;
 import com.thinkgem.jeesite.modules.act.service.ActTaskService;
@@ -41,6 +42,8 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 	
 	@Autowired
 	private ActcardReviewDao actcardReviewDao;
+	@Autowired
+	private OfficeDao officeDao;
 	
 	public Actcard get(String id) {
 		Actcard actcard = super.get(id);
@@ -75,10 +78,14 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 			actTaskService.taskForward( actcard.getProcInsId(), null);
 			
 		}else if(actcard.getState().equals("反馈整改情况") && null != actcard.getRectificationResult()){
-			actcard.setState("验证整改情况");
+			actcard.setState("关闭问题");
 			actTaskService.getProcessEngine().getTaskService().setAssignee(actcard.getAct().getTaskId(), null);
-			
 			actTaskService.taskForward( actcard.getProcInsId(), null);
+		}
+		else if(actcard.getState().equals("关闭问题") && null != actcard.getCloserReport()){
+			actcard.setState("已关闭");
+			actTaskService.taskForward( actcard.getProcInsId(), null);
+			//actTaskService.taskForward( actcard.getProcInsId(), null);
 		}
 		super.save(actcard);
 		if (isnew){//这是一个新的流程
