@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.train.entity.record.TrainRecordCourseware;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
-
+import com.thinkgem.jeesite.common.persistence.ActEntity;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
@@ -22,10 +22,9 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
  * @author 岳鑫
  * @version 2017-05-30
  */
-public class Actcard extends DataEntity<Actcard> {
+public class Actcard extends ActEntity<Actcard> {
 	
 	private static final long serialVersionUID = 1L;
-	private String procInsId;		// 流程实例ID
 	private String unsafeActs;		// 不安全行为
 	private String measure;		// 解决措施
 	private String safetyActs;		// 安全行为
@@ -34,10 +33,15 @@ public class Actcard extends DataEntity<Actcard> {
 	private String reporterOffice;		// 填报人单位
 	private Date reportingTime;		// 填报时间
 	private String rectificationResult;		// 整改结果
+
 	private User closer;		// 关闭人
 	private Date closeTime;		// 关闭时间
-	private String state;		// 状态
+	private String closerReport;//质量安全环保科回复
+	
+	private String state;		// 状态(指定责任人、正在整改、等待关闭、已关闭)
 	private Office territorialOffice;		// 属地单位
+	private String territorialOfficeReport;//属地单位回复
+	
 	private String reportPic;		// 上报时图片
 	private String rectificationPic;		// 整改图片
 	private String actcardUnsafeEventId;		// 不安全分类
@@ -56,15 +60,6 @@ public class Actcard extends DataEntity<Actcard> {
 		super(id);
 	}
 
-	@Length(min=0, max=64, message="流程实例ID长度必须介于 0 和 64 之间")
-	public String getProcInsId() {
-		return procInsId;
-	}
-
-	public void setProcInsId(String procInsId) {
-		this.procInsId = procInsId;
-	}
-	
 	public String getUnsafeActs() {
 		return unsafeActs;
 	}
@@ -150,6 +145,14 @@ public class Actcard extends DataEntity<Actcard> {
 		this.closeTime = closeTime;
 	}
 	
+	public String getCloserReport() {
+		return closerReport;
+	}
+
+	public void setCloserReport(String closerReport) {
+		this.closerReport = closerReport;
+	}
+
 	@Length(min=0, max=255, message="状态长度必须介于 0 和 255 之间")
 	public String getState() {
 		return state;
@@ -168,6 +171,14 @@ public class Actcard extends DataEntity<Actcard> {
 		this.territorialOffice = territorialOffice;
 	}
 	
+	public String getTerritorialOfficeReport() {
+		return territorialOfficeReport;
+	}
+
+	public void setTerritorialOfficeReport(String territorialOfficeReport) {
+		this.territorialOfficeReport = territorialOfficeReport;
+	}
+
 	@Length(min=0, max=1000, message="上报时图片长度必须介于 0 和 1000 之间")
 	public String getReportPic() {
 		return reportPic;
@@ -233,5 +244,7 @@ public class Actcard extends DataEntity<Actcard> {
 	public void setActcardReviewList(List<ActcardReview> actcardReviewList) {
 		this.actcardReviewList = actcardReviewList;
 	}
+
+	
 	
 }

@@ -171,14 +171,22 @@ public class ActTaskService extends BaseService {
 //			e.setProcExecUrl(ActUtils.getProcExeUrl(task.getProcessDefinitionId()));
 			e.setStatus("claim");
 			
+			
 			String processInstanceId = task.getProcessInstanceId();
 			ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).active().singleResult();
 			String businessKey = processInstance.getBusinessKey();
-			Actcard actcard = actcardDao.get(businessKey.replaceAll("actcard:", ""));
 			System.out.println(businessKey);
-			if(null != actcard && null != actcard.getOffice() && !actcard.getOffice().equals(UserUtils.getUser().getOffice())){
-				System.out.println(actcard.getOffice());
-				continue;
+			Actcard actcard = actcardDao.get(businessKey.replaceAll("actcard:", ""));
+			if(null != actcard){//说明为actcard任务
+				if( null == actcard.getUser() || !UserUtils.getUser().getId().equals(actcard.getUser().getId())){//如果人员相等则为本人的任务
+					System.out.println(actcard.getSolver());
+					if( null != actcard.getOffice() && !actcard.getOffice().equals(UserUtils.getUser().getOffice())){
+						System.out.println(actcard.getOffice());
+						continue;
+					}
+				}else{
+					
+				}
 			}
 			
 			result.add(e);

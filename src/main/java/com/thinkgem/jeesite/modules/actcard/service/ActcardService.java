@@ -5,6 +5,10 @@ package com.thinkgem.jeesite.modules.actcard.service;
 
 import java.util.List;
 
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.identity.User;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +36,8 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 
 	@Autowired
 	private ActTaskService actTaskService;
+	@Autowired
+	private RuntimeService runtimeService;
 	
 	@Autowired
 	private ActcardReviewDao actcardReviewDao;
@@ -52,25 +58,33 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 	
 	@Transactional(readOnly = false)
 	public void save(Actcard actcard) {
-		super.save(actcard);
-		for (ActcardReview actcardReview : actcard.getActcardReviewList()){
-			if (actcardReview.getId() == null){
-				continue;
+		Actcard tempactcard = actcard;
+		boolean isnew = actcard.getIsNewRecord();
+		if (isnew){//这是一个新的流程
+			if(null == actcard.getState() || "".equals(actcard.getState())){
+				actcard.setState("指定责任人");
+				actcard.setOffice(actcard.getTerritorialOffice());
 			}
-			if (ActcardReview.DEL_FLAG_NORMAL.equals(actcardReview.getDelFlag())){
-				if (StringUtils.isBlank(actcardReview.getId())){
-					actcardReview.setActcard(actcard);
-					actcardReview.preInsert();
-					actcardReviewDao.insert(actcardReview);
-				}else{
-					actcardReview.preUpdate();
-					actcardReviewDao.update(actcardReview);
-				}
-			}else{
-				actcardReviewDao.delete(actcardReview);
-			}
+		}else if(actcard.getState().equals("指定责任人") && null != actcard.getSolver() ){
+			actcard.setState("反馈整改情况");
+			actcard.setUser(actcard.getSolver());
+			actcard.setUser(actcard.getSolver());
+			
+			System.out.println(actcard.getAct().getTaskId());
+			actTaskService.getProcessEngine().getTaskService().setAssignee(actcard.getAct().getTaskId(), actcard.getSolver().getId());
+			actTaskService.taskForward( actcard.getProcInsId(), null);
+			
+		}else if(actcard.getState().equals("反馈整改情况") && null != actcard.getRectificationResult()){
+			actcard.setState("验证整改情况");
+			actTaskService.getProcessEngine().getTaskService().setAssignee(actcard.getAct().getTaskId(), null);
+			
+			actTaskService.taskForward( actcard.getProcInsId(), null);
 		}
-		actTaskService.startProcess(ActUtils.PD_ACTCARD_PROCESS[0], ActUtils.PD_ACTCARD_PROCESS[1], actcard.getId(), "ACT卡");
+		super.save(actcard);
+		if (isnew){//这是一个新的流程
+			System.out.println("这是一个新的流程");
+			actTaskService.startProcess(ActUtils.PD_ACTCARD_PROCESS[0], ActUtils.PD_ACTCARD_PROCESS[1], actcard.getId(), "ACT卡");
+		}
 	}
 	
 	@Transactional(readOnly = false)
