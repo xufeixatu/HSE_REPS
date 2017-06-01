@@ -105,10 +105,8 @@
 			del_flag,
 			unused_1,
 			unused_2,
-			unused_3,
-			courseId,
-			attachName,
-			attachId
+			unused_3
+			
 		) VALUES (
 			#{id},
 			#{trainPlanExtraId},
@@ -130,10 +128,8 @@
 			#{delFlag},
 			#{unused1},
 			#{unused2},
-			#{unused3},
-			#{courseId},
-			#{attachName},
-			#{attachId}
+			#{unused3}
+			
 		)
 	</insert>
 	

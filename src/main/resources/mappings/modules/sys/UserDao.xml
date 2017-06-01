@@ -223,6 +223,23 @@
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 	
+	<!-- 查询一个部门内的全部用户 -->
+	<select id="findUserByOfficeId2" resultType="User">
+		SELECT
+			*
+		FROM sys_user a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} and
+		      a.office_id = #{deptId}
+	</select>
+	
+	<!-- 查询一个公司的全部用户 -->
+	<select id="findAllUser" resultType="User">
+		SELECT
+			*
+		FROM sys_user a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
 	<!-- 插入用户 -->
 	<insert id="insert">
 		INSERT INTO sys_user(
