@@ -18,9 +18,6 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==0}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid_04" sourceRef="problem_report_modify" targetRef="sid_audit_02"></sequenceFlow>
-    <sequenceFlow id="sid_05" name="重新上报" sourceRef="sid_audit_02" targetRef="problem_report_audit">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==0}]]></conditionExpression>
-    </sequenceFlow>
     <sequenceFlow id="sid_02" sourceRef="problem_report_audit" targetRef="sid_audit_01"></sequenceFlow>
     <sequenceFlow id="sid_07" sourceRef="sid_audit_01" targetRef="problem_report_audit01">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==1}]]></conditionExpression>
@@ -28,15 +25,18 @@
     <sequenceFlow id="sid_12" name="整改通过" sourceRef="sid_audit_03" targetRef="problem_report_end">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==1}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="sid_06" name="关闭问题" sourceRef="sid_audit_02" targetRef="problem_report_end">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==0}]]></conditionExpression>
-    </sequenceFlow>
     <sequenceFlow id="sid_11" name="整改不通过" sourceRef="sid_audit_03" targetRef="problem_report_audit02">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==0}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid_10" sourceRef="problem_report_audit03" targetRef="sid_audit_03"></sequenceFlow>
     <sequenceFlow id="sid_09" sourceRef="problem_report_audit02" targetRef="problem_report_audit03"></sequenceFlow>
     <sequenceFlow id="sid_08" sourceRef="problem_report_audit01" targetRef="problem_report_audit02"></sequenceFlow>
+    <sequenceFlow id="sid_06" name="关闭问题" sourceRef="sid_audit_02" targetRef="problem_report_end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid_05" name="重新上报" sourceRef="sid_audit_02" targetRef="problem_report_audit">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==1}]]></conditionExpression>
+    </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_problem_report">
     <bpmndi:BPMNPlane bpmnElement="problem_report" id="BPMNPlane_problem_report">
@@ -79,59 +79,59 @@
         <omgdi:waypoint x="490.0" y="51.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_07" id="BPMNEdge_sid_07">
-        <omgdi:waypoint x="304.58715596330273" y="51.41284403669725"></omgdi:waypoint>
-        <omgdi:waypoint x="345.0" y="51.22831050228311"></omgdi:waypoint>
+        <omgdi:waypoint x="305.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="345.0" y="51.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_06" id="BPMNEdge_sid_06">
-        <omgdi:waypoint x="304.5" y="260.5"></omgdi:waypoint>
-        <omgdi:waypoint x="899.0" y="260.5"></omgdi:waypoint>
+        <omgdi:waypoint x="305.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="899.0" y="260.0"></omgdi:waypoint>
         <omgdi:waypoint x="899.0" y="65.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="0.0" width="0.0" x="304.5" y="260.5"></omgdc:Bounds>
+          <omgdc:Bounds height="0.0" width="0.0" x="305.0" y="260.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_05" id="BPMNEdge_sid_05">
-        <omgdi:waypoint x="265.5" y="260.5"></omgdi:waypoint>
-        <omgdi:waypoint x="170.0" y="260.5"></omgdi:waypoint>
+        <omgdi:waypoint x="265.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="170.0" y="260.0"></omgdi:waypoint>
         <omgdi:waypoint x="170.0" y="91.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="0.0" width="0.0" x="265.5" y="260.5"></omgdc:Bounds>
+          <omgdc:Bounds height="0.0" width="0.0" x="265.0" y="260.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_04" id="BPMNEdge_sid_04">
-        <omgdi:waypoint x="285.19900497512435" y="200.0"></omgdi:waypoint>
-        <omgdi:waypoint x="285.4" y="240.4"></omgdi:waypoint>
+        <omgdi:waypoint x="285.0" y="200.0"></omgdi:waypoint>
+        <omgdi:waypoint x="285.0" y="240.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_03" id="BPMNEdge_sid_03">
-        <omgdi:waypoint x="285.41203703703707" y="70.58796296296296"></omgdi:waypoint>
-        <omgdi:waypoint x="285.184331797235" y="120.0"></omgdi:waypoint>
+        <omgdi:waypoint x="285.0" y="71.0"></omgdi:waypoint>
+        <omgdi:waypoint x="285.0" y="120.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_11" id="BPMNEdge_sid_11">
-        <omgdi:waypoint x="800.5" y="70.5"></omgdi:waypoint>
-        <omgdi:waypoint x="800.5" y="149.0"></omgdi:waypoint>
+        <omgdi:waypoint x="800.0" y="71.0"></omgdi:waypoint>
+        <omgdi:waypoint x="800.0" y="149.0"></omgdi:waypoint>
         <omgdi:waypoint x="540.0" y="149.0"></omgdi:waypoint>
         <omgdi:waypoint x="540.0" y="91.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="0.0" width="0.0" x="800.5" y="70.5"></omgdc:Bounds>
+          <omgdc:Bounds height="0.0" width="0.0" x="800.0" y="71.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_02" id="BPMNEdge_sid_02">
-        <omgdi:waypoint x="220.0" y="51.21645021645021"></omgdi:waypoint>
-        <omgdi:waypoint x="265.4130434782609" y="51.413043478260875"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="265.0" y="51.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_10" id="BPMNEdge_sid_10">
-        <omgdi:waypoint x="735.0" y="51.21645021645021"></omgdi:waypoint>
-        <omgdi:waypoint x="780.4130434782609" y="51.413043478260875"></omgdi:waypoint>
+        <omgdi:waypoint x="735.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="51.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_01" id="BPMNEdge_sid_01">
         <omgdi:waypoint x="75.0" y="51.0"></omgdi:waypoint>
         <omgdi:waypoint x="120.0" y="51.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid_12" id="BPMNEdge_sid_12">
-        <omgdi:waypoint x="819.5969387755102" y="51.4030612244898"></omgdi:waypoint>
-        <omgdi:waypoint x="885.0001803670469" y="51.07106507427895"></omgdi:waypoint>
+        <omgdi:waypoint x="820.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="885.0" y="51.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="0.0" width="0.0" x="819.5969387755102" y="51.4030612244898"></omgdc:Bounds>
+          <omgdc:Bounds height="0.0" width="0.0" x="820.0" y="51.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

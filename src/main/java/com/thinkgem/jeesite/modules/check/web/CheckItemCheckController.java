@@ -61,7 +61,6 @@ public class CheckItemCheckController extends BaseController {
 		return "modules/check/checkItemCheckForm";
 	}
 
-	@RequiresPermissions("check:checkItemCheck:edit")
 	@RequestMapping(value = "save")
 	public String save(CheckItemCheck checkItemCheck, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, checkItemCheck)){

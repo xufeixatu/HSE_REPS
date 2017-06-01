@@ -45,7 +45,7 @@ CREATE TABLE `check_item_check` (
   `id` varchar(64) NOT NULL,
   `inspct_id` varchar(64) DEFAULT NULL COMMENT '检查记录表id',
   `check_item_id` varchar(64) DEFAULT NULL,
-  `check_result` varchar(64) DEFAULT NULL,
+  `check_result` varchar(64) DEFAULT NULL COMMENT '检查是否通过，1：通过，0：不通过',
   `check_time` datetime DEFAULT NULL,
   `report_status` varchar(64) DEFAULT NULL COMMENT '该检查项的检查结果是上报还是未上报。',
   `craete_by` varchar(64) DEFAULT NULL,
@@ -150,7 +150,7 @@ CREATE TABLE `inspct` (
 DROP TABLE IF EXISTS `question`;
 CREATE TABLE `question` (
   `id` varchar(64) NOT NULL,
-  `check_item_id` varchar(64) DEFAULT NULL,
+  `check_item_check_id` varchar(64) DEFAULT NULL,
   `create_date` datetime DEFAULT NULL,
   `question_desc` varchar(255) DEFAULT NULL,
   `check_type_class_id` varchar(255) DEFAULT NULL,

@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.risk.web;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +21,7 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
 import com.thinkgem.jeesite.modules.risk.entity.RiskAccess;
 import com.thinkgem.jeesite.modules.risk.entity.RiskSaferesult;
 import com.thinkgem.jeesite.modules.risk.service.RiskAccessService;
@@ -46,6 +49,26 @@ public class RiskAccessController extends BaseController {
 		}
 		return entity;
 	}
+	/**
+	 * 导出风险控制的模板
+	 * @param riskAccess
+	 * @param request
+	 * @param response
+	 * @param model
+	 */
+	@RequiresPermissions("risk:riskAccess:view")
+	@RequestMapping(value = "exceltemplate")
+	public void exceltemplate(RiskAccess riskAccess,HttpServletRequest request, HttpServletResponse response, Model model) {
+		ExportExcel exportExcel=new ExportExcel("风险控制模板", RiskAccess.class, 2);
+		try {
+			exportExcel.write(response, "风险控制模板.xlsx");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
 	
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = {"list", ""})

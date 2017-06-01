@@ -19,7 +19,7 @@ public class CheckItemCheck extends DataEntity<CheckItemCheck> {
 	private static final long serialVersionUID = 1L;
 	private String inspctId;		// 检查记录id
 	private String checkItemId;		// 检查项id
-	private String checkResult;		// 检查结果
+	private String checkResult = "-1";		// 检查结果
 	private Date checkTime;		// 检查时间
 	private String reportStatus;		// 上报状态
 	private String craeteBy;		// craete_by

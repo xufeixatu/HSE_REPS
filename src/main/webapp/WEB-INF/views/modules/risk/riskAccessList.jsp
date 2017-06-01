@@ -17,8 +17,11 @@
 	</script>
 </head>
 <body>
+
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/risk/riskAccess/">健康安全辨识汇总</a></li>
+		<li ><a href="${ctx}/risk/riskAccess/exceltemplate">模板下载</a></li>
+		<li ><a href="#">健康安全导入</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>

@@ -7,8 +7,9 @@ import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 //import org.hibernate.validator.constraints.Length(min=0, max=255, message="风险名称;
-
+import com.thinkgem.jeesite.common.annotation.FieldName;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 
 /**
  * riskEntity
@@ -140,7 +141,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
+	@ExcelField(title="场所、设备")
 	@Length(min=0, max=255, message="场所、设备长度必须介于 0 和 255 之间")
 	public String getPlaceDevice() {
 		return placeDevice;
@@ -158,7 +159,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setRiskName(String riskName) {
 		this.riskName = riskName;
 	}
-	
+	@ExcelField(title="作业活动名称/活动、物料、产品")
 	@Length(min=0, max=255, message="作业活动名称/活动、物料、产品、服务长度必须介于 0 和 255 之间")
 	public String getWorkName() {
 		return workName;
@@ -167,7 +168,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setWorkName(String workName) {
 		this.workName = workName;
 	}
-	
+	@ExcelField(title="危害因素")
 	@Length(min=0, max=255, message="危害因素（危险源）长度必须介于 0 和 255 之间")
 	public String getRiskFactors() {
 		return riskFactors;

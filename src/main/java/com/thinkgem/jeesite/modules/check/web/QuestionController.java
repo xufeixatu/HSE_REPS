@@ -124,9 +124,9 @@ public class QuestionController extends BaseController {
 		}
 		questionService.save(question);
 		addMessage(redirectAttributes, "提交审批'" + question.getCurrentAuditUser().getName() + "'成功");
-		return "redirect:" + adminPath + "/act/task/todo/";
+		//return "redirect:" + adminPath + "/act/task/todo/";
 //		addMessage(redirectAttributes, "保存监督检查问题上报成功");
-//		return "redirect:"+Global.getAdminPath()+"/check/question/?repage";
+		return "redirect:"+Global.getAdminPath()+"/check/question/?repage";
 	}
 	
 	@RequiresPermissions("check:question:edit")

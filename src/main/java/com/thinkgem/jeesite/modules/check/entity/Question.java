@@ -20,7 +20,7 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 public class Question extends ActEntity<Question> {
 	
 	private static final long serialVersionUID = 1L;
-	private String checkItemId;		// check_item_id
+	private String checkItemCheckId;		// check_item_check_id
 	private String questionDesc;		// 问题描述
 	private String checkTypeClassId;	// 检查类别
 	private String questionLevelId;		// 问题级别
@@ -116,15 +116,14 @@ public class Question extends ActEntity<Question> {
 		super(id);
 	}
 
-	@Length(min=0, max=64, message="check_item_id长度必须介于 0 和 64 之间")
-	public String getCheckItemId() {
-		return checkItemId;
+	public String getCheckItemCheckId() {
+		return checkItemCheckId;
 	}
 
-	public void setCheckItemId(String checkItemId) {
-		this.checkItemId = checkItemId;
+	public void setCheckItemCheckId(String checkItemCheckId) {
+		this.checkItemCheckId = checkItemCheckId;
 	}
-	
+
 	@Length(min=0, max=255, message="问题描述长度必须介于 0 和 255 之间")
 	public String getQuestionDesc() {
 		return questionDesc;

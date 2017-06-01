@@ -82,6 +82,9 @@ public class QuestionService extends CrudService<QuestionDao, Question> {
 		// 重新编辑申请		
 		else{
 			question.preUpdate();
+			if("no".equals(question.getAct().getFlag())) {
+				question.setStateId("5");
+			}
 			dao.update(question);
 			question.getAct().setComment(("yes".equals(question.getAct().getFlag())?"[重新上报] ":"[关闭问题] ")+question.getAct().getComment());
 			// 完成流程任务
