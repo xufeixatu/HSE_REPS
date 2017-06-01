@@ -46,7 +46,7 @@
 	</ul>
 	<form:form id="searchForm" modelAttribute="courseCatalog" action="${ctx}/course_catalog/courseCatalog/" method="post" class="breadcrumb form-search">
 		<ul class="ul-form">
-			<li><label>课件类别名称：</label>
+			<li><label>课件类别：</label>
 				<form:input path="catalogName" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
