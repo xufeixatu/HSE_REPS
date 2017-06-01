@@ -20,6 +20,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
+import com.thinkgem.jeesite.modules.actcard.entity.ActcardReview;
 import com.thinkgem.jeesite.modules.actcard.service.ActcardService;
 
 /**
@@ -59,6 +60,23 @@ public class ActcardController extends BaseController {
 	public String form(Actcard actcard, Model model) {
 		model.addAttribute("actcard", actcard);
 		return "modules/actcard/actcardForm";
+	}
+	
+	
+	
+	@RequiresPermissions("actcard:actcard:view")
+	@RequestMapping(value = "view")
+	public String view(Actcard actcard, Model model) {
+		model.addAttribute("actcard", actcard);
+		return "modules/actcard/actcardView";
+	}
+	
+	@RequiresPermissions("actcard:actcard:view")
+	@RequestMapping(value = "view")
+	public String review(ActcardReview actcardReview, Model model) {
+		actcardService.review(actcardService.get(actcardReview.getActcard().getId()), actcardReview);
+		model.addAttribute("actcard", actcardService.get(actcardReview.getActcard().getId()));
+		return "modules/actcard/actcardView";
 	}
 
 	@RequiresPermissions("actcard:actcard:edit")

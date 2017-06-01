@@ -100,6 +100,7 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 		actcardReviewDao.insert(actcardReview);
 	}
 	
+	
 	@Transactional(readOnly = false)
 	public void delete(Actcard actcard) {
 		super.delete(actcard);
