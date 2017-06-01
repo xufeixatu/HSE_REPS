@@ -91,6 +91,15 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 		}
 	}
 	
+	
+	@Transactional(readOnly = false)
+	public void review(Actcard actcard,ActcardReview actcardReview) {
+		actcard.getActcardReviewList().add(actcardReview);
+		actcardReview.setActcard(actcard);
+		actcardReview.preInsert();
+		actcardReviewDao.insert(actcardReview);
+	}
+	
 	@Transactional(readOnly = false)
 	public void delete(Actcard actcard) {
 		super.delete(actcard);
