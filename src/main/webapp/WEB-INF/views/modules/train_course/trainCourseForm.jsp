@@ -41,6 +41,13 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">课件类别:</label>
+			<div class="controls">
+				<sys:treeselect id="type" name="type.id" value="${trainCourse.id}" labelName="trainCourse.type" labelValue="${trainCourse.courseTypeId}"
+					title="课件类别" url="/course_catalog/courseCatalog/treeData" extId="${trainCourse.id}" cssClass="" allowClear="true"/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">课件名称：</label>
 			<div class="controls">
 				<form:input path="courseName" htmlEscape="false" maxlength="255" class="input-xlarge required"/>
