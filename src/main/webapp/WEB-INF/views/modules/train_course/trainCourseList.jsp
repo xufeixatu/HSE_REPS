@@ -18,7 +18,7 @@
         	return false;
         }
 		
-		$(document).ready(function() {
+	 	$(document).ready(function() {
 			 var getprogressvalue = $("#progress-value").attr('value');
 		     $("#progress-value").css("width",getprogressvalue+"%");
 		});
@@ -60,7 +60,6 @@
 	                }  
 	            } 
 
-		
 	</script>
 	<style type="text/css">
 		a{
@@ -145,6 +144,7 @@
 	</style>
 </head>
 <body>
+
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/train_course/trainCourse/">培训课件查看列表</a></li>
 		<shiro:hasPermission name="train_course:trainCourse:edit"><li><a href="${ctx}/train_course/trainCourse/form">上传培训课件</a></li></shiro:hasPermission>
@@ -156,12 +156,14 @@
 			<li><label>课件名称：</label>
 				<form:input path="courseName" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
+			<li><label>课件类型：</label>
+				<form:input path="courseTypeId" htmlEscape="false" maxlength="255" class="input-medium"/>
+			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
 	<sys:message content="${message}"/>
-
 	<div id="container">
   		<div id="row">
   			<c:forEach items="${page.list}" var="trainCourse">
@@ -183,10 +185,10 @@
 							<table id="tblMain"><tr><td>★</td><td>★</td><td>★</td><td>★</td><td>★</td></tr>
 		    				</table>
 						</span>
-<%-- 		  		 		<span class="course-text-operate">
+		  		 		<span class="course-text-operate">
 		  		 			<a class="course-text-operate-modify" href="${ctx}/train_course/trainCourse/form?id=${trainCourse.id}">修改</a>
 		  		 			<a class="course-text-operate-delete" href="${ctx}/train_course/trainCourse/delete?id=${trainCourse.id}" onclick="return confirmx('确认要删除该培训课件上传与查看吗？', this.href)">删除</a>
-		  		 		</span> --%>
+		  		 		</span>
 		  		 	</div>
 		  		 	
 		  		 </div>
