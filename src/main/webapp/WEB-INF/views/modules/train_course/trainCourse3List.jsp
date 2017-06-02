@@ -119,6 +119,7 @@
 	</ol>
 	<!-- 播放视频 -->
 			<div id="a1"></div>
+			<div id="nowTime"></div>
 			<script type="text/javascript" src="http://localhost:8080/HSE/ckplayer/ckplayer.js" charset="utf-8"></script>
 			<script type="text/javascript">
 				var flashvars={
@@ -148,6 +149,20 @@
 			        CKobject.getObjectById('ckplayer_totaltime').removeListener('totaltime','totaltimeHandler');
 				alert('totaltime:');
 				} */
+
+				  function loadedHandler(){
+				    if(CKobject.getObjectById('ckplayer_a1').getType()){
+				      CKobject.getObjectById('ckplayer_a1').addListener('time',timeHandler);
+				    }
+				    else{
+				      CKobject.getObjectById('ckplayer_a1').addListener('time','timeHandler');
+				    }
+				  }
+				  function timeHandler(t){
+				    if(t>-1){
+				        CKobject._K_('nowTime').innerHTML='当前播放的时间点是(此值精确到小数点后三位，即毫秒)：'+t;
+				    }
+				  }
 			</script>
 
 <!-- 			<div id="a1"></div>

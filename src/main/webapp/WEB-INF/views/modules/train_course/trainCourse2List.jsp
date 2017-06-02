@@ -35,7 +35,7 @@
 	                     td.onmouseover = TdOnclick;
 	                         td.style.cursor = "pointer";
 	                             }  
-	                         }  
+	                          }  
 	     function TdOnclick() {
 	          var tds = GetTds();
 	          var index = ArrayIndexOf(tds, this);   
@@ -50,8 +50,11 @@
 	               $(td).css("color","#FFFFFF");
 	                }  
 	            } 
-
-	    
+/*  		function decode(text){
+ 			text = decodeURI(text);
+ 			return text;
+ 		}
+	     */
 	</script>
 	<style>
 		body{
@@ -360,11 +363,20 @@
 							<c:forTokens items="${testString}" delims="|" var="videoHref">
 								<li>
 									<!-- 字符串截取获取最后的文件名，并显示 -->
-									<c:set var="videoHrefString" value="${videoHref}"/>													
+									<c:set var="videoHrefString" value="${videoHref}"/>			
+																		
 									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
 									<c:forEach items="${videoId}" var="videoName" begin="8" >
-										${videoName}
-									</c:forEach>									
+									
+<!-- 									<script type="text/javascript">
+
+										/* videoName = decodeURI(videoName); */
+										
+									</script> -->
+									${videoName}
+<%--  									<%=java.net.URLDecoder.decode("%E7%9F%A5%E8%AF%86%E5%B0%B1%E6%98%AF%E5%8A%9B%E9%87%8F.mp4","UTF-8")%>
+									<%=java.net.URLDecoder.decode("videoName","UTF-8")%> --%>
+									</c:forEach>								
 								</li>
 							</c:forTokens>				        		
 		        		</ol>
@@ -381,7 +393,6 @@
 							<span class="chapetr-item">
 							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
 							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
-								<%-- <a href="http://localhost:8080${videoHref}"> --%>
 							
 									<!-- 字符串截取获取最后的文件名，并显示 -->
 									<c:set var="videoHrefString" value="${videoHref}"/>													
@@ -398,91 +409,6 @@
 		    </div>
 		</div>
 	</div>
-<!--  
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/train_course/trainCourse2/">培训课件查看列表</a></li>
-		<shiro:hasPermission name="train_course:trainCourse2:edit"><li><a href="${ctx}/train_course/trainCourse2/form">上传培训课件</a></li></shiro:hasPermission>
-	</ul>
-	<form:form id="searchForm" modelAttribute="trainCourse" action="${ctx}/train_course/trainCourse2/" method="post" class="breadcrumb form-search">
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<ul class="ul-form">
-			<li><label>课件名称：</label>
-				<form:input path="courseName" htmlEscape="false" maxlength="255" class="input-medium"/>
-			</li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
-			<li class="clearfix"></li>
-		</ul>
-	</form:form>
-	<sys:message content="${message}"/>
-	
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
-		<thead>
-			<tr>
-				<th>封面</th>
-				<th>课件名称</th>
-				<th>课件描述</th>
-				<th>课件时长</th>
-				<th>课件学习人数</th>
-				<th>课件评价得分</th>
-				<th>上传人</th>
-				<th>上传时间</th>
-				<shiro:hasPermission name="train_course:trainCourse2:edit"><th>操作</th></shiro:hasPermission>
-			</tr>
-		</thead>
-		<tbody>
-		<c:forEach items="${page.list}" var="trainCourse">
-			<tr>
-				<td>
-					<a href = "${ctx}/train_course/trainCourse2/list?id=${trainCourse.id}">
-						<img src="http://localhost:8080${trainCourse.coverId}" width = "150" height = "100">
-					</a>
-				</td>
-				<td>
-					${trainCourse.courseName}
-				</td>
-				<td>
-					${trainCourse.courseDec}
-				</td>
-				<td>
-					${trainCourse.courseTime}
-				</td>
-				<td>
-					${trainCourse.courseCount}
-				</td>
-				<td>
-					${trainCourse.courseGrade}
-				</td>
-				<td>
-					${trainCourse.uploadBy}
-				</td>
-				<td>
-					<fmt:formatDate value="${trainCourse.uploadTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<shiro:hasPermission name="train_course:trainCourse2:edit"><td>
-    				<a href="${ctx}/train_course/trainCourse2form?id=${trainCourse.id}">修改</a>
-					<a href="${ctx}/train_course/trainCourse2/delete?id=${trainCourse.id}" onclick="return confirmx('确认要删除该培训课件上传与查看吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>
-	-->
 	<div class="pagination">${page}</div>
 </body>
 </html>
