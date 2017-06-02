@@ -42,7 +42,7 @@ CREATE TABLE `course_catelog` (
   `create_by` varchar(64) default NULL,
   `create_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `update_by` varchar(64) default NULL,
-  `update_date` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `update_date` timestamp NOT NULL default '2017-06-01 00:00:00',
   `remarks` varchar(255) default NULL,
   `del_flag` char(1) default NULL,
   PRIMARY KEY  (`id`)
@@ -111,7 +111,7 @@ CREATE TABLE `train_course` (
   `create_by` varchar(64) default NULL,
   `create_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `update_by` varchar(64) default NULL,
-  `update_date` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `update_date` timestamp NOT NULL default '2017-06-01 00:00:00',
   `remarks` varchar(255) default NULL,
   `del_flag` char(1) default NULL,
   `unused_1` varchar(64) default NULL,
