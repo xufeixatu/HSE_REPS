@@ -42,6 +42,7 @@ CREATE TABLE `course_catelog` (
   `create_by` varchar(64) default NULL,
   `create_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `update_by` varchar(64) default NULL,
+<<<<<<< HEAD
   `update_date` timestamp NOT NULL default '0000-00-00 00:00:00',
   `remarks` varchar(255) default NULL,
   `del_flag` char(1) default NULL,
@@ -112,6 +113,78 @@ CREATE TABLE `train_course` (
   `create_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `update_by` varchar(64) default NULL,
   `update_date` timestamp NOT NULL default '0000-00-00 00:00:00',
+=======
+  `update_date` timestamp NOT NULL default '2017-06-01 00:00:00',
+  `remarks` varchar(255) default NULL,
+  `del_flag` char(1) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of course_catelog
+-- ----------------------------
+INSERT INTO `course_catelog` VALUES ('35643970543a4ccf92689d060a4c0599', 'wesadf', 'asdfd', '试试而非的善意', '1', '2017-05-17 21:45:48', '1', '2017-05-17 21:45:48', '阿三打', '0');
+
+-- ----------------------------
+-- Table structure for course_review
+-- ----------------------------
+DROP TABLE IF EXISTS `course_review`;
+CREATE TABLE `course_review` (
+  `id` varchar(64) NOT NULL,
+  `course_id` varchar(64) default NULL,
+  `assess_by_id` varchar(64) default NULL,
+  `assess_opinion` varchar(255) default NULL,
+  `assess_grade` varchar(64) default NULL,
+  `unused_1` varchar(64) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of course_review
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for course_study
+-- ----------------------------
+DROP TABLE IF EXISTS `course_study`;
+CREATE TABLE `course_study` (
+  `id` varchar(64) NOT NULL,
+  `course_id` varchar(64) default NULL,
+  `train_by_id` varchar(64) default NULL,
+  `study_status` varchar(64) default NULL,
+  `study_time` datetime default NULL,
+  `study_date` datetime default NULL,
+  `study_start_time` datetime default NULL,
+  `study_end_time` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of course_study
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for train_course
+-- ----------------------------
+DROP TABLE IF EXISTS `train_course`;
+CREATE TABLE `train_course` (
+  `id` varchar(64) NOT NULL,
+  `train_plan_extra_id` varchar(64) default NULL,
+  `course_type_id` varchar(64) default NULL,
+  `cover_id` varchar(255) default NULL,
+  `doc_id` varchar(500) default NULL,
+  `course_name` varchar(255) default NULL,
+  `course_dec` varchar(255) default NULL,
+  `course_time` varchar(64) default NULL,
+  `course_count` varchar(64) default '0',
+  `course_grade` varchar(64) default '0',
+  `upload_by` varchar(64) default NULL,
+  `upload_time` datetime default NULL,
+  `create_by` varchar(64) default NULL,
+  `create_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `update_by` varchar(64) default NULL,
+  `update_date` timestamp NOT NULL default '2017-06-01 00:00:00',
+>>>>>>> branch 'HSE_RUNNABLE' of https://github.com/xufeixatu/HSE_REPS.git
   `remarks` varchar(255) default NULL,
   `del_flag` char(1) default NULL,
   `unused_1` varchar(64) default NULL,
