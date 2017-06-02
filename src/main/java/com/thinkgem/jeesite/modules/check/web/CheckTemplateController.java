@@ -5,14 +5,10 @@ package com.thinkgem.jeesite.modules.check.web;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -22,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
@@ -84,8 +82,8 @@ public class CheckTemplateController extends BaseController {
 	public String save(HttpServletRequest request, HttpServletResponse response, 
 			RedirectAttributes redirectAttributes) {
 		
-        response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
+		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+		MultipartFile uploadFile = multipartRequest.getFile("attachFile"); 
 		String filePath = null;
 		CheckTemplate checkTemplate = new CheckTemplate();
    	 	try {
@@ -97,39 +95,12 @@ public class CheckTemplateController extends BaseController {
    	 		if(!uploadDirFile.exists()){
    	 			uploadDirFile.mkdirs();
    	 		}
-   	 		//获得磁盘文件条目工厂
-   	 		DiskFileItemFactory factory = new DiskFileItemFactory();
-   	 		//设置暂时存放文件的存储室，这个存储室可以和最终存储文件的文件夹不同。因为当文件很大的话会占用过多内存所以设置存储室。
-   	 		factory.setRepository(uploadDirFile);
-   	 		//设置缓存的大小，当上传文件的容量超过缓存时，就放到暂时存储室。
-   	 		factory.setSizeThreshold(10*1024*1024);
-   	 		//上传处理工具类
-   	 		ServletFileUpload upload = new ServletFileUpload(factory);
-   	 		upload.setHeaderEncoding("UTF-8");
-   	 		//调用 parseRequest（request）方法  获得上传文件 FileItem 的集合list 可实现多文件上传。
-   	 		List<FileItem> list = (List<FileItem>)upload.parseRequest(request);
-   	 		for(FileItem item:list){
-	           	 if(item.isFormField()){
-	        		 String fieldName = item.getFieldName();
-	        		 if("templateName".equals(fieldName)) {
-	        			 String templateName = item.getString("UTF-8");
-	        			 checkTemplate.setTemplateName(templateName);
-	        		 }else if("templateDesc".equals(fieldName)){
-	        			 String templateDesc = item.getString("UTF-8");
-	        			 checkTemplate.setTemplateDesc(templateDesc);
-	        		 }else if("templateDesc".equals(fieldName)){
-	        			 String templateDesc = item.getString("UTF-8");
-	        			 checkTemplate.setTemplateDesc(templateDesc);
-	        		 }else if("usedStatus".equals(fieldName)){
-	        			 String usedStatus = item.getString("UTF-8");
-	        			 checkTemplate.setUsedStatus(usedStatus);
-	        		 }
-	        	 }else{
-   	 				filePath = uploadDirStr + item.getName().substring(0, item.getName().lastIndexOf(".")) 
-   	 					+ "(" + currentTime + ").xls";
-   	 				item.write(new File(filePath));
-   	 			}
-   	 		}
+   	 		String fileName = uploadFile.getOriginalFilename();
+			filePath = uploadDirStr + fileName.substring(0, fileName.lastIndexOf(".")) + "(" + currentTime + ").xls";
+ 			uploadFile.transferTo(new File(filePath));
+			checkTemplate.setTemplateName(multipartRequest.getParameter("templateName"));
+			checkTemplate.setTemplateDesc(multipartRequest.getParameter("templateDesc"));	
+			checkTemplate.setUsedStatus(multipartRequest.getParameter("usedStatus"));			 
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "上传检查模板失败！");
 			return "";
