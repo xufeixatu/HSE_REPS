@@ -30,7 +30,7 @@
 		<li><a href="${ctx}/actcard/actcard/">ACT卡列表</a></li>
 		<li class="active"><a href="${ctx}/actcard/actcard/form?id=${actcard.id}">ACT卡<shiro:hasPermission name="actcard:actcard:edit">${not empty actcard.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="actcard:actcard:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="actcard" action="${ctx}/actcard/actcard/save" method="post" class="form-horizontal">
+	<form:form id="inputForm"  modelAttribute="actcard" action="${ctx}/actcard/actcard/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<form:hidden path="act.taskId"/>
 		<form:hidden path="act.taskName"/>
@@ -89,21 +89,66 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
-		<c:if test='${actcard.state == "反馈整改情况"}'>
-			<div class="control-group">
-				<label class="control-label">整改结果：</label>
-				<div class="controls">
-					<form:textarea path="rectificationResult" htmlEscape="false" rows="4" class="input-xxlarge "/>
-				</div>
+		<div class="control-group">
+			<label class="control-label">不安全分类：</label>
+			<div class="controls">
+				<form:input path="actcardUnsafeEventId" htmlEscape="false" class="input-xlarge "/>
 			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">不安全分类子类：</label>
+			<div class="controls">
+				<form:input path="actcardUnsafeEventChildId" htmlEscape="false" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">属地单位：</label>
+			<div class="controls">
+				<sys:treeselect id="territorialOffice" name="territorialOffice.id" value="${actcard.territorialOffice.id}" labelName="territorialOffice.name" labelValue="${actcard.territorialOffice.name}"
+					title="部门" url="/sys/office/treeData?type=2" cssClass="required" allowClear="true" notAllowSelectParent="true"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">上报时图片：</label>
+			<div class="controls">
+				<form:hidden id="reportPic" path="reportPic" htmlEscape="false" maxlength="1000" class="input-xlarge"/>
+				<sys:ckfinder input="reportPic" type="files" uploadPath="/actcard/actcard" selectMultiple="true"/>
+			</div>
+		</div>
+		
+		
+		<div class="control-group">
+			<label class="control-label">整改人：</label>
+			<div class="controls">
+				<sys:treeselect id="solver" name="solver.id" value="${actcard.solver.id}" labelName="solver.name" labelValue="${actcard.solver.name}"
+					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label class="control-label">整改结果：</label>
+			<div class="controls">
+				<form:textarea path="rectificationResult" htmlEscape="false" rows="4" class="input-xxlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">整改图片：</label>
+			<div class="controls">
+				<form:hidden id="rectificationPic" path="rectificationPic" htmlEscape="false" maxlength="1000" class="input-xlarge"/>
+				<sys:ckfinder input="rectificationPic" type="files" uploadPath="/actcard/actcard" selectMultiple="true"/>
+			</div>
+		</div>
+		
+		<c:if test='${actcard.state == "关闭问题"}'>
 			<div class="control-group">
-				<label class="control-label">整改图片：</label>
+				<label class="control-label">质量安全环保科回复：</label>
 				<div class="controls">
-					<form:hidden id="rectificationPic" path="rectificationPic" htmlEscape="false" maxlength="1000" class="input-xlarge"/>
-					<sys:ckfinder input="rectificationPic" type="files" uploadPath="/actcard/actcard" selectMultiple="true"/>
+					<form:textarea path="closerReport" htmlEscape="false" rows="4" class="input-xxlarge "/>
 				</div>
 			</div>
 		</c:if>
+		
 		<!-- 
 		<div class="control-group">
 			<label class="control-label">关闭人：</label>
@@ -162,50 +207,9 @@
 			</div>
 		</div>
 		 -->
-		<div class="control-group">
-			<label class="control-label">属地单位：</label>
-			<div class="controls">
-				<sys:treeselect id="territorialOffice" name="territorialOffice.id" value="${actcard.territorialOffice.id}" labelName="territorialOffice.name" labelValue="${actcard.territorialOffice.name}"
-					title="部门" url="/sys/office/treeData?type=2" cssClass="required" allowClear="true" notAllowSelectParent="true"/>
-				<span class="help-inline"><font color="red">*</font> </span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">上报时图片：</label>
-			<div class="controls">
-				<form:hidden id="reportPic" path="reportPic" htmlEscape="false" maxlength="1000" class="input-xlarge"/>
-				<sys:ckfinder input="reportPic" type="files" uploadPath="/actcard/actcard" selectMultiple="true"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">不安全分类：</label>
-			<div class="controls">
-				<form:input path="actcardUnsafeEventId" htmlEscape="false" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">不安全分类子类：</label>
-			<div class="controls">
-				<form:input path="actcardUnsafeEventChildId" htmlEscape="false" class="input-xlarge "/>
-			</div>
-		</div>
-		<c:if test='${actcard.state == "指定责任人"}'>
-			<div class="control-group">
-				<label class="control-label">整改人：</label>
-				<div class="controls">
-					<sys:treeselect id="solver" name="solver.id" value="${actcard.solver.id}" labelName="solver.name" labelValue="${actcard.solver.name}"
-						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
-				</div>
-			</div>
-		</c:if>
-		<c:if test='${actcard.state == "关闭问题"}'>
-			<div class="control-group">
-				<label class="control-label">质量安全环保科回复：</label>
-				<div class="controls">
-					<form:textarea path="closerReport" htmlEscape="false" rows="4" class="input-xxlarge "/>
-				</div>
-			</div>
-		</c:if>
+		
+		
+		
 		<!-- 
 		<div class="control-group">
 			<label class="control-label">user_id：</label>
@@ -245,9 +249,121 @@
 					title="部门" url="/sys/office/treeData?type=2" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 		-->
 		<div class="form-actions">
-			<shiro:hasPermission name="actcard:actcard:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasPermission name="actcard:actcard:edit"><input id="btnSubmit"  onclick="return submitColtrol();" class="btn btn-primary"  type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
+	<script type="text/javascript">
+	function readonlyStart(){
+		//开始只读
+		readonlybyid("unsafeActs");
+		readonlybyid("measure");
+		readonlybyid("safetyActs");
+		readonlybyid("suggestions");
+		readonlybyid("reporter");
+		readonlybyid("reporterOffice");
+		readonlybyid("reportingTime");
+		$("[name='reportingTime']").attr("disabled","disabled");
+		readonlybyid("actcardUnsafeEventId");
+		readonlybyid("actcardUnsafeEventChildId");
+		readonlybyid("territorialOfficeName");
+		readonlybyid("reportPicPreview");
+		$("#reportPicPreview").parent().children("a").remove();//有待检查
+	}
+	function readonlyAssign(){
+		//指定责任人只读
+		readonlybyid("solverName");
+	}
+	function hideAssign(){
+		$("#solverName").parent().parent().parent().hide();
+	}
+	function readonlyFeedback(){
+		//反馈整改情况只读
+		readonlybyid("rectificationResult");
+		$("#rectificationPicPreview").parent().children("a").remove();//有待检查
+	}
+	function hideFeedback(){
+		hidegpdiv4id("rectificationResult");
+		hidegpdiv4id("rectificationPic");
+	}
+	$(function(){//加载完成后，修改界面
+		if("指定责任人" == "${actcard.state}"){
+			//alert("${actcard.state}");
+			readonlyStart();
+			addpxing("solverName");
+			hideFeedback();
+		}else if("反馈整改情况" == "${actcard.state}") {
+			//alert("${actcard.state}");
+			readonlyStart();
+			readonlyAssign();
+			addxing("rectificationResult");
+		}else if("关闭问题" == "${actcard.state}") {
+			//alert("${actcard.state}");
+			readonlyStart();
+			readonlyAssign();
+			readonlyFeedback();
+			addxing("closerReport");
+		}else{
+			//开始
+			hideAssign();//隐藏指定责任人
+			hideFeedback();
+		}
+	});
+	function submitColtrol(){
+		//指定责任人\反馈整改情况\关闭问题
+		if("指定责任人" == "${actcard.state}"){
+			if(idIsNull("solverName")){
+				addIsNotNullStr4idParent("solverName");
+				return false;
+			}
+		}else if("反馈整改情况" == "${actcard.state}") {
+			//alert("${actcard.state}");
+			if(idIsNull("rectificationResult")){
+				addIsNotNullStr4idParent("rectificationResult");
+				return false;
+			}
+		}else if("关闭问题" == "${actcard.state}") {
+			//alert("${actcard.state}");
+			if(idIsNull("closerReport")){
+				addIsNotNullStr4idParent("closerReport");
+				return false;
+			}
+		}else{
+			//开始
+			if(idIsNull("territorialOfficeName")){
+				addIsNotNullStr4idParent("territorialOfficeName");
+				return false;
+			}
+		}
+	}
+	function readonlybyid(id){
+		$("#"+id).attr("readonly","readonly");
+		$("#"+id).attr("disabled","disabled");
+	}
+	function addIsNotNullStr4idParent(id){//在父ID中添加"必填",并且注册onfocus事件用于去除必填
+		$("#"+id).off('focus').on('focus',function(){
+			//alert("cancelByid");
+			if($("#"+id).parent().children("label:last-child").length>0){
+				$("#"+id).parent().children("label:last-child").remove();
+			}
+			});
+		if(!($("#"+id).parent().children("label:last-child").length>0)){
+			$("#"+id).parent().append('<label class="error" for="reportingTime">必填信息</label>');
+		}
+	}
+	
+	function idIsNull(id){//判断ID是否为null
+		return ("" == $("#"+id).val() || null ==  $("#"+id).val() ||  undefined == $("#"+id).val());
+	}
+	function hidegpdiv4id(id){//通过ID隐藏div
+		$("#"+id).parent().parent().hide();
+	}
+	function addpxing(id){
+		$("#"+id).parent().parent().append('<span class="help-inline"><font color="red">*</font></span>');
+	} 
+	function addxing(id){
+		$("#"+id).parent().append('<span class="help-inline"><font color="red">*</font></span>');
+	} 
+	</script>
 </body>
 </html>

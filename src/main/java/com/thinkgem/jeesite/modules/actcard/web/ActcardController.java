@@ -72,7 +72,7 @@ public class ActcardController extends BaseController {
 	}
 	
 	@RequiresPermissions("actcard:actcard:view")
-	@RequestMapping(value = "view")
+	@RequestMapping(value = "review")
 	public String review(ActcardReview actcardReview, Model model) {
 		actcardService.review(actcardService.get(actcardReview.getActcard().getId()), actcardReview);
 		model.addAttribute("actcard", actcardService.get(actcardReview.getActcard().getId()));
