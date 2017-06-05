@@ -422,19 +422,19 @@
 						path="assessOpinion" htmlEscape="false" rows="4" maxlength="255"
 						class="input-xxlarge " />
 				</span> 
-				<div class="control-group">
+				<div hidden="hidden" class="control-group">
 				<label class="control-label">评论人：</label>
 				<div class="controls">
-					<form:input path="assessById" htmlEscape="false" maxlength="64" class="input-xlarge required" disabled = "true"/>
+					<form:input path="assessById" htmlEscape="false" maxlength="64" class="input-xlarge required" />
 						<span class="help-inline"><font color="red">*</font> </span>
 					</div>
 				</div>
-				<div class="control-group">
-				<label class="control-label">上传时间：</label>
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论时间：</label>
 				<div class="controls">
 					<input name="assessTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
 						value="<fmt:formatDate value="${courseReview.assessTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});" disabled="false"/>
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 						<span class="help-inline"><font color="red">*</font> </span>
 					</div>
 				</div>

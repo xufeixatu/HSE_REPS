@@ -85,8 +85,8 @@ public class CourseReviewController extends BaseController {
 		}
 		courseReviewService.save(courseReview);
 		addMessage(redirectAttributes, "保存课件评论成功");
-		return "redirect:"+Global.getAdminPath()+"/course_review/courseReview/?repage";
-/*		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse2/?repage";*/
+/*		return "redirect:"+Global.getAdminPath()+"/course_review/courseReview/?repage";*/
+		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse2/?repage";
 	}
 	
 	@RequiresPermissions("course_review:courseReview:edit")
