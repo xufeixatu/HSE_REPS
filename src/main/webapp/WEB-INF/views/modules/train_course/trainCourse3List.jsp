@@ -119,7 +119,8 @@
 	</ol>
 	<!-- 播放视频 -->
 			<div id="a1"></div>
-			<div id="nowTime"></div>
+<!-- 			<div id="nowTime"></div> -->
+			<div id="totalTime"></div>
 			<script type="text/javascript" src="http://localhost:8080/HSE/ckplayer/ckplayer.js" charset="utf-8"></script>
 			<script type="text/javascript">
 				var flashvars={
@@ -127,42 +128,38 @@
 					e:1,
 					i:'http://www.ckplayer.com/static/images/cqdw.jpg'
 					};
-				var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always'};//这里定义播放器的其它参数如背景色（跟flashvars中的b不同），是否支持全屏，是否支持交互
+				/* var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always'};//这里定义播放器的其它参数如背景色（跟flashvars中的b不同），是否支持全屏，是否支持交互 */
 				var video=['http://img.ksbbs.com/asset/Mon_1605/0ec8cc80112a2d6.mp4->video/mp4'];
 				var support=['all'];
 				CKobject.embedHTML5('a1','ckplayer_a1',1100,500,video,flashvars,support);
 				
-				/* test */
 				function loadedHandler(){
-					CKobject.getObjectById('ckplayer_a1').addListener('play','playHandler');
+				  if(CKobject.getObjectById('ckplayer_a1').getType()){
+				    CKobject.getObjectById('ckplayer_a1').addListener('play',playHandler);
+				    CKobject.getObjectById('ckplayer_a1').addListener('time',timeHandler);
+				    CKobject.getObjectById('ckplayer_a1').addListener('totaltime',totaltimeHandler);
+				  }
+				  else{
+				    CKobject.getObjectById('ckplayer_a1').addListener('play','playHandler');
+				    CKobject.getObjectById('ckplayer_a1').addListener('time','timeHandler');
+				  	CKobject.getObjectById('ckplayer_a1').addListener('totaltime','totaltimeHandler');
+				  }
 				}
+/* 				function timeHandler(t){
+				  if(t>-1){
+				      CKobject._K_('nowTime').innerHTML='当前播放的时间点是(此值精确到小数点后三位，即毫秒)：'+t;
+				  }
+				} */
 				function playHandler(){
-				        CKobject.getObjectById('ckplayer_a1').removeListener('play','playHandler');
+				      CKobject.getObjectById('ckplayer_a1').removeListener('play','playHandler');
 					alert('捕获到播放动作');
 				}
-				/* test end */
-			/* 	
-				function loadedHandler(){
-					CKobject.getObjectById('ckplayer_totaltime').addListener('totaltime','totaltimeHandler');
+				function totaltimeHander(t){
+					if(t>-1){
+						CKobject.getObjectById('ckplayer_a1').removeListener('totaltime','totaltimeHandler');
+						CKobject._K_('totalTime').innerHTML='当前播放的视频的总时长是(此值精确到小数点后三位，即毫秒)：'+t;
+					}
 				}
-				function totaltimeHandler(){
-			        CKobject.getObjectById('ckplayer_totaltime').removeListener('totaltime','totaltimeHandler');
-				alert('totaltime:');
-				} */
-
-				  function loadedHandler(){
-				    if(CKobject.getObjectById('ckplayer_a1').getType()){
-				      CKobject.getObjectById('ckplayer_a1').addListener('time',timeHandler);
-				    }
-				    else{
-				      CKobject.getObjectById('ckplayer_a1').addListener('time','timeHandler');
-				    }
-				  }
-				  function timeHandler(t){
-				    if(t>-1){
-				        CKobject._K_('nowTime').innerHTML='当前播放的时间点是(此值精确到小数点后三位，即毫秒)：'+t;
-				    }
-				  }
 			</script>
 
 <!-- 			<div id="a1"></div>
