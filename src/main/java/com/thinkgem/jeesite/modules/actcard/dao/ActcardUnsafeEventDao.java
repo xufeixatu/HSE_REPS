@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.actcard.dao;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.TreeDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafeEvent;
@@ -14,5 +16,7 @@ import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafeEvent;
  */
 @MyBatisDao
 public interface ActcardUnsafeEventDao extends TreeDao<ActcardUnsafeEvent> {
+
+	List<ActcardUnsafeEvent> findCheckedList(String actcardUnsafeEventId);
 	
 }

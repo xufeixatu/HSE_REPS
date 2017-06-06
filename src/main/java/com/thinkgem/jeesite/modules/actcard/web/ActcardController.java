@@ -69,6 +69,14 @@ public class ActcardController extends BaseController {
 		model.addAttribute("actcard", actcard);
 		//model.addAttribute("menuList", systemService.findAllMenu());
 		model.addAttribute("actcardUnsafeEventList", actcardUnsafeEventDao.findAllList(new ActcardUnsafeEvent()));
+		String unids = actcard.getActcardUnsafeEventId();
+		if(null!=unids && unids.length()>1){
+			unids = unids.substring(0, unids.length()-1);
+			unids = "'"+unids.replaceAll(",", "','")+"'";
+			model.addAttribute("actcardUnsafeEventList2", actcardUnsafeEventDao.findCheckedList(unids));
+			System.out.println(actcardUnsafeEventDao.findCheckedList(unids).size());
+		}
+		
 		return "modules/actcard/actcardForm";
 	}
 	

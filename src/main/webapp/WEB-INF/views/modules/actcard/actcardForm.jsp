@@ -45,6 +45,20 @@
 			var zNodes=[
 					<c:forEach items="${actcardUnsafeEventList}" var="actcardUnsafeEvent">{id:"${actcardUnsafeEvent.id}", pId:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.parent.id:0}", name:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.name:'不安全事件列表'}"},
 		            </c:forEach>];
+			if("指定责任人" == "${actcard.state}" || 
+					"反馈整改情况" == "${actcard.state}" ||
+					"关闭问题" == "${actcard.state}"){
+				
+				var setting = {view:{selectedMulti:false},
+						data:{simpleData:{enable:true}},callback:{beforeClick:function(id, node){
+							tree.checkNode(node, !node.checked, true, true);
+							return false;
+						}}};
+				// 用户-菜单
+				var zNodes=[
+						<c:forEach items="${actcardUnsafeEventList2}" var="actcardUnsafeEvent">{id:"${actcardUnsafeEvent.id}", pId:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.parent.id:0}", name:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.name:'不安全事件列表'}"},
+			            </c:forEach>];
+			}
 			// 初始化树结构
 			var tree = $.fn.zTree.init($("#actcardUnsafeEventTree"), setting, zNodes);
 			// 不选择父节点
