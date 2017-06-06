@@ -11,10 +11,12 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		user.name AS "createBy.name"
 	</sql>
 	
 	<sql id="actcardReviewJoins">
+		left join sys_user user on user.id  = a.create_by
 	</sql>
     
 	<select id="get" resultType="ActcardReview">
