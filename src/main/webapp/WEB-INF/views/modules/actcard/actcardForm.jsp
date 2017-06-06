@@ -4,11 +4,22 @@
 <head>
 	<title>ACT卡管理</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/treeview.jsp" %>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			//$("#name").focus();
 			$("#inputForm").validate({
 				submitHandler: function(form){
+					var ids = [], nodes = tree.getCheckedNodes(true);
+					for(var i=0; i<nodes.length; i++) {
+						ids.push(nodes[i].id);
+					}
+					$("#actcardUnsafeEventId").val(ids);
+					var ids2 = [], nodes2 = tree2.getCheckedNodes(true);
+					for(var i=0; i<nodes2.length; i++) {
+						ids2.push(nodes2[i].id);
+					}
+					$("#officeIds").val(ids2);
 					loading('正在提交，请稍等...');
 					form.submit();
 				},
@@ -22,7 +33,44 @@
 					}
 				}
 			});
+			
+			//开始树形复选
+			var setting = {check:{enable:true,nocheckInherit:true},view:{selectedMulti:false},
+					data:{simpleData:{enable:true}},callback:{beforeClick:function(id, node){
+						tree.checkNode(node, !node.checked, true, true);
+						return false;
+					}}};
+			
+			// 用户-菜单
+			var zNodes=[
+					<c:forEach items="${actcardUnsafeEventList}" var="actcardUnsafeEvent">{id:"${actcardUnsafeEvent.id}", pId:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.parent.id:0}", name:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.name:'不安全事件列表'}"},
+		            </c:forEach>];
+			// 初始化树结构
+			var tree = $.fn.zTree.init($("#actcardUnsafeEventTree"), setting, zNodes);
+			// 不选择父节点
+			tree.setting.check.chkboxType = { "Y" : "ps", "N" : "s" };
+			// 默认选择节点
+			var ids = "${actcard.actcardUnsafeEventId}".split(",");
+			for(var i=0; i<ids.length; i++) {
+				var node = tree.getNodeByParam("id", ids[i]);
+				
+				try{tree.checkNode(node, true, false);}catch(e){}
+			}
+			// 默认展开全部节点
+			tree.expandAll(true);
+			// 刷新（显示/隐藏）机构
+			//refreshOfficeTree();
+			//$("#dataScope").change(function(){
+			//	refreshOfficeTree();
+			//});
 		});
+		function refreshOfficeTree(){
+			if($("#dataScope").val()==9){
+				$("#officeTree").show();
+			}else{
+				$("#officeTree").hide();
+			}
+		}
 	</script>
 </head>
 <body>
@@ -89,16 +137,24 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group" style="display: none">
 			<label class="control-label">不安全分类：</label>
 			<div class="controls">
 				<form:input path="actcardUnsafeEventId" htmlEscape="false" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group" style="display: none">
 			<label class="control-label">不安全分类子类：</label>
 			<div class="controls">
 				<form:input path="actcardUnsafeEventChildId" htmlEscape="false" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">不安全分类:</label>
+			<div class="controls">
+				<div id="actcardUnsafeEventTree" class="ztree" style="margin-top:3px;float:left;"></div>
+				<form:hidden path="actcardUnsafeEventId"/>
+				
 			</div>
 		</div>
 		<div class="control-group">
@@ -269,6 +325,8 @@
 		readonlybyid("territorialOfficeName");
 		readonlybyid("reportPicPreview");
 		$("#reportPicPreview").parent().children("a").remove();//有待检查
+		$("#actcardUnsafeEventTree span").attr("disabled","disabled");
+		$("#actcardUnsafeEventTree span").attr("style","readonly:readonly");
 	}
 	function readonlyAssign(){
 		//指定责任人只读

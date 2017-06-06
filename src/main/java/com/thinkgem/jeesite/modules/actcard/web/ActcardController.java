@@ -19,9 +19,13 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.actcard.dao.ActcardUnsafeEventDao;
 import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
 import com.thinkgem.jeesite.modules.actcard.entity.ActcardReview;
+import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafeEvent;
 import com.thinkgem.jeesite.modules.actcard.service.ActcardService;
+import com.thinkgem.jeesite.modules.actcard.service.ActcardUnsafeEventService;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
 
 /**
  * ACT卡Controller
@@ -34,6 +38,10 @@ public class ActcardController extends BaseController {
 
 	@Autowired
 	private ActcardService actcardService;
+	@Autowired
+	private SystemService systemService;
+	@Autowired
+	private ActcardUnsafeEventDao actcardUnsafeEventDao;
 	
 	@ModelAttribute
 	public Actcard get(@RequestParam(required=false) String id) {
@@ -59,6 +67,8 @@ public class ActcardController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Actcard actcard, Model model) {
 		model.addAttribute("actcard", actcard);
+		//model.addAttribute("menuList", systemService.findAllMenu());
+		model.addAttribute("actcardUnsafeEventList", actcardUnsafeEventDao.findAllList(new ActcardUnsafeEvent()));
 		return "modules/actcard/actcardForm";
 	}
 	
