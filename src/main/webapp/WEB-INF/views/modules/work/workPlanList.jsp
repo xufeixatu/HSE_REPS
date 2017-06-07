@@ -243,7 +243,9 @@
 				<a href="${ctx}/work/workPlan/assigned_work?id={{row.id}}&planType=${planTypeDict.value}">分配任务</a>	
 			{{/pass}}
 			</td></shiro:hasPermission>
+			
 		</tr>
+		
 	</script>
 	
 </body>
