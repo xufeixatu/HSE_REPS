@@ -63,6 +63,34 @@
 			var tree = $.fn.zTree.init($("#actcardUnsafeEventTree"), setting, zNodes);
 			// 不选择父节点
 			tree.setting.check.chkboxType = { "Y" : "ps", "N" : "s" };
+			//
+			//
+			tree.setting.callback = {
+					onCheck : function(event, treeId, treeNode){
+						//alert(treeNode.tId + ", " + treeNode.name);
+						var treeObj = $.fn.zTree.getZTreeObj(treeId);
+						var nodes = treeObj.transformToArray(treeNode);
+						
+						json = eval(nodes)  
+						for(var i=0; i<json.length; i++)  
+						{  
+						   //alert(json[i].name+" " + json[i].tId)  
+						   if(json[i].name.indexOf("其他") > -1){
+							   //alert(json[i].name+" " + json[i].id)
+							   //alert($("#"+json[i].id+"_temp"));
+							   if(!$("#"+json[i].id+"_temp")[0]){
+								   $("#"+json[i].tId).append("<input type='text' mynode='mynode' id='"+json[i].id+"_temp'/>");
+							   }else{
+								   $("#"+json[i].id+"_temp").remove();
+							   }
+							   
+							   //var th = $.fn.zTree.getZTreeObj(json[i].id);
+							   //th.setEditable(true);
+						   }
+						}  
+					}
+			};
+			
 			// 默认选择节点
 			var ids = "${actcard.actcardUnsafeEventId}".split(",");
 			for(var i=0; i<ids.length; i++) {
@@ -78,13 +106,7 @@
 			//	refreshOfficeTree();
 			//});
 		});
-		function refreshOfficeTree(){
-			if($("#dataScope").val()==9){
-				$("#officeTree").show();
-			}else{
-				$("#officeTree").hide();
-			}
-		}
+		
 	</script>
 </head>
 <body>
@@ -379,6 +401,7 @@
 			//开始
 			hideAssign();//隐藏指定责任人
 			hideFeedback();
+			
 		}
 	});
 	function submitColtrol(){
@@ -401,11 +424,18 @@
 				return false;
 			}
 		}else{
+			//提交前将各种其他保存到不安全子分类中（actcardUnsafeEventChildId）
+			var str = '';
+			$("[mynode='mynode']").each(function(index,element){
+				str += $(this).val()+"-"+$(this).attr("id")+","
+			});
+			$("#actcardUnsafeEventChildId").val(str);
 			//开始
 			if(idIsNull("territorialOfficeName")){
 				addIsNotNullStr4idParent("territorialOfficeName");
 				return false;
 			}
+			
 		}
 	}
 	function readonlybyid(id){

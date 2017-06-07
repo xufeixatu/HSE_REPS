@@ -61,6 +61,7 @@ CREATE TABLE actcard_review
 
 CREATE TABLE actcard_unsafe
 (
+	id varchar(64) NOT NULL COMMENT '编号',
 	unsafe_event_id varchar(64) NOT NULL COMMENT '不安全事件编号',
 	actcard_id varchar(64) NOT NULL COMMENT 'actcard编号',
 	parent_id varchar(64) NOT NULL COMMENT '父级编号',
@@ -73,7 +74,7 @@ CREATE TABLE actcard_unsafe
 	update_date datetime NOT NULL COMMENT '更新时间',
 	remarks varchar(255) COMMENT '备注信息',
 	del_flag char(1) DEFAULT '0' NOT NULL COMMENT '删除标记',
-	PRIMARY KEY (unsafe_event_id, actcard_id)
+	PRIMARY KEY (id)
 ) COMMENT = 'actcard_unsafe';
 
 

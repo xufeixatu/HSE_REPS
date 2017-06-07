@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.actcard.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.activiti.engine.RuntimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
 import com.thinkgem.jeesite.modules.actcard.entity.ActcardReview;
+import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafe;
 import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
 import com.thinkgem.jeesite.modules.train.entity.record.TrainRecordCourseware;
 import com.thinkgem.jeesite.modules.train.entity.record.TrainRecordScore;
@@ -37,8 +39,13 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 	@Autowired
 	private RuntimeService runtimeService;
 	
+	
 	@Autowired
 	private ActcardReviewDao actcardReviewDao;
+	@Autowired
+	private ActcardUnsafeService actcardUnsafeService;
+	@Autowired
+	private ActcardUnsafeEventService actcardUnsafeEventService;
 	@Autowired
 	private OfficeDao officeDao;
 	
@@ -88,10 +95,62 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 		if (isnew){//这是一个新的流程
 			System.out.println("这是一个新的流程");
 			actTaskService.startProcess(ActUtils.PD_ACTCARD_PROCESS[0], ActUtils.PD_ACTCARD_PROCESS[1], actcard.getId(), "ACT卡");
+			
+			//新的流程时保存actcard_unsafe表
+			saveActunsafe(actcard);
 		}
 	}
 	
 	
+	private void saveActunsafe(Actcard actcard) {
+		
+		// TODO Auto-generated method stub
+		String unids = actcard.getActcardUnsafeEventId();
+		if(null!=unids && unids.length()>1){//将正常的actunsafe保存
+			String[] unidsArr = unids.split(",");
+			for (int i = 0; i < unidsArr.length; i++) {
+				if(null != unidsArr[i] && !"".equals(unidsArr[i])){
+					ActcardUnsafe actcardUnsafe = new ActcardUnsafe();
+					//actcardUnsafe.setId("ee");
+					actcardUnsafe.setActcardId(actcard.getId());
+					actcardUnsafe.setUnsafeEventId(unidsArr[i]);
+					ActcardUnsafe actcardUnsafe2 = new ActcardUnsafe();//父亲节点，这里的ID为下一个的parentID
+					if(null == actcardUnsafeEventService.get(unidsArr[i]).getParentId()){
+						actcardUnsafe2.setId("0");
+					}else{
+						actcardUnsafe2.setId(actcardUnsafeEventService.get(unidsArr[i]).getParentId());
+					}
+					
+					actcardUnsafe.setParent(actcardUnsafe2);
+					actcardUnsafe.setParentIds("0,");
+					actcardUnsafe.setSort(actcardUnsafeEventService.get(unidsArr[i]).getSort()+"");
+					actcardUnsafe.setName(actcardUnsafeEventService.get(unidsArr[i]).getName());
+					actcardUnsafeService.save(actcardUnsafe);
+				}
+			}
+		}
+		//保存其他
+		String unsafeOtherInfo = actcard.getActcardUnsafeEventChildId();
+		if(unsafeOtherInfo.length()>1){
+			String[] unsafeOtherInfos = unsafeOtherInfo.split(",");
+			for (int i = 0; i < unsafeOtherInfos.length; i++) {
+				ActcardUnsafe actcardUnsafe = new ActcardUnsafe();
+				//actcardUnsafe.setId("ee");
+				actcardUnsafe.setActcardId(actcard.getId());
+				actcardUnsafe.setUnsafeEventId(UUID.randomUUID().toString().replaceAll("-", ""));
+				ActcardUnsafe actcardUnsafe2 = new ActcardUnsafe();//父亲节点，这里的ID为下一个的parentID
+				actcardUnsafe2.setId(unsafeOtherInfos[i].split("-")[1].replaceAll("_temp", ""));
+				
+				actcardUnsafe.setParent(actcardUnsafe2);
+				actcardUnsafe.setParentIds("0,");
+				actcardUnsafe.setSort("30");
+				actcardUnsafe.setName(unsafeOtherInfos[i].split("-")[0]);
+				actcardUnsafeService.save(actcardUnsafe);
+			}
+		}
+		
+	}
+
 	@Transactional(readOnly = false)
 	public void review(Actcard actcard,ActcardReview actcardReview) {
 		actcard.getActcardReviewList().add(actcardReview);

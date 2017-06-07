@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.actcard.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,9 +21,11 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.actcard.dao.ActcardUnsafeDao;
 import com.thinkgem.jeesite.modules.actcard.dao.ActcardUnsafeEventDao;
 import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
 import com.thinkgem.jeesite.modules.actcard.entity.ActcardReview;
+import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafe;
 import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafeEvent;
 import com.thinkgem.jeesite.modules.actcard.service.ActcardService;
 import com.thinkgem.jeesite.modules.actcard.service.ActcardUnsafeEventService;
@@ -42,6 +46,8 @@ public class ActcardController extends BaseController {
 	private SystemService systemService;
 	@Autowired
 	private ActcardUnsafeEventDao actcardUnsafeEventDao;
+	@Autowired
+	private ActcardUnsafeDao actcardUnsafeDao;
 	
 	@ModelAttribute
 	public Actcard get(@RequestParam(required=false) String id) {
@@ -71,10 +77,15 @@ public class ActcardController extends BaseController {
 		model.addAttribute("actcardUnsafeEventList", actcardUnsafeEventDao.findAllList(new ActcardUnsafeEvent()));
 		String unids = actcard.getActcardUnsafeEventId();
 		if(null!=unids && unids.length()>1){
-			unids = unids.substring(0, unids.length()-1);
-			unids = "'"+unids.replaceAll(",", "','")+"'";
-			model.addAttribute("actcardUnsafeEventList2", actcardUnsafeEventDao.findCheckedList(unids));
-			System.out.println(actcardUnsafeEventDao.findCheckedList(unids).size());
+			//当unids.length()大于1时为提交过的数据，只查询被选择的数据
+//			unids = unids.substring(0, unids.length()-1);
+//			unids = "'"+unids.replaceAll(",", "','")+"'";
+			List<ActcardUnsafe> list = actcardUnsafeDao.findListByActcardId(actcard.getId());
+			for (int i = 0; i < list.size(); i++) {
+				list.get(i).setId(list.get(i).getUnsafeEventId());
+			}
+			model.addAttribute("actcardUnsafeEventList2", list);
+//			System.out.println(actcardUnsafeEventDao.findCheckedList(unids).size());
 		}
 		
 		return "modules/actcard/actcardForm";
@@ -104,6 +115,7 @@ public class ActcardController extends BaseController {
 			return form(actcard, model);
 		}
 		actcardService.save(actcard);
+		
 		addMessage(redirectAttributes, "保存ACT卡成功");
 		return "redirect:"+Global.getAdminPath()+"/actcard/actcard/?repage";
 	}

@@ -3,6 +3,7 @@
 <mapper namespace="com.thinkgem.jeesite.modules.actcard.dao.ActcardUnsafeDao">
     
 	<sql id="actcardUnsafeColumns">
+		a.id AS "id",
 		a.unsafe_event_id AS "unsafeEventId",
 		a.actcard_id AS "actcardId",
 		a.parent_id AS "parent.id",
@@ -70,8 +71,20 @@
 		</choose>
 	</select>
 	
+	<select id="findListByActcardId" resultType="ActcardUnsafe">
+		SELECT 
+			<include refid="actcardUnsafeColumns"/>
+		FROM actcard_unsafe a
+		<include refid="actcardUnsafeJoins"/>
+		<where>
+			a.del_flag = '0'
+			and a.actcard_id = #{actcardId}
+		</where>		
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO actcard_unsafe(
+			id,
 			unsafe_event_id,
 			actcard_id,
 			parent_id,
@@ -85,6 +98,7 @@
 			remarks,
 			del_flag
 		) VALUES (
+			#{id},
 			#{unsafeEventId},
 			#{actcardId},
 			#{parent.id},

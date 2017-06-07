@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.actcard.dao;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafe;
@@ -14,5 +16,7 @@ import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafe;
  */
 @MyBatisDao
 public interface ActcardUnsafeDao extends CrudDao<ActcardUnsafe> {
+
+	List<ActcardUnsafe> findListByActcardId(String actcardId);
 	
 }
