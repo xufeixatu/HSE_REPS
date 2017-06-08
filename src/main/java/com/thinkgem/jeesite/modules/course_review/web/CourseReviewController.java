@@ -3,10 +3,6 @@
  */
 package com.thinkgem.jeesite.modules.course_review.web;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +21,6 @@ import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.course_review.entity.CourseReview;
 import com.thinkgem.jeesite.modules.course_review.service.CourseReviewService;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 课件评论Controller
@@ -44,6 +39,7 @@ public class CourseReviewController extends BaseController {
 		CourseReview entity = null;
 		if (StringUtils.isNotBlank(id)){
 			entity = courseReviewService.get(id);
+			
 		}
 		if (entity == null){
 			entity = new CourseReview();
@@ -55,12 +51,6 @@ public class CourseReviewController extends BaseController {
 	@RequestMapping(value = {"list", ""})
 	public String list(CourseReview courseReview, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CourseReview> page = courseReviewService.findPage(new Page<CourseReview>(request, response), courseReview); 
-		courseReview.setAssessById(UserUtils.getUser().getName());
-		Date upload_time = new Date();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		dateFormat.format(upload_time);
-		courseReview.setAssessTime(upload_time);
-		model.addAttribute("courseReview", courseReview);
 		model.addAttribute("page", page);
 		return "modules/course_review/courseReviewList";
 	}
@@ -68,11 +58,11 @@ public class CourseReviewController extends BaseController {
 	@RequiresPermissions("course_review:courseReview:view")
 	@RequestMapping(value = "form")
 	public String form(CourseReview courseReview, Model model) {
-		courseReview.setAssessById(UserUtils.getUser().getName());
+/*		courseReview.setAssessById(UserUtils.getUser().getName());
 		Date upload_time = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		dateFormat.format(upload_time);
-		courseReview.setAssessTime(upload_time);
+		courseReview.setAssessTime(upload_time);*/	
 		model.addAttribute("courseReview", courseReview);
 		return "modules/course_review/courseReviewForm";
 	}
@@ -85,8 +75,19 @@ public class CourseReviewController extends BaseController {
 		}
 		courseReviewService.save(courseReview);
 		addMessage(redirectAttributes, "保存课件评论成功");
-/*		return "redirect:"+Global.getAdminPath()+"/course_review/courseReview/?repage";*/
-		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse2/?repage";
+		return "redirect:"+Global.getAdminPath()+"/course_review/courseReview/?repage";
+	}
+	
+	/*评论*/
+	@RequiresPermissions("course_review:courseReview:edit")
+	@RequestMapping(value = "save1")
+	public String save1(CourseReview courseReview, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, courseReview)){
+			return form(courseReview, model);
+		}
+		courseReviewService.save(courseReview);
+		addMessage(redirectAttributes, "保存课件评论成功");
+		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse2/list?id=1032b1d728484afc96b3faaf2448f2d5";
 	}
 	
 	@RequiresPermissions("course_review:courseReview:edit")
