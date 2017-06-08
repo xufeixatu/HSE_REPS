@@ -111,7 +111,10 @@
 						<c:forEach items="${trainNeedMatrixList}" var="trainNeedMatrix">
 							<c:if test="${trainNeedMatrix.trainContent.sn == trainContent.sn && trainNeedMatrix.trainJob.sn == trainJob.sn}">
 								<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit">
-							    	<a href="${ctx}/train/matrix/trainNeedMatrix/form?id=${trainNeedMatrix.id}">R</a>
+							    	<a href="${ctx}/train/matrix/trainNeedMatrix/form?id=${trainNeedMatrix.id}">
+							    	<c:if test="${trainNeedMatrix.status==1}"><p style="color:red;">待</p></c:if>
+							    	<c:if test="${trainNeedMatrix.status==0}"><p style="color:green;">过</p></c:if>
+							    	</a>
 								</shiro:hasPermission>
 							</c:if>
 						</c:forEach>

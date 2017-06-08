@@ -55,8 +55,9 @@
 				<td>版本号</td>
 				<td>培训岗位名称</td>
 				<td>培训知识内容名称</td>
-				<td>更新时间</td>
-				<td>备注</td>
+				<td>培训有效起始时间</td>
+				<td>培训有效截止时间</td>
+				<td>状态</td>
 				<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit"><td>操作</td></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -66,8 +67,9 @@
 				<td>${fns:getDictLabel(trainNeedMatrix.version, 'train_matrix_version', '')}</td>
 				<td>${trainNeedMatrix.trainJob.name}</td>
 				<td>${trainNeedMatrix.trainContent.name}</td>
-				<td><fmt:formatDate value="${trainNeedMatrix.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-				<td>${trainNeedMatrix.remarks}</td>
+				<td><fmt:formatDate value="${trainNeedMatrix.startTime}" pattern="yyyy-MM-dd"/></td>
+				<td><fmt:formatDate value="${trainNeedMatrix.endTime}" pattern="yyyy-MM-dd"/></td>
+				<td>${fns:getDictLabel(trainNeedMatrix.status, 'train_matrix_status', '')}</td>
 				<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit">
 				<td>
 			   		<a href="${ctx}/train/matrix/trainNeedMatrix/form?id=${trainNeedMatrix.id}">修改</a>

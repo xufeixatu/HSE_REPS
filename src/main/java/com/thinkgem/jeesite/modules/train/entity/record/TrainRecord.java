@@ -26,6 +26,9 @@ public class TrainRecord extends DataEntity<TrainRecord> {
 	private static final long serialVersionUID = 1L;
 	private String name;		// 培训主题
 	private Office objectOffice;		// 受训单位
+	private String classify; //培训分类
+	private String trainMethod;  //培训方式（集中/送外/在线培训）
+	private String teacherName; //培训讲师姓名
 	private Date trainTime;		// 培训时间
 	private Date beginTrainTime;		// 开始 培训时间
 	private Date endTrainTime;		// 结束 培训时间
@@ -70,6 +73,31 @@ public class TrainRecord extends DataEntity<TrainRecord> {
 		this.objectOffice = objectOffice;
 	}
 	
+	public String getClassify() {
+		return classify;
+	}
+
+	public void setClassify(String classify) {
+		this.classify = classify;
+	}
+
+	
+	public String getTrainMethod() {
+		return trainMethod;
+	}
+
+	public void setTrainMethod(String trainMethod) {
+		this.trainMethod = trainMethod;
+	}
+
+	public String getTeacherName() {
+		return teacherName;
+	}
+
+	public void setTeacherName(String teacherName) {
+		this.teacherName = teacherName;
+	}
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="培训时间不能为空")
 	public Date getTrainTime() {

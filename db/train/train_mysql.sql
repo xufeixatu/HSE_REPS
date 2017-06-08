@@ -1,18 +1,3 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : localhost3306
-Source Server Version : 50541
-Source Host           : localhost:3306
-Source Database       : jeesite
-
-Target Server Type    : MYSQL
-Target Server Version : 50541
-File Encoding         : 65001
-
-Date: 2017-05-21 18:40:27
-*/
-
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -191,13 +176,17 @@ CREATE TABLE `train_need_matrix` (
   `id` varchar(64) NOT NULL COMMENT '编号',
   `job_id` varchar(64) NOT NULL COMMENT '培训岗位编码',
   `content_id` varchar(64) NOT NULL COMMENT '培训知识内容编号',
+  `version` varchar(8) DEFAULT NULL COMMENT '版本号',
+  `start_time` datetime DEFAULT NULL COMMENT '培训有效起始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '培训有效截止时间',
+  `status` varchar(8) DEFAULT NULL COMMENT '培训状态（已培训、未培训）',
   `create_by` varchar(64) NOT NULL COMMENT '创建者',
   `create_date` datetime NOT NULL COMMENT '创建时间',
   `update_by` varchar(64) NOT NULL COMMENT '更新者',
   `update_date` datetime NOT NULL COMMENT '更新时间',
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
   `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '删除标记（0：正常；1：删除）',
-  `version` varchar(8) DEFAULT NULL COMMENT '版本号',
+ 
   PRIMARY KEY (`id`),
   KEY `content_id` (`content_id`),
   KEY `job_id` (`job_id`),
@@ -205,14 +194,6 @@ CREATE TABLE `train_need_matrix` (
   CONSTRAINT `train_need_matrix_ibfk_2` FOREIGN KEY (`job_id`) REFERENCES `train_job` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of train_need_matrix
--- ----------------------------
-INSERT INTO `train_need_matrix` VALUES ('48e0f872ee074c7faf73f46318c2439d', '0df251927b4342cc8d26cdf24f928cfd', '9bfa33fed3dc4dc8b8031ff86bd90c45', '1', '2017-05-21 12:03:22', '1', '2017-05-21 12:14:15', '', '0', '20150201');
-INSERT INTO `train_need_matrix` VALUES ('7130ce3e5cfc48369c6961689e602f52', '0df251927b4342cc8d26cdf24f928cfd', '993eec6dd1b247f3928cf738fe89d8e5', '1', '2017-05-21 12:03:03', '1', '2017-05-21 12:13:48', '', '0', '20150201');
-INSERT INTO `train_need_matrix` VALUES ('7e187032aabf4c28bbd640230e1094e5', '5ece7131a5f044f3be8b6445fbfa8b49', 'd0dae411e3cc4d2b942f1425f4b6bb25', '1', '2017-05-21 12:26:10', '1', '2017-05-21 12:26:10', '', '0', '20150201');
-INSERT INTO `train_need_matrix` VALUES ('935f3c987a994ab0916bb816644f3a05', '0df251927b4342cc8d26cdf24f928cfd', '914b9e4ec8ff410c9133169f22543663', '1', '2017-05-18 08:28:32', '1', '2017-05-21 12:02:37', '', '0', '20150201');
-INSERT INTO `train_need_matrix` VALUES ('99a5e89dfcbc48b89d05b38d82f2eafa', '0df251927b4342cc8d26cdf24f928cfd', 'e6c7f29670f64e0896561fa7e1291573', '1', '2017-05-21 12:03:36', '1', '2017-05-21 12:13:44', '', '0', '20150201');
 
 -- ----------------------------
 -- Table structure for train_plan
@@ -253,7 +234,11 @@ DROP TABLE IF EXISTS `train_record`;
 CREATE TABLE `train_record` (
   `id` varchar(64) NOT NULL,
   `name` varchar(255) NOT NULL COMMENT '培训主题',
-  `object_office_id` varchar(64) NOT NULL,
+  `object_office_id` varchar(64) NOT NULL COMMENT '受训单位',
+  `classify` varchar(8) DEFAULT NULL COMMENT '培训分类',
+  `train_method` varchar(8) DEFAULT NULL COMMENT '培训方式（集中/送外/在线培训）',
+  `teacher_name` varchar(32) DEFAULT NULL COMMENT '培训讲师姓名',
+  `train_object` varchar(8) DEFAULT NULL COMMENT '培训对象(1:管理人员，0:操作人员)',
   `train_time` datetime NOT NULL COMMENT '培训时间',
   `subject_office_id` varchar(64) NOT NULL COMMENT '责任单位',
   `plan_number` int(11) NOT NULL COMMENT '培训人数',

@@ -80,6 +80,27 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">培训分类：</label>
+			<div class="controls">
+				<form:radiobuttons path="classify" items="${fns:getDictList('train_content_classify')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">培训方式：</label>
+			<div class="controls">
+				<form:radiobuttons path="trainMethod" items="${fns:getDictList('train_methods_classify')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">培训教师姓名：</label>
+			<div class="controls">
+				<form:input path="teacherName" htmlEscape="false" maxlength="32" class="input-xlarge required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">培训时间：</label>
 			<div class="controls">
 				<input name="trainTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
