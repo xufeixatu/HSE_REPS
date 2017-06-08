@@ -18,5 +18,10 @@ import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafeEvent;
 public interface ActcardUnsafeEventDao extends TreeDao<ActcardUnsafeEvent> {
 
 	List<ActcardUnsafeEvent> findCheckedList(String actcardUnsafeEventId);
+
+	ActcardUnsafeEvent getActcardUnsafeByParentIdAndName(String string);
+
+	List<ActcardUnsafeEvent> findByParentId(String id);
+
 	
 }

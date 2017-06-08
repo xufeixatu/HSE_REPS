@@ -109,6 +109,19 @@
 		</choose>
 	</select>
 	
+	<select id="findActcards" resultType="Actcard">
+		SELECT 
+			<include refid="actcardColumns"/>
+		FROM actcard a
+		<include refid="actcardJoins"/>
+		<where>
+			a.del_flag = '0'
+			and a.territorial_office_id = #{0}
+			and a.reporting_time >= #{1}
+			and a.reporting_time &lt;= #{2}
+		</where>		
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO actcard(
 			id,

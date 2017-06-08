@@ -5,6 +5,9 @@ package com.thinkgem.jeesite.modules.actcard.entity;
 
 import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -24,6 +27,37 @@ public class ActcardUnsafe extends DataEntity<ActcardUnsafe> {
 	private String name;		// 名称
 	private String sort;		// 排序
 	
+	private Date startTime;
+	private Date endTime;
+	private String officeIds;
+	
+	
+	
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getOfficeIds() {
+		return officeIds;
+	}
+
+	public void setOfficeIds(String officeIds) {
+		this.officeIds = officeIds;
+	}
+
 	public ActcardUnsafe() {
 		super();
 	}

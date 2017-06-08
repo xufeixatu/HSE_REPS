@@ -66,6 +66,8 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 	@Transactional(readOnly = false)
 	public void save(Actcard actcard) {
 		Actcard tempactcard = actcard;
+		String others = actcard.getActcardUnsafeEventChildId();//用ActcardUnsafeEventChildId代替other传入
+		actcard.setActcardUnsafeEventChildId("");
 		boolean isnew = actcard.getIsNewRecord();
 		if (isnew){//这是一个新的流程
 			if(null == actcard.getState() || "".equals(actcard.getState())){
@@ -97,12 +99,12 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 			actTaskService.startProcess(ActUtils.PD_ACTCARD_PROCESS[0], ActUtils.PD_ACTCARD_PROCESS[1], actcard.getId(), "ACT卡");
 			
 			//新的流程时保存actcard_unsafe表
-			saveActunsafe(actcard);
+			saveActunsafe(actcard,others);
 		}
 	}
 	
 	
-	private void saveActunsafe(Actcard actcard) {
+	private void saveActunsafe(Actcard actcard,String others) {
 		
 		// TODO Auto-generated method stub
 		String unids = actcard.getActcardUnsafeEventId();
@@ -130,7 +132,7 @@ public class ActcardService extends CrudService<ActcardDao, Actcard> {
 			}
 		}
 		//保存其他
-		String unsafeOtherInfo = actcard.getActcardUnsafeEventChildId();
+		String unsafeOtherInfo = others;
 		if(unsafeOtherInfo.length()>1){
 			String[] unsafeOtherInfos = unsafeOtherInfo.split(",");
 			for (int i = 0; i < unsafeOtherInfos.length; i++) {

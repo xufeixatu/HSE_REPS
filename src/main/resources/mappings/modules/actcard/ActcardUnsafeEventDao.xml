@@ -27,6 +27,23 @@
 		WHERE a.id = #{id}
 	</select>
 	
+	<select id="getActcardUnsafeByParentIdAndName" resultType="ActcardUnsafeEvent">
+		SELECT 
+			<include refid="actcardUnsafeEventColumns"/>
+		FROM actcard_unsafe_event a
+		<include refid="actcardUnsafeEventJoins"/>
+		WHERE a.parent_id = '0'
+		and a.name like concat('%',#{0})
+	</select>
+	
+	<select id="findByParentId" resultType="ActcardUnsafeEvent">
+		SELECT 
+			<include refid="actcardUnsafeEventColumns"/>
+		FROM actcard_unsafe_event a
+		<include refid="actcardUnsafeEventJoins"/>
+		WHERE a.parent_id = #{0}
+	</select>
+	
 	<select id="findList" resultType="ActcardUnsafeEvent">
 		SELECT 
 			<include refid="actcardUnsafeEventColumns"/>
