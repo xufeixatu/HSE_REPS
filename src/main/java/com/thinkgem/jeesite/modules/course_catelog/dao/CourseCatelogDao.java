@@ -10,7 +10,7 @@ import com.thinkgem.jeesite.modules.course_catelog.entity.CourseCatelog;
 /**
  * 课件目录DAO接口
  * @author 王少昌
- * @version 2017-05-17
+ * @version 2017-06-07
  */
 @MyBatisDao
 public interface CourseCatelogDao extends CrudDao<CourseCatelog> {
