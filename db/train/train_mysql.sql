@@ -223,11 +223,6 @@ CREATE TABLE `train_plan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of train_plan
--- ----------------------------
-INSERT INTO `train_plan` VALUES ('1', '26', '4', '技术培训', '1', '2017-05-31 08:16:29', '0', '00000000000', '1', '11', '0', '0', '1', '2017-05-21 08:17:09', '1', '2017-05-21 17:34:59', '0', '0', '1');
-
--- ----------------------------
 -- Table structure for train_record
 -- ----------------------------
 DROP TABLE IF EXISTS `train_record`;
@@ -261,13 +256,6 @@ CREATE TABLE `train_record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of train_record
--- ----------------------------
-INSERT INTO `train_record` VALUES ('1c9003a5feb44de68cead755f7261dc8', '2017-05-21技术培训', '26', '2017-05-31 08:16:29', '11', '0', '1', '0', '1', '2017-05-21 17:31:53', '1', '2017-05-21 17:31:53', null, '0', '0', null, null, null, '1', '0', '1', null);
-INSERT INTO `train_record` VALUES ('7db3d55b7fe6405183c35457d2c01303', '2017年研发项目培训', '6', '2017-05-31 16:26:57', '9', '12', '6', '0', '1', '2017-05-20 16:28:27', '1', '2017-05-21 16:54:34', '', '0', '1', null, '', '', '1', '23水电费', '1', '|/jeesite/userfiles/1/files/train/record/trainRecord/2017/05/__3_1_1_20160514130351.jpg|/jeesite/userfiles/1/files/train/record/trainRecord/2017/05/__3_1_1_20160514130351.jpg');
-INSERT INTO `train_record` VALUES ('d12af463cac74507a8790fbe2b94bb06', '2017-05-21技术培训', '26', '2017-05-31 08:16:29', '11', '0', '1', '0', '1', '2017-05-21 17:34:59', '1', '2017-05-21 17:34:59', null, '0', '0', null, null, null, '1', '0', '1', null);
-INSERT INTO `train_record` VALUES ('fd2a1b98198c4eaba0984855901fc41b', '测试', '2', '2017-05-21 15:22:56', '6', '21', '1', '1', '1', '2017-05-20 15:23:45', '1', '2017-05-20 16:22:04', '', '0', '1', '2017-05-02 15:23:26', '34', '33', '1', '23', null, null);
 
 -- ----------------------------
 -- Table structure for train_record_courseware
@@ -314,7 +302,3 @@ CREATE TABLE `train_record_score` (
   CONSTRAINT `train_record_score_ibfk_1` FOREIGN KEY (`record_id`) REFERENCES `train_record` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of train_record_score
--- ----------------------------
-INSERT INTO `train_record_score` VALUES ('ae3bb958a8df400c84419fecadecbc61', '7db3d55b7fe6405183c35457d2c01303', '6', '23.7', '1', '2017-05-20 16:28:27', '1', '2017-05-20 16:28:27', '', '1');

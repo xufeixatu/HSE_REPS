@@ -9,6 +9,7 @@
 		a.classify AS "classify",
 		a.train_method AS "trainMethod",
 		a.teacher_name  AS "teacherName",
+		a.train_object AS "trainObject",
 		a.train_time AS "trainTime",
 		a.subject_office_id AS "subjectOffice.id",
 		a.plan_number AS "planNumber",
@@ -78,6 +79,10 @@
 				AND a.teacher_name = #{teacherName}
 			</if>
 			
+			<if test="trainObject != null and  trainObject != ''">
+				AND a.train_object = #{trainObject}
+			</if>
+			
 			<if test="subjectOffice != null and subjectOffice.id != null and subjectOffice.id != ''">
 				AND a.subject_office_id = #{subjectOffice.id}
 			</if>
@@ -130,6 +135,7 @@
 			classify,
 		    train_method,
 		    teacher_name,
+		    train_object,
 			train_time,
 			subject_office_id,
 			plan_number,
@@ -155,6 +161,7 @@
 			#{classify},
 			#{trainMethod},
 			#{teacherName},
+			#{trainObject},
 			#{trainTime},
 			#{subjectOffice.id},
 			#{planNumber},
@@ -183,6 +190,7 @@
 			classify = #{classify},
 		    train_method = #{trainMethod},
 		    teacher_name = #{teacherName},
+		    train_object = #{trainObject},
 			train_time = #{trainTime},
 			subject_office_id = #{subjectOffice.id},
 			plan_number = #{planNumber},

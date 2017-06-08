@@ -44,6 +44,9 @@
 					<form:options items="${trainContentList}" itemLabel="name" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
+			<li><label>培训需求状态：</label>
+				<form:radiobuttons path="status" items="${fns:getDictList('train_matrix_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
@@ -112,11 +115,12 @@
 							<c:if test="${trainNeedMatrix.trainContent.sn == trainContent.sn && trainNeedMatrix.trainJob.sn == trainJob.sn}">
 								<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit">
 							    	<a href="${ctx}/train/matrix/trainNeedMatrix/form?id=${trainNeedMatrix.id}">
-							    	<c:if test="${trainNeedMatrix.status==1}"><p style="color:red;">待</p></c:if>
-							    	<c:if test="${trainNeedMatrix.status==0}"><p style="color:green;">过</p></c:if>
+							    	<c:if test="${trainNeedMatrix.status==0}"><p style="color:red;">未</p></c:if>
+							    	<c:if test="${trainNeedMatrix.status==1}"><p style="color:green;">已</p></c:if>
 							    	</a>
 								</shiro:hasPermission>
 							</c:if>
+							——
 						</c:forEach>
 					</td>
 				</c:forEach>
