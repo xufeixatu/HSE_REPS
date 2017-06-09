@@ -129,7 +129,7 @@ public class TrainNeedMatrixController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/train/matrix/trainNeedMatrix/?repage";
 	}
 	
-	//@ResponseBody
+	@ResponseBody
 	@RequiresPermissions("train:matrix:trainNeedMatrix:edit")
 	@RequestMapping(value = "changeStatus")
 	public String changeStatus(TrainNeedMatrix trainNeedMatrix, Model model, RedirectAttributes redirectAttributes) {
@@ -138,13 +138,13 @@ public class TrainNeedMatrixController extends BaseController {
 		}
 		if(trainNeedMatrix.getStatus().equals("0")){
 			trainNeedMatrix.setStatus("1");
+			trainNeedMatrixService.save(trainNeedMatrix);
+			return "<h2 style='color:green;'>&radic;</h2>";
 		}else{
 			trainNeedMatrix.setStatus("0");
+			trainNeedMatrixService.save(trainNeedMatrix);
+			return "<h2 style='color:red;'>未</h2>";
 		}
-		trainNeedMatrixService.save(trainNeedMatrix);
-		addMessage(redirectAttributes, "修改培训需求状态成功");
-		return "redirect:"+Global.getAdminPath()+"/train/matrix/trainNeedMatrix/matrix#"+trainNeedMatrix.getId();
-		//return "true";
 	}
 	
 	@RequiresPermissions("train:matrix:trainNeedMatrix:edit")

@@ -14,6 +14,17 @@
 			$("#searchForm").submit();
         	return false;
         }
+		function changeStatus(trainNeedMatrixId){
+			if(trainNeedMatrixId!=null && trainNeedMatrixId!=''){
+				htmlobj = $.ajax("${ctx}/train/matrix/trainNeedMatrix/changeStatus?id="+trainNeedMatrixId,async:true);
+				$("#"+trainNeedMatrixId).val(htmlobj.responseText);
+				return true;
+			}else{
+				$("#messageBox").val("<button data-dismiss='alert' class='close'>×</button>改状态失败").removeClass('hidden');
+				return false;
+			}
+			
+		}
 	</script>
 </head>
 <body>
@@ -130,26 +141,28 @@
 				
 				<td>${trainJob.sn}</td>
 				<td>${trainJob.name}</td>
+				
 				<c:forEach items="${trainContentList}" var="trainContent">
-					<td >
+					<td >——
 						<c:forEach items="${trainNeedMatrixList}" var="trainNeedMatrix">
 							<c:if test="${trainNeedMatrix.trainContent.sn == trainContent.sn && trainNeedMatrix.trainJob.sn == trainJob.sn}">
 								<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit">
-							    	<a id="${trainNeedMatrix.id}" href="${ctx}/train/matrix/trainNeedMatrix/changeStatus?id=${trainNeedMatrix.id}">
-							    	<c:if test="${trainNeedMatrix.status==0}"><p style="color:red;">未</p></c:if>
-							    	<c:if test="${trainNeedMatrix.status==1}"><p style="color:green;">&radic;</p></c:if>
+							    	<a id="${trainNeedMatrix.id}"   href="javascript:void(0)" onclick="changeStatus('${trainNeedMatrix.id}')">
+							    	    <c:if test="${trainNeedMatrix.status==0}"><h2 style="color:red;">未</h2></c:if>
+							    	    <c:if test="${trainNeedMatrix.status==1}"><h2 style="color:green;">&radic;</h2></c:if>
 							    	</a>
+							    	
 								</shiro:hasPermission>
 							</c:if>
 						</c:forEach>
+						
 					</td>
 				</c:forEach>
 				
 			</tr>
 		</c:forEach>
-		
 		</tbody>
 	</table>
-	<div class="pagination">${page}</div>
+	
 </body>
 </html>
