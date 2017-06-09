@@ -6,7 +6,12 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
+			$(".matrixData").mouseover(function(){
+				  this.css("background-color","yellow");
+		    });
+			$(".matrixData").mouseout(function(){
+				  this.css("background-color","#E9E9E4");
+		    });
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -16,15 +21,24 @@
         }
 		function changeStatus(trainNeedMatrixId){
 			if(trainNeedMatrixId!=null && trainNeedMatrixId!=''){
-				htmlobj = $.ajax("${ctx}/train/matrix/trainNeedMatrix/changeStatus?id="+trainNeedMatrixId,async:true);
-				$("#"+trainNeedMatrixId).val(htmlobj.responseText);
+				var htmlobj = $.ajax({
+					type: "GET",
+		             url: '${ctx}/train/matrix/trainNeedMatrix/changeStatus?id='+trainNeedMatrixId,
+		             dataType: "html",
+		             success: function(data){
+		            	 console.log(htmlobj.responseText);
+		            	 $("#"+trainNeedMatrixId).html(htmlobj.responseText);
+		             }
+				});
 				return true;
 			}else{
-				$("#messageBox").val("<button data-dismiss='alert' class='close'>×</button>改状态失败").removeClass('hidden');
+				console.log("error:"+trainNeedMatrixId);
 				return false;
 			}
 			
 		}
+		
+		
 	</script>
 </head>
 <body>
@@ -66,9 +80,19 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed"> <!--  -->
 		<thead>
 			<tr>
-				<td rowspan="2">人员分类</td>
-				<td rowspan="2">序号</td>
-				<td rowspan="2">HSE培训管理信息</td>
+				<td rowspan="3">人员分类</td>
+				<td rowspan="3">序号</td>
+				<td rowspan="3">HSE培训管理信息</td>
+				<c:forEach items="${trainContentList}" var="trainContent">
+					<td  style="text-align:center;">${trainContent.name}</td>
+				</c:forEach>
+			</tr>
+			<tr>
+			    <c:forEach items="${trainContentList}" var="trainContent">
+					<td  style="text-align:center;">${trainContent.sn}</td>
+				</c:forEach>
+			</tr>
+			<tr>
 				<c:forEach items="${trainContentList}" var="trainContent">
 				    <c:if test="${trainContent.classify=='1' && tableArgs['tc1'] > 0 }">
 				        <td style="text-align:center;" colspan="${tableArgs['tc1']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
@@ -86,11 +110,6 @@
 				        <td style="text-align:center;" colspan="${tableArgs['tc4']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
 				        <p hidden="hidden">${tableArgs['tc4']=-1}</p> 
 				    </c:if>
-				</c:forEach>
-			</tr>
-			<tr>
-				<c:forEach items="${trainContentList}" var="trainContent">
-					<td>${trainContent.name}</td>
 				</c:forEach>
 			</tr>
 			<tr>
@@ -127,29 +146,29 @@
 		<c:forEach items="${trainJobList}" var="trainJob">
 			<tr>
 				<c:if test="${trainJob.classify=='1' && tableArgs['tj1'] > 0 }">
-				    <td rowspan="${tableArgs['tj1']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
+				    <td style="text-align:center;" rowspan="${tableArgs['tj1']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
 				    <p hidden="hidden">${tableArgs['tj1']=-1}</p>
 				</c:if>
 				<c:if test="${trainJob.classify=='2' && tableArgs['tj2'] > 0 }">
-				    <td rowspan="${tableArgs['tj2']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
+				    <td style="text-align:center;" rowspan="${tableArgs['tj2']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
 				    <p hidden="hidden">${tableArgs['tj2']=-1}</p>
 				</c:if>
 				<c:if test="${trainJob.classify=='3' && tableArgs['tj3'] > 0 }">
-				    <td rowspan="${tableArgs['tj3']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
+				    <td style="text-align:center;" rowspan="${tableArgs['tj3']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
 				     <p hidden="hidden">${tableArgs['tj3']=-1}</p>
 				</c:if>
 				
-				<td>${trainJob.sn}</td>
-				<td>${trainJob.name}</td>
+				<td style="text-align:center;">${trainJob.sn}</td>
+				<td style="text-align:center;">${trainJob.name}</td>
 				
 				<c:forEach items="${trainContentList}" var="trainContent">
-					<td >——
+					<td >
 						<c:forEach items="${trainNeedMatrixList}" var="trainNeedMatrix">
 							<c:if test="${trainNeedMatrix.trainContent.sn == trainContent.sn && trainNeedMatrix.trainJob.sn == trainJob.sn}">
 								<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit">
-							    	<a id="${trainNeedMatrix.id}"   href="javascript:void(0)" onclick="changeStatus('${trainNeedMatrix.id}')">
-							    	    <c:if test="${trainNeedMatrix.status==0}"><h2 style="color:red;">未</h2></c:if>
-							    	    <c:if test="${trainNeedMatrix.status==1}"><h2 style="color:green;">&radic;</h2></c:if>
+							    	<a id="${trainNeedMatrix.id}" class="matrixData"  href="javascript:void(0)" onclick="changeStatus('${trainNeedMatrix.id}')" onmove>
+							    	    <c:if test="${trainNeedMatrix.status==0}"><p style="color:red;">R</p></c:if>
+							    	    <c:if test="${trainNeedMatrix.status==1}"><p style="color:green;">√</p></c:if>
 							    	</a>
 							    	
 								</shiro:hasPermission>

@@ -139,11 +139,11 @@ public class TrainNeedMatrixController extends BaseController {
 		if(trainNeedMatrix.getStatus().equals("0")){
 			trainNeedMatrix.setStatus("1");
 			trainNeedMatrixService.save(trainNeedMatrix);
-			return "<h2 style='color:green;'>&radic;</h2>";
+			return "<p style='color:green;'>&radic;</p>";
 		}else{
 			trainNeedMatrix.setStatus("0");
 			trainNeedMatrixService.save(trainNeedMatrix);
-			return "<h2 style='color:red;'>未</h2>";
+			return "<p style='color:red;'>R</p>";
 		}
 	}
 	
