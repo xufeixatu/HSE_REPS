@@ -193,7 +193,17 @@ CREATE TABLE `train_need_matrix` (
   CONSTRAINT `train_need_matrix_ibfk_1` FOREIGN KEY (`content_id`) REFERENCES `train_content` (`id`),
   CONSTRAINT `train_need_matrix_ibfk_2` FOREIGN KEY (`job_id`) REFERENCES `train_job` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*
+-- Query: SELECT * FROM hse.train_need_matrix
+LIMIT 0, 1000
 
+-- Date: 2017-06-09 12:36
+*/
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('48e0f872ee074c7faf73f46318c2439d','0df251927b4342cc8d26cdf24f928cfd','9bfa33fed3dc4dc8b8031ff86bd90c45','1','2017-05-21 12:03:22','1','2017-06-09 01:12:24','','0','20150201','2017-06-01 00:00:00','2017-06-28 00:00:00','1');
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('7130ce3e5cfc48369c6961689e602f52','0df251927b4342cc8d26cdf24f928cfd','993eec6dd1b247f3928cf738fe89d8e5','1','2017-05-21 12:03:03','1','2017-06-09 01:12:21','','0','20150201','2017-06-06 00:00:00','2017-06-26 00:00:00','1');
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('7e187032aabf4c28bbd640230e1094e5','5ece7131a5f044f3be8b6445fbfa8b49','d0dae411e3cc4d2b942f1425f4b6bb25','1','2017-05-21 12:26:10','1','2017-06-09 00:59:37','','0','20150201','2017-06-01 00:00:00','2017-06-29 00:00:00','0');
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('935f3c987a994ab0916bb816644f3a05','0df251927b4342cc8d26cdf24f928cfd','914b9e4ec8ff410c9133169f22543663','1','2017-05-18 08:28:32','1','2017-06-09 01:12:14','','0','20150201','2017-06-06 00:00:00','2017-06-30 00:00:00','1');
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('99a5e89dfcbc48b89d05b38d82f2eafa','0df251927b4342cc8d26cdf24f928cfd','e6c7f29670f64e0896561fa7e1291573','1','2017-05-21 12:03:36','1','2017-06-09 01:12:26','','0','20150201','2017-06-20 00:00:00','2017-06-29 00:00:00','1');
 
 -- ----------------------------
 -- Table structure for train_plan
