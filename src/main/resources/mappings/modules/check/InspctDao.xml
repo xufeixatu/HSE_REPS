@@ -37,7 +37,9 @@
 	</select>
 	
 	<select id="findList" resultType="Inspct">
-	SELECT data.*,office1.name AS checkOfficeName, office2.name AS inspectionOfficeName
+	SELECT data.*,office1.name AS checkOfficeName, office2.name AS inspectionOfficeName,
+	IFNULL(check_result.all_question_count,0) AS aLLQuestionCount,
+	IFNULL(check_result1.solved_question_count,0) AS solvedQuestionCount
 	FROM
 		(SELECT 
 			<include refid="inspctColumns"/>,
@@ -57,6 +59,25 @@
 		 </where>) AS data
 	LEFT JOIN sys_office office1 ON office1.id = data.checkOfficeId
 	LEFT JOIN sys_office office2 ON office2.id = data.inspectionOfficeId
+	LEFT JOIN
+	(SELECT check_result.inspct_id, count(*) AS all_question_count
+	FROM question,
+	(SELECT * FROM check_item_check
+	WHERE check_result = '0'
+	GROUP BY inspct_id
+	) AS check_result
+	WHERE question.check_item_check_id = check_result.id) AS check_result
+	ON data.id = check_result.inspct_id
+	LEFT JOIN
+	(SELECT check_result.inspct_id, count(*) AS solved_question_count
+	FROM question,
+	(SELECT * FROM check_item_check
+	WHERE check_result = '0'
+	GROUP BY inspct_id
+	) AS check_result
+	WHERE question.check_item_check_id = check_result.id
+	AND question.state_id = '5') AS check_result1
+	ON data.id = check_result1.inspct_id	
 	</select>
 	
 	<select id="findAllList" resultType="Inspct">
@@ -124,5 +145,27 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+	
+	<select id="getALLQuestionCountByInspctId"  parameterType="java.lang.String" resultType="int">
+		SELECT count(*) AS count
+		FROM question,
+		(SELECT * FROM check_item_check
+		WHERE check_result = '0'
+		AND inspct_id = #{inspctId}
+		) AS check_result
+		WHERE question.check_item_check_id = check_result.id
+		AND question.state_id != '5'	
+	</select>
+
+	<select id="getSolvedQuestionCountByInspctId"  parameterType="java.lang.String" resultType="int">
+		SELECT count(*) AS count
+		FROM question,
+		(SELECT * FROM check_item_check
+		WHERE check_result = '0'
+		AND inspct_id = #{inspctId}
+		) AS check_result
+		WHERE question.check_item_check_id = check_result.id
+		AND question.state_id = '5'	
+	</select>
 	
 </mapper>
