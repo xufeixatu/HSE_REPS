@@ -137,7 +137,7 @@
 								<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit">
 							    	<a id="${trainNeedMatrix.id}" href="${ctx}/train/matrix/trainNeedMatrix/changeStatus?id=${trainNeedMatrix.id}">
 							    	<c:if test="${trainNeedMatrix.status==0}"><p style="color:red;">未</p></c:if>
-							    	<c:if test="${trainNeedMatrix.status==1}"><p style="color:green;">已</p></c:if>
+							    	<c:if test="${trainNeedMatrix.status==1}"><p style="color:green;">&radic;</p></c:if>
 							    	</a>
 								</shiro:hasPermission>
 							</c:if>
