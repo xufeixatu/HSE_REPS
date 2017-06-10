@@ -4,6 +4,7 @@
 <head>
 <title>查看并可评阅</title>
 <meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/treeview.jsp" %>
 <script type="text/javascript">
 	$(document).ready(
 			function() {
@@ -29,6 +30,64 @@
 										}
 									}
 								});
+				
+				
+				//开始树形复选
+				var setting = {check:{enable:true,nocheckInherit:true},view:{selectedMulti:false},
+						data:{simpleData:{enable:true}},callback:{beforeClick:function(id, node){
+							tree.checkNode(node, !node.checked, true, true);
+							return false;
+						}}};
+				
+				// 用户-菜单
+				var zNodes=[
+						<c:forEach items="${actcardUnsafeEventList}" var="actcardUnsafeEvent">{id:"${actcardUnsafeEvent.id}", pId:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.parent.id:0}", name:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.name:'不安全事件列表'}"},
+			            </c:forEach>];
+				if("指定责任人" == "${actcard.state}" || 
+						"反馈整改情况" == "${actcard.state}" ||
+						"已关闭" == "${actcard.state}"||
+						"关闭问题" == "${actcard.state}"){
+					
+					var setting = {view:{selectedMulti:false},
+							data:{simpleData:{enable:true}},callback:{beforeClick:function(id, node){
+								tree.checkNode(node, !node.checked, true, true);
+								return false;
+							}}};
+					// 用户-菜单
+					var zNodes=[
+							<c:forEach items="${actcardUnsafeEventList2}" var="actcardUnsafeEvent">{id:"${actcardUnsafeEvent.id}", pId:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.parent.id:0}", name:"${not empty actcardUnsafeEvent.parent.id?actcardUnsafeEvent.name:'不安全事件列表'}"},
+				            </c:forEach>];
+				}
+				// 初始化树结构
+				var tree = $.fn.zTree.init($("#actcardUnsafeEventTree"), setting, zNodes);
+				// 不选择父节点
+				tree.setting.check.chkboxType = { "Y" : "ps", "N" : "s" };
+				//
+				//
+				tree.setting.callback = {
+						onCheck : function(event, treeId, treeNode){
+							//alert(treeNode.tId + ", " + treeNode.name);
+							var treeObj = $.fn.zTree.getZTreeObj(treeId);
+							var nodes = treeObj.transformToArray(treeNode);
+							
+							json = eval(nodes)  
+							for(var i=0; i<json.length; i++)  
+							{  
+							   if(json[i].name.indexOf("其他") > -1){
+								   if(!$("#"+json[i].id+"_temp")[0]){
+									   $("#"+json[i].tId).append("<input type='text' mynode='mynode' id='"+json[i].id+"_temp'/>");
+								   }else{
+									   $("#"+json[i].id+"_temp").remove();
+								   }
+							   }
+							}  
+						}
+				};
+				tree.expandAll(true); 
+				
+				
+				$("#reportPicPreview").parent().children("a").remove();//取消图片的上传
+				$("#rectificationPic").parent().children("a").remove();//取消图片的上传
 			});
 </script>
 </head>
@@ -41,7 +100,13 @@
 		<li class="active"><a
 			href="${ctx}/actcard/actcard/view?id=${actcard.id}">ACT卡评阅</a></li>
 	</ul>
-	<form:form modelAttribute="actcardReview" action="${ctx}/actcard/actcard/review" method="post" class="form-horizontal">
+	<form:form modelAttribute="actcard" action="${ctx}/actcard/actcard/review" method="post" class="form-horizontal">
+		<form:hidden path="id"/>
+		<form:hidden path="act.taskId"/>
+		<form:hidden path="act.taskName"/>
+		<form:hidden path="act.taskDefKey"/>
+		<form:hidden path="act.procInsId"/>
+		<form:hidden path="act.procDefId"/>
 		<sys:message content="${message}" />
 		<fieldset>
 			<legend>审批详情</legend>
@@ -80,15 +145,24 @@
 				</tr>
 				<tr>
 					<td class="tit">不安全分类：</td>
-					<td colspan="5">${actcard.actcardUnsafeEventId}</td>
-				</tr>
-				<tr>
-					<td class="tit">不安全子分类：</td>
-					<td colspan="5">${actcard.actcardUnsafeEventChildId}</td>
+					<td colspan="5">
+						<div class="control-group">
+							<div class="controls">
+								<div id="actcardUnsafeEventTree" class="ztree" style="margin-top:3px;float:left;"></div>
+							</div>
+						</div>
+					
+					</td>
 				</tr>
 				<tr>
 					<td class="tit">上报时图片：</td>
-					<td colspan="5">${actcard.reportPic}</td>
+					<td colspan="5">
+						<div class="controls">
+							<form:hidden id="reportPic" path="reportPic" htmlEscape="false" maxlength="1000" class="input-xlarge"/>
+							<sys:ckfinder input="reportPic" type="files" uploadPath="/actcard/actcard" readonly="readonly" selectMultiple="false"/>
+						</div>
+					</td>
+					
 				</tr>
 				<tr>
 					<td class="tit">整改人：</td>
@@ -100,7 +174,12 @@
 				</tr>
 				<tr>
 					<td class="tit">整改图片：</td>
-					<td colspan="5">${actcard.rectificationPic}</td>
+					<td colspan="5">
+						<div class="controls">
+							<form:hidden id="rectificationPic" path="rectificationPic" htmlEscape="false" maxlength="1000" class="input-xlarge"/>
+							<sys:ckfinder input="rectificationPic" type="files" uploadPath="/actcard/actcard" readonly="readonly" selectMultiple="false"/>
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td class="tit">质量安全环保科回复：</td>

@@ -47,6 +47,7 @@
 		            </c:forEach>];
 			if("指定责任人" == "${actcard.state}" || 
 					"反馈整改情况" == "${actcard.state}" ||
+					"已关闭" == "${actcard.state}"||
 					"关闭问题" == "${actcard.state}"){
 				
 				var setting = {view:{selectedMulti:false},

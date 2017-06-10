@@ -97,6 +97,15 @@ public class ActcardController extends BaseController {
 	@RequestMapping(value = "view")
 	public String view(Actcard actcard, Model model) {
 		model.addAttribute("actcard", actcard);
+		String unids = actcard.getActcardUnsafeEventId();
+		if(null!=unids && unids.length()>1){
+			List<ActcardUnsafe> list = actcardUnsafeDao.findListByActcardId(actcard.getId());
+			for (int i = 0; i < list.size(); i++) {
+				list.get(i).setId(list.get(i).getUnsafeEventId());
+			}
+			model.addAttribute("actcardUnsafeEventList2", list);
+			System.out.println("list.size()----->"+list.size());
+		}
 		return "modules/actcard/actcardView";
 	}
 	
@@ -104,7 +113,8 @@ public class ActcardController extends BaseController {
 	@RequestMapping(value = "review")
 	public String review(ActcardReview actcardReview, Model model) {
 		actcardService.review(actcardService.get(actcardReview.getActcard().getId()), actcardReview);
-		model.addAttribute("actcard", actcardService.get(actcardReview.getActcard().getId()));
+		Actcard actcard = actcardService.get(actcardReview.getActcard().getId());
+		model.addAttribute("actcard", actcard);
 		return "modules/actcard/actcardView";
 	}
 
