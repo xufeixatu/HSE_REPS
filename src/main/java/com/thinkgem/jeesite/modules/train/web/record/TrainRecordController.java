@@ -83,10 +83,28 @@ public class TrainRecordController extends BaseController {
 		if (!beanValidator(model, trainRecord)){
 			return form(trainRecord, model);
 		}
+		if(trainRecord.getStatus().equals("1")){
+			addMessage(redirectAttributes, "受培记录已归档，不能修改");
+			return "redirect:"+Global.getAdminPath()+"/train/record/trainRecord/form";
+		}
 		trainRecordService.save(trainRecord);
 		addMessage(redirectAttributes, "保存培训记录成功");
 		return "redirect:"+Global.getAdminPath()+"/train/record/trainRecord/?repage";
 	}
+	
+	@RequiresPermissions("train:record:trainRecord:edit")
+	@RequestMapping(value = "immutable")
+	public String immutable(TrainRecord trainRecord, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, trainRecord)){
+			return form(trainRecord, model);
+		}
+		trainRecord.setStatus("1");//归档 不可更改了
+		trainRecordService.save(trainRecord);
+		addMessage(redirectAttributes, "保存培训记录成功");
+		return "redirect:"+Global.getAdminPath()+"/train/record/trainRecord/?repage";
+	}
+	
+	
 	
 	@RequiresPermissions("train:record:trainRecord:edit")
 	@RequestMapping(value = "delete")

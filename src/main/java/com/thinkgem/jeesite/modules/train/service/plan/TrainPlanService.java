@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.train.service.plan;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,10 @@ public class TrainPlanService extends CrudService<TrainPlanDao, TrainPlan> {
 		trainRecord.setTrainDuration(trainPlan.getPeriod());
 		trainRecord.setSubjectOffice(trainPlan.getSubjectOffice());
 		trainRecord.setObjectOffice(trainPlan.getObjectOffice());
+		trainRecord.setTrainObject(trainPlan.getTrainObject());
+		trainRecord.setTrainMethod(trainPlan.getTrainMethod());
+		trainRecord.setClassify(trainPlan.getClassify());
+		trainRecord.setBeginTrainTime(new Date());
 		trainRecord.setTrainTime(trainPlan.getTrainTime());
 		trainRecord.setIsPlan("1");//是计划
 		trainRecord.setPlan(trainPlan);

@@ -301,6 +301,7 @@ CREATE TABLE `train_record_score` (
   `record_id` varchar(64) NOT NULL COMMENT '培训记录',
   `user_id` varchar(64) NOT NULL COMMENT '受培人员',
   `score` varchar(32) NOT NULL COMMENT '培训成绩',
+  `status` varchar(8) NOT NULL DEFAULT '0' COMMENT '归档状态（-1取消，0草稿，1归档）',
   `create_by` varchar(64) NOT NULL COMMENT '创建者',
   `create_date` datetime NOT NULL COMMENT '创建时间',
   `update_by` varchar(64) NOT NULL COMMENT '更新者',
