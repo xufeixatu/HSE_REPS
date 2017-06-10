@@ -3,6 +3,10 @@
  */
 package com.thinkgem.jeesite.modules.train_course.web;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,8 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.course_review.entity.CourseReview;
+import com.thinkgem.jeesite.modules.course_review.service.CourseReviewService;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
 import com.thinkgem.jeesite.modules.train_course.service.TrainCourseService;
 
@@ -33,7 +40,8 @@ public class TrainCourse2Controller extends BaseController {
 
 	@Autowired
 	private TrainCourseService trainCourseService;
-	
+	@Autowired
+	private CourseReviewService courseReviewService;
 	@ModelAttribute
 	public TrainCourse get(@RequestParam(required=false) String id) {
 		TrainCourse entity = null;
@@ -49,8 +57,26 @@ public class TrainCourse2Controller extends BaseController {
 	@RequiresPermissions("train_course:trainCourse2:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(TrainCourse trainCourse, HttpServletRequest request, HttpServletResponse response, Model model) {
+		
 		Page<TrainCourse> page = trainCourseService.findPage(new Page<TrainCourse>(request, response), trainCourse); 
 		model.addAttribute("page", page);
+		
+		CourseReview courseReview =new CourseReview();
+		//补充
+		courseReview.setCourseId(request.getParameter("id"));
+	    System.out.println(courseReview.getCourseId());//课件Id
+	    System.out.println("第二个controller");
+	    //courseReview.setAssessGrade("1");
+	    Page<CourseReview> page1 = courseReviewService.findPage(new Page<CourseReview>(request, response), courseReview); 
+		courseReview.setAssessById(UserUtils.getUser().getName());
+		Date upload_time = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dateFormat.format(upload_time);
+		courseReview.setAssessTime(upload_time);
+		
+		courseReview.setCourseId(trainCourse.getId());
+		model.addAttribute("courseReview", courseReview);
+		model.addAttribute("page1", page1);
 		return "modules/train_course/trainCourse2List";
 	}
 
@@ -58,6 +84,7 @@ public class TrainCourse2Controller extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(TrainCourse trainCourse, Model model) {
 		model.addAttribute("trainCourse", trainCourse);
+		//model.addAttribute("courseReview", courseReview);
 		return "modules/train_course/trainCourse2Form";
 	}
 

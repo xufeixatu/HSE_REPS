@@ -168,7 +168,7 @@
 		  		 <div class="course">
 		  		 	<a href="${ctx}/train_course/trainCourse2/list?id=${trainCourse.id}">
 	
-		  		 		<img src="http://localhost:8080${trainCourse.coverId}" />
+		  		 		<img src="http://localhost:8083${trainCourse.coverId}" />
 		  		 	</a>
 		  		 	<div class="course-text">
 		  		 		<a href="${ctx}/train_course/trainCourse2/list?id=${trainCourse.id}">

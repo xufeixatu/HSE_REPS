@@ -2,16 +2,77 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-s
 	<title>培训课件上传与查看管理</title>
 	<meta name="decorator" content="default"/>
+	<style type="text/css"> 
+			*{margin:0;padding:0;list-style-type:none;}
+			body{color:#666;font:12px/1.5 Arial;}
+			/* star */
+			#star{position:relative;width:600px;margin:20px auto;height:24px;color:#FFFFFF;top:20px}
+			#star ul,#star span{float:left;display:inline;height:19px;line-height:19px;}
+			#star ul{margin:0 10px;}
+			#star li{float:left;width:24px;cursor:pointer;text-indent:-9999px;background:url(http://localhost:8083/HSE/images/star.png) no-repeat;}
+			#star strong{color:#f60;padding-left:10px;}
+			#star li.on{background-position:0 -28px;}
+			#star p{position:absolute;top:20px;width:159px;height:60px;display:none;background:url(http://localhost:8083/HSE/images//icon.gif) no-repeat;padding:7px 10px 0;}
+			#star p em{color:#f60;display:block;font-style:normal;}
+			</style>
+	
 	<script type="text/javascript">
+	  window.onload = function (){
+
+		var oStar = document.getElementById("star");
+		var aLi = oStar.getElementsByTagName("li");
+		var oUl = oStar.getElementsByTagName("ul")[0];
+		var oSpan = oStar.getElementsByTagName("span")[0];
+		var oP = oStar.getElementsByTagName("p")[0];
+		var i = iScore = iStar = 0;
+
+		for (i = 1; i <= aLi.length; i++){
+			aLi[i - 1].index = i;
+			
+			//鼠标移过显示分数
+			aLi[i - 1].onmouseover = function (){
+				fnPoint(this.index);
+				//浮动层显示
+				oP.style.display = "block";
+				//计算浮动层位置
+				oP.style.left = oUl.offsetLeft + this.index * this.offsetWidth - 104 + "px";
+				//匹配浮动层文字内容
+				oP.innerHTML = "<em><b>" + this.index + "</b> 分 "
+			};
+			
+			//鼠标离开后恢复上次评分
+			aLi[i - 1].onmouseout = function (){
+				fnPoint();
+				//关闭浮动层
+				oP.style.display = "none"
+			};
+			
+			//点击后进行评分处理
+			aLi[i - 1].onclick = function (){
+				iStar = this.index;
+				oP.style.display = "none";
+				oSpan.innerHTML = "<strong>" + (this.index) + " 分<> "
+			}
+		}
+		
+		//评分处理
+		function fnPoint(iArg){
+			//分数赋值
+			iScore = iArg || iStar;
+			for (i = 0; i < aLi.length; i++) aLi[i].className = i < iScore ? "on" : "";	
+		}
+		
+	};
+
+	
 		$(document).ready(function() {
 			 var getprogressvalue = $("#progress-value").attr('value');
 		     $("#progress-value").css("width",getprogressvalue+"%");
 		});
 		function page(n,s){
-			$("#pageNo").val(n);
+			$("#pageNo").val(n);0
 			$("#pageSize").val(s);
 			$("#searchForm").submit();
         	return false;
@@ -20,7 +81,8 @@ s
 	        for (var i = 0; i < arr.length; i++) { 
 	           if (arr[i] == element) {
 	                return i;    
-	            }   
+	            }   0.
+	            
 	        }   
 	        return -1; 
 	       }  
@@ -36,7 +98,7 @@ s
 	                     td.onmouseover = TdOnclick;
 	                         td.style.cursor = "pointer";
 	                             }  
-	                         }  
+	                          }  
 	     function TdOnclick() {
 	          var tds = GetTds();
 	          var index = ArrayIndexOf(tds, this);   
@@ -51,8 +113,11 @@ s
 	               $(td).css("color","#FFFFFF");
 	                }  
 	            } 
-
-	    
+/*  		function decode(text){
+ 			text = decodeURI(text);
+ 			return text;
+ 		} */
+	     
 	</script>
 	<style>
 		body{
@@ -290,6 +355,36 @@ s
 			position:absolute;
 			top:-5px;
 		}
+		/* 评论 */
+		.media{
+			 -moz-border-radius: 15px;   
+			  -webkit-border-radius: 15px;
+			  border-radius:15px;
+		}
+		.hd{
+		    padding-left:11px;
+			font-size: 15px;
+    		font-weight: bold;
+    		position: absolute;
+            padding-top: 8px;
+		}
+		.cmt-post{
+			border-bottom: 1px solid #d9dde1;
+			height: 120px;
+            padding-top: 9px;
+		}
+		 .clearfix{
+		    color: #93999f;
+		    font-size: 12px;
+		     margin-top: 13px;
+   			 padding-left: 42px;
+		}
+		#btnSubmit{
+			position: absolute;
+		    margin: 60px 33px;
+		    width: 100px;
+		    border-radius: 10px;			
+		}
 	</style>
 </head>
 <body class="wrapper">
@@ -298,9 +393,9 @@ s
 	    <li>>></li>
 	    <li class="active">查看课件</li>
 	</ol>
-	
+	<!-- 图片 -->
 	<div class="course-detail">
-		<img alt="封面" src="http://localhost:8080/${trainCourse.coverId}">
+		<img alt="封面" src="http://localhost:8083/${trainCourse.coverId}">
 		<div class="course-detail-text">
 			<span class="course-detail-text-title">${trainCourse.courseName}</span>
 			<div class="course-detail-text-status">
@@ -325,19 +420,27 @@ s
 					<li class="focus">
 						<a>星级评分</a>
 					</li>
-					<li class="star" onmouseover="InitEvent()">
-						<table id="tblMain"><tr><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>
-	    				</table>
-					</li>
+					<div id="star">
+						<ul>
+							<li><a href="javascript:;">1</a><>
+							<li><a href="javascript:;">2</a><>
+							<li><a href="javascript:;">3</a><>
+							<li><a href="javascript:;">4</a><>
+							<li><a href="javascript:;">5</a><>
+						</ul>
+						<span></span>
+						<p></p>
+					</div>
 				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="course-description">
+    <!--    中间部分 -->	
+   <div class="course-description">
 		<ul id="myTab" class="nav nav-tabs">
 		    <li class="active">
 		        <a href="#introduce" data-toggle="tab">
-		                                         课程介绍
+		            课程介绍
 		        </a>
 		    </li>
 		    <li>
@@ -345,7 +448,13 @@ s
 					课程目录
 				</a>
 			</li>
+			 <li>
+		    	<a href="#appraise" data-toggle="tab" >
+					课程评价
+				</a>
+			</li>
 		</ul>
+		
 		<div id="myTabContent" class="tab-content">
 		    <div class="tab-pane fade in active" id="introduce">
 		        <ul>
@@ -361,17 +470,27 @@ s
 							<c:forTokens items="${testString}" delims="|" var="videoHref">
 								<li>
 									<!-- 字符串截取获取最后的文件名，并显示 -->
-									<c:set var="videoHrefString" value="${videoHref}"/>													
+									<c:set var="videoHrefString" value="${videoHref}"/>			
+																		
 									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
 									<c:forEach items="${videoId}" var="videoName" begin="8" >
-										${videoName}
-									</c:forEach>									
+									
+<!-- 									<script type="text/javascript">
+
+										/* videoName = decodeURI(videoName); */
+										
+									</script> -->
+									${videoName}
+ 				 				<%-- 	<%=java.net.URLDecoder.decode("%E7%9F%A5%E8%AF%86%E5%B0%B1%E6%98%AF%E5%8A%9B%E9%87%8F.mp4","UTF-8")%> --%>
+							<%-- 	 	<%=java.net.URLDecoder.decode("vName","UTF-8")%>   --%>
+									</c:forEach>								
 								</li>
 							</c:forTokens>				        		
 		        		</ol>
 		        	</li>
 		        </ul>
 		    </div>
+		    
 		    <div class="tab-pane fade" id="chapter">
 		        <ul>		        
 					<c:set var="testString" value="${trainCourse.docId}"/>
@@ -382,7 +501,6 @@ s
 							<span class="chapetr-item">
 							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
 							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
-								<%-- <a href="http://localhost:8080${videoHref}"> --%>
 							
 									<!-- 字符串截取获取最后的文件名，并显示 -->
 									<c:set var="videoHrefString" value="${videoHref}"/>													
@@ -397,93 +515,104 @@ s
 					</c:forTokens>			
 		        </ul>
 		    </div>
+		    		
+		  <!--   评价 -->
+		<%--   <div>${courseReview.courseId}</div> --%>
+		  	<div class="tab-pane fade course_review" id="appraise">
+		  	<form:form id="inputForm" modelAttribute="courseReview"
+			action="${ctx}/course_review/courseReview/save1" method="post"
+			class="form-horizontal">
+		 	<%-- <input name="courseId" value="${courseReview.courseId}" /> --%>
+		 	<form:hidden path="courseId"  value="${courseReview.courseId}"/>
+			<form:hidden path="id"/>
+			<sys:message content="${message}" />
+			<div class="control-group">
+				<span> <form:textarea
+						path="assessOpinion" htmlEscape="false" rows="4" maxlength="255"
+						class="input-xxlarge " />
+				</span> 
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论人：</label>
+				<div class="controls">
+					<form:input path="assessById" htmlEscape="false" maxlength="64" class="input-xlarge required" />
+						<span class="help-inline"><font color="red">*</font> </span>
+					</div>
+				</div>
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论时间：</label>
+				<div class="controls">
+					<input name="assessTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+						value="<fmt:formatDate value="${courseReview.assessTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+						<span class="help-inline"><font color="red">*</font> </span>
+					</div>
+				</div>
+						
+				<span> <shiro:hasPermission
+					name="course_review:courseReview:edit">
+					<input id="btnSubmit" class="btn btn-primary" type="submit"
+						value="发表" />&nbsp;</shiro:hasPermission>
+				</span>
+			</div>
+		 </form:form>
+		<sys:message content="${message}" />
+		  	
+		  	
+		  	  <div class="cmt-wrap">
+                 <ul class="cmt-list">
+                 	<c:forEach items="${page1.list}" var="courseReview">
+                    <li class="cmt-post" >
+                      <c:if test="courseReview.courseId=="></c:if>
+    				<div class="inner">
+	    			  	<div class="media"  style="display:inline;">
+	                   <a href="/u/1968386/courses" target="_blank"><img src="http://img.mukewang.com/555869eb0001716101800180-40-40.jpg" width="32" height="32" style="border-radius:37px 37px;"></a>
+        			    </div>
+    				
+    					<div class="hd" style="display:inline">
+                          <a href="javascript:void();" class="name disabled">${courseReview.assessById}</a>
+    					</div>
+    					<p class="cmt-txt" style="padding: 5px 41px;padding-top: 16px;">${courseReview.assessOpinion}</p>
+    					<div class="ft clearfix">
+						<span><fmt:formatDate value="${courseReview.assessTime}"
+								pattern="yyyy-MM-dd HH:mm:ss" /></span>
+						   </div>
+						</div>
+    		    	</li>
+    		    	</c:forEach>
+		  	    </ul>
+		  	</div>
+		  	
+		  	
+	    	 <%-- 
+		<table id="contentTable"
+			class="table table-striped table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th>评论内容</th>
+					<th>评论人</th>
+					<th>评论时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${page1.list}" var="courseReview">
+					<tr>
+						<td><a
+							href="${ctx}/course_review/courseReview/form?id=${courseReview.id}">
+								${courseReview.assessOpinion} </a></td>
+						<td>${courseReview.assessById}</td>
+						<td><fmt:formatDate value="${courseReview.assessTime}"
+								pattern="yyyy-MM-dd HH:mm:ss" /></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table> --%> 
+     	</div>
+	
 		</div>
-	</div>
-<!--  
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/train_course/trainCourse2/">培训课件查看列表</a></li>
-		<shiro:hasPermission name="train_course:trainCourse2:edit"><li><a href="${ctx}/train_course/trainCourse2/form">上传培训课件</a></li></shiro:hasPermission>
-	</ul>
-	<form:form id="searchForm" modelAttribute="trainCourse" action="${ctx}/train_course/trainCourse2/" method="post" class="breadcrumb form-search">
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<ul class="ul-form">
-			<li><label>课件名称：</label>
-				<form:input path="courseName" htmlEscape="false" maxlength="255" class="input-medium"/>
-			</li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
-			<li class="clearfix"></li>
-		</ul>
-	</form:form>
-	<sys:message content="${message}"/>
-	
 		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
-		<thead>
-			<tr>
-				<th>封面</th>
-				<th>课件名称</th>
-				<th>课件描述</th>
-				<th>课件时长</th>
-				<th>课件学习人数</th>
-				<th>课件评价得分</th>
-				<th>上传人</th>
-				<th>上传时间</th>
-				<shiro:hasPermission name="train_course:trainCourse2:edit"><th>操作</th></shiro:hasPermission>
-			</tr>
-		</thead>
-		<tbody>
-		<c:forEach items="${page.list}" var="trainCourse">
-			<tr>
-				<td>
-					<a href = "${ctx}/train_course/trainCourse2/list?id=${trainCourse.id}">
-						<img src="http://localhost:8080${trainCourse.coverId}" width = "150" height = "100">
-					</a>
-				</td>
-				<td>
-					${trainCourse.courseName}
-				</td>
-				<td>
-					${trainCourse.courseDec}
-				</td>
-				<td>
-					${trainCourse.courseTime}
-				</td>
-				<td>
-					${trainCourse.courseCount}
-				</td>
-				<td>
-					${trainCourse.courseGrade}
-				</td>
-				<td>
-					${trainCourse.uploadBy}
-				</td>
-				<td>
-					<fmt:formatDate value="${trainCourse.uploadTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<shiro:hasPermission name="train_course:trainCourse2:edit"><td>
-    				<a href="${ctx}/train_course/trainCourse2form?id=${trainCourse.id}">修改</a>
-					<a href="${ctx}/train_course/trainCourse2/delete?id=${trainCourse.id}" onclick="return confirmx('确认要删除该培训课件上传与查看吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>
-	-->
-	<div class="pagination">${page}</div>
+	</div>
+
+	 <div class="pagination">${page}</div>
 </body>
 </html>
+
