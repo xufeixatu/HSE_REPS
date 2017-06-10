@@ -23,8 +23,11 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.actcard.dao.ActcardUnsafeEventDao;
 import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
 import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafe;
+import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafeEvent;
+import com.thinkgem.jeesite.modules.actcard.service.ActcardUnsafeEventService;
 import com.thinkgem.jeesite.modules.actcard.service.ActcardUnsafeService;
 import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
@@ -40,6 +43,10 @@ public class ActcardUnsafeController extends BaseController {
 
 	@Autowired
 	private ActcardUnsafeService actcardUnsafeService;
+	@Autowired
+	private ActcardUnsafeEventService actcardUnsafeEventService;
+	@Autowired
+	private ActcardUnsafeEventDao actcardUnsafeEventDao;
 	
 	@Autowired
 	private OfficeDao officeDao;
@@ -72,25 +79,63 @@ public class ActcardUnsafeController extends BaseController {
 		return "modules/actcard/countView";
 	}
 	@RequiresPermissions("actcard:actcardUnsafe:view")
+	@RequestMapping(value = "countUnsafeInfoEvent")
+	public String countUnsafeInfoEvent(ActcardUnsafe actcardUnsafe, HttpServletRequest request, HttpServletResponse response, Model model) {
+		model.addAttribute("officeNames", getAllOfficeNameByOfficeIds(actcardUnsafe.getOfficeIds()));
+		System.out.println("ctcardUnsafe.getUnsafeEventId()----------"+actcardUnsafe.getUnsafeEventId());
+		model.addAttribute("unsafeEventDate", getAllUnsafeEventInfo(actcardUnsafe));
+		return "modules/actcard/countinfoView";
+	}
+	
+	
+	
+	@RequiresPermissions("actcard:actcardUnsafe:view")
 	@RequestMapping(value = "countUnsafeEvent")
 	public String countUnsafeEvent(ActcardUnsafe actcardUnsafe, HttpServletRequest request, HttpServletResponse response, Model model) {
-		System.out.println(actcardUnsafe.getStartTime());
-		System.out.println(actcardUnsafe.getEndTime());
-		System.out.println(actcardUnsafe.getOfficeIds());
 		model.addAttribute("officeNames", getAllOfficeNameByOfficeIds(actcardUnsafe.getOfficeIds()));
 		model.addAttribute("unsafeEventDate", getAllUnsafeEvent(actcardUnsafe));
-		
-//		Page<ActcardUnsafe> page = actcardUnsafeService.findPage(new Page<ActcardUnsafe>(request, response), actcardUnsafe); 
-//		model.addAttribute("page", page);
 		return "modules/actcard/countView";
 	}
+	private String getAllUnsafeEventInfo(ActcardUnsafe actcardUnsafe){
+		String officeIds = actcardUnsafe.getOfficeIds();
+		Date startTime = actcardUnsafe.getStartTime();
+		Date endTime = actcardUnsafe.getEndTime();
+		String unsafeEventInfoIds = actcardUnsafe.getUnsafeEventId();
+		String events = "";
+		if(null!=unsafeEventInfoIds && unsafeEventInfoIds.length() > 1){
+			String[] unsafeEventInfoIdsArr = unsafeEventInfoIds.split(",");
+			for (int i = 0; i < unsafeEventInfoIdsArr.length; i++) {
+				//获取不安全事件的名称
+				
+				String event = "{name:'"+actcardUnsafeEventService.get(unsafeEventInfoIdsArr[i]).getName()+"',data:[";
+				
+				if(null!=officeIds && officeIds.length()>=1){//该事件每个部门的个数
+					String[] idsArr = officeIds.split(",");
+					for (int j = 0; j < idsArr.length; j++) {
+						int actNum = actcardUnsafeService.findUnsafeEventById(idsArr[j],startTime,endTime,unsafeEventInfoIdsArr[i]);
+						event += actNum+",";
+					}
+					if(",".equals(event.substring(event.length()-1, event.length()))){
+						event = event.substring(0, event.length()-1);
+					}
+				}
+				event += "]},";
+				events += event;
+			}
+		}
+		if(events.length()>1 && ",".equals(events.substring(events.length()-1, events.length()))){
+			events = events.substring(0, events.length()-1);
+		}
+		return events;
+	}
+	
 	private String getAllUnsafeEvent(ActcardUnsafe actcardUnsafe){
 		String ids = actcardUnsafe.getOfficeIds();
 		Date startTime = actcardUnsafe.getStartTime();
 		Date endTime = actcardUnsafe.getEndTime();
 		String act = "{name:'不安全行为',data:[";
 		String statue = "{name:'不安全状态',data:[";
-		if(ids.length()>=1){
+		if(null!=ids && ids.length()>=1){
 			String[] idsArr = ids.split(",");
 			for (int i = 0; i < idsArr.length; i++) {
 				int actNum = actcardUnsafeService.findUnsafeActById(idsArr[i],startTime,endTime);
@@ -105,7 +150,7 @@ public class ActcardUnsafeController extends BaseController {
 		}
 		act += "]}";
 		statue += "]}";
-		return "["+act+","+statue+"]";
+		return act+","+statue;
 	}
 	private String getAllOfficeNameByOfficeIds(String ids){
 //		List<Office> list = new ArrayList<Office>();
@@ -115,17 +160,17 @@ public class ActcardUnsafeController extends BaseController {
 //				list.add(officeDao.get(idsArr[i]));
 //			}
 //		}
-		String names = "[";
-		if(ids.length()>=1){
+		String names = "";
+		if(null!=ids && ids.length()>=1){
 			String[] idsArr = ids.split(",");
 			for (int i = 0; i < idsArr.length; i++) {
 				names+= "'"+officeDao.get(idsArr[i]).getId()+officeDao.get(idsArr[i]).getName()+"',";
 			}
 		}
-		if(",".equals(names.substring(names.length()-1, names.length()))){
+		if(null!=ids && names.length()>0 && ",".equals(names.substring(names.length()-1, names.length()))){
+			System.out.println(names);
 			names = names.substring(0, names.length()-1);
 		}
-		names += "]";
 		System.out.println(names);
 		return names;
 	}

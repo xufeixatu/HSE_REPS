@@ -3,8 +3,11 @@
  */
 package com.thinkgem.jeesite.modules.actcard.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,8 @@ public class ActcardUnsafeService extends CrudService<ActcardUnsafeDao, ActcardU
 	private ActcardDao actcardDao;
 	@Autowired
 	private ActcardUnsafeEventService actcardUnsafeEventService;
+	@Autowired
+	private ActcardUnsafeDao actcardUnsafeDao;
 	
 	public ActcardUnsafe get(String id) {
 		return super.get(id);
@@ -77,6 +82,27 @@ public class ActcardUnsafeService extends CrudService<ActcardUnsafeDao, ActcardU
 			}
 		}
 		return count;
+	}
+
+	public int findUnsafeEventById(String offiecid, Date startTime, Date endTime, String eventid) {
+		// TODO Auto-generated method stub
+		List<Actcard> list = actcardDao.findActcards(offiecid,startTime,endTime);
+		List<String> listIds = new ArrayList<String>();
+		for (int i = 0; i < list.size(); i++) {
+			listIds.add(list.get(i).getId());
+		}
+		System.out.println("listIds------------>"+listIds.size());
+		Map<String, Object> params = new HashMap<String, Object>();
+		if(listIds.size()==0){
+			listIds.add("' '");
+		}
+		
+		params.put("listIds", listIds);
+		params.put("eventid", eventid);
+		
+//		List<ActcardUnsafe> list2 = actcardUnsafeDao.findUnsafeEvent(listIds,eventid);
+		List<ActcardUnsafe> list2 = actcardUnsafeDao.findUnsafeEvent(params);
+		return list2.size();
 	}
 	
 }

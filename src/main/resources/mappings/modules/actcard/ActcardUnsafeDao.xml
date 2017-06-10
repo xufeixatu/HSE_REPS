@@ -81,6 +81,20 @@
 			and a.actcard_id = #{actcardId}
 		</where>		
 	</select>
+	<select id="findUnsafeEvent" resultType="ActcardUnsafe">
+		SELECT 
+			<include refid="actcardUnsafeColumns"/>
+		FROM actcard_unsafe a 
+		<include refid="actcardUnsafeJoins"/>
+		<where>
+			a.del_flag = '0'
+			and a.actcard_id in (
+			<foreach item="item" index="index" collection="listIds" open="(" separator="," close=")">  
+			  #{item}  
+			 </foreach>)  
+			and a.unsafe_event_id = #{eventid}
+		</where>		
+	</select>
 	
 	<insert id="insert">
 		INSERT INTO actcard_unsafe(

@@ -3,7 +3,9 @@
  */
 package com.thinkgem.jeesite.modules.actcard.dao;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
@@ -18,5 +20,9 @@ import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafe;
 public interface ActcardUnsafeDao extends CrudDao<ActcardUnsafe> {
 
 	List<ActcardUnsafe> findListByActcardId(String actcardId);
+
+	List<ActcardUnsafe> findUnsafeEvent(String offiecid, Date startTime, Date endTime, String eventid);
+
+	List<ActcardUnsafe> findUnsafeEvent(Map<String, Object> params);
 	
 }

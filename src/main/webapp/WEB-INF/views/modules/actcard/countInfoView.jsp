@@ -4,6 +4,7 @@
 <head>
 	<title>不安全事件统计</title>
 	<meta name="decorator" content="default"/>
+	<%@include file="/WEB-INF/views/include/treeview.jsp" %>
 	<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
 	<script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
 	<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
@@ -20,20 +21,20 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/actcard/actcardUnsafe/countUnsafeEvent">不安全事件统计</a></li>
-		<li><a href="${ctx}/actcard/actcardUnsafe/countUnsafeInfoEvent">不安全事件详细统计</a></li>
+		<li ><a href="${ctx}/actcard/actcardUnsafe/countUnsafeEvent">不安全事件统计</a></li>
+		<li class="active"><a href="${ctx}/actcard/actcardUnsafe/countUnsafeInfoEvent">不安全事件详细统计</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="actcardUnsafe" action="${ctx}/actcard/actcardUnsafe/countUnsafeEvent" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="actcardUnsafe" action="${ctx}/actcard/actcardUnsafe/countUnsafeInfoEvent" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 			<li><label>时间段：</label>
 				
-				<input name="startTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+				<input name="startTime" cssClass="input-small" type="text" readonly="readonly" maxlength="20" class="input-small Wdate required"
 					value="<fmt:formatDate value="${actcardUnsafe.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 				-
-				<input name="endTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+				<input name="endTime" type="text" readonly="readonly" maxlength="20" class="input-small Wdate required"
 					value="<fmt:formatDate value="${actcardUnsafe.endTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
@@ -41,8 +42,18 @@
 				<sys:treeselect id="territorialOffice" name="officeIds" value="${actcard.territorialOffice.id}" labelName="territorialOffice.name" labelValue="${actcard.territorialOffice.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="input-small" allowClear="true" checked="true" notAllowSelectParent="true"/>
 			</li>
+			
+			<li>
+				<label>不安全分类:</label>
+				<sys:treeselect id="actcardUnsafeEvent" name="unsafeEventId" value="${actcardUnsafeEvent.territorialOffice.id}" labelName="actcardUnsafeEvent.name" labelValue="${actcard.territorialOffice.name}"
+					title="不安全分类" url="/actcard/actcardUnsafeEvent/treeData" cssClass="input-small" allowClear="true" checked="true" notAllowSelectParent="true"/>
+			</li>
+			
+			
+			
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
+			
 		</ul>
 	</form:form>
 	
@@ -55,7 +66,7 @@
 	            type: 'bar'
 	        },
 	        title: {
-	            text: '不安全事件统计图'
+	            text: '不安全事件详细统计图'
 	        },
 	        xAxis: {
 	            categories: [${officeNames}],
