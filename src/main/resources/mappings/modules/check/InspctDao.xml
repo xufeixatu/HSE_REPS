@@ -60,23 +60,18 @@
 	LEFT JOIN sys_office office1 ON office1.id = data.checkOfficeId
 	LEFT JOIN sys_office office2 ON office2.id = data.inspectionOfficeId
 	LEFT JOIN
-	(SELECT check_result.inspct_id, count(*) AS all_question_count
-	FROM question,
-	(SELECT * FROM check_item_check
-	WHERE check_result = '0'
-	GROUP BY inspct_id
-	) AS check_result
-	WHERE question.check_item_check_id = check_result.id) AS check_result
+	(SELECT inspct_id, count(*) AS all_question_count 
+		FROM check_item_check
+		WHERE check_result = '0'
+		GROUP BY inspct_id) AS check_result
 	ON data.id = check_result.inspct_id
 	LEFT JOIN
-	(SELECT check_result.inspct_id, count(*) AS solved_question_count
-	FROM question,
-	(SELECT * FROM check_item_check
-	WHERE check_result = '0'
-	GROUP BY inspct_id
-	) AS check_result
-	WHERE question.check_item_check_id = check_result.id
-	AND question.state_id = '5') AS check_result1
+	(SELECT check_item_check.inspct_id, count(*) AS solved_question_count
+		FROM check_item_check, question
+		WHERE check_item_check.id = question.check_item_check_id
+		AND question.state_id = '5'
+		AND check_item_check.check_result = '0'
+		GROUP BY check_item_check.inspct_id) AS check_result1
 	ON data.id = check_result1.inspct_id	
 	</select>
 	
