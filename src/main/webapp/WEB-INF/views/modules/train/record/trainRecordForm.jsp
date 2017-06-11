@@ -230,10 +230,9 @@
 								<input id="trainRecordCoursewareList{{idx}}_delFlag" name="trainRecordCoursewareList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
-								<select id="trainRecordCoursewareList{{idx}}_courseware" name="trainRecordCoursewareList[{{idx}}].courseware.id" data-value="{{row.courseware.id}}" class="input-small ">
-									<option value=""></option>
-									<c:forEach items="${fns:getDictList('')}" var="dict">
-										<option value="${dict.value}">${dict.label}</option>
+								<select id="trainRecordCoursewareList{{idx}}_courseware" name="trainRecordCoursewareList[{{idx}}].courseware.id" data-value="{{row.courseware.id}}" class="input-large required" >
+									<c:forEach items="${trainRecord.trainRecordCoursewareList}" var="item">
+										<option value="${item.value}">${item.label}</option>
 									</c:forEach>
 								</select>
 							</td>
