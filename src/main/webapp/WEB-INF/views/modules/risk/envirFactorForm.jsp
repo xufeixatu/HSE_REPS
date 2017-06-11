@@ -61,9 +61,9 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">危害因素：</label>
+			<label class="control-label">危害因素（危险源）：</label>
 			<div class="controls">
-				<form:input path="riskFactors" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:checkboxes path="riskFactors" items="${fns:getDictList('risk_factors')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 		<div class="control-group">

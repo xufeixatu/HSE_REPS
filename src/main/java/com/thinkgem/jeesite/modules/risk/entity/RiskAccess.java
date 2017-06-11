@@ -64,7 +64,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	}
 	public void setEscore(String escore) {
 		this.escore = escore;
-	}
+	} 
 	public String getCscore() {
 		return cscore;
 	}

@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.risk.dao.RiskAccessDao;
+import com.thinkgem.jeesite.modules.risk.dao.RiskSaferesultDao;
 import com.thinkgem.jeesite.modules.risk.entity.RiskAccess;
 import com.thinkgem.jeesite.modules.risk.entity.RiskSaferesult;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
-import com.thinkgem.jeesite.modules.risk.dao.RiskAccessDao;
-import com.thinkgem.jeesite.modules.risk.dao.RiskSaferesultDao;
 
 /**
  * riskService
@@ -44,12 +44,57 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	
 	@Transactional(readOnly = false)
 	public void save(RiskAccess riskAccess) {
+		super.save(riskAccess);
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(RiskAccess riskAccess) {
+		super.delete(riskAccess);
+	}
+	/**
+	 * 增加一个新的风险
+	 * @param riskAccess
+	 */
+	@Transactional(readOnly = false)
+	public void addSave(RiskAccess riskAccess) {
+	
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		riskAccess.setNumber(new Date().getTime()+"");
 		riskAccess.setYears(new Date());
 		riskAccess.setRecognizeDate(new Date());
 		riskAccess.setRecognizeBy(UserUtils.getUser().getName());
 		riskAccess.setUnit(UserUtils.getUser().getOffice().getName());
 		super.save(riskAccess);
+	}
+	/**
+	 * 分析
+	 * @param riskAccess
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public void  analyse(RiskAccess riskAccess) {
+		RiskSaferesult riskSaferesult=null;
 		
+		List<RiskAccess> risk = findList(riskAccess);
+		String id=risk.get(0).getAccessid();
+		riskSaferesult=riskSaferesultDao.get(id);
+		
+		riskAccess.setRiskLevel(riskSaferesult.getRiskLevel());
+		riskAccess.setLscore(riskSaferesult.getLscore());
+		riskAccess.setEscore(riskSaferesult.getEscore());
+		riskAccess.setCscore(riskSaferesult.getCscore());
+		
+		super.save(riskAccess);
+		//return riskAccess;
+	}
+
+	public void analyse_envir(RiskAccess riskAccess) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void getLEC(RiskAccess riskAccess){
 		
 		String lscore = riskAccess.getLscore();
 		String escore = riskAccess.getEscore();
@@ -102,37 +147,6 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 			riskAccess.setRiskLevel(entity.getRiskLevel());
 			super.save(riskAccess);
 		}
-	}
-	
-	@Transactional(readOnly = false)
-	public void delete(RiskAccess riskAccess) {
-		super.delete(riskAccess);
-	}
-	/**
-	 * 分析
-	 * @param riskAccess
-	 * @return
-	 */
-	@Transactional(readOnly = false)
-	public void  analyse(RiskAccess riskAccess) {
-		RiskSaferesult riskSaferesult=null;
-		
-		List<RiskAccess> risk = findList(riskAccess);
-		String id=risk.get(0).getAccessid();
-		riskSaferesult=riskSaferesultDao.get(id);
-		
-		riskAccess.setRiskLevel(riskSaferesult.getRiskLevel());
-		riskAccess.setLscore(riskSaferesult.getLscore());
-		riskAccess.setEscore(riskSaferesult.getEscore());
-		riskAccess.setCscore(riskSaferesult.getCscore());
-		
-		super.save(riskAccess);
-		//return riskAccess;
-	}
-
-	public void analyse_envir(RiskAccess riskAccess) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }
