@@ -111,15 +111,7 @@
 				</form:select>
 			</div>
 		</div>	
-		<div class="control-group">
-			<label class="control-label">风险等级</label>
-			<div class="controls">
-				<form:select path="riskLevel" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('risk_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>	
+	
 <!-- 	lec法则  结束-->
 	
 	             <div >
@@ -136,12 +128,6 @@
 			<label class="control-label">触发原因：</label>
 			<div class="controls">
 				<form:textarea path="reason" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="form-actions">
