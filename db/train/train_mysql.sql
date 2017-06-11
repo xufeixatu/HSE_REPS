@@ -284,7 +284,8 @@ CREATE TABLE `train_record_courseware` (
   PRIMARY KEY (`id`),
   KEY `courseware_id` (`courseware_id`),
   KEY `record_id` (`record_id`),
-  CONSTRAINT `train_record_courseware_ibfk_1` FOREIGN KEY (`courseware_id`) REFERENCES `train_courseware` (`id`),
+--  CONSTRAINT `train_record_courseware_ibfk_1` FOREIGN KEY (`courseware_id`) REFERENCES `train_courseware` (`id`),
+-- 避免错
   CONSTRAINT `train_record_courseware_ibfk_2` FOREIGN KEY (`record_id`) REFERENCES `train_record` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
