@@ -5,6 +5,10 @@ package com.thinkgem.jeesite.modules.train_course.service;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.VideoConvertUtils;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
 import com.thinkgem.jeesite.modules.course_catelog.dao.CourseCatelogDao;
 import com.thinkgem.jeesite.modules.course_catelog.entity.CourseCatelog;
@@ -46,9 +51,43 @@ public class TrainCourseService extends CrudService<TrainCourseDao, TrainCourse>
 		return super.findPage(page, trainCourse);
 	}
 	
+	
+	public void vedioConvert(TrainCourse trainCourse, String filePath){
+		
+		//获得保存文件的路径
+	/*	String basePath = sctx.getRealPath("userfiles");*/
+		//拿到文件路径和转码
+/*		String filePath[]=trainCourse.getDocId().split("|");*/
+		String path = filePath + "userfiles\\1\\files\\train_course\\trainCourse\\2017\\05\\movie.mp4";
+		
+		String codcFilePath = filePath + "userfiles\\1\\files\\train_course\\trainCourse\\2017\\05\\" + "NewVedioTest" + ".mp4";				//设置转换为flv格式后文件的保存路径
+		// 获取配置的转换工具（ffmpeg.exe）的存放路径
+		String ffmpegPath = filePath + ".." + "\\tools\\ffmpeg.exe";	
+		//转码
+
+		try {
+/*			boolean flag = VideoConvertUtils.executeCodecs(ffmpegPath, filePath[0], codcFilePath);*/
+			boolean flag = VideoConvertUtils.executeCodecs(ffmpegPath, path, codcFilePath);
+			if(flag == true){
+				//TODO
+			}
+			else{
+				//TODO
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
+	
 	@Transactional(readOnly = false)
 	public void save(TrainCourse trainCourse) {
 		super.save(trainCourse);
+		
 		for (CourseCatelog courseCatelog : trainCourse.getCourseCatelogList()){
 			if (courseCatelog.getId() == null){
 				continue;
