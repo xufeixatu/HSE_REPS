@@ -11,10 +11,12 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		user.name AS "createBy.name"
 	</sql>
 	
 	<sql id="actcardReviewJoins">
+		left join sys_user user on user.id  = a.create_by
 	</sql>
     
 	<select id="get" resultType="ActcardReview">
@@ -32,6 +34,9 @@
 		<include refid="actcardReviewJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="actcard != null and actcard.id != null and actcard.id != ''">
+				AND a.actcard_id = #{actcard.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

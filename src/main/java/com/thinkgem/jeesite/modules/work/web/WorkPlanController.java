@@ -540,6 +540,7 @@ public class WorkPlanController extends BaseController {
 		}
 		return mapList;
 	}
+
 //<<<<<<< HEAD
 	/**
 	 * 查询待受理工作
@@ -607,4 +608,5 @@ public class WorkPlanController extends BaseController {
 //=======
 //
 //>>>>>>> refs/remotes/origin/master
+
 }

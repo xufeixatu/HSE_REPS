@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.actcard.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,13 +21,20 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.actcard.dao.ActcardUnsafeDao;
+import com.thinkgem.jeesite.modules.actcard.dao.ActcardUnsafeEventDao;
 import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
+import com.thinkgem.jeesite.modules.actcard.entity.ActcardReview;
+import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafe;
+import com.thinkgem.jeesite.modules.actcard.entity.ActcardUnsafeEvent;
 import com.thinkgem.jeesite.modules.actcard.service.ActcardService;
+import com.thinkgem.jeesite.modules.actcard.service.ActcardUnsafeEventService;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
 
 /**
  * ACT卡Controller
  * @author 岳鑫
- * @version 2017-05-23
+ * @version 2017-05-30
  */
 @Controller
 @RequestMapping(value = "${adminPath}/actcard/actcard")
@@ -33,6 +42,12 @@ public class ActcardController extends BaseController {
 
 	@Autowired
 	private ActcardService actcardService;
+	@Autowired
+	private SystemService systemService;
+	@Autowired
+	private ActcardUnsafeEventDao actcardUnsafeEventDao;
+	@Autowired
+	private ActcardUnsafeDao actcardUnsafeDao;
 	
 	@ModelAttribute
 	public Actcard get(@RequestParam(required=false) String id) {
@@ -57,37 +72,50 @@ public class ActcardController extends BaseController {
 	@RequiresPermissions("actcard:actcard:view")
 	@RequestMapping(value = "form")
 	public String form(Actcard actcard, Model model) {
-		
-		String view = "actcardForm";
-		
-		// 查看审批申请单
-		if (StringUtils.isNotBlank(actcard.getId())){//.getAct().getProcInsId())){
-
-			// 环节编号
-			String taskDefKey = actcard.getAct().getTaskDefKey();
-			
-			// 查看工单
-			if(actcard.getAct().isFinishTask()){
-				view = "actcardView";
-			}
-			// 修改环节
-			else if ("modify".equals(taskDefKey)){
-				view = "actcardForm";
-			}
-			// 指定解决人员环节
-			else if ("appoint".equals(taskDefKey)){
-				view = "actcardAppoint";
-			}
-			// 解决环节
-			else if ("solve".equals(taskDefKey)){
-				view = "actcardSolve";
-			}
-
-		}
-
 		model.addAttribute("actcard", actcard);
-		return "modules/actcard/" + view;
-
+		//model.addAttribute("menuList", systemService.findAllMenu());
+		model.addAttribute("actcardUnsafeEventList", actcardUnsafeEventDao.findAllList(new ActcardUnsafeEvent()));
+		String unids = actcard.getActcardUnsafeEventId();
+		if(null!=unids && unids.length()>1){
+			//当unids.length()大于1时为提交过的数据，只查询被选择的数据
+//			unids = unids.substring(0, unids.length()-1);
+//			unids = "'"+unids.replaceAll(",", "','")+"'";
+			List<ActcardUnsafe> list = actcardUnsafeDao.findListByActcardId(actcard.getId());
+			for (int i = 0; i < list.size(); i++) {
+				list.get(i).setId(list.get(i).getUnsafeEventId());
+			}
+			model.addAttribute("actcardUnsafeEventList2", list);
+//			System.out.println(actcardUnsafeEventDao.findCheckedList(unids).size());
+		}
+		
+		return "modules/actcard/actcardForm";
+	}
+	
+	
+	
+	@RequiresPermissions("actcard:actcard:view")
+	@RequestMapping(value = "view")
+	public String view(Actcard actcard, Model model) {
+		model.addAttribute("actcard", actcard);
+		String unids = actcard.getActcardUnsafeEventId();
+		if(null!=unids && unids.length()>1){
+			List<ActcardUnsafe> list = actcardUnsafeDao.findListByActcardId(actcard.getId());
+			for (int i = 0; i < list.size(); i++) {
+				list.get(i).setId(list.get(i).getUnsafeEventId());
+			}
+			model.addAttribute("actcardUnsafeEventList2", list);
+			System.out.println("list.size()----->"+list.size());
+		}
+		return "modules/actcard/actcardView";
+	}
+	
+	@RequiresPermissions("actcard:actcard:view")
+	@RequestMapping(value = "review")
+	public String review(ActcardReview actcardReview, Model model) {
+		actcardService.review(actcardService.get(actcardReview.getActcard().getId()), actcardReview);
+		Actcard actcard = actcardService.get(actcardReview.getActcard().getId());
+		model.addAttribute("actcard", actcard);
+		return "modules/actcard/actcardView";
 	}
 
 	@RequiresPermissions("actcard:actcard:edit")
@@ -97,6 +125,7 @@ public class ActcardController extends BaseController {
 			return form(actcard, model);
 		}
 		actcardService.save(actcard);
+		
 		addMessage(redirectAttributes, "保存ACT卡成功");
 		return "redirect:"+Global.getAdminPath()+"/actcard/actcard/?repage";
 	}

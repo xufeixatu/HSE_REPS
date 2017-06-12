@@ -27,6 +27,23 @@
 		WHERE a.id = #{id}
 	</select>
 	
+	<select id="getActcardUnsafeByParentIdAndName" resultType="ActcardUnsafeEvent">
+		SELECT 
+			<include refid="actcardUnsafeEventColumns"/>
+		FROM actcard_unsafe_event a
+		<include refid="actcardUnsafeEventJoins"/>
+		WHERE a.parent_id = '0'
+		and a.name like concat('%',#{0})
+	</select>
+	
+	<select id="findByParentId" resultType="ActcardUnsafeEvent">
+		SELECT 
+			<include refid="actcardUnsafeEventColumns"/>
+		FROM actcard_unsafe_event a
+		<include refid="actcardUnsafeEventJoins"/>
+		WHERE a.parent_id = #{0}
+	</select>
+	
 	<select id="findList" resultType="ActcardUnsafeEvent">
 		SELECT 
 			<include refid="actcardUnsafeEventColumns"/>
@@ -66,6 +83,18 @@
 		<include refid="actcardUnsafeEventJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findCheckedList" resultType="ActcardUnsafeEvent">
+		SELECT 
+			<include refid="actcardUnsafeEventColumns"/>
+		FROM actcard_unsafe_event a
+		<include refid="actcardUnsafeEventJoins"/>
+		<where>
+			a.del_flag = '0'
+			AND a.id in (${_parameter})
 		</where>
 		ORDER BY a.sort ASC
 	</select>
