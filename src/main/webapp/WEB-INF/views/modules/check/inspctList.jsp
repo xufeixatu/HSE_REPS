@@ -48,6 +48,7 @@
 				<th>检查时间</th>
 				<th>受检部门</th>
 				<th>检查类别</th>
+				<th>上报问题</th>
 				<shiro:hasPermission name="check:inspct:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -69,8 +70,11 @@
 				<td>
 					${inspct.typeName}
 				</td>
+				<td>
+					共【${inspct.aLLQuestionCount}】已整改【${inspct.solvedQuestionCount}】
+				</td>				
 				<shiro:hasPermission name="check:inspct:edit"><td>
-					<a href="${ctx}/check/checkItemCheck">进入检查</a>
+					<a href="${ctx}/check/checkItemCheck?inspctId=${inspct.id}">进入检查</a>
 					<%-- <a href="${ctx}/check/checkItemCheck">查看具体检查项</a>
     				<a href="${ctx}/check/inspct/form?id=${inspct.id}">修改</a>
 					<a href="${ctx}/check/inspct/delete?id=${inspct.id}" onclick="return confirmx('确认要删除该检查记录管理吗？', this.href)">删除</a> --%>

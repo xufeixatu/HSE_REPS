@@ -33,7 +33,25 @@ public class Inspct extends DataEntity<Inspct> {
 	private String obligate2;		// obligate_2
 	private String obligate3;		// obligate_3
 	private CheckTypeClass checkTypeClass; //检查类别
+	private int aLLQuestionCount;
+	private int solvedQuestionCount;
 	
+	public int getaLLQuestionCount() {
+		return aLLQuestionCount;
+	}
+
+	public void setaLLQuestionCount(int aLLQuestionCount) {
+		this.aLLQuestionCount = aLLQuestionCount;
+	}
+
+	public int getSolvedQuestionCount() {
+		return solvedQuestionCount;
+	}
+
+	public void setSolvedQuestionCount(int solvedQuestionCount) {
+		this.solvedQuestionCount = solvedQuestionCount;
+	}
+
 	public CheckTypeClass getCheckTypeClass() {
 		return checkTypeClass;
 	}
