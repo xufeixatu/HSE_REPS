@@ -20,7 +20,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	
 	private static final long serialVersionUID = 1L;
 	private String number;		// 编号
-	private Date years;		// 年份
+	private String years;		// 年份
 	private String unit;		// 属地单位
 	private String recognizeBy;		// 辨识人
 	private Date recognizeDate;		// 辨识时间
@@ -89,11 +89,11 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	}
 	
 	@JsonFormat(pattern = "yyyy")
-	public Date getYears() {
+	public String getYears() {
 		return years;
 	}
 
-	public void setYears(Date years) {
+	public void setYears(String years) {
 		this.years = years;
 	}
 	

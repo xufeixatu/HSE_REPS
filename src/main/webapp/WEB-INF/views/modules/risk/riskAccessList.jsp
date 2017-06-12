@@ -119,7 +119,7 @@
 		<c:forEach items="${page.list}" var="riskAccess">
 			<tr>
 				<td><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">
-					<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>
+					${riskAccess.years}
 				</a></td>
 				<td>
 					${riskAccess.unit}

@@ -13,12 +13,15 @@ import javax.validation.ConstraintViolationException;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -124,9 +127,9 @@ public class RiskAccessController extends BaseController {
 						failureMsg.append("</br>编号为"+risk.getNumber()+"的风险已经存在");
 						failureNum++;
 					}else{
-						risk.setYears(new Date());
+						risk.setYears(riskAccessService.getYears());
 						risk.setId(null);
-						riskAccessService.save(risk);
+						riskAccessService.addSave(risk);
 						successNum++;
 					}
 				}
@@ -272,7 +275,7 @@ public class RiskAccessController extends BaseController {
 			return form(riskAccess, model);
 		}
 	        
-		riskAccessService.save(riskAccess);
+		riskAccessService.addSave(riskAccess);
 		addMessage(redirectAttributes, "保存风险成功");
 		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/?repage";
 	}
