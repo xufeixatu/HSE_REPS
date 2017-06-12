@@ -7,6 +7,7 @@
 		a.record_id AS "record.id",
 		a.user_id AS "user.id",
 		a.score AS "score",
+		a.status AS "status",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
