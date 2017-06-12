@@ -23,12 +23,13 @@
 				}
 			});
 		});
+
 		function autoPingjia(){
 			 var lscore=$('#lscore option:selected').val();
 			 var escore=$('#escore option:selected').val();
 			 var cscore=$('#cscore option:selected').val();
 			  if(lscore>0&&escore>0&&cscore>0){
-				var dscore=lscore*escore*cscore;
+				/* var dscore=lscore*escore*cscore;
 				if(dscore>=320){
 					$("#riskLevel option[value='5']").attr("selected","selected");
 				}else if(dscore>=160){
@@ -39,11 +40,11 @@
 					$("#riskLevel option[value='2']").attr("selected", "selected");	
 				}else {
 					$("#riskLevel option[value='1']").attr("selected", "selected");
-				}
+				} */
 				
 				
 			 } 
-		}
+		
 	</script>
 </head>
 <body>
@@ -102,63 +103,93 @@
 				<form:radiobuttons path="judgeTf" items="${fns:getDictList('risk_is_flag')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label">评价方式：</label>
+			<div class="controls" >
+				<span><input  name="judgeMethod" type="radio" checked="checked" ><label for="judgeMethod1">LEC</label></span>
+				<span><input  name="judgeMethod" type="radio"  ><label for="judgeMethod2">MS</label></span>
+			</div>
+		</div>
+
+	    <script>
+	        $(function () {
+	            $("#lec").show();
+	            $(".controls span").click(function () {
+	    if($(this).index()==1){
+	    	$("#lec").hide();
+	    	$("#ms").show();
+	    }
+	    if($(this).index()==0){
+	    	$("#ms").hide();
+	    	$("#lec").show();
+	    }
+	    	
+	            })
+	        })
+	    </script>
 
 		<!-- 	lec法则  开始-->
-		<ul id="myTab" class="nav nav-tabs">
-			<li class="active">
-				<a href="#lec" data-toggle="tab"> LEC法则</a>
-			</li>
-			<li><a href="#ms" data-toggle="tab">MS法则</a></li>
-		</ul>
-		<div id="myTabContent" class="tab-content">
-			<div class="tab-pane fade in active" id="lec"  onchange="autoPingjia()" >
-				<div class="control-group">   
-					<label class="control-label">L(可能性)</label>
-					<div class="controls">
-						<form:select path="lscore"    class="input-xlarge ">
-							<form:option value="" label=""/>
-							<form:options items="${fns:getDictList('risk_lscore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-						</form:select>
-					</div>
-					<label class="control-label">E(频繁程度)</label>
-					<div class="controls">
-						<form:select path="escore"  class="input-xlarge ">
-							<form:option value="" label=""/>
-							<form:options items="${fns:getDictList('risk_escore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-						</form:select>
-					</div>
-					<label class="control-label">C(可能导致后果)</label>
-					<div class="controls">
-						<form:select path="cscore"   class="input-xlarge ">
-							<form:option value="" label=""/>
-							<form:options items="${fns:getDictList('risk_cscore')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-						</form:select>
-					</div>
-				</div>		
-			</div>
-			<!-- ms法则 -->
-			<div class="tab-pane fade" id="ms">
-				<p>ms</p>
-			</div>
-		
-		</div>
-		<div class="control-group">
-			<label class="control-label">自动评价结果：</label>
-			<div class="controls">
-			<form:select path="riskLevel"   class="input-xlarge ">
-					<form:options items="${fns:getDictList('risk_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-			</form:select>
-			
-			</div>
-		</div>
 
-<!-- 	lec法则  结束-->
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+		<div id="lec" class="control-group"  hidden="hidden">
+			<div class="control-group">
+				<label class="control-label">L(可能性)</label>
+				<div class="controls">
+					<form:select path="lscore" class="input-xlarge ">
+						<form:option value="" label="" />
+						<form:options items="${fns:getDictList('risk_lscore')}"
+							itemLabel="label" itemValue="value" htmlEscape="false" />
+					</form:select>
+				</div>
+				<label class="control-label">E(频繁程度)</label>
+				<div class="controls">
+					<form:select path="escore" class="input-xlarge ">
+						<form:option value="" label="" />
+						<form:options items="${fns:getDictList('risk_escore')}"
+							itemLabel="label" itemValue="value" htmlEscape="false" />
+					</form:select>
+				</div>
+				<label class="control-label">C(可能导致后果)</label>
+				<div class="controls">
+					<form:select path="cscore" class="input-xlarge ">
+						<form:option value="" label="" />
+						<form:options items="${fns:getDictList('risk_cscore')}"
+							itemLabel="label" itemValue="value" htmlEscape="false" />
+					</form:select>
+				</div>
 			</div>
 		</div>
+		<!-- LEC法则结束 -->
+		<!-- ms法则 -->
+		<div id="ms" class="control-group" hidden="hidden">
+			<div class="control-group">
+				<label class="control-label">L(事故发生可能性)</label>
+				<div class="controls">
+					<form:select path="lscore" class="input-xlarge ">
+						<form:option value="" label="" />
+						<form:options items="${fns:getDictList('risk_lscore')}"
+							itemLabel="label" itemValue="value" htmlEscape="false" />
+					</form:select>
+				</div>
+				<label class="control-label">M(控制措施的状态)</label>
+				<div class="controls">
+					<form:select path="escore" class="input-xlarge ">
+						<form:option value="" label="" />
+						<form:options items="${fns:getDictList('risk_mscore')}"
+							itemLabel="label" itemValue="value" htmlEscape="false" />
+					</form:select>
+				</div>
+				<label class="control-label">S(事故后果)</label>
+				<div class="controls">
+					<form:select path="cscore" class="input-xlarge ">
+						<form:option value="" label="" />
+						<form:options items="${fns:getDictList('risk_sscore')}"
+							itemLabel="label" itemValue="value" htmlEscape="false" />
+					</form:select>
+				</div>
+			</div>
+		</div>
+		<!-- ms法则结束 -->
+
 		<div class="form-actions">
 			<shiro:hasPermission name="risk:riskAccess:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

@@ -58,10 +58,9 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	@Transactional(readOnly = false)
 	public void addSave(RiskAccess riskAccess) {
 	
-		Calendar calendar=Calendar.getInstance();
-		calendar.setTime(new Date());
+	
 		riskAccess.setNumber(new Date().getTime()+"");
-		riskAccess.setYears(new Date());
+		riskAccess.setYears(getYears());
 		riskAccess.setRecognizeDate(new Date());
 		riskAccess.setRecognizeBy(UserUtils.getUser().getName());
 		riskAccess.setUnit(UserUtils.getUser().getOffice().getName());
@@ -89,6 +88,11 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 		//return riskAccess;
 	}
 
+	public String getYears(){
+		Calendar calendar=Calendar.getInstance();
+		calendar.setTime(new Date());
+		return String.valueOf(calendar.get(Calendar.YEAR));
+	}
 	public void analyse_envir(RiskAccess riskAccess) {
 		// TODO Auto-generated method stub
 		
