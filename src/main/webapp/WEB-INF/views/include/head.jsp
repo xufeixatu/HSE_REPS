@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta name="author" content="http://jeesite.com/"/>
 <meta name="renderer" content="webkit"><meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
 <meta http-equiv="Expires" content="0"><meta http-equiv="Cache-Control" content="no-cache"><meta http-equiv="Cache-Control" content="no-store">
-<script src="${ctxStatic}/jquery/jquery-1.8.3.min.js" type="text/javascript"></script>
+<!-- <script src="${ctxStatic}/jquery/jquery-1.8.3.min.js" type="text/javascript"></script> -->
 <link href="${ctxStatic}/bootstrap/2.3.1/css_${not empty cookie.theme.value ? cookie.theme.value : 'cerulean'}/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script src="${ctxStatic}/bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- <script src="${ctxStatic}/bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script> -->
 <link href="${ctxStatic}/bootstrap/2.3.1/awesome/font-awesome.min.css" type="text/css" rel="stylesheet" />
 <!--[if lte IE 7]><link href="${ctxStatic}/bootstrap/2.3.1/awesome/font-awesome-ie7.min.css" type="text/css" rel="stylesheet" /><![endif]-->
 <!--[if lte IE 6]><link href="${ctxStatic}/bootstrap/bsie/css/bootstrap-ie6.min.css" type="text/css" rel="stylesheet" />
@@ -21,3 +21,24 @@
 <script src="${ctxStatic}/common/hse.js" type="text/javascript"></script>
 <script type="text/javascript">var ctx = '${ctx}', ctxStatic='${ctxStatic}';</script>
 <link href="${ctxStatic}/common/hse.css" type="text/css" rel="stylesheet" />
+<link href="${ctxStatic}/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<link href="${ctxStatic}/hplus/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+<link href="${ctxStatic}/hplus/css/plugins/footable/footable.core.css" rel="stylesheet">
+<link href="${ctxStatic}/hplus/css/animate.css" rel="stylesheet">
+<link href="${ctxStatic}/hplus/css/style.css?v=4.1.0" rel="stylesheet">
+<!-- 全局js -->
+<script src="${ctxStatic}/hplus/js/jquery.min.js?v=2.1.4"></script>
+<script src="${ctxStatic}/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="${ctxStatic}/hplus/js/plugins/footable/footable.all.min.js"></script>
+
+<!-- 自定义js -->
+<script src="js/content.js?v=1.0.0"></script>
+<script>
+    $(document).ready(function() {
+
+        $('.footable').footable();
+        $('.footable2').footable();
+
+    });
+
+</script>
