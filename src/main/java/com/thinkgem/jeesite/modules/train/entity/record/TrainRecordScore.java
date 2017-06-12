@@ -20,6 +20,7 @@ public class TrainRecordScore extends DataEntity<TrainRecordScore> {
 	private TrainRecord record;		// 培训记录 父类
 	private User user;		// 受培人员
 	private String score;		// 培训成绩
+	private String status; //成绩状态
 	
 	public TrainRecordScore() {
 		super();
@@ -58,6 +59,15 @@ public class TrainRecordScore extends DataEntity<TrainRecordScore> {
 
 	public void setScore(String score) {
 		this.score = score;
+	}
+
+	@Length(min=1, max=8, message="培训状态长度必须介于 1 和 8 之间")
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

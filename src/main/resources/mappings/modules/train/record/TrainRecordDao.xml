@@ -6,6 +6,10 @@
 		a.id AS "id",
 		a.name AS "name",
 		a.object_office_id AS "objectOffice.id",
+		a.classify AS "classify",
+		a.train_method AS "trainMethod",
+		a.teacher_name  AS "teacherName",
+		a.train_object AS "trainObject",
 		a.train_time AS "trainTime",
 		a.subject_office_id AS "subjectOffice.id",
 		a.plan_number AS "planNumber",
@@ -62,6 +66,23 @@
 			<if test="objectOffice != null and objectOffice.id != null and objectOffice.id != ''">
 				AND a.object_office_id = #{objectOffice.id}
 			</if>
+			
+			<if test="classify != null and  classify != ''">
+				AND a.classify = #{classify}
+			</if>
+			
+			<if test="trainMethod != null and  trainMethod != ''">
+				AND a.train_method = #{trainMethod}
+			</if>
+			
+			<if test="teacherName != null and  teacherName != ''">
+				AND a.teacher_name = #{teacherName}
+			</if>
+			
+			<if test="trainObject != null and  trainObject != ''">
+				AND a.train_object = #{trainObject}
+			</if>
+			
 			<if test="subjectOffice != null and subjectOffice.id != null and subjectOffice.id != ''">
 				AND a.subject_office_id = #{subjectOffice.id}
 			</if>
@@ -111,6 +132,10 @@
 			id,
 			name,
 			object_office_id,
+			classify,
+		    train_method,
+		    teacher_name,
+		    train_object,
 			train_time,
 			subject_office_id,
 			plan_number,
@@ -133,6 +158,10 @@
 			#{id},
 			#{name},
 			#{objectOffice.id},
+			#{classify},
+			#{trainMethod},
+			#{teacherName},
+			#{trainObject},
 			#{trainTime},
 			#{subjectOffice.id},
 			#{planNumber},
@@ -158,6 +187,10 @@
 		UPDATE train_record SET 	
 			name = #{name},
 			object_office_id = #{objectOffice.id},
+			classify = #{classify},
+		    train_method = #{trainMethod},
+		    teacher_name = #{teacherName},
+		    train_object = #{trainObject},
 			train_time = #{trainTime},
 			subject_office_id = #{subjectOffice.id},
 			plan_number = #{planNumber},

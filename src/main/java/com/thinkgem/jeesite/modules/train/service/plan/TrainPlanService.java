@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.train.service.plan;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.modules.train.entity.plan.TrainPlan;
 import com.thinkgem.jeesite.modules.train.entity.record.TrainRecord;
-import com.thinkgem.jeesite.modules.train.service.record.TrainRecordService;
 import com.thinkgem.jeesite.modules.train.dao.plan.TrainPlanDao;
+import com.thinkgem.jeesite.modules.train.dao.record.TrainRecordDao;
 
 /**
  * 培训计划信息Service
@@ -27,7 +28,7 @@ import com.thinkgem.jeesite.modules.train.dao.plan.TrainPlanDao;
 public class TrainPlanService extends CrudService<TrainPlanDao, TrainPlan> {
 
 	@Autowired
-	private TrainRecordService trainRecordService;
+	private TrainRecordDao trainRecordDao;
 	@Autowired
 	private TrainPlanDao trainPlanDao;
 	
@@ -64,12 +65,16 @@ public class TrainPlanService extends CrudService<TrainPlanDao, TrainPlan> {
 		trainRecord.setTrainDuration(trainPlan.getPeriod());
 		trainRecord.setSubjectOffice(trainPlan.getSubjectOffice());
 		trainRecord.setObjectOffice(trainPlan.getObjectOffice());
+		trainRecord.setTrainObject(trainPlan.getTrainObject());
+		trainRecord.setTrainMethod(trainPlan.getTrainMethod());
+		trainRecord.setClassify(trainPlan.getClassify());
+		trainRecord.setBeginTrainTime(new Date());
 		trainRecord.setTrainTime(trainPlan.getTrainTime());
 		trainRecord.setIsPlan("1");//是计划
 		trainRecord.setPlan(trainPlan);
 		trainRecord.preInsert();
 		trainRecord.setIsNewRecord(true);
-		trainRecordService.save(trainRecord);
+		trainRecordDao.insert(trainRecord);
 		
 		trainPlan.preUpdate();
 		trainPlan.setStatus("1");

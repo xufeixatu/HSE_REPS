@@ -44,10 +44,7 @@
 		<div class="control-group">
 			<label class="control-label">培训分类：</label>
 			<div class="controls">
-				<form:select path="classify" class="input-xlarge required">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('train_content_classify')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				<form:radiobuttons path="classify" items="${fns:getDictList('train_content_classify')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
@@ -58,16 +55,15 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label">培训对象分类：</label>
 			<div class="controls">
-				<form:select path="trainObject" class="input-xlarge required">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('train_objects_classify')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				<form:radiobuttons path="trainObject" items="${fns:getDictList('train_objects_classify')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
+		
 		<div class="control-group">
 			<label class="control-label">培训时间：</label>
 			<div class="controls">
@@ -92,12 +88,9 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">培训方式分类：</label>
+			<label class="control-label">培训方式：</label>
 			<div class="controls">
-				<form:select path="trainMethod" class="input-xlarge required">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('train_methods_classify')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				<form:radiobuttons path="trainMethod" items="${fns:getDictList('train_methods_classify')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>

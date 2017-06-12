@@ -3,7 +3,9 @@
  */
 package com.thinkgem.jeesite.modules.train.web.matrix;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
@@ -75,13 +78,30 @@ public class TrainNeedMatrixController extends BaseController {
 	@RequestMapping(value = {"matrix"})
 	public String matrix(TrainNeedMatrix trainNeedMatrix, HttpServletRequest request, HttpServletResponse response, Model model) {
 		List<TrainNeedMatrix> trainNeedMatrixList = trainNeedMatrixService.findList(trainNeedMatrix);
+		Map<String,Integer> table_args = new HashMap<String,Integer>();
+		
 		model.addAttribute("trainNeedMatrixList", trainNeedMatrixList);
 		// 获取培训岗位列表
 		List<TrainJob> trainJobList = trainJobService.findList(new TrainJob());
 		model.addAttribute("trainJobList", trainJobList);
+		for(TrainJob tj : trainJobList){//count TrainJob by classify
+			if(table_args.get("tj"+tj.getClassify())==null){
+				table_args.put("tj"+tj.getClassify(),0);
+			}
+			table_args.put("tj"+tj.getClassify(), table_args.get("tj"+tj.getClassify())+1);
+		}
 		// 获取培训知识内容列表
 		List<TrainContent> trainContentList = trainContentService.findList(new TrainContent());
 		model.addAttribute("trainContentList", trainContentList);
+		for(TrainContent tc : trainContentList){//count TrainContent by classify
+			if(table_args.get("tc"+tc.getClassify())==null){
+				table_args.put("tc"+tc.getClassify(),0);
+			}
+			table_args.put("tc"+tc.getClassify(), table_args.get("tc"+tc.getClassify())+1);
+		}
+		
+		model.addAttribute("tableArgs", table_args);
+		
 		return "modules/train/matrix/trainNeedMatrix";
 	}
 
@@ -107,6 +127,24 @@ public class TrainNeedMatrixController extends BaseController {
 		trainNeedMatrixService.save(trainNeedMatrix);
 		addMessage(redirectAttributes, "保存培训需求成功");
 		return "redirect:"+Global.getAdminPath()+"/train/matrix/trainNeedMatrix/?repage";
+	}
+	
+	@ResponseBody
+	@RequiresPermissions("train:matrix:trainNeedMatrix:edit")
+	@RequestMapping(value = "changeStatus")
+	public String changeStatus(TrainNeedMatrix trainNeedMatrix, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, trainNeedMatrix)){
+			return form(trainNeedMatrix, model);
+		}
+		if(trainNeedMatrix.getStatus().equals("0")){
+			trainNeedMatrix.setStatus("1");
+			trainNeedMatrixService.save(trainNeedMatrix);
+			return "<p style='color:green;'>&radic;</p>";
+		}else{
+			trainNeedMatrix.setStatus("0");
+			trainNeedMatrixService.save(trainNeedMatrix);
+			return "<p style='color:red;'>R</p>";
+		}
 	}
 	
 	@RequiresPermissions("train:matrix:trainNeedMatrix:edit")

@@ -1,11 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>ACT卡管理</title>
-	<meta name="decorator" content="default"/>
-	<%@include file="/WEB-INF/views/include/treeview.jsp" %>
-	<script type="text/javascript">
+<title>ACT卡管理</title>
+<meta name="decorator" content="default" />
+<%@include file="/WEB-INF/views/include/treeview.jsp"%>
+<script type="text/javascript">
 		$(document).ready(function() {
 			//$("#name").focus();
 			$("#inputForm").validate({
@@ -113,135 +113,202 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/actcard/actcard/">ACT卡列表</a></li>
-		<li class="active"><a href="${ctx}/actcard/actcard/form?id=${actcard.id}">ACT卡<shiro:hasPermission name="actcard:actcard:edit">${not empty actcard.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="actcard:actcard:edit">查看</shiro:lacksPermission></a></li>
-	</ul><br/>
-	<form:form id="inputForm"  modelAttribute="actcard" action="${ctx}/actcard/actcard/save" method="post" class="form-horizontal">
-		<form:hidden path="id"/>
-		<form:hidden path="act.taskId"/>
-		<form:hidden path="act.taskName"/>
-		<form:hidden path="act.taskDefKey"/>
-		<form:hidden path="act.procInsId"/>
-		<form:hidden path="act.procDefId"/>
-		<sys:message content="${message}"/>		
+		<li class="active"><a
+			href="${ctx}/actcard/actcard/form?id=${actcard.id}">ACT卡<shiro:hasPermission
+					name="actcard:actcard:edit">${not empty actcard.id?'修改':'添加'}</shiro:hasPermission>
+				<shiro:lacksPermission name="actcard:actcard:edit">查看</shiro:lacksPermission></a></li>
+	</ul>
+	<br />
+	<form:form id="inputForm" modelAttribute="actcard"
+		action="${ctx}/actcard/actcard/save" method="post"
+		class="form-horizontal">
+		<form:hidden path="id" />
+		<form:hidden path="act.taskId" />
+		<form:hidden path="act.taskName" />
+		<form:hidden path="act.taskDefKey" />
+		<form:hidden path="act.procInsId" />
+		<form:hidden path="act.procDefId" />
+		<sys:message content="${message}" />
 		<div class="control-group">
 
-			<label class="control-label">所观察到的不安全行为及有污染隐患的行为所关注：</label>
+			<label class="control-label">属地单位：</label>
+			<div class="controls">
+				<sys:treeselect id="territorialOffice" name="territorialOffice.id"
+					value="${actcard.territorialOffice.id}"
+					labelName="territorialOffice.name"
+					labelValue="${actcard.territorialOffice.name}" title="部门"
+					url="/sys/office/treeData?type=2" cssClass="" allowClear="true"
+					notAllowSelectParent="true" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">不安全事件分类：</label>
+			<div class="controls">
+				<sys:treeselect id="actcardUnsafeEvent" name="actcardUnsafeEvent.id"
+					value="${actcard.actcardUnsafeEvent.id}"
+					labelName="actcardUnsafeEvent.name"
+					labelValue="${actcard.actcardUnsafeEvent.name}" title="不安全事件分类"
+					url="/actcard/actcardUnsafeEvent/treeData"
+					cssClass="required recipient" cssStyle="width:150px"
+					allowClear="true" notAllowSelectParent="true" smallBtn="false"
+					checked="true" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">不安全事件分类子类：</label>
+			<div class="controls">
+				<sys:treeselect id="actcardUnsafeEventChild"
+					name="actcardUnsafeEventChild.id"
+					value="${actcard.actcardUnsafeEventChild.id}"
+					labelName="actcardUnsafeEventChild.name"
+					labelValue="${actcard.actcardUnsafeEventChild.name}"
+					title="不安全事件分类子类" url="/actcard/actcardUnsafeEvent/treeData"
+					cssClass="required recipient" cssStyle="width:150px"
+					allowClear="true" notAllowSelectParent="true" smallBtn="false"
+					checked="true" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">所观察到的不安全行为及有污染隐患的行为：</label>
 
 			<div class="controls">
-				<form:textarea path="unsafeActs" htmlEscape="false" rows="4" class="input-xxlarge required"/>
+				<form:textarea path="unsafeActs" htmlEscape="false" rows="4"
+					class="input-xxlarge required" />
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">对不安全行为及隐患即刻的纠正行为和措施：</label>
 			<div class="controls">
-				<form:textarea path="measure" htmlEscape="false" rows="4" class="input-xxlarge required"/>
+				<form:textarea path="measure" htmlEscape="false" rows="4"
+					class="input-xxlarge required" />
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">所观察到的需要鼓励的安全、环保行为：</label>
 			<div class="controls">
-				<form:textarea path="safetyActs" htmlEscape="false" rows="4" class="input-xxlarge "/>
+				<form:textarea path="safetyActs" htmlEscape="false" rows="4"
+					class="input-xxlarge " />
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">持续改进的HSE工作的其它建议：</label>
 			<div class="controls">
-				<form:textarea path="suggestions" htmlEscape="false" rows="4" class="input-xxlarge "/>
+				<form:textarea path="suggestions" htmlEscape="false" rows="4"
+					class="input-xxlarge " />
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">填报人：</label>
 			<div class="controls">
-				<form:input path="reporter" htmlEscape="false" maxlength="255" class="input-xlarge required"/>
+				<form:input path="reporter" htmlEscape="false" maxlength="255"
+					class="input-xlarge required" />
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">填报人单位：</label>
 			<div class="controls">
-				<form:input path="reporterOffice" htmlEscape="false" maxlength="255" class="input-xlarge required"/>
+				<form:input path="reporterOffice" htmlEscape="false" maxlength="255"
+					class="input-xlarge required" />
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">填报时间：</label>
 			<div class="controls">
-				<input name="reportingTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+				<input name="reportingTime" type="text" readonly="readonly"
+					maxlength="20" class="input-medium Wdate required"
 					value="<fmt:formatDate value="${actcard.reportingTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});" />
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group" style="display: none">
 			<label class="control-label">不安全分类：</label>
 			<div class="controls">
-				<form:input path="actcardUnsafeEventId" htmlEscape="false" class="input-xlarge "/>
+				<form:input path="actcardUnsafeEventId" htmlEscape="false"
+					class="input-xlarge " />
 			</div>
 		</div>
 		<div class="control-group" style="display: none">
 			<label class="control-label">不安全分类子类：</label>
 			<div class="controls">
-				<form:input path="actcardUnsafeEventChildId" htmlEscape="false" class="input-xlarge "/>
+				<form:input path="actcardUnsafeEventChildId" htmlEscape="false"
+					class="input-xlarge " />
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">不安全分类:</label>
 			<div class="controls">
-				<div id="actcardUnsafeEventTree" class="ztree" style="margin-top:3px;float:left;"></div>
-				<form:hidden path="actcardUnsafeEventId"/>
-				
+				<div id="actcardUnsafeEventTree" class="ztree"
+					style="margin-top: 3px; float: left;"></div>
+				<form:hidden path="actcardUnsafeEventId" />
+
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">属地单位：</label>
 			<div class="controls">
-				<sys:treeselect id="territorialOffice" name="territorialOffice.id" value="${actcard.territorialOffice.id}" labelName="territorialOffice.name" labelValue="${actcard.territorialOffice.name}"
-					title="部门" url="/sys/office/treeData?type=2" cssClass="required" allowClear="true" notAllowSelectParent="true"/>
+				<sys:treeselect id="territorialOffice" name="territorialOffice.id"
+					value="${actcard.territorialOffice.id}"
+					labelName="territorialOffice.name"
+					labelValue="${actcard.territorialOffice.name}" title="部门"
+					url="/sys/office/treeData?type=2" cssClass="required"
+					allowClear="true" notAllowSelectParent="true" />
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">上报时图片：</label>
 			<div class="controls">
-				<form:hidden id="reportPic" path="reportPic" htmlEscape="false" maxlength="1000" class="input-xlarge"/>
-				<sys:ckfinder input="reportPic" type="files" uploadPath="/actcard/actcard" selectMultiple="true"/>
+				<form:hidden id="reportPic" path="reportPic" htmlEscape="false"
+					maxlength="1000" class="input-xlarge" />
+				<sys:ckfinder input="reportPic" type="files"
+					uploadPath="/actcard/actcard" selectMultiple="true" />
 			</div>
 		</div>
-		
-		
+
+
 		<div class="control-group">
 			<label class="control-label">整改人：</label>
 			<div class="controls">
-				<sys:treeselect id="solver" name="solver.id" value="${actcard.solver.id}" labelName="solver.name" labelValue="${actcard.solver.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				<sys:treeselect id="solver" name="solver.id"
+					value="${actcard.solver.id}" labelName="solver.name"
+					labelValue="${actcard.solver.name}" title="用户"
+					url="/sys/office/treeData?type=3" cssClass="" allowClear="true"
+					notAllowSelectParent="true" />
 			</div>
 		</div>
-		
+
 		<div class="control-group">
 			<label class="control-label">整改结果：</label>
 			<div class="controls">
-				<form:textarea path="rectificationResult" htmlEscape="false" rows="4" class="input-xxlarge "/>
+				<form:textarea path="rectificationResult" htmlEscape="false"
+					rows="4" class="input-xxlarge " />
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">整改图片：</label>
 			<div class="controls">
-				<form:hidden id="rectificationPic" path="rectificationPic" htmlEscape="false" maxlength="1000" class="input-xlarge"/>
-				<sys:ckfinder input="rectificationPic" type="files" uploadPath="/actcard/actcard" selectMultiple="true"/>
+				<form:hidden id="rectificationPic" path="rectificationPic"
+					htmlEscape="false" maxlength="1000" class="input-xlarge" />
+				<sys:ckfinder input="rectificationPic" type="files"
+					uploadPath="/actcard/actcard" selectMultiple="true" />
 			</div>
 		</div>
-		
+
 		<c:if test='${actcard.state == "关闭问题"}'>
 			<div class="control-group">
 				<label class="control-label">质量安全环保科回复：</label>
 				<div class="controls">
-					<form:textarea path="closerReport" htmlEscape="false" rows="4" class="input-xxlarge "/>
+					<form:textarea path="closerReport" htmlEscape="false" rows="4"
+						class="input-xxlarge " />
 				</div>
 			</div>
 		</c:if>
-		
+
 		<!-- 
 		<div class="control-group">
 			<label class="control-label">关闭人：</label>
@@ -300,9 +367,9 @@
 			</div>
 		</div>
 		 -->
-		
-		
-		
+
+
+
 		<!-- 
 		<div class="control-group">
 			<label class="control-label">user_id：</label>
@@ -342,8 +409,11 @@
 					title="部门" url="/sys/office/treeData?type=2" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 		-->
 		<div class="form-actions">
-			<shiro:hasPermission name="actcard:actcard:edit"><input id="btnSubmit"  onclick="return submitColtrol();" class="btn btn-primary"  type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
-			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+			<shiro:hasPermission name="actcard:actcard:edit">
+				<input id="btnSubmit" onclick="return submitColtrol();"
+					class="btn btn-primary" type="submit" value="保 存" />&nbsp;</shiro:hasPermission>
+			<input id="btnCancel" class="btn" type="button" value="返 回"
+				onclick="history.go(-1)" />
 		</div>
 	</form:form>
 	<script type="text/javascript">

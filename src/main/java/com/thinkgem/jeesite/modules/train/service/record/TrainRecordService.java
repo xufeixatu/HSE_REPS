@@ -79,6 +79,7 @@ public class TrainRecordService extends CrudService<TrainRecordDao, TrainRecord>
 					trainRecordScore.preInsert();
 					trainRecordScoreDao.insert(trainRecordScore);
 				}else{
+					trainRecordScore.setStatus(trainRecord.getStatus());
 					trainRecordScore.preUpdate();
 					trainRecordScoreDao.update(trainRecordScore);
 				}

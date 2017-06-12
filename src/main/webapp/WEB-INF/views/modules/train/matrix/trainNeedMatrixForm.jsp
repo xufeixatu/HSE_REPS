@@ -27,8 +27,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
+	    <li><a href="${ctx}/train/matrix/trainNeedMatrix/matrix">培训需求矩阵</a></li>
 		<li><a href="${ctx}/train/matrix/trainNeedMatrix/">培训需求列表</a></li>
-		<li><a href="${ctx}/train/matrix/trainNeedMatrix/matrix">培训需求矩阵</a></li>
 		<li class="active"><a href="${ctx}/train/matrix/trainNeedMatrix/form?id=${trainNeedMatrix.id}">培训需求<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit">${not empty trainNeedMatrix.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="train:matrix:trainNeedMatrix:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="trainNeedMatrix" action="${ctx}/train/matrix/trainNeedMatrix/save" method="post" class="form-horizontal">
@@ -64,6 +64,32 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label">培训有效起始时间：</label>
+			<div class="controls">
+				<input name="startTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+					value="<fmt:formatDate value="${trainNeedMatrix.startTime}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">培训有效截止时间：</label>
+			<div class="controls">
+				<input name="endTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+					value="<fmt:formatDate value="${trainNeedMatrix.endTime}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">状态：</label>
+			<div class="controls">
+				<form:radiobuttons path="status" items="${fns:getDictList('train_matrix_status')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>	
+		
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">

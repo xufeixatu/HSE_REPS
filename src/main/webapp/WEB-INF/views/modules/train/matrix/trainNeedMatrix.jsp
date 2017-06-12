@@ -6,7 +6,12 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
+			$(".matrixData").mouseover(function(){
+				  this.css("background-color","yellow");
+		    });
+			$(".matrixData").mouseout(function(){
+				  this.css("background-color","#E9E9E4");
+		    });
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -14,6 +19,26 @@
 			$("#searchForm").submit();
         	return false;
         }
+		function changeStatus(trainNeedMatrixId){
+			if(trainNeedMatrixId!=null && trainNeedMatrixId!=''){
+				var htmlobj = $.ajax({
+					type: "GET",
+		             url: '${ctx}/train/matrix/trainNeedMatrix/changeStatus?id='+trainNeedMatrixId,
+		             dataType: "html",
+		             success: function(data){
+		            	 console.log(htmlobj.responseText);
+		            	 $("#"+trainNeedMatrixId).html(htmlobj.responseText);
+		             }
+				});
+				return true;
+			}else{
+				console.log("error:"+trainNeedMatrixId);
+				return false;
+			}
+			
+		}
+		
+		
 	</script>
 </head>
 <body>
@@ -44,31 +69,51 @@
 					<form:options items="${trainContentList}" itemLabel="name" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
+			<li><label>培训需求状态：</label>
+				<form:radiobuttons path="status" items="${fns:getDictList('train_matrix_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
 	<sys:message content="${message}"/>
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
+	<table id="contentTable" class="table table-striped table-bordered table-condensed"> <!--  -->
 		<thead>
 			<tr>
-				<td>人员分类</td>
-				<td>序号</td>
-				<td>HSE培训管理信息</td>
+				<td rowspan="3">人员分类</td>
+				<td rowspan="3">序号</td>
+				<td rowspan="3">HSE培训管理信息</td>
 				<c:forEach items="${trainContentList}" var="trainContent">
-					<td>${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
+					<td  style="text-align:center;">${trainContent.name}</td>
 				</c:forEach>
 			</tr>
 			<tr>
-				<td>人员分类</td>
-				<td>序号</td>
-				<td>HSE培训管理信息</td>
-				<c:forEach items="${trainContentList}" var="trainContent">
-					<td>${trainContent.name}</td>
+			    <c:forEach items="${trainContentList}" var="trainContent">
+					<td  style="text-align:center;">${trainContent.sn}</td>
 				</c:forEach>
 			</tr>
 			<tr>
-				<td>课程基本信息</td>
+				<c:forEach items="${trainContentList}" var="trainContent">
+				    <c:if test="${trainContent.classify=='1' && tableArgs['tc1'] > 0 }">
+				        <td style="text-align:center;" colspan="${tableArgs['tc1']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
+				        <p hidden="hidden">${tableArgs['tc1']=-1}</p> 
+				    </c:if>
+				    <c:if test="${trainContent.classify=='2' && tableArgs['tc2'] > 0 }">
+				        <td style="text-align:center;" colspan="${tableArgs['tc2']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
+				        <p hidden="hidden">${tableArgs['tc2']=-1}</p> 
+				    </c:if>
+				    <c:if test="${trainContent.classify=='3' && tableArgs['tc3'] > 0 }">
+				        <td style="text-align:center;" colspan="${tableArgs['tc3']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
+				        <p hidden="hidden">${tableArgs['tc3']=-1}</p> 
+				    </c:if>
+				    <c:if test="${trainContent.classify=='4' && tableArgs['tc4'] > 0 }">
+				        <td style="text-align:center;" colspan="${tableArgs['tc4']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
+				        <p hidden="hidden">${tableArgs['tc4']=-1}</p> 
+				    </c:if>
+				</c:forEach>
+			</tr>
+			<tr>
+				<td rowspan="4">课程基本信息</td>
 				<td>1</td>
 				<td>初次培训课时要求（小时）</td>
 				<c:forEach items="${trainContentList}" var="trainContent">
@@ -76,7 +121,6 @@
 				</c:forEach>
 			</tr>
 			<tr>
-				<td>课程基本信息</td>
 				<td>2</td>
 				<td>复培课时/频率（小时/N年）</td>
 				<c:forEach items="${trainContentList}" var="trainContent">
@@ -84,7 +128,6 @@
 				</c:forEach>
 			</tr>
 			<tr>
-				<td>课程基本信息</td>
 				<td>3</td>
 				<td>培训组织单位</td>
 				<c:forEach items="${trainContentList}" var="trainContent">
@@ -92,7 +135,6 @@
 				</c:forEach>
 			</tr>
 			<tr>
-				<td>课程基本信息</td>
 				<td>4</td>
 				<td>培训完成要求（职前/职后）</td>
 				<c:forEach items="${trainContentList}" var="trainContent">
@@ -103,26 +145,43 @@
 		<tbody>
 		<c:forEach items="${trainJobList}" var="trainJob">
 			<tr>
-				<td>${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
-				<td>${trainJob.sn}</td>
-				<td>${trainJob.name}</td>
+				<c:if test="${trainJob.classify=='1' && tableArgs['tj1'] > 0 }">
+				    <td style="text-align:center;" rowspan="${tableArgs['tj1']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
+				    <p hidden="hidden">${tableArgs['tj1']=-1}</p>
+				</c:if>
+				<c:if test="${trainJob.classify=='2' && tableArgs['tj2'] > 0 }">
+				    <td style="text-align:center;" rowspan="${tableArgs['tj2']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
+				    <p hidden="hidden">${tableArgs['tj2']=-1}</p>
+				</c:if>
+				<c:if test="${trainJob.classify=='3' && tableArgs['tj3'] > 0 }">
+				    <td style="text-align:center;" rowspan="${tableArgs['tj3']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
+				     <p hidden="hidden">${tableArgs['tj3']=-1}</p>
+				</c:if>
+				
+				<td style="text-align:center;">${trainJob.sn}</td>
+				<td style="text-align:center;">${trainJob.name}</td>
+				
 				<c:forEach items="${trainContentList}" var="trainContent">
-					<td>
+					<td >
 						<c:forEach items="${trainNeedMatrixList}" var="trainNeedMatrix">
 							<c:if test="${trainNeedMatrix.trainContent.sn == trainContent.sn && trainNeedMatrix.trainJob.sn == trainJob.sn}">
 								<shiro:hasPermission name="train:matrix:trainNeedMatrix:edit">
-							    	<a href="${ctx}/train/matrix/trainNeedMatrix/form?id=${trainNeedMatrix.id}">R</a>
+							    	<a id="${trainNeedMatrix.id}" class="matrixData"  href="javascript:void(0)" onclick="changeStatus('${trainNeedMatrix.id}')" onmove>
+							    	    <c:if test="${trainNeedMatrix.status==0}"><p style="color:red;">R</p></c:if>
+							    	    <c:if test="${trainNeedMatrix.status==1}"><p style="color:green;">√</p></c:if>
+							    	</a>
+							    	
 								</shiro:hasPermission>
 							</c:if>
 						</c:forEach>
+						
 					</td>
 				</c:forEach>
 				
 			</tr>
 		</c:forEach>
-		
 		</tbody>
 	</table>
-	<div class="pagination">${page}</div>
+	
 </body>
 </html>

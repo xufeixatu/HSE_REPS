@@ -67,6 +67,10 @@ public class TrainRecordScoreController extends BaseController {
 		if (!beanValidator(model, trainRecordScore)){
 			return form(trainRecordScore, model);
 		}
+		if(trainRecordScore.getStatus().equals("1")){
+			addMessage(redirectAttributes, "受培人员成绩已归档，不能修改");
+			return "redirect:"+Global.getAdminPath()+"/train/record/trainRecordScore/form";
+		}
 		trainRecordScoreService.save(trainRecordScore);
 		addMessage(redirectAttributes, "保存受培人员成绩成功");
 		return "redirect:"+Global.getAdminPath()+"/train/record/trainRecordScore/?repage";

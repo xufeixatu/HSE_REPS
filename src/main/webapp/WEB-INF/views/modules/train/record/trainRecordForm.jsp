@@ -80,6 +80,27 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">培训分类：</label>
+			<div class="controls">
+				<form:radiobuttons path="classify" items="${fns:getDictList('train_content_classify')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">培训方式：</label>
+			<div class="controls">
+				<form:radiobuttons path="trainMethod" items="${fns:getDictList('train_methods_classify')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">培训教师姓名：</label>
+			<div class="controls">
+				<form:input path="teacherName" htmlEscape="false" maxlength="32" class="input-xlarge required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">培训时间：</label>
 			<div class="controls">
 				<input name="trainTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
@@ -209,10 +230,9 @@
 								<input id="trainRecordCoursewareList{{idx}}_delFlag" name="trainRecordCoursewareList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
-								<select id="trainRecordCoursewareList{{idx}}_courseware" name="trainRecordCoursewareList[{{idx}}].courseware.id" data-value="{{row.courseware.id}}" class="input-small ">
-									<option value=""></option>
-									<c:forEach items="${fns:getDictList('')}" var="dict">
-										<option value="${dict.value}">${dict.label}</option>
+								<select id="trainRecordCoursewareList{{idx}}_courseware" name="trainRecordCoursewareList[{{idx}}].courseware.id" data-value="{{row.courseware.id}}" class="input-large required" >
+									<c:forEach items="${trainRecord.trainRecordCoursewareList}" var="item">
+										<option value="${item.value}">${item.label}</option>
 									</c:forEach>
 								</select>
 							</td>
