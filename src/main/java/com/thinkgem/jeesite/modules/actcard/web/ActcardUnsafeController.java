@@ -84,10 +84,8 @@ public class ActcardUnsafeController extends BaseController {
 		model.addAttribute("officeNames", getAllOfficeNameByOfficeIds(actcardUnsafe.getOfficeIds()));
 		System.out.println("ctcardUnsafe.getUnsafeEventId()----------"+actcardUnsafe.getUnsafeEventId());
 		model.addAttribute("unsafeEventDate", getAllUnsafeEventInfo(actcardUnsafe));
-		return "modules/actcard/countinfoView";
+		return "modules/actcard/countInfoView";
 	}
-	
-	
 	
 	@RequiresPermissions("actcard:actcardUnsafe:view")
 	@RequestMapping(value = "countUnsafeEvent")
@@ -199,5 +197,4 @@ public class ActcardUnsafeController extends BaseController {
 		addMessage(redirectAttributes, "删除actcard_unsafe关联表成功");
 		return "redirect:"+Global.getAdminPath()+"/actcard/actcardUnsafe/?repage";
 	}
-
 }
