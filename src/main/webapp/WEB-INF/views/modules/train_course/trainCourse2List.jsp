@@ -4,6 +4,7 @@
 <head>
 	<title>培训课件上传与查看管理</title>
 	<meta name="decorator" content="default"/>
+
 	<style type="text/css"> 
 			*{margin:0;padding:0;list-style-type:none;}
 			body{color:#666;font:12px/1.5 Arial;}
@@ -17,6 +18,7 @@
 			#star p{position:absolute;top:20px;width:159px;height:60px;display:none;background:url(http://localhost:8080/HSE/images//icon.gif) no-repeat;padding:7px 10px 0;}
 			#star p em{color:#f60;display:block;font-style:normal;}
 			</style>
+
 	
 	<script type="text/javascript">
 	
@@ -442,6 +444,7 @@
 					<li class="focus">
 						<a>星级评分</a>
 					</li>
+<!-- <<<<<<< HEAD -->
 					<div id="star">
 						<ul>
 							<li><a href="javascript:;">1</a><>
@@ -453,6 +456,12 @@
 						<span></span>
 						<p></p>
 					</div>
+<!-- =======
+					<li class="star" 	onmouseover="InitEvent()">
+						<table id="tblMain"><tr><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>
+	    				</table>
+					</li>
+>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git -->
 				</ul>
 			</div>
 		</div>
@@ -471,7 +480,9 @@
 				</a>
 			</li>
 			 <li>
+
 		    	<a href="#appraise" data-toggle="tab" >
+
 					课程评价
 				</a>
 			</li>
@@ -519,7 +530,7 @@
 							
 					<c:forTokens items="${testString}" delims="|" var="videoHref">
 						<li>
-							<span class="chapter-time">05:20</span>
+							<span class="chapter-time"></span>
 							<span class="chapetr-item">
 							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
 							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
@@ -539,6 +550,7 @@
 		    </div>
 		    		
 		  <!--   评价 -->
+
 		<%--   <div>${courseReview.courseId}</div> --%>
 		  	<div class="tab-pane fade course_review" id="appraise">
 		  	<form:form id="inputForm" modelAttribute="courseReview"
@@ -635,6 +647,71 @@
 	</div>
 
 	 <div class="pagination">${page}</div>
+<%-- =======
+		  	<div class="tab-pane fade course_review" id="appraise">
+		  	<form:form id="inputForm" modelAttribute="courseReview"
+			action="${ctx}/course_review/courseReview/save1" method="post"
+			class="form-horizontal">
+			<form:hidden path="id"/>
+			<sys:message content="${message}" />
+			<div class="control-group">
+				<span> <form:textarea
+						path="assessOpinion" htmlEscape="false" rows="4" maxlength="255"
+						class="input-xxlarge " />
+				</span> 
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论人：</label>
+				<div class="controls">
+					<form:input path="assessById" htmlEscape="false" maxlength="64" class="input-xlarge required" />
+						<span class="help-inline"><font color="red">*</font> </span>
+					</div>
+				</div>
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论时间：</label>
+				<div class="controls">
+					<input name="assessTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+						value="<fmt:formatDate value="${courseReview.assessTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+						<span class="help-inline"><font color="red">*</font> </span>
+					</div>
+				</div>
+						
+				<span> <shiro:hasPermission
+					name="course_review:courseReview:edit">
+					<input id="btnSubmit" class="btn btn-primary" type="submit"
+						value="发表" />&nbsp;</shiro:hasPermission>
+				</span>
+			</div>
+		 </form:form>
+		<sys:message content="${message}" />
+		  		  	
+		  	  <div class="cmt-wrap">
+                 <ul class="cmt-list">
+                 	<c:forEach items="${page1.list}" var="courseReview">
+                    <li class="cmt-post" >
+                      
+    				<div class="inner">
+	    			  	<div class="media"  style="display:inline;">
+	                   <a href="/u/1968386/courses" target="_blank"><img src="http://img.mukewang.com/555869eb0001716101800180-40-40.jpg" width="32" height="32" style="border-radius:37px 37px;"></a>
+        			    </div>
+    				
+    					<div class="hd" style="display:inline">
+                          <a href="javascript:void();" class="name disabled">${courseReview.assessById}</a>
+    					</div>
+    					<p class="cmt-txt" style="padding: 5px 41px;padding-top: 16px;">${courseReview.assessOpinion}</p>
+    					<div class="ft clearfix">
+						<span><fmt:formatDate value="${courseReview.assessTime}"
+								pattern="yyyy-MM-dd HH:mm:ss" /></span>
+						   </div>
+						</div>
+    		    	</li>
+    		    	</c:forEach>
+		  	    </ul>
+		  	</div>
+     	</div>
+		</div>	
+	</div>
+>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git --%>
 </body>
 </html>
 

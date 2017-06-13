@@ -2,6 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
+
 	<title>学习记录管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
@@ -78,6 +79,7 @@
 			<div class="controls">
 				<input name="gradeDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 					value="<fmt:formatDate value="${courseStudy.gradeDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>

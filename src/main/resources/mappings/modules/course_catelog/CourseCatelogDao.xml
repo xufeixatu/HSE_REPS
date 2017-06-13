@@ -16,6 +16,7 @@
 	</sql>
 	
 	<sql id="courseCatelogJoins">
+	LEFT JOIN course_catelog cct ON cct.id = a.course_id
 	</sql>
     
 	<select id="get" resultType="CourseCatelog">
@@ -35,6 +36,12 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="attachName != null and attachName != ''">
 				AND a.attach_name = #{attachName}
+			</if>
+			<if test="trainCourse != null and trainCourse.id != null and trainCourse.id != ''">
+				AND a.course_id = #{trainCourse.id}
+			</if>
+			<if test="attachId != null and attachId != ''">
+				AND a.attach_id = #{attachId} 
 			</if>
 		</where>
 		<choose>

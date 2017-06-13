@@ -8,6 +8,7 @@ import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
 
 /**
+//<<<<<<< HEAD
  * 学习记录DAO接口
  * @author 王少昌
  * @version 2017-06-10
@@ -16,5 +17,13 @@ import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
 public interface CourseStudyDao extends CrudDao<CourseStudy> {
 
 	CourseStudy getByCourseIdAndUserId(CourseStudy courseStudy);
+//=======
+// * 课程用户学习记录表DAO接口
+// * @author 曹洪运
+// * @version 2017-06-09
+// */
+//@MyBatisDao
+//public interface CourseStudyDao extends CrudDao<CourseStudy> {
+//>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git
 	
 }

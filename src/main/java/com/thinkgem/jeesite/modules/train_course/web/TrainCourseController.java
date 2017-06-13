@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -76,10 +77,11 @@ public class TrainCourseController extends BaseController {
 
 	@RequiresPermissions("train_course:trainCourse:edit")
 	@RequestMapping(value = "save")
-	public String save(TrainCourse trainCourse, Model model, RedirectAttributes redirectAttributes) {
+	public String save(TrainCourse trainCourse, Model model, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {
 		if (!beanValidator(model, trainCourse)){
 			return form(trainCourse, model);
 		}
+		trainCourseService.vedioConvert(trainCourse, httpServletRequest.getSession().getServletContext().getRealPath("/"));
 		trainCourseService.save(trainCourse);
 		addMessage(redirectAttributes, "保存培训课件上传与查看成功");
 		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse/?repage";

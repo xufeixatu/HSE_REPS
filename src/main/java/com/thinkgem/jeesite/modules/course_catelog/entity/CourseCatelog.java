@@ -6,15 +6,17 @@ package com.thinkgem.jeesite.modules.course_catelog.entity;
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
 
 /**
  * 课件目录Entity
  * @author 王少昌
- * @version 2017-05-17
+ * @version 2017-06-07
  */
 public class CourseCatelog extends DataEntity<CourseCatelog> {
 	
 	private static final long serialVersionUID = 1L;
+	private TrainCourse trainCourse;		// 业务主表 父类
 	private String courseId;		// 课程id
 	private String attachName;		// 附件名称
 	private String attachId;		// 附件id
@@ -25,6 +27,19 @@ public class CourseCatelog extends DataEntity<CourseCatelog> {
 
 	public CourseCatelog(String id){
 		super(id);
+	}
+	
+	public CourseCatelog(TrainCourse trainCourse){
+		this.trainCourse = trainCourse;
+	}
+
+	@Length(min=0, max=500, message="长度必须介于 0 和 64 之间")
+	public TrainCourse getTrainCourse() {
+		return trainCourse;
+	}
+
+	public void setTrainCourse(TrainCourse trainCourse) {
+		this.trainCourse = trainCourse;
 	}
 
 	@Length(min=0, max=64, message="课程id长度必须介于 0 和 64 之间")
@@ -45,7 +60,7 @@ public class CourseCatelog extends DataEntity<CourseCatelog> {
 		this.attachName = attachName;
 	}
 	
-	@Length(min=0, max=64, message="附件id长度必须介于 0 和 64 之间")
+	@Length(min=0, max=255, message="附件id长度必须介于 0 和 255之间")
 	public String getAttachId() {
 		return attachId;
 	}

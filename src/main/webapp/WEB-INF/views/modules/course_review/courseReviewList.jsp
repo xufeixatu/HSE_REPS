@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
@@ -59,6 +60,7 @@
 		</c:forEach>
 		</tbody>
 	</table>
+
 	<div class="pagination">${page}</div>
 </body>
 </html>

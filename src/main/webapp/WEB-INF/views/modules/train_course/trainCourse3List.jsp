@@ -9,6 +9,8 @@
 		$(document).ready(function() {
 			 var getprogressvalue = $("#progress-value").attr('value');
 		     $("#progress-value").css("width",getprogressvalue+"%");
+		     
+		 /*     $("#chapter-time").innerHtml=getTotalTime(); */
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -17,6 +19,7 @@
         	return false;
         }	
 	</script>
+	
 	<style>
 		body{
 			background-color:#d7d7d7;
@@ -36,7 +39,6 @@
 		}
 	
 	
-		
 		<!--目录-->
 		.course-description{
 			padding:20px;
@@ -104,10 +106,49 @@
 			position:absolute;
 			top:-5px;
 		}
-		
-		
-		
+				
 	</style>
+	
+	<script>
+	
+ 		//ckplayer监听时间函数 
+		function loadedHandler(){
+		  if(CKobject.getObjectById('ckplayer_a1').getType()){
+		    CKobject.getObjectById('ckplayer_a1').addListener('play',playHandler);
+		    CKobject.getObjectById('ckplayer_a1').addListener('time',timeHandler); 
+		  }
+		  else{
+		    CKobject.getObjectById('ckplayer_a1').addListener('play','playHandler');
+		     CKobject.getObjectById('ckplayer_a1').addListener('time','timeHandler'); 
+		  }
+		}
+		
+		//获取当前时间
+		function timeHandler(t){
+		  if(t>-1){
+		      CKobject._K_('nowTime').innerHTML='当前播放的时间点是(此值精确到小数点后三位，即毫秒)：'+t;
+		  }
+		} 
+		
+		//监听当前的播放按键，并且显示当前的视频的总时长
+		function playHandler(){
+		      CKobject.getObjectById('ckplayer_a1').removeListener('play','playHandler');
+			CKobject._K_('totalTime').innerHTML='当前播放视频时长是(秒)：'+ getTotalTime();
+			CKobject._K_('chapterTime').innerHTML=getTotalTime();
+			$("#chapter-time").innerHtml=getTotalTime();
+			$("#chapterTime").innerHtml=getTotalTime();
+		}
+		
+		//通过getstatus函数来获取totaltime参数	
+		function getTotalTime(){
+			var a=CKobject.getObjectById('ckplayer_a1').getStatus();
+			alert(a['totalTime']);
+			return a['totalTime'];
+		}
+	
+	</script>
+	
+	
 </head>
 <body class="wrapper">
 	<ol class="breadcrumb">
@@ -118,23 +159,22 @@
 	    <li class="active">${trainCourse.courseName}</li>
 	</ol>
 	<!-- 播放视频 -->
-	<div class="course-detail">
-		<video width="1140" style="margin-top:-2px;   height: 305px;    padding-left: 12px;"  controls >
-<!-- 		$('#videoArea').bind('course-detail',function() { return false; }); -->
-<%-- 			<c:set var="testString" value="${trainCourse.docId}"/>
-			
-			<c:forTokens items="${testString}" delims="|" var="videoHref">
-			
-			<!-- 字符串截取获取最后的文件名，并显示 -->
-			<c:set var="videoHrefString" value="${videoHref}"/>													
-			<c:forEach items="${videoHrefString}" var="videoName" begin="5" > --%>
-				<source src="http://localhost:8080/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4"  type="video/mp4" />
-<%-- 			
-			</c:forEach>
-			</c:forTokens>	 --%>
-		</video>
-   </div> 
-
+			<div id="a1"></div>
+			<div id="nowTime"></div>
+			<div id="totalTime"></div>
+			<script type="text/javascript" src="http://localhost:8080/HSE/ckplayer/ckplayer.js" charset="utf-8"></script>
+			<script type="text/javascript">
+				var flashvars={
+					p:0,
+					e:1,
+					i:'http://www.ckplayer.com/static/images/cqdw.jpg'
+					};
+				/* var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always'};//这里定义播放器的其它参数如背景色（跟flashvars中的b不同），是否支持全屏，是否支持交互 */
+				var video=['http://img.ksbbs.com/asset/Mon_1605/0ec8cc80112a2d6.mp4->video/mp4'];
+				var support=['all'];
+				CKobject.embedHTML5('a1','ckplayer_a1',1100,500,video,flashvars,support);				
+				
+			</script>
 	<!-- 目录 -->
 	<div class="course-description">
 		<p>
@@ -146,7 +186,8 @@
 						
 				<c:forTokens items="${testString}" delims="|" var="videoHref">
 					<li>
-						<span class="chapter-time">05:20</span>
+						<span  id="chapterTime" class="chapter-time"></span>
+						<!-- <input type="button" onclick="getTotalTime()" name="clickme"/> -->
 						<span class="chapetr-item">
 						<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
 						<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">

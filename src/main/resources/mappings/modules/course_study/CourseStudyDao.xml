@@ -5,6 +5,7 @@
 	<sql id="courseStudyColumns">
 		a.id AS "id",
 		a.course_id AS "courseId",
+<!-- <<<<<<< HEAD -->
 		a.status AS "status",
 		a.duration AS "duration",
 		a.study_start_time AS "studyStartTime",
@@ -119,7 +120,116 @@
 			grade = #{grade},
 			grade_date = #{gradeDate},
 			create_by = #{createBy.id},
-			create_date = #{createDate}
+			create_date = #{createDate}<!-- 
+=======
+		a.train_by_id AS "trainById",
+		a.study_status AS "studyStatus",
+		a.study_time AS "studyTime",
+		a.study_date AS "studyDate",
+		a.study_start_time AS "studyStartTime",
+		a.study_end_time AS "studyEndTime",
+		a.name AS "name",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="courseStudyJoins">
+	</sql>
+    
+	<select id="get" resultType="CourseStudy">
+		SELECT 
+			<include refid="courseStudyColumns"/>
+		FROM course_study a
+		<include refid="courseStudyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CourseStudy">
+		SELECT 
+			<include refid="courseStudyColumns"/>
+		FROM course_study a
+		<include refid="courseStudyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CourseStudy">
+		SELECT 
+			<include refid="courseStudyColumns"/>
+		FROM course_study a
+		<include refid="courseStudyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO course_study(
+			id,
+			course_id,
+			train_by_id,
+			study_status,
+			study_time,
+			study_date,
+			study_start_time,
+			study_end_time,
+			name,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{courseId},
+			#{trainById},
+			#{studyStatus},
+			#{studyTime},
+			#{studyDate},
+			#{studyStartTime},
+			#{studyEndTime},
+			#{name},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE course_study SET 	
+			course_id = #{courseId},
+			train_by_id = #{trainById},
+			study_status = #{studyStatus},
+			study_time = #{studyTime},
+			study_date = #{studyDate},
+			study_start_time = #{studyStartTime},
+			study_end_time = #{studyEndTime}
+>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git -->
 		WHERE id = #{id}
 	</update>
 	
