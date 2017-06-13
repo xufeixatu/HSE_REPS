@@ -197,5 +197,4 @@ public class ActcardUnsafeController extends BaseController {
 		addMessage(redirectAttributes, "删除actcard_unsafe关联表成功");
 		return "redirect:"+Global.getAdminPath()+"/actcard/actcardUnsafe/?repage";
 	}
-
 }
