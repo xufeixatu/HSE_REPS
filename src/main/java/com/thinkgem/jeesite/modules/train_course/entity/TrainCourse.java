@@ -35,7 +35,17 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	private String courseId;		// 课程id
 	private String attachName;		// 附件名称
 	private String attachId;		// 附件id
+	private int gradeCount;    //打分人数
 	
+	
+	public int getGradeCount() {
+		return gradeCount;
+	}
+
+	public void setGradeCount(int gradeCount) {
+		this.gradeCount = gradeCount;
+	}
+
 	public TrainCourse() {
 		super();
 	}

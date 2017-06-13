@@ -11,16 +11,17 @@
 			#star{position:relative;width:600px;margin:20px auto;height:24px;color:#FFFFFF;top:20px}
 			#star ul,#star span{float:left;display:inline;height:19px;line-height:19px;}
 			#star ul{margin:0 10px;}
-			#star li{float:left;width:24px;cursor:pointer;text-indent:-9999px;background:url(http://localhost:8083/HSE/images/star.png) no-repeat;}
+			#star li{float:left;width:24px;cursor:pointer;text-indent:-9999px;background:url(http://localhost:8080/HSE/images/star.png) no-repeat;}
 			#star strong{color:#f60;padding-left:10px;}
 			#star li.on{background-position:0 -28px;}
-			#star p{position:absolute;top:20px;width:159px;height:60px;display:none;background:url(http://localhost:8083/HSE/images//icon.gif) no-repeat;padding:7px 10px 0;}
+			#star p{position:absolute;top:20px;width:159px;height:60px;display:none;background:url(http://localhost:8080/HSE/images//icon.gif) no-repeat;padding:7px 10px 0;}
 			#star p em{color:#f60;display:block;font-style:normal;}
 			</style>
 	
 	<script type="text/javascript">
+	
+	
 	  window.onload = function (){
-
 		var oStar = document.getElementById("star");
 		var aLi = oStar.getElementsByTagName("li");
 		var oUl = oStar.getElementsByTagName("ul")[0];
@@ -53,7 +54,28 @@
 			aLi[i - 1].onclick = function (){
 				iStar = this.index;
 				oP.style.display = "none";
-				oSpan.innerHTML = "<strong>" + (this.index) + " 分<> "
+				oSpan.innerHTML = "<strong>" + (this.index) + "</strong> 分 ";
+			/* 	//打分之前刷新
+				$("strong").html(""); */
+				//获取请求参数
+				var str = $("strong").text();
+				//alert(str);
+				//发送ajax请求
+				 $.ajax({
+		             type: "post",
+		             url: "${ctx}/course_study/courseStudy/setGrade",
+		             data: {"id":"${courseStudy.id}", "grade":str},
+		             dataType: "html",
+		         
+		             success: function(data){
+		                  alert(data);	
+		                         
+		                      },
+		             error:function(){
+		            	 alert("打分失败");
+		             }
+		             
+		         });
 			}
 		}
 		
@@ -395,7 +417,7 @@
 	</ol>
 	<!-- 图片 -->
 	<div class="course-detail">
-		<img alt="封面" src="http://localhost:8083/${trainCourse.coverId}">
+		<img alt="封面" src="http://localhost:8080/${trainCourse.coverId}">
 		<div class="course-detail-text">
 			<span class="course-detail-text-title">${trainCourse.courseName}</span>
 			<div class="course-detail-text-status">

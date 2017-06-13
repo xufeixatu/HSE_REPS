@@ -25,6 +25,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.course_review.entity.CourseReview;
 import com.thinkgem.jeesite.modules.course_review.service.CourseReviewService;
+import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
+import com.thinkgem.jeesite.modules.course_study.service.CourseStudyService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
 import com.thinkgem.jeesite.modules.train_course.service.TrainCourseService;
@@ -42,6 +44,8 @@ public class TrainCourse2Controller extends BaseController {
 	private TrainCourseService trainCourseService;
 	@Autowired
 	private CourseReviewService courseReviewService;
+	@Autowired
+	private CourseStudyService courseStudyService;
 	@ModelAttribute
 	public TrainCourse get(@RequestParam(required=false) String id) {
 		TrainCourse entity = null;
@@ -64,8 +68,7 @@ public class TrainCourse2Controller extends BaseController {
 		CourseReview courseReview =new CourseReview();
 		//补充
 		courseReview.setCourseId(request.getParameter("id"));
-	    System.out.println(courseReview.getCourseId());//课件Id
-	    System.out.println("第二个controller");
+	 
 	    //courseReview.setAssessGrade("1");
 	    Page<CourseReview> page1 = courseReviewService.findPage(new Page<CourseReview>(request, response), courseReview); 
 		courseReview.setAssessById(UserUtils.getUser().getName());
@@ -77,6 +80,14 @@ public class TrainCourse2Controller extends BaseController {
 		courseReview.setCourseId(trainCourse.getId());
 		model.addAttribute("courseReview", courseReview);
 		model.addAttribute("page1", page1);
+		
+		//传打分参数
+		CourseStudy courseStudy =  new CourseStudy();
+		courseStudy.setCourseId(trainCourse.getId());
+		courseStudy.setCreateBy(UserUtils.getUser());
+		System.out.println("===============================");
+		model.addAttribute("courseStudy", courseStudyService.findByCourseIdAndUserId(courseStudy));
+		System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
 		return "modules/train_course/trainCourse2List";
 	}
 
@@ -106,5 +117,8 @@ public class TrainCourse2Controller extends BaseController {
 		addMessage(redirectAttributes, "删除培训课件上传与查看成功");
 		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse2/?repage";
 	}
+	
+	
+	
 
 }
