@@ -3,40 +3,54 @@
  */
 package com.thinkgem.jeesite.modules.actcard.entity;
 
-import com.thinkgem.jeesite.modules.sys.entity.Office;
 import org.hibernate.validator.constraints.Length;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.common.collect.Lists;
+
+import javax.validation.constraints.NotNull;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.train.entity.record.TrainRecordCourseware;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.common.persistence.ActEntity;
+import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * ACT卡Entity
  * @author 岳鑫
- * @version 2017-05-23
+ * @version 2017-05-30
  */
 public class Actcard extends ActEntity<Actcard> {
 	
 	private static final long serialVersionUID = 1L;
-	private Office territorialOffice;		// 属地单位
-	private ActcardUnsafeEvent actcardUnsafeEvent;		// 不安全分类
-	private ActcardUnsafeEvent actcardUnsafeEventChild;		// 不安全分类子类
-	private String unsafeActs;		// 所观察到的不安全行为及有污染隐患的行为
-	private String measure;		// 对不安全行为及隐患即刻的纠正行为和措施
-	private String safetyActs;		// 所观察到的需要鼓励的安全、环保行为
-	private String suggestions;		// 持续改进的HSE工作的其它建议
+	private String unsafeActs;		// 不安全行为
+	private String measure;		// 解决措施
+	private String safetyActs;		// 安全行为
+	private String suggestions;		// 建议
 	private String reporter;		// 填报人
-	private Office reporterOffice;		// 填报人单位
+	private String reporterOffice;		// 填报人单位
 	private Date reportingTime;		// 填报时间
 	private String rectificationResult;		// 整改结果
+
 	private User closer;		// 关闭人
 	private Date closeTime;		// 关闭时间
-	private String state;		// 状态
+	private String closerReport;//质量安全环保科回复
+	
+	private String state;		// 状态(指定责任人、正在整改、等待关闭、已关闭)
+	private Office territorialOffice;		// 属地单位
+	private String territorialOfficeReport;//属地单位回复
+	
 	private String reportPic;		// 上报时图片
 	private String rectificationPic;		// 整改图片
-	
+	private String actcardUnsafeEventId;		// 不安全分类
+	private String actcardUnsafeEventChildId;		// 不安全分类子类
 	private User solver;		// 整改人
+	private User user;		// user_id
+	private Office office;		// office_id
+	private List<ActcardReview> actcardReviewList = Lists.newArrayList();		// 评阅列表
+	
 	
 	public Actcard() {
 		super();
@@ -46,14 +60,6 @@ public class Actcard extends ActEntity<Actcard> {
 		super(id);
 	}
 
-	public Office getTerritorialOffice() {
-		return territorialOffice;
-	}
-
-	public void setTerritorialOffice(Office territorialOffice) {
-		this.territorialOffice = territorialOffice;
-	}
-	
 	public String getUnsafeActs() {
 		return unsafeActs;
 	}
@@ -95,12 +101,12 @@ public class Actcard extends ActEntity<Actcard> {
 		this.reporter = reporter;
 	}
 	
-	@NotNull(message="填报人单位不能为空")
-	public Office getReporterOffice() {
+	@Length(min=1, max=255, message="填报人单位长度必须介于 1 和 255 之间")
+	public String getReporterOffice() {
 		return reporterOffice;
 	}
 
-	public void setReporterOffice(Office reporterOffice) {
+	public void setReporterOffice(String reporterOffice) {
 		this.reporterOffice = reporterOffice;
 	}
 	
@@ -139,6 +145,14 @@ public class Actcard extends ActEntity<Actcard> {
 		this.closeTime = closeTime;
 	}
 	
+	public String getCloserReport() {
+		return closerReport;
+	}
+
+	public void setCloserReport(String closerReport) {
+		this.closerReport = closerReport;
+	}
+
 	@Length(min=0, max=255, message="状态长度必须介于 0 和 255 之间")
 	public String getState() {
 		return state;
@@ -148,6 +162,23 @@ public class Actcard extends ActEntity<Actcard> {
 		this.state = state;
 	}
 	
+	@NotNull(message="属地单位不能为空")
+	public Office getTerritorialOffice() {
+		return territorialOffice;
+	}
+
+	public void setTerritorialOffice(Office territorialOffice) {
+		this.territorialOffice = territorialOffice;
+	}
+	
+	public String getTerritorialOfficeReport() {
+		return territorialOfficeReport;
+	}
+
+	public void setTerritorialOfficeReport(String territorialOfficeReport) {
+		this.territorialOfficeReport = territorialOfficeReport;
+	}
+
 	@Length(min=0, max=1000, message="上报时图片长度必须介于 0 和 1000 之间")
 	public String getReportPic() {
 		return reportPic;
@@ -166,24 +197,22 @@ public class Actcard extends ActEntity<Actcard> {
 		this.rectificationPic = rectificationPic;
 	}
 	
+	public String getActcardUnsafeEventId() {
+		return actcardUnsafeEventId;
+	}
 
+	public void setActcardUnsafeEventId(String actcardUnsafeEventId) {
+		this.actcardUnsafeEventId = actcardUnsafeEventId;
+	}
 	
-	public ActcardUnsafeEvent getActcardUnsafeEvent() {
-		return actcardUnsafeEvent;
+	public String getActcardUnsafeEventChildId() {
+		return actcardUnsafeEventChildId;
 	}
 
-	public void setActcardUnsafeEvent(ActcardUnsafeEvent actcardUnsafeEvent) {
-		this.actcardUnsafeEvent = actcardUnsafeEvent;
+	public void setActcardUnsafeEventChildId(String actcardUnsafeEventChildId) {
+		this.actcardUnsafeEventChildId = actcardUnsafeEventChildId;
 	}
-
-	public ActcardUnsafeEvent getActcardUnsafeEventChild() {
-		return actcardUnsafeEventChild;
-	}
-
-	public void setActcardUnsafeEventChild(ActcardUnsafeEvent actcardUnsafeEventChild) {
-		this.actcardUnsafeEvent = actcardUnsafeEventChild;
-	}
-
+	
 	public User getSolver() {
 		return solver;
 	}
@@ -191,5 +220,31 @@ public class Actcard extends ActEntity<Actcard> {
 	public void setSolver(User solver) {
 		this.solver = solver;
 	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public Office getOffice() {
+		return office;
+	}
+
+	public void setOffice(Office office) {
+		this.office = office;
+	}
+
+	public List<ActcardReview> getActcardReviewList() {
+		return actcardReviewList;
+	}
+
+	public void setActcardReviewList(List<ActcardReview> actcardReviewList) {
+		this.actcardReviewList = actcardReviewList;
+	}
+
+	
 	
 }

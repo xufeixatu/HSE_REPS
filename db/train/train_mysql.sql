@@ -1,18 +1,3 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : localhost3306
-Source Server Version : 50541
-Source Host           : localhost:3306
-Source Database       : jeesite
-
-Target Server Type    : MYSQL
-Target Server Version : 50541
-File Encoding         : 65001
-
-Date: 2017-05-21 18:40:27
-*/
-
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -191,28 +176,34 @@ CREATE TABLE `train_need_matrix` (
   `id` varchar(64) NOT NULL COMMENT '编号',
   `job_id` varchar(64) NOT NULL COMMENT '培训岗位编码',
   `content_id` varchar(64) NOT NULL COMMENT '培训知识内容编号',
+  `version` varchar(8) DEFAULT NULL COMMENT '版本号',
+  `start_time` datetime DEFAULT NULL COMMENT '培训有效起始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '培训有效截止时间',
+  `status` varchar(8) DEFAULT NULL COMMENT '培训状态（已培训、未培训）',
   `create_by` varchar(64) NOT NULL COMMENT '创建者',
   `create_date` datetime NOT NULL COMMENT '创建时间',
   `update_by` varchar(64) NOT NULL COMMENT '更新者',
   `update_date` datetime NOT NULL COMMENT '更新时间',
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
   `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '删除标记（0：正常；1：删除）',
-  `version` varchar(8) DEFAULT NULL COMMENT '版本号',
+ 
   PRIMARY KEY (`id`),
   KEY `content_id` (`content_id`),
   KEY `job_id` (`job_id`),
   CONSTRAINT `train_need_matrix_ibfk_1` FOREIGN KEY (`content_id`) REFERENCES `train_content` (`id`),
   CONSTRAINT `train_need_matrix_ibfk_2` FOREIGN KEY (`job_id`) REFERENCES `train_job` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*
+-- Query: SELECT * FROM hse.train_need_matrix
+LIMIT 0, 1000
 
--- ----------------------------
--- Records of train_need_matrix
--- ----------------------------
-INSERT INTO `train_need_matrix` VALUES ('48e0f872ee074c7faf73f46318c2439d', '0df251927b4342cc8d26cdf24f928cfd', '9bfa33fed3dc4dc8b8031ff86bd90c45', '1', '2017-05-21 12:03:22', '1', '2017-05-21 12:14:15', '', '0', '20150201');
-INSERT INTO `train_need_matrix` VALUES ('7130ce3e5cfc48369c6961689e602f52', '0df251927b4342cc8d26cdf24f928cfd', '993eec6dd1b247f3928cf738fe89d8e5', '1', '2017-05-21 12:03:03', '1', '2017-05-21 12:13:48', '', '0', '20150201');
-INSERT INTO `train_need_matrix` VALUES ('7e187032aabf4c28bbd640230e1094e5', '5ece7131a5f044f3be8b6445fbfa8b49', 'd0dae411e3cc4d2b942f1425f4b6bb25', '1', '2017-05-21 12:26:10', '1', '2017-05-21 12:26:10', '', '0', '20150201');
-INSERT INTO `train_need_matrix` VALUES ('935f3c987a994ab0916bb816644f3a05', '0df251927b4342cc8d26cdf24f928cfd', '914b9e4ec8ff410c9133169f22543663', '1', '2017-05-18 08:28:32', '1', '2017-05-21 12:02:37', '', '0', '20150201');
-INSERT INTO `train_need_matrix` VALUES ('99a5e89dfcbc48b89d05b38d82f2eafa', '0df251927b4342cc8d26cdf24f928cfd', 'e6c7f29670f64e0896561fa7e1291573', '1', '2017-05-21 12:03:36', '1', '2017-05-21 12:13:44', '', '0', '20150201');
+-- Date: 2017-06-09 12:36
+*/
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('48e0f872ee074c7faf73f46318c2439d','0df251927b4342cc8d26cdf24f928cfd','9bfa33fed3dc4dc8b8031ff86bd90c45','1','2017-05-21 12:03:22','1','2017-06-09 01:12:24','','0','20150201','2017-06-01 00:00:00','2017-06-28 00:00:00','1');
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('7130ce3e5cfc48369c6961689e602f52','0df251927b4342cc8d26cdf24f928cfd','993eec6dd1b247f3928cf738fe89d8e5','1','2017-05-21 12:03:03','1','2017-06-09 01:12:21','','0','20150201','2017-06-06 00:00:00','2017-06-26 00:00:00','1');
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('7e187032aabf4c28bbd640230e1094e5','5ece7131a5f044f3be8b6445fbfa8b49','d0dae411e3cc4d2b942f1425f4b6bb25','1','2017-05-21 12:26:10','1','2017-06-09 00:59:37','','0','20150201','2017-06-01 00:00:00','2017-06-29 00:00:00','0');
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('935f3c987a994ab0916bb816644f3a05','0df251927b4342cc8d26cdf24f928cfd','914b9e4ec8ff410c9133169f22543663','1','2017-05-18 08:28:32','1','2017-06-09 01:12:14','','0','20150201','2017-06-06 00:00:00','2017-06-30 00:00:00','1');
+INSERT INTO `train_need_matrix` (`id`,`job_id`,`content_id`,`create_by`,`create_date`,`update_by`,`update_date`,`remarks`,`del_flag`,`version`,`start_time`,`end_time`,`status`) VALUES ('99a5e89dfcbc48b89d05b38d82f2eafa','0df251927b4342cc8d26cdf24f928cfd','e6c7f29670f64e0896561fa7e1291573','1','2017-05-21 12:03:36','1','2017-06-09 01:12:26','','0','20150201','2017-06-20 00:00:00','2017-06-29 00:00:00','1');
 
 -- ----------------------------
 -- Table structure for train_plan
@@ -242,18 +233,17 @@ CREATE TABLE `train_plan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of train_plan
--- ----------------------------
-INSERT INTO `train_plan` VALUES ('1', '26', '4', '技术培训', '1', '2017-05-31 08:16:29', '0', '00000000000', '1', '11', '0', '0', '1', '2017-05-21 08:17:09', '1', '2017-05-21 17:34:59', '0', '0', '1');
-
--- ----------------------------
 -- Table structure for train_record
 -- ----------------------------
 DROP TABLE IF EXISTS `train_record`;
 CREATE TABLE `train_record` (
   `id` varchar(64) NOT NULL,
   `name` varchar(255) NOT NULL COMMENT '培训主题',
-  `object_office_id` varchar(64) NOT NULL,
+  `object_office_id` varchar(64) NOT NULL COMMENT '受训单位',
+  `classify` varchar(8) DEFAULT NULL COMMENT '培训分类',
+  `train_method` varchar(8) DEFAULT NULL COMMENT '培训方式（集中/送外/在线培训）',
+  `teacher_name` varchar(32) DEFAULT NULL COMMENT '培训讲师姓名',
+  `train_object` varchar(8) DEFAULT NULL COMMENT '培训对象(1:管理人员，0:操作人员)',
   `train_time` datetime NOT NULL COMMENT '培训时间',
   `subject_office_id` varchar(64) NOT NULL COMMENT '责任单位',
   `plan_number` int(11) NOT NULL COMMENT '培训人数',
@@ -276,13 +266,6 @@ CREATE TABLE `train_record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of train_record
--- ----------------------------
-INSERT INTO `train_record` VALUES ('1c9003a5feb44de68cead755f7261dc8', '2017-05-21技术培训', '26', '2017-05-31 08:16:29', '11', '0', '1', '0', '1', '2017-05-21 17:31:53', '1', '2017-05-21 17:31:53', null, '0', '0', null, null, null, '1', '0', '1', null);
-INSERT INTO `train_record` VALUES ('7db3d55b7fe6405183c35457d2c01303', '2017年研发项目培训', '6', '2017-05-31 16:26:57', '9', '12', '6', '0', '1', '2017-05-20 16:28:27', '1', '2017-05-21 16:54:34', '', '0', '1', null, '', '', '1', '23水电费', '1', '|/jeesite/userfiles/1/files/train/record/trainRecord/2017/05/__3_1_1_20160514130351.jpg|/jeesite/userfiles/1/files/train/record/trainRecord/2017/05/__3_1_1_20160514130351.jpg');
-INSERT INTO `train_record` VALUES ('d12af463cac74507a8790fbe2b94bb06', '2017-05-21技术培训', '26', '2017-05-31 08:16:29', '11', '0', '1', '0', '1', '2017-05-21 17:34:59', '1', '2017-05-21 17:34:59', null, '0', '0', null, null, null, '1', '0', '1', null);
-INSERT INTO `train_record` VALUES ('fd2a1b98198c4eaba0984855901fc41b', '测试', '2', '2017-05-21 15:22:56', '6', '21', '1', '1', '1', '2017-05-20 15:23:45', '1', '2017-05-20 16:22:04', '', '0', '1', '2017-05-02 15:23:26', '34', '33', '1', '23', null, null);
 
 -- ----------------------------
 -- Table structure for train_record_courseware
@@ -301,7 +284,8 @@ CREATE TABLE `train_record_courseware` (
   PRIMARY KEY (`id`),
   KEY `courseware_id` (`courseware_id`),
   KEY `record_id` (`record_id`),
-  CONSTRAINT `train_record_courseware_ibfk_1` FOREIGN KEY (`courseware_id`) REFERENCES `train_courseware` (`id`),
+--  CONSTRAINT `train_record_courseware_ibfk_1` FOREIGN KEY (`courseware_id`) REFERENCES `train_courseware` (`id`),
+-- 避免错
   CONSTRAINT `train_record_courseware_ibfk_2` FOREIGN KEY (`record_id`) REFERENCES `train_record` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -318,6 +302,7 @@ CREATE TABLE `train_record_score` (
   `record_id` varchar(64) NOT NULL COMMENT '培训记录',
   `user_id` varchar(64) NOT NULL COMMENT '受培人员',
   `score` varchar(32) NOT NULL COMMENT '培训成绩',
+  `status` varchar(8) NOT NULL DEFAULT '0' COMMENT '归档状态（-1取消，0草稿，1归档）',
   `create_by` varchar(64) NOT NULL COMMENT '创建者',
   `create_date` datetime NOT NULL COMMENT '创建时间',
   `update_by` varchar(64) NOT NULL COMMENT '更新者',
@@ -329,7 +314,3 @@ CREATE TABLE `train_record_score` (
   CONSTRAINT `train_record_score_ibfk_1` FOREIGN KEY (`record_id`) REFERENCES `train_record` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of train_record_score
--- ----------------------------
-INSERT INTO `train_record_score` VALUES ('ae3bb958a8df400c84419fecadecbc61', '7db3d55b7fe6405183c35457d2c01303', '6', '23.7', '1', '2017-05-20 16:28:27', '1', '2017-05-20 16:28:27', '', '1');

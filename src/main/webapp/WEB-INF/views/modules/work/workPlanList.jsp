@@ -122,66 +122,34 @@
 		</ul>
 	</form:form>
 	<sys:message content="${message}" />
-	<c:forEach items="${list}" var="workPlan">
-		<div class="table_item">
-			<div id="b">
-				<div>
-					<img src="/HSE/static/images/open.jpg" onclick="showTree(this);" />
-					<input type="checkbox" />${workPlan.name} <span style="color:#9B9B9B">【${workPlan.workState}】</span>
+	
+	<div class="ibox-content">
+	
+		<table id="treeTable"
+			class="table table-striped table-bordered table-condensed 
+					footable table table-stripped toggle-arrow-tiny">
+			<thead>
+				<tr>
+					<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
+					<th data-toggle="true">工作项</th>
+					<th>级别</th>
+					<th data-hide="all">时间要求</th>
+					<th>状态</th>
+					<c:if test="${workPlan.planType eq 'company'}">
+						<th data-hide="all">责任单位</th>
+					</c:if>
+					<th data-hide="all">责任人</th>
 					<shiro:hasPermission name="work:workPlan:edit">
-						<span style="float: right;color: blue;">修改 删除</span>
+						<th>操作</th>
 					</shiro:hasPermission>
-				</div>
-				<div></div>
-				<div>
-					<div>${workPlan.workDesc}</div>
-					<div>责任单位：<%-- ${fns:getOfficeNameById(workPlan.depts.id)}  --%>   
-					          责任人：${workPlan.personLiable }  
-						 完成时间：<c:choose>
-						  			<c:when test="${not empty workPlan.startTime}"><fmt:formatDate value="${workPlan.startTime}" pattern="yyyy年MM月dd日"/>-<fmt:formatDate value="${workPlan.planedFinishTime}" pattern="yyyy年MM月dd日"/></c:when>
-						  			<c:when test="${not empty workPlan.requiredFinishTime}"><fmt:formatDate value="${workPlan.requiredFinishTime}" pattern="yyyy年MM月dd日"/>前</c:when>
-						  			<c:when test="${not empty workPlan.frequency}">${workPlan.frequency}月执行</c:when>
-						  			<c:otherwise>
-						  				<jsp:useBean id="currentDate" class="java.util.Date"/>
-						  				<fmt:formatDate value="${currentDate}" pattern="yyyy"/>年12月31日前
-						  			</c:otherwise>
-						  		  </c:choose>
-					</div>
-				</div>
-				<div>
-					<img src="/HSE/static/images/mesg.jpg" /><img src="/HSE/static/images/feedback.jpg" />
-				</div>
-				<div>
-					已经监督检查了不少女员工的卫生状况。确实不容乐观。革命尚未成功，同志还需努力。
-					<div>责任单位：作业一区 责任人：张小宝 完成时间：2017-05-17</div>
-				</div>
-			</div>
-		</div>
-	</c:forEach>
-	<table id="treeTable"
-		class="table table-striped table-bordered table-condensed">
-		<thead>
-			<tr>
-				<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
-				<th>工作项</th>
-				<th>级别</th>
-				<th>时间要求</th>
-				<th>状态</th>
-				<c:if test="${workPlan.planType eq 'company'}">
-					<th>责任单位</th>
-				</c:if>
-				<th>责任人</th>
-				<shiro:hasPermission name="work:workPlan:edit">
-					<th>操作</th>
-				</shiro:hasPermission>
-
-			</tr>
-		</thead>
-		<tbody id="treeTableList"></tbody>
-	</table>
+	
+				</tr>
+			</thead>
+			<tbody id="treeTableList"></tbody>
+		</table>
+	</div>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
-
 			<td>
 				{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>

@@ -44,7 +44,7 @@
 				<th>受培人员</th>
 				<th>培训成绩</th>
 				<th>更新时间</th>
-				<th>备注信息</th>
+				<th>状态</th>
 				<shiro:hasPermission name="train:record:trainRecordScore:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -63,12 +63,14 @@
 				<td>
 					<fmt:formatDate value="${trainRecordScore.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
-				<td>
-					${trainRecordScore.remarks}
-				</td>
+				<td>${fns:getDictLabel(trainRecordScore.status, 'train_record_status', '')}</td>
+				
 				<shiro:hasPermission name="train:record:trainRecordScore:edit"><td>
+				<c:if test="${trainRecord.status!='1'}" >
     				<a href="${ctx}/train/record/trainRecordScore/form?id=${trainRecordScore.id}">修改</a>
 					<a href="${ctx}/train/record/trainRecordScore/delete?id=${trainRecordScore.id}" onclick="return confirmx('确认要删除该受培人员成绩吗？', this.href)">删除</a>
+				    <a href="${ctx}/train/record/trainRecordScore/immutable?id=${trainRecordScore.id}">提交归档</a>
+				</c:if>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

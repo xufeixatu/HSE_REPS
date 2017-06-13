@@ -66,6 +66,8 @@ import com.thinkgem.jeesite.modules.act.service.creator.SimpleRuntimeActivityDef
 import com.thinkgem.jeesite.modules.act.utils.ActUtils;
 import com.thinkgem.jeesite.modules.act.utils.ProcessDefCache;
 import com.thinkgem.jeesite.modules.act.utils.ProcessDefUtils;
+import com.thinkgem.jeesite.modules.actcard.dao.ActcardDao;
+import com.thinkgem.jeesite.modules.actcard.entity.Actcard;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
@@ -78,6 +80,8 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 @Transactional(readOnly = true)
 public class ActTaskService extends BaseService {
 
+	@Autowired
+	private ActcardDao actcardDao;
 	@Autowired
 	private ActDao actDao;
 
@@ -166,6 +170,25 @@ public class ActTaskService extends BaseService {
 //			e.setProcIns(runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult());
 //			e.setProcExecUrl(ActUtils.getProcExeUrl(task.getProcessDefinitionId()));
 			e.setStatus("claim");
+			
+			
+			String processInstanceId = task.getProcessInstanceId();
+			ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).active().singleResult();
+			String businessKey = processInstance.getBusinessKey();
+			System.out.println(businessKey);
+			Actcard actcard = actcardDao.get(businessKey.replaceAll("actcard:", ""));
+			if(null != actcard){//说明为actcard任务
+				if( null == actcard.getUser() || !UserUtils.getUser().getId().equals(actcard.getUser().getId())){//如果人员相等则为本人的任务
+					System.out.println(actcard.getSolver());
+					if( null != actcard.getOffice() && !actcard.getOffice().equals(UserUtils.getUser().getOffice())){
+						System.out.println(actcard.getOffice());
+						continue;
+					}
+				}else{
+					
+				}
+			}
+			
 			result.add(e);
 		}
 		return result;
