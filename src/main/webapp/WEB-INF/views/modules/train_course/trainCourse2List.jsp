@@ -4,6 +4,7 @@
 <head>
 	<title>培训课件上传与查看管理</title>
 	<meta name="decorator" content="default"/>
+	
 	<script type="text/javascript">
 		$(document).ready(function() {
 			 var getprogressvalue = $("#progress-value").attr('value');
@@ -53,8 +54,8 @@
 /*  		function decode(text){
  			text = decodeURI(text);
  			return text;
- 		}
-	     */
+ 		} */
+	     
 	</script>
 	<style>
 		body{
@@ -292,6 +293,36 @@
 			position:absolute;
 			top:-5px;
 		}
+		/* 评论 */
+		.media{
+			 -moz-border-radius: 15px;   
+			  -webkit-border-radius: 15px;
+			  border-radius:15px;
+		}
+		.hd{
+		    padding-left:11px;
+			font-size: 15px;
+    		font-weight: bold;
+    		position: absolute;
+            padding-top: 8px;
+		}
+		.cmt-post{
+			border-bottom: 1px solid #d9dde1;
+			height: 120px;
+            padding-top: 9px;
+		}
+		 .clearfix{
+		    color: #93999f;
+		    font-size: 12px;
+		     margin-top: 13px;
+   			 padding-left: 42px;
+		}
+		#btnSubmit{
+			position: absolute;
+		    margin: 60px 33px;
+		    width: 100px;
+		    border-radius: 10px;			
+		}
 	</style>
 </head>
 <body class="wrapper">
@@ -300,7 +331,7 @@
 	    <li>>></li>
 	    <li class="active">查看课件</li>
 	</ol>
-	
+	<!-- 图片 -->
 	<div class="course-detail">
 		<img alt="封面" src="http://localhost:8080/${trainCourse.coverId}">
 		<div class="course-detail-text">
@@ -327,7 +358,7 @@
 					<li class="focus">
 						<a>星级评分</a>
 					</li>
-					<li class="star" onmouseover="InitEvent()">
+					<li class="star" 	onmouseover="InitEvent()">
 						<table id="tblMain"><tr><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>
 	    				</table>
 					</li>
@@ -335,11 +366,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="course-description">
+    <!--    中间部分 -->	
+   <div class="course-description">
 		<ul id="myTab" class="nav nav-tabs">
 		    <li class="active">
 		        <a href="#introduce" data-toggle="tab">
-		                                         课程介绍
+		            课程介绍
 		        </a>
 		    </li>
 		    <li>
@@ -347,7 +379,13 @@
 					课程目录
 				</a>
 			</li>
+			 <li>
+		    	<a href="#appraise" data-toggle="tab">
+					课程评价
+				</a>
+			</li>
 		</ul>
+		
 		<div id="myTabContent" class="tab-content">
 		    <div class="tab-pane fade in active" id="introduce">
 		        <ul>
@@ -374,8 +412,8 @@
 										
 									</script> -->
 									${videoName}
-<%--  									<%=java.net.URLDecoder.decode("%E7%9F%A5%E8%AF%86%E5%B0%B1%E6%98%AF%E5%8A%9B%E9%87%8F.mp4","UTF-8")%>
-									<%=java.net.URLDecoder.decode("videoName","UTF-8")%> --%>
+ 				 				<%-- 	<%=java.net.URLDecoder.decode("%E7%9F%A5%E8%AF%86%E5%B0%B1%E6%98%AF%E5%8A%9B%E9%87%8F.mp4","UTF-8")%> --%>
+							<%-- 	 	<%=java.net.URLDecoder.decode("vName","UTF-8")%>   --%>
 									</c:forEach>								
 								</li>
 							</c:forTokens>				        		
@@ -383,13 +421,14 @@
 		        	</li>
 		        </ul>
 		    </div>
+		    
 		    <div class="tab-pane fade" id="chapter">
 		        <ul>		        
 					<c:set var="testString" value="${trainCourse.docId}"/>
 							
 					<c:forTokens items="${testString}" delims="|" var="videoHref">
 						<li>
-							<span class="chapter-time">05:20</span>
+							<span class="chapter-time"></span>
 							<span class="chapetr-item">
 							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
 							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
@@ -407,8 +446,71 @@
 					</c:forTokens>			
 		        </ul>
 		    </div>
-		</div>
+		    		
+		  <!--   评价 -->
+		  	<div class="tab-pane fade course_review" id="appraise">
+		  	<form:form id="inputForm" modelAttribute="courseReview"
+			action="${ctx}/course_review/courseReview/save1" method="post"
+			class="form-horizontal">
+			<form:hidden path="id"/>
+			<sys:message content="${message}" />
+			<div class="control-group">
+				<span> <form:textarea
+						path="assessOpinion" htmlEscape="false" rows="4" maxlength="255"
+						class="input-xxlarge " />
+				</span> 
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论人：</label>
+				<div class="controls">
+					<form:input path="assessById" htmlEscape="false" maxlength="64" class="input-xlarge required" />
+						<span class="help-inline"><font color="red">*</font> </span>
+					</div>
+				</div>
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论时间：</label>
+				<div class="controls">
+					<input name="assessTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+						value="<fmt:formatDate value="${courseReview.assessTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+						<span class="help-inline"><font color="red">*</font> </span>
+					</div>
+				</div>
+						
+				<span> <shiro:hasPermission
+					name="course_review:courseReview:edit">
+					<input id="btnSubmit" class="btn btn-primary" type="submit"
+						value="发表" />&nbsp;</shiro:hasPermission>
+				</span>
+			</div>
+		 </form:form>
+		<sys:message content="${message}" />
+		  		  	
+		  	  <div class="cmt-wrap">
+                 <ul class="cmt-list">
+                 	<c:forEach items="${page1.list}" var="courseReview">
+                    <li class="cmt-post" >
+                      
+    				<div class="inner">
+	    			  	<div class="media"  style="display:inline;">
+	                   <a href="/u/1968386/courses" target="_blank"><img src="http://img.mukewang.com/555869eb0001716101800180-40-40.jpg" width="32" height="32" style="border-radius:37px 37px;"></a>
+        			    </div>
+    				
+    					<div class="hd" style="display:inline">
+                          <a href="javascript:void();" class="name disabled">${courseReview.assessById}</a>
+    					</div>
+    					<p class="cmt-txt" style="padding: 5px 41px;padding-top: 16px;">${courseReview.assessOpinion}</p>
+    					<div class="ft clearfix">
+						<span><fmt:formatDate value="${courseReview.assessTime}"
+								pattern="yyyy-MM-dd HH:mm:ss" /></span>
+						   </div>
+						</div>
+    		    	</li>
+    		    	</c:forEach>
+		  	    </ul>
+		  	</div>
+     	</div>
+		</div>	
 	</div>
-	<div class="pagination">${page}</div>
 </body>
 </html>
+

@@ -25,7 +25,7 @@ import com.thinkgem.jeesite.modules.course_catelog.service.CourseCatelogService;
 /**
  * 课件目录Controller
  * @author 王少昌
- * @version 2017-05-17
+ * @version 2017-06-07
  */
 @Controller
 @RequestMapping(value = "${adminPath}/course_catelog/courseCatelog")

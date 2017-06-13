@@ -5,20 +5,18 @@ package com.thinkgem.jeesite.modules.course_catelog.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.course_catelog.entity.CourseCatelog;
 import com.thinkgem.jeesite.modules.course_catelog.dao.CourseCatelogDao;
 
 /**
  * 课件目录Service
  * @author 王少昌
- * @version 2017-05-17
+ * @version 2017-06-07
  */
 @Service
 @Transactional(readOnly = true)

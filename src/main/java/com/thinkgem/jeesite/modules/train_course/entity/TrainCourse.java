@@ -5,10 +5,15 @@ package com.thinkgem.jeesite.modules.train_course.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.common.collect.Lists;
+
 import javax.validation.constraints.NotNull;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.course_catelog.entity.CourseCatelog;
 
 /**
  * 培训课件Entity
@@ -32,9 +37,10 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	private String unused1;		// unused_1
 	private String unused2;		// unused_2
 	private String unused3;		// unused_3
-	private String courseId;		// 课程id
+/*	private String courseId;		// 课程id
 	private String attachName;		// 附件名称
 	private String attachId;		// 附件id
+*/	private List<CourseCatelog> CourseCatelogList = Lists.newArrayList();		// 子表列表
 	
 	public TrainCourse() {
 		super();
@@ -170,7 +176,7 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	public void setUnused3(String unused3) {
 		this.unused3 = unused3;
 	}
-	@Length(min=0, max=64, message="课程id长度必须介于 0 和 64 之间")
+/*	@Length(min=0, max=64, message="课程id长度必须介于 0 和 64 之间")
 	public String getCourseId() {
 		return courseId;
 	}
@@ -195,6 +201,15 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 
 	public void setAttachId(String attachId) {
 		this.attachId = attachId;
+	}*/
+	
+	
+	public List<CourseCatelog> getCourseCatelogList() {
+		return CourseCatelogList;
+	}
+
+	public void setCourseCatelogList(List<CourseCatelog> CourseCatelogList) {
+		this.CourseCatelogList = CourseCatelogList;
 	}
 	
 }
