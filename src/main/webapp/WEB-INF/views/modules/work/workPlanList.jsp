@@ -92,6 +92,18 @@
 			me.href += str;
 			return confirmx('确认要提交该工作计划吗？', me.href);
 		}
+		//显示隐藏详细行
+		function expandDetail(id){
+			var o = $('#ex_' + id);
+			var s = $('#s_' + id);
+			if(o.attr('style') == "display:none"){
+				o.attr('style','display:block');
+				s.attr('src','/HSE/static/images/open.jpg');
+			}else{
+				o.attr('style','display:none');
+				s.attr('src','/HSE/static/images/close.jpg');
+			}
+		}
 	</script>
 </head>
 <body>
@@ -123,38 +135,35 @@
 	</form:form>
 	<sys:message content="${message}" />
 	
-	<div class="ibox-content">
-	
-		<table id="treeTable"
-			class="table table-striped table-bordered table-condensed 
-					footable table table-stripped toggle-arrow-tiny">
-			<thead>
-				<tr>
-					<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
-					<th data-toggle="true">工作项</th>
-					<th>级别</th>
-					<th data-hide="all">时间要求</th>
-					<th>状态</th>
-					<c:if test="${workPlan.planType eq 'company'}">
-						<th data-hide="all">责任单位</th>
-					</c:if>
-					<th data-hide="all">责任人</th>
-					<shiro:hasPermission name="work:workPlan:edit">
-						<th>操作</th>
-					</shiro:hasPermission>
-	
-				</tr>
-			</thead>
-			<tbody id="treeTableList"></tbody>
-		</table>
-	</div>
+	<table id="treeTable"
+		class="table table-striped table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th><input type="checkbox" name="selectAll" onclick="selectAll(this);"/></th>
+				<th>工作项</th>
+				<th>级别</th>
+				<th>时间要求</th>
+				<th>状态</th>
+				<c:if test="${workPlan.planType eq 'company'}">
+					<th>责任单位</th>
+				</c:if>
+				<th>责任人</th>
+				<shiro:hasPermission name="work:workPlan:edit">
+					<th>操作</th>
+				</shiro:hasPermission>
+
+			</tr>
+		</thead>
+		<tbody id="treeTableList"></tbody>
+	</table>
 	<script type="text/template" id="treeTableTpl">
-		<tr id="{{row.id}}" pId="{{pid}}">
+
+		<tr id="{{row.id}}" pId="{{pid}}" onclick="expandDetail('{{row.id}}')">
 			<td>
-				{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
+				<img id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
 			<td>{{#edit}}
-					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
+					<a onclick="return false;" href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
 						{{row.name}}
 					</a>
 				{{/edit}}
@@ -213,7 +222,9 @@
 			</td></shiro:hasPermission>
 			
 		</tr>
-		
+		<tr id="ex_{{row.id}}" style="display:none">
+			<td colspan="100">你好</td>
+		</tr>
 	</script>
 	
 </body>

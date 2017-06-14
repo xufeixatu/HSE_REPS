@@ -21,7 +21,7 @@
 <script src="${ctxStatic}/common/hse.js" type="text/javascript"></script>
 <script type="text/javascript">var ctx = '${ctx}', ctxStatic='${ctxStatic}';</script>
 <link href="${ctxStatic}/common/hse.css" type="text/css" rel="stylesheet" />
-<link href="${ctxStatic}/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<%-- <link href="${ctxStatic}/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 <link href="${ctxStatic}/hplus/css/font-awesome.css?v=4.4.0" rel="stylesheet">
 <link href="${ctxStatic}/hplus/css/plugins/footable/footable.core.css" rel="stylesheet">
 <link href="${ctxStatic}/hplus/css/animate.css" rel="stylesheet">
@@ -29,7 +29,7 @@
 <!-- 全局js -->
 <script src="${ctxStatic}/hplus/js/jquery.min.js?v=2.1.4"></script>
 <script src="${ctxStatic}/hplus/js/bootstrap.min.js?v=3.3.6"></script>
-<script src="${ctxStatic}/hplus/js/plugins/footable/footable.all.min.js"></script>
+<script src="${ctxStatic}/hplus/js/plugins/footable/footable.all.min.js"></script> --%>
 
 <!-- 自定义js -->
 <script src="js/content.js?v=1.0.0"></script>
