@@ -5,9 +5,7 @@
 	<title>检查项检查管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
-		$(document).ready(function() {
-			
-		});
+		var inspctId = $("#inspctId").val();
 		function page(n,s){
 			$("#pageNo").val(n);
 			$("#pageSize").val(s);
@@ -36,7 +34,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/check/checkItemCheck/">检查项检查</a></li>
+		<li class="active"><a href="${ctx}/check/checkItemCheck?inspctId=${inspctId}")>检查项检查</a></li>
 		<shiro:hasPermission name="check:checkItemCheck:edit"><li><a href="${ctx}/check/checkItemCheck/form">检查项检查</a></li></shiro:hasPermission>
 	</ul>
 	<sys:message content="${message}"/>
@@ -71,13 +69,10 @@
 		</tbody>
 	</table>
 	<div class="pagination">${page}</div>
-<%-- 	<form:form id="searchForm" modelAttribute="checkItemCheck" action="${ctx}/check/checkItemCheck/" method="post" class="breadcrumb form-search">
+ 	<form:form id="searchForm" modelAttribute="checkItemCheck" action="${ctx}/check/checkItemCheck?inspctId=${inspctId}" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<ul class="ul-form">
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="提交"/></li>
-			<li class="btns"><input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/></li>
-		</ul>
-	</form:form>	 --%>
+		<input id="inspctId" name="inspctId" type="hidden" value="${inspctId}"/>
+	</form:form>
 </body>
 </html>

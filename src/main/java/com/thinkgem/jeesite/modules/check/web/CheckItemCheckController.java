@@ -49,6 +49,9 @@ public class CheckItemCheckController extends BaseController {
 	@RequiresPermissions("check:checkItemCheck:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CheckItemCheck checkItemCheck, HttpServletRequest request, HttpServletResponse response, Model model) {
+		String inspctId = request.getParameter("inspctId");
+		model.addAttribute("inspctId", inspctId);
+		checkItemCheck.setInspctId(inspctId);
 		Page<CheckItemCheck> page = checkItemCheckService.findPage(new Page<CheckItemCheck>(request, response), checkItemCheck); 
 		model.addAttribute("page", page);
 		return "modules/check/checkItemCheckList";
