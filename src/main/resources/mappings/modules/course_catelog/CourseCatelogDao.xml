@@ -16,7 +16,7 @@
 	</sql>
 	
 	<sql id="courseCatelogJoins">
-	LEFT JOIN course_catelog cct ON cct.id = a.course_id
+	LEFT JOIN train_course tc ON tc.id = a.course_id
 	</sql>
     
 	<select id="get" resultType="CourseCatelog">

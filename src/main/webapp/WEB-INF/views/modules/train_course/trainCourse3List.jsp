@@ -126,14 +126,14 @@
 		//获取当前时间
 		function timeHandler(t){
 		  if(t>-1){
-		      CKobject._K_('nowTime').innerHTML='当前播放的时间点是(此值精确到小数点后三位，即毫秒)：'+t;
+		    /*   CKobject._K_('nowTime').innerHTML='当前播放的时间点是(此值精确到小数点后三位，即毫秒)：'+t; */
 		  }
 		} 
 		
 		//监听当前的播放按键，并且显示当前的视频的总时长
 		function playHandler(){
 		      CKobject.getObjectById('ckplayer_a1').removeListener('play','playHandler');
-			CKobject._K_('totalTime').innerHTML='当前播放视频时长是(秒)：'+ getTotalTime();
+/* 			CKobject._K_('totalTime').innerHTML='当前播放视频时长是(秒)：'+ getTotalTime(); */
 			CKobject._K_('chapterTime').innerHTML=getTotalTime();
 			$("#chapter-time").innerHtml=getTotalTime();
 			$("#chapterTime").innerHtml=getTotalTime();
@@ -142,7 +142,6 @@
 		//通过getstatus函数来获取totaltime参数	
 		function getTotalTime(){
 			var a=CKobject.getObjectById('ckplayer_a1').getStatus();
-			alert(a['totalTime']);
 			return a['totalTime'];
 		}
 	
@@ -160,8 +159,8 @@
 	</ol>
 	<!-- 播放视频 -->
 			<div id="a1"></div>
-			<div id="nowTime"></div>
-			<div id="totalTime"></div>
+<!-- 			<div id="nowTime"></div>
+			<div id="totalTime"></div> -->
 			<script type="text/javascript" src="http://localhost:8080/HSE/ckplayer/ckplayer.js" charset="utf-8"></script>
 			<script type="text/javascript">
 				var flashvars={

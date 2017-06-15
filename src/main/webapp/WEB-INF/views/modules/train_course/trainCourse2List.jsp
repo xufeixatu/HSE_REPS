@@ -331,6 +331,7 @@
 	    <li>>></li>
 	    <li class="active">查看课件</li>
 	</ol>
+	
 	<!-- 图片 -->
 	<div class="course-detail">
 		<img alt="封面" src="http://localhost:8080/${trainCourse.coverId}">
@@ -405,15 +406,7 @@
 																		
 									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
 									<c:forEach items="${videoId}" var="videoName" begin="8" >
-									
-<!-- 									<script type="text/javascript">
-
-										/* videoName = decodeURI(videoName); */
-										
-									</script> -->
-									${videoName}
- 				 				<%-- 	<%=java.net.URLDecoder.decode("%E7%9F%A5%E8%AF%86%E5%B0%B1%E6%98%AF%E5%8A%9B%E9%87%8F.mp4","UTF-8")%> --%>
-							<%-- 	 	<%=java.net.URLDecoder.decode("vName","UTF-8")%>   --%>
+										<c:out value="${tools:urlDecode(videoName)}"></c:out>
 									</c:forEach>								
 								</li>
 							</c:forTokens>				        		
@@ -437,7 +430,7 @@
 									<c:set var="videoHrefString" value="${videoHref}"/>													
 									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
 									<c:forEach items="${videoId}" var="videoName" begin="8" >
-										${videoName}
+										<c:out value="${tools:urlDecode(videoName)}"></c:out>
 									</c:forEach>
 								</a>
 							</span>
