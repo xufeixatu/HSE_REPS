@@ -20,7 +20,7 @@
 			</div>
 			<div id="openClose" class="close">&nbsp;</div>
 			<div id="right">
-				<iframe id="workPlanContent" src="${ctx}/work/workPlan/workList?id=&parentIds=" width="100%" height="91%" frameborder="0"></iframe>
+				<iframe id="workPlanContent" src="${ctx}/work/workPlan/list?id=&parentIds=&planType=${workPlan.planType}" width="100%" height="91%" frameborder="0"></iframe>
 			</div>
 		</div>
 		<script type="text/javascript">

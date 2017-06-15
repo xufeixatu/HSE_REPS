@@ -8,6 +8,7 @@
 <%@include file="/WEB-INF/views/include/treetable.jsp"%>
 <script type="text/javascript">
 		$(document).ready(function() {
+			
 			var tpl = $("#treeTableTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 			var data = ${fns:toJson(list)}, ids = [], rootIds = [];
 			
@@ -26,6 +27,7 @@
 				addRow("#treeTableList", tpl, data, rootIds[i], true);
 			}
 			$("#treeTable").treeTable({expandLevel : 5});
+			$("a").bind("click", function(event){event.stopPropagation();});
 		});
 		function addRow(list, tpl, data, pid, root){
 			for (var i=0; i<data.length; i++){
@@ -116,7 +118,6 @@
 				<li><a
 				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}行动计划</a></li>
 		</shiro:hasPermission>
-		
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
 		action="${ctx}/work/workPlan/" method="post"
@@ -163,7 +164,7 @@
 				<img id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
 			<td>{{#edit}}
-					<a onclick="return false;" href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
+					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
 						{{row.name}}
 					</a>
 				{{/edit}}
