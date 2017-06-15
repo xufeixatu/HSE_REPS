@@ -158,7 +158,7 @@
 		<tbody id="treeTableList"></tbody>
 	</table>
 	<script type="text/template" id="treeTableTpl">
-		<tr id="{{row.id}}" pId="{{pid}}">
+		<tr id="{{row.id}}" pId="{{pid}}" onclick="">
 			<td>
 				<img onclick="expandDetail('{{row.id}}')" id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
