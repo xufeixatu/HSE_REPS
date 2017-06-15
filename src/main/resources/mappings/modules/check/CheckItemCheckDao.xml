@@ -44,6 +44,9 @@
 			AND user.id = inspct.check_person
 			AND a.check_item_id = item.id
 			AND a.inspct_id = inspct.id
+			<if test="inspctId != null and inspctId != ''" >
+        		AND a.inspct_id = #{inspctId}
+      		</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
