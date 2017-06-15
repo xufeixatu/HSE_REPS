@@ -81,7 +81,7 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 public class ActTaskService extends BaseService {
 
 	@Autowired
-	private ActcardDao actcardDao;
+	private ActcardDao actcardDao; 
 	@Autowired
 	private ActDao actDao;
 
