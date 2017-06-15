@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+
 <html>
 <head>
+	
 	<title>工作管理</title>
 	<meta name="decorator" content="default"/>
 	<%@include file="/WEB-INF/views/include/treeview.jsp" %>
@@ -27,7 +29,7 @@
 			var setting = {data:{simpleData:{enable:true,idKey:"id",pIdKey:"pId",rootPId:'0'}},
 				callback:{onClick:function(event, treeId, treeNode){
 						var id = treeNode.pId == '0' ? '' :treeNode.pId;
-						$('#workPlanContent').attr("src","${ctx}/work/workType/list?id="+id+"&parentIds="+treeNode.pIds);
+						$('#workPlanContent').attr("src","${ctx}/work/workPlan/list?workType.id=" + id + "&id=&parentIds=&planType=${workPlan.planType}");
 					}
 				}
 			};

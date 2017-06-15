@@ -158,10 +158,9 @@
 		<tbody id="treeTableList"></tbody>
 	</table>
 	<script type="text/template" id="treeTableTpl">
-
-		<tr id="{{row.id}}" pId="{{pid}}" onclick="expandDetail('{{row.id}}')">
+		<tr id="{{row.id}}" pId="{{pid}}">
 			<td>
-				<img id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
+				<img onclick="expandDetail('{{row.id}}')" id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
 			<td>{{#edit}}
 					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
@@ -224,7 +223,15 @@
 			
 		</tr>
 		<tr id="ex_{{row.id}}" style="display:none">
-			<td colspan="100">你好</td>
+			<td colspan="100">
+				<a href="#" style="font-weight:900px">最新交流</a><br/>
+				最新反馈消息：{{row.newFeedback}}<br/>
+				单位：{{row.feebackPeopleId}} 反馈人：{{row.remain_dept_id}} 反馈时间：{{row.feedbackTime}}<br/>
+				
+				最新回复消息：{{row.newReply}}<br/>
+				回复人：{{row.replyPeopleId}} 回复时间：{{row.replyTime}}<br/>
+				
+			</td>
 		</tr>
 	</script>
 	

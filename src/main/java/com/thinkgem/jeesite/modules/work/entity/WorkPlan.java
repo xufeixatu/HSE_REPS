@@ -117,9 +117,17 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String remainCreateBy;
 	private String remainName;
 	private String remainDeptName;
+	
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	private String newFeedback; //最新反馈
+	private String feebackPeopleId; //反馈人
+	private Date feedbackTime; //最新反馈时间
+	private String newReply; //最新回复
+	private String replyPeopleId; //回复人ID
+//	private Date replyTime;
+	
 	public String getCommentContent() {
 		return commentContent;
 	}
