@@ -41,14 +41,18 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>序号</th>
 				<th>检查内容</th>
 				<th>是否符合标准</th>
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${page.list}" var="checkItemCheck">
+		<c:forEach items="${page.list}" var="checkItemCheck" varStatus="status">
 			<tr>
-				<td width="80%">
+				<td width="5%">
+					${status.count + (page.pageNo -1) * page.pageSize}
+				</td>
+				<td width="75%">
 					${checkItemCheck.checkContent}
 				</td>
 				<td width="20%" align="center">
