@@ -38,7 +38,7 @@
 				AND a.attach_name = #{attachName}
 			</if>
 			<if test="trainCourse != null and trainCourse.id != null and trainCourse.id != ''">
-				AND a.course_id = #{courseId}
+				AND a.course_id = #{trainCourse.id}
 			</if>
 			<if test="attachId != null and attachId != ''">
 				AND a.attach_id = #{attachId} 
@@ -98,7 +98,7 @@
 		)
 	</insert>
 	
-	<update id="update">
+	<update id="update">s
 		UPDATE course_catelog SET 	
 			attach_name = #{attachName},
 			attach_id = #{attachId}
