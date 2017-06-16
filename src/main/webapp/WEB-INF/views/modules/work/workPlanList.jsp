@@ -8,7 +8,6 @@
 <%@include file="/WEB-INF/views/include/treetable.jsp"%>
 <script type="text/javascript">
 		$(document).ready(function() {
-			
 			var tpl = $("#treeTableTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 			var data = ${fns:toJson(list)}, ids = [], rootIds = [];
 			
@@ -158,9 +157,9 @@
 		<tbody id="treeTableList"></tbody>
 	</table>
 	<script type="text/template" id="treeTableTpl">
-		<tr id="{{row.id}}" pId="{{pid}}" onclick="">
+		<tr id="{{row.id}}" pId="{{pid}}" onclick="expandDetail('{{row.id}}')">
 			<td>
-				<img onclick="expandDetail('{{row.id}}')" id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
+				<img id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
 			<td>{{#edit}}
 					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
@@ -230,7 +229,6 @@
 				
 				最新回复消息：{{row.newReply}}<br/>
 				回复人：{{row.replyPeopleId}} 回复时间：{{row.replyTime}}<br/>
-				
 			</td>
 		</tr>
 	</script>

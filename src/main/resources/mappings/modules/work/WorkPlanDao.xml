@@ -173,7 +173,7 @@
 	 -->
 	<select id="findList" resultType="WorkPlan">
 		SELECT 
-			*
+			<include refid="workPlanColumns"></include>
 		FROM work_plan a
 		<include refid="workPlanJoins"/>
 		<where>
