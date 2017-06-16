@@ -119,11 +119,15 @@
 		</shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
-		action="${ctx}/work/workPlan/" method="post"
+		action="${ctx}/work/workPlan/?planType=${planTypeDict.value}" method="post"
 		class="breadcrumb form-search">
 		<ul class="ul-form">
-			<li><label>标题：</label> <form:input path="name"
-					htmlEscape="false" maxlength="100" class="input-medium" /></li>
+			<li>
+				<label>工作状态：</label> 
+				<form:select path="workStateId" class="input-medium"> 
+							<form:options items="${fns:getDictList('work_state')}"
+								itemLabel="label" itemValue="id" htmlEscape="false" />
+				</form:select></li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary"
 				type="submit" value="查询" /></li>
 			<li class="btns">

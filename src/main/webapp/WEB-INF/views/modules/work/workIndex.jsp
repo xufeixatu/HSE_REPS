@@ -29,7 +29,7 @@
 			var setting = {data:{simpleData:{enable:true,idKey:"id",pIdKey:"pId",rootPId:'0'}},
 				callback:{onClick:function(event, treeId, treeNode){
 						var id = treeNode.pId == '0' ? '' :treeNode.pId;
-						$('#workPlanContent').attr("src","${ctx}/work/workPlan/list?workType.id=" + id + "&id=&parentIds=&planType=${workPlan.planType}");
+						$('#workPlanContent').attr("src","${ctx}/work/workPlan/list?workType.id=" + treeNode.id + "&id=&parentIds=&planType=${workPlan.planType}");
 					}
 				}
 			};

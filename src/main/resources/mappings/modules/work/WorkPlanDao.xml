@@ -181,11 +181,8 @@
 			<if test="parent != null and parent.id != null and parent.id != ''">
 				AND a.parent_id = #{parent.id}
 			</if>
-			<if test="name != null and name != ''">
-				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			<if test="workStateId != null and workStateId != ''">
+				AND a.work_state_id = #{workStateId}
 			</if>
 			<if test="parentIds != null and parentIds != ''">
 				AND a.parent_ids LIKE 

@@ -80,7 +80,7 @@ public class WorkPlanController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"index" , "" })
+	@RequestMapping(value = {"index" })
 	public String index(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
@@ -89,11 +89,14 @@ public class WorkPlanController extends BaseController {
 	}
 	
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = { "list"})
+	@RequestMapping(value = { "list",""})
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
 		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
-
+		//根据工作计划中的分类生成过滤条件
+		if(workPlan.getWorkType() != null){
+			WorkPlanSqlMapFilter.getFilter().typeWorkTypeFilterSqlMapDsf(workPlan, model);
+		}
 		List<WorkPlan> list = workPlanService.findList(workPlan);
 
 		model.addAttribute("list", list);

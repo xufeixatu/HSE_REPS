@@ -12,6 +12,7 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
+import com.thinkgem.jeesite.modules.work.entity.WorkType;
 
 @Component
 @Scope("prototype")
@@ -201,6 +202,16 @@ public class WorkPlanSqlMapFilter {
 		dsf.append("wri.id is null");
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
+	}
+
+	public void typeWorkTypeFilterSqlMapDsf(WorkPlan workPlan, Model model) {
+		if(workPlan.getWorkType() != null && !"".equals(workPlan.getWorkType().getId().trim())){
+			common(workPlan, model);
+			dsf.append(" and a.work_type_id = '" + workPlan.getWorkType().getId() + "' ");
+			System.out.println(workPlan.getWorkType().getId());
+			// 将字符串加回到sqlMap.dsf属性
+			sqlMap.put("dsf", dsf.toString());
+		}
 	}
 
 	
