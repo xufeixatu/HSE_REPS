@@ -4,7 +4,6 @@
     
 	<sql id="courseCatelogColumns">
 		a.id AS "id",
-		a.chapter_id AS "chapterId",
 		a.course_id AS "courseId",
 		a.attach_name AS "attachName",
 		a.attach_id AS "attachId",
@@ -39,7 +38,7 @@
 				AND a.attach_name = #{attachName}
 			</if>
 			<if test="trainCourse != null and trainCourse.id != null and trainCourse.id != ''">
-				AND a.course_id = #{trainCourse.id}
+				AND a.course_id = #{courseId}
 			</if>
 			<if test="attachId != null and attachId != ''">
 				AND a.attach_id = #{attachId} 
@@ -76,7 +75,6 @@
 	<insert id="insert">
 		INSERT INTO course_catelog(
 			id,
-			chapter_id,
 			course_id,
 			attach_name,
 			attach_id,
@@ -88,8 +86,7 @@
 			del_flag
 		) VALUES (
 			#{id},
-			#{chapterId},
-			#{courseId},
+			#{trainCourse.id},
 			#{attachName},
 			#{attachId},
 			#{createBy.id},
@@ -103,15 +100,13 @@
 	
 	<update id="update">
 		UPDATE course_catelog SET 	
-			chapter_id = #{chapterId},
-			course_id = #{courseId},
 			attach_name = #{attachName},
 			attach_id = #{attachId}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
-		UPDATE course_catelog SET 
+		UPDATE course_catelog SET
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>

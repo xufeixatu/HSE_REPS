@@ -35,9 +35,6 @@ public class TrainCourseService extends CrudService<TrainCourseDao, TrainCourse>
 		return trainCourse;
 	}
 
-/*	public TrainCourse get(String id) {
-		return super.get(id);
-	}*/
 	
 	public List<TrainCourse> findList(TrainCourse trainCourse) {
 		return super.findList(trainCourse);

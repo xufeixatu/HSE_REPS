@@ -42,13 +42,7 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 /*	private String courseId;		// 课程id
 	private String attachName;		// 附件名称
 	private String attachId;		// 附件id
-//<<<<<<< HEAD
-	
-//=======
 */	
-//	
-//>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git
-	
 	
 	public int getGradeCount() {
 		return gradeCount;
@@ -192,6 +186,7 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	public void setUnused3(String unused3) {
 		this.unused3 = unused3;
 	}
+	
 /*	@Length(min=0, max=64, message="课程id长度必须介于 0 和 64 之间")
 	public String getCourseId() {
 		return courseId;
@@ -217,8 +212,8 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 
 	public void setAttachId(String attachId) {
 		this.attachId = attachId;
-	}*/
-	
+	}
+	*/
 	
 	public List<CourseCatelog> getCourseCatelogList() {
 		return CourseCatelogList;
@@ -227,5 +222,6 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	public void setCourseCatelogList(List<CourseCatelog> CourseCatelogList) {
 		this.CourseCatelogList = CourseCatelogList;
 	}
+
 	
 }
