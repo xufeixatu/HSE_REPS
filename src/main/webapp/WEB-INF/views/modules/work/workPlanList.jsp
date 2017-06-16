@@ -26,7 +26,7 @@
 				addRow("#treeTableList", tpl, data, rootIds[i], true);
 			}
 			$("#treeTable").treeTable({expandLevel : 5});
-			$("a").bind("click", function(event){event.stopPropagation();});
+			$("a,input[type='checkbox'],span[arrow='true']").bind("click", function(event){event.stopPropagation();});
 		});
 		function addRow(list, tpl, data, pid, root){
 			for (var i=0; i<data.length; i++){
@@ -158,7 +158,7 @@
 	</table>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}" onclick="expandDetail('{{row.id}}')">
-			<td>
+			<td name="first">
 				<img id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
 			<td>{{#edit}}
