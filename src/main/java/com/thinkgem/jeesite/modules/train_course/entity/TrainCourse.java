@@ -37,11 +37,27 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	private String unused1;		// unused_1
 	private String unused2;		// unused_2
 	private String unused3;		// unused_3
+	private int gradeCount;    //打分人数
+	private List<CourseCatelog> CourseCatelogList = Lists.newArrayList();		// 子表列表
 /*	private String courseId;		// 课程id
 	private String attachName;		// 附件名称
 	private String attachId;		// 附件id
-*/	private List<CourseCatelog> CourseCatelogList = Lists.newArrayList();		// 子表列表
+//<<<<<<< HEAD
 	
+//=======
+*/	
+//	
+//>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git
+	
+	
+	public int getGradeCount() {
+		return gradeCount;
+	}
+
+	public void setGradeCount(int gradeCount) {
+		this.gradeCount = gradeCount;
+	}
+
 	public TrainCourse() {
 		super();
 	}

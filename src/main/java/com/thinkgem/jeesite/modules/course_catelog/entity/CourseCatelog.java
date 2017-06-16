@@ -17,6 +17,7 @@ public class CourseCatelog extends DataEntity<CourseCatelog> {
 	
 	private static final long serialVersionUID = 1L;
 	private TrainCourse trainCourse;		// 业务主表 父类
+	private String chapterId;		// 章节id
 	private String courseId;		// 课程id
 	private String attachName;		// 附件名称
 	private String attachId;		// 附件id
@@ -67,6 +68,16 @@ public class CourseCatelog extends DataEntity<CourseCatelog> {
 
 	public void setAttachId(String attachId) {
 		this.attachId = attachId;
+	}
+	
+	
+	@Length(min=0, max=64, message="章节id长度必须介于 0 和 64 之间")
+	public String getChapterId() {
+		return chapterId;
+	}
+
+	public void setChapterId(String chapterId) {
+		this.chapterId = chapterId;
 	}
 	
 }

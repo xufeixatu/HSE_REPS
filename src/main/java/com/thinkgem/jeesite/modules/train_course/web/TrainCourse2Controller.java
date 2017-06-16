@@ -25,6 +25,11 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.course_review.entity.CourseReview;
 import com.thinkgem.jeesite.modules.course_review.service.CourseReviewService;
+//<<<<<<< HEAD
+import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
+import com.thinkgem.jeesite.modules.course_study.service.CourseStudyService;
+//=======
+//>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
 import com.thinkgem.jeesite.modules.train_course.service.TrainCourseService;
@@ -42,6 +47,11 @@ public class TrainCourse2Controller extends BaseController {
 	private TrainCourseService trainCourseService;
 	@Autowired
 	private CourseReviewService courseReviewService;
+//<<<<<<< HEAD
+	@Autowired
+	private CourseStudyService courseStudyService;
+//=======
+//>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git
 	@ModelAttribute
 	public TrainCourse get(@RequestParam(required=false) String id) {
 		TrainCourse entity = null;
@@ -62,7 +72,12 @@ public class TrainCourse2Controller extends BaseController {
 		model.addAttribute("page", page);
 		
 		CourseReview courseReview =new CourseReview();
-		Page<CourseReview> page1 = courseReviewService.findPage(new Page<CourseReview>(request, response), courseReview); 
+//<<<<<<< HEAD
+		//补充
+		courseReview.setCourseId(request.getParameter("id"));
+	 
+	    //courseReview.setAssessGrade("1");
+	    Page<CourseReview> page1 = courseReviewService.findPage(new Page<CourseReview>(request, response), courseReview); 
 		courseReview.setAssessById(UserUtils.getUser().getName());
 		Date upload_time = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -72,6 +87,26 @@ public class TrainCourse2Controller extends BaseController {
 		courseReview.setCourseId(trainCourse.getId());
 		model.addAttribute("courseReview", courseReview);
 		model.addAttribute("page1", page1);
+		
+		//传打分参数
+		CourseStudy courseStudy =  new CourseStudy();
+		courseStudy.setCourseId(trainCourse.getId());
+		courseStudy.setCreateBy(UserUtils.getUser());
+		System.out.println("===============================");
+		model.addAttribute("courseStudy", courseStudyService.findByCourseIdAndUserId(courseStudy));
+		System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+//=======
+//		Page<CourseReview> page1 = courseReviewService.findPage(new Page<CourseReview>(request, response), courseReview); 
+//		courseReview.setAssessById(UserUtils.getUser().getName());
+//		Date upload_time = new Date();
+//		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		dateFormat.format(upload_time);
+//		courseReview.setAssessTime(upload_time);
+//		
+//		courseReview.setCourseId(trainCourse.getId());
+//		model.addAttribute("courseReview", courseReview);
+//		model.addAttribute("page1", page1);
+//>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git
 		return "modules/train_course/trainCourse2List";
 	}
 
@@ -101,5 +136,8 @@ public class TrainCourse2Controller extends BaseController {
 		addMessage(redirectAttributes, "删除培训课件上传与查看成功");
 		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse2/?repage";
 	}
+	
+	
+	
 
 }

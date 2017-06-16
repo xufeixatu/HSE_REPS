@@ -68,7 +68,7 @@
 			<label class="control-label">封面上传：</label>
 			<div class="controls">
 				<form:hidden id="coverId" path="coverId" htmlEscape="false" maxlength="255" class="input-xlarge"/>
-				<sys:ckfinder input="coverId" type="files" uploadPath="/train_course/trainCourse" selectMultiple="false"/>
+				<sys:ckfinder input="coverId" type="images" uploadPath="/train_course/trainCourse" selectMultiple="false"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -126,14 +126,13 @@
 								<input id="courseCatelogList{{idx}}_delFlag" name="courseCatelogList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
-							<div>courseCatelogList[{{idx}}].attachName</div>
-							<div>courseCatelogList[{{idx}}].attachId</div>
 								<input id="courseCatelogList{{idx}}_attachName" name="courseCatelogList[{{idx}}].attachName" type="text" value="{{row.attach_name}}" maxlength="100" class="input-small "/>
 							</td>
 							<td>					
-								<form:hidden id="docId" path="docId" htmlEscape="false" maxlength="500" class="input-xlarge"/>
-								<sys:ckfinder input="docId" type="files" uploadPath="/train_course/trainCourse" selectMultiple="true"/>
+								<input name="courseCatelogList[{{idx}}].attachId" id="courseCatelogList{{idx}}_attachId" maxlength="255" class="input-xlarge" type="hidden"/>
+								<sys:ckfinder input="courseCatelogList{{idx}}_attachId	" type="files" uploadPath="/train_course/trainCourse" selectMultiple="false"/>
 							</td>
+							
 							<shiro:hasPermission name="train_course:trainCourse:edit"><td class="text-center" width="10">
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#courseCatelogList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 							</td></shiro:hasPermission>
@@ -152,8 +151,8 @@
 				</div>
 <%-- 				<label class="control-label">课件附件上传：</label>
 				<div class="controls">
-				
-												<input name="courseCatelogList[{{idx}}].attachId" id="courseCatelogList{{idx}}_attachId maxlength="255" class="input-xlarge" type="hidden"/>
+			<form:hidden id="docId" path="courseCatelogList[{{idx}}].attachId" htmlEscape="false" maxlength="500" class="input-xlarge"/>
+								<input name="courseCatelogList[{{idx}}].attachId" id="courseCatelogList{{idx}}_attachId maxlength="255" class="input-xlarge" type="hidden"/>
 								<sys:ckfinder input="courseCatelogList{{idx}}_attachId" type="files" uploadPath="/train_course/trainCourse" selectMultiple="false"/>
 				
 

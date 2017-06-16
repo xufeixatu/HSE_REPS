@@ -4,6 +4,7 @@
     
 	<sql id="courseCatelogColumns">
 		a.id AS "id",
+		a.chapter_id AS "chapterId",
 		a.course_id AS "courseId",
 		a.attach_name AS "attachName",
 		a.attach_id AS "attachId",
@@ -75,6 +76,7 @@
 	<insert id="insert">
 		INSERT INTO course_catelog(
 			id,
+			chapter_id,
 			course_id,
 			attach_name,
 			attach_id,
@@ -86,6 +88,7 @@
 			del_flag
 		) VALUES (
 			#{id},
+			#{chapterId},
 			#{courseId},
 			#{attachName},
 			#{attachId},
@@ -100,6 +103,7 @@
 	
 	<update id="update">
 		UPDATE course_catelog SET 	
+			chapter_id = #{chapterId},
 			course_id = #{courseId},
 			attach_name = #{attachName},
 			attach_id = #{attachId}

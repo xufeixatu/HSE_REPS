@@ -4,14 +4,99 @@
 <head>
 	<title>培训课件上传与查看管理</title>
 	<meta name="decorator" content="default"/>
+
+	<style type="text/css"> 
+			*{margin:0;padding:0;list-style-type:none;}
+			body{color:#666;font:12px/1.5 Arial;}
+			/* star */
+			#star{position:relative;width:600px;margin:20px auto;height:24px;color:#FFFFFF;top:20px}
+			#star ul,#star span{float:left;display:inline;height:19px;line-height:19px;}
+			#star ul{margin:0 10px;}
+			#star li{float:left;width:24px;cursor:pointer;text-indent:-9999px;background:url(http://localhost:8080/HSE/images/star.png) no-repeat;}
+			#star strong{color:#f60;padding-left:10px;}
+			#star li.on{background-position:0 -28px;}
+			#star p{position:absolute;top:20px;width:159px;height:60px;display:none;background:url(http://localhost:8080/HSE/images//icon.gif) no-repeat;padding:7px 10px 0;}
+			#star p em{color:#f60;display:block;font-style:normal;}
+			</style>
+
 	
 	<script type="text/javascript">
+	
+	
+	  window.onload = function (){
+		var oStar = document.getElementById("star");
+		var aLi = oStar.getElementsByTagName("li");
+		var oUl = oStar.getElementsByTagName("ul")[0];
+		var oSpan = oStar.getElementsByTagName("span")[0];
+		var oP = oStar.getElementsByTagName("p")[0];
+		var i = iScore = iStar = 0;
+
+		for (i = 1; i <= aLi.length; i++){
+			aLi[i - 1].index = i;
+			
+			//鼠标移过显示分数
+			aLi[i - 1].onmouseover = function (){
+				fnPoint(this.index);
+				//浮动层显示
+				oP.style.display = "block";
+				//计算浮动层位置
+				oP.style.left = oUl.offsetLeft + this.index * this.offsetWidth - 104 + "px";
+				//匹配浮动层文字内容
+				oP.innerHTML = "<em><b>" + this.index + "</b> 分 "
+			};
+			
+			//鼠标离开后恢复上次评分
+			aLi[i - 1].onmouseout = function (){
+				fnPoint();
+				//关闭浮动层
+				oP.style.display = "none"
+			};
+			
+			//点击后进行评分处理
+			aLi[i - 1].onclick = function (){
+				iStar = this.index;
+				oP.style.display = "none";
+				oSpan.innerHTML = "<strong>" + (this.index) + "</strong> 分 ";
+			/* 	//打分之前刷新
+				$("strong").html(""); */
+				//获取请求参数
+				var str = $("strong").text();
+				//alert(str);
+				//发送ajax请求
+				 $.ajax({
+		             type: "post",
+		             url: "${ctx}/course_study/courseStudy/setGrade",
+		             data: {"id":"${courseStudy.id}", "grade":str},
+		             dataType: "html",
+		         
+		             success: function(data){
+		                  alert(data);	
+		                         
+		                      },
+		             error:function(){
+		            	 alert("打分失败");
+		             }
+		             
+		         });
+			}
+		}
+		
+		//评分处理
+		function fnPoint(iArg){
+			//分数赋值
+			iScore = iArg || iStar;
+			for (i = 0; i < aLi.length; i++) aLi[i].className = i < iScore ? "on" : "";	
+		}
+		
+	};
+
+	
 		$(document).ready(function() {
 			 var getprogressvalue = $("#progress-value").attr('value');
 		     $("#progress-value").css("width",getprogressvalue+"%");
 		});
 		function page(n,s){
-			$("#pageNo").val(n);
+			$("#pageNo").val(n);0
 			$("#pageSize").val(s);
 			$("#searchForm").submit();
         	return false;
@@ -20,7 +105,8 @@
 	        for (var i = 0; i < arr.length; i++) { 
 	           if (arr[i] == element) {
 	                return i;    
-	            }   
+	            }   0.
+	            
 	        }   
 	        return -1; 
 	       }  
@@ -359,10 +445,24 @@
 					<li class="focus">
 						<a>星级评分</a>
 					</li>
+<!-- <<<<<<< HEAD -->
+					<div id="star">
+						<ul>
+							<li><a href="javascript:;">1</a><>
+							<li><a href="javascript:;">2</a><>
+							<li><a href="javascript:;">3</a><>
+							<li><a href="javascript:;">4</a><>
+							<li><a href="javascript:;">5</a><>
+						</ul>
+						<span></span>
+						<p></p>
+					</div>
+<!-- =======
 					<li class="star" 	onmouseover="InitEvent()">
 						<table id="tblMain"><tr><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>
 	    				</table>
 					</li>
+>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git -->
 				</ul>
 			</div>
 		</div>
@@ -381,7 +481,9 @@
 				</a>
 			</li>
 			 <li>
-		    	<a href="#appraise" data-toggle="tab">
+
+		    	<a href="#appraise" data-toggle="tab" >
+
 					课程评价
 				</a>
 			</li>
@@ -441,6 +543,104 @@
 		    </div>
 		    		
 		  <!--   评价 -->
+
+		<%--   <div>${courseReview.courseId}</div> --%>
+		  	<div class="tab-pane fade course_review" id="appraise">
+		  	<form:form id="inputForm" modelAttribute="courseReview"
+			action="${ctx}/course_review/courseReview/save1" method="post"
+			class="form-horizontal">
+		 	<%-- <input name="courseId" value="${courseReview.courseId}" /> --%>
+		 	<form:hidden path="courseId"  value="${courseReview.courseId}"/>
+			<form:hidden path="id"/>
+			<sys:message content="${message}" />
+			<div class="control-group">
+				<span> <form:textarea
+						path="assessOpinion" htmlEscape="false" rows="4" maxlength="255"
+						class="input-xxlarge " />
+				</span> 
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论人：</label>
+				<div class="controls">
+					<form:input path="assessById" htmlEscape="false" maxlength="64" class="input-xlarge required" />
+						<span class="help-inline"><font color="red">*</font> </span>
+					</div>
+				</div>
+				<div hidden="hidden" class="control-group">
+				<label class="control-label">评论时间：</label>
+				<div class="controls">
+					<input name="assessTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
+						value="<fmt:formatDate value="${courseReview.assessTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+						<span class="help-inline"><font color="red">*</font> </span>
+					</div>
+				</div>
+						
+				<span> <shiro:hasPermission
+					name="course_review:courseReview:edit">
+					<input id="btnSubmit" class="btn btn-primary" type="submit"
+						value="发表" />&nbsp;</shiro:hasPermission>
+				</span>
+			</div>
+		 </form:form>
+		<sys:message content="${message}" />
+		  	
+		  	
+		  	  <div class="cmt-wrap">
+                 <ul class="cmt-list">
+                 	<c:forEach items="${page1.list}" var="courseReview">
+                    <li class="cmt-post" >
+                      <c:if test="courseReview.courseId=="></c:if>
+    				<div class="inner">
+	    			  	<div class="media"  style="display:inline;">
+	                   <a href="/u/1968386/courses" target="_blank"><img src="http://img.mukewang.com/555869eb0001716101800180-40-40.jpg" width="32" height="32" style="border-radius:37px 37px;"></a>
+        			    </div>
+    				
+    					<div class="hd" style="display:inline">
+                          <a href="javascript:void();" class="name disabled">${courseReview.assessById}</a>
+    					</div>
+    					<p class="cmt-txt" style="padding: 5px 41px;padding-top: 16px;">${courseReview.assessOpinion}</p>
+    					<div class="ft clearfix">
+						<span><fmt:formatDate value="${courseReview.assessTime}"
+								pattern="yyyy-MM-dd HH:mm:ss" /></span>
+						   </div>
+						</div>
+    		    	</li>
+    		    	</c:forEach>
+		  	    </ul>
+		  	</div>
+		  	
+		  	
+	    	 <%-- 
+		<table id="contentTable"
+			class="table table-striped table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th>评论内容</th>
+					<th>评论人</th>
+					<th>评论时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${page1.list}" var="courseReview">
+					<tr>
+						<td><a
+							href="${ctx}/course_review/courseReview/form?id=${courseReview.id}">
+								${courseReview.assessOpinion} </a></td>
+						<td>${courseReview.assessById}</td>
+						<td><fmt:formatDate value="${courseReview.assessTime}"
+								pattern="yyyy-MM-dd HH:mm:ss" /></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table> --%> 
+     	</div>
+	
+		</div>
+		
+	</div>
+
+	 <div class="pagination">${page}</div>
+<%-- =======
 		  	<div class="tab-pane fade course_review" id="appraise">
 		  	<form:form id="inputForm" modelAttribute="courseReview"
 			action="${ctx}/course_review/courseReview/save1" method="post"
@@ -504,6 +704,7 @@
      	</div>
 		</div>	
 	</div>
+>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git --%>
 </body>
 </html>
 

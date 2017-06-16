@@ -2,7 +2,8 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>课程用户学习记录表管理</title>
+
+	<title>学习记录管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -27,48 +28,32 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/course_study/courseStudy/">课程用户学习记录表列表</a></li>
-		<li class="active"><a href="${ctx}/course_study/courseStudy/form?id=${courseStudy.id}">课程用户学习记录表<shiro:hasPermission name="course_study:courseStudy:edit">${not empty courseStudy.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="course_study:courseStudy:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/course_study/courseStudy/">学习记录列表</a></li>
+		<li class="active"><a href="${ctx}/course_study/courseStudy/form?id=${courseStudy.id}">学习记录<shiro:hasPermission name="course_study:courseStudy:edit">${not empty courseStudy.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="course_study:courseStudy:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="courseStudy" action="${ctx}/course_study/courseStudy/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">课件ID：</label>
+			<label class="control-label">course_id：</label>
 			<div class="controls">
 				<form:input path="courseId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">培训人ID：</label>
+			<label class="control-label">status：</label>
 			<div class="controls">
-				<form:input path="trainById" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="status" htmlEscape="false" maxlength="8" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">学习状态：</label>
+			<label class="control-label">duration：</label>
 			<div class="controls">
-				<form:input path="studyStatus" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="duration" htmlEscape="false" maxlength="32" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">学习时间：</label>
-			<div class="controls">
-				<input name="studyTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${courseStudy.studyTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">学习时长：</label>
-			<div class="controls">
-				<input name="studyDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${courseStudy.studyDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">学习开始时间：</label>
+			<label class="control-label">study_start_time：</label>
 			<div class="controls">
 				<input name="studyStartTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 					value="<fmt:formatDate value="${courseStudy.studyStartTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
@@ -76,10 +61,25 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">学习结束时间：</label>
+			<label class="control-label">study_end_time：</label>
 			<div class="controls">
 				<input name="studyEndTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 					value="<fmt:formatDate value="${courseStudy.studyEndTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">打分：</label>
+			<div class="controls">
+				<form:input path="grade" htmlEscape="false" maxlength="8" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">grade_date：</label>
+			<div class="controls">
+				<input name="gradeDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="<fmt:formatDate value="${courseStudy.gradeDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
