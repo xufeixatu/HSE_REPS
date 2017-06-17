@@ -12,6 +12,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
@@ -48,7 +49,13 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String approveOpinion;		// approve_opinion
 	private String myDept;      //当前登陆用户所有部门的name字段
 	private String timeType;		//时间类别
-	
+	private String attachFiles;//附件路径集合
+	public String getAttachFiles() {
+		return attachFiles;
+	}
+	public void setAttachFiles(String attachFiles) {
+		this.attachFiles = attachFiles;
+	}
 	/**
 	 * 接受任务时间，已经淘汰不用。因公司任务分派给多个部门，所以同一任务的接受也是多个部门的信息，原设计用单一属性是错误的
 	 */
@@ -301,6 +308,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 * 
 	 * @return
 	 */
+	@ExcelField(title="ID", type=1, align=2, sort=1)
 	public String getUserId() {
 		return userId;
 	}
@@ -335,6 +343,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setRemains(Set<WorkPlanRemain> remains) {
 		this.remains = remains;
 	}
+	@ExcelField(title="工作级别", align=2, sort=20)
 	public String getWorkLevel() {
 		return workLevel;
 	}
@@ -359,6 +368,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setWorkSubmit(boolean workSubmit) {
 		this.workSubmit = workSubmit;
 	}
+	@ExcelField(title="工作类别", align=2, sort=30)
 	public String getPlanType() {
 		return planType;
 	}

@@ -27,6 +27,20 @@
 			}
 			$("#treeTable").treeTable({expandLevel : 5});
 			$("a,input[type='checkbox'],span[arrow='true']").bind("click", function(event){event.stopPropagation();});
+			//导入导出功能钩子
+			$("#btnExport").click(function(){
+				top.$.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){
+					if(v=="ok"){
+						$("#searchForm").attr("action","${ctx}/work/workPlan/export?planType=${planTypeDict.value}");
+						$("#searchForm").submit();
+					}
+				},{buttonsFocus:1});
+				top.$('.jbox-body .jbox-icon').css('top','55px');
+			});
+			$("#btnImport").click(function(){
+				$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
+					bottomText:"导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！"});
+			});
 		});
 		function addRow(list, tpl, data, pid, root){
 			for (var i=0; i<data.length; i++){
@@ -108,6 +122,15 @@
 	</script>
 </head>
 <body>
+	<div id="importBox" class="hide">
+		<form id="importForm" action="${ctx}/work/workPlan/import?planType=${planTypeDict.value}" method="post" enctype="multipart/form-data"
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+			<a href="${ctx}/work/workPlan/import/template?planType=${planTypeDict.value}">下载模板</a>
+		</form>
+	</div>
+	
 	<ul class="nav nav-tabs">
 		<li class="active"><a
 			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">新增${planTypeDict.label}列表</a></li>
@@ -131,9 +154,8 @@
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary"
 				type="submit" value="查询" /></li>
 			<li class="btns">
-				<a href="#">下载工作计划模板</a></li>
-			<li class="btns">
-				<a href="#">导入工作计划EXCEL文件</a></li>
+				<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
+				<input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>

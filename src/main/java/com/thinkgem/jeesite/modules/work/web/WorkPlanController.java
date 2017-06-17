@@ -11,25 +11,35 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
+import com.thinkgem.jeesite.common.utils.excel.ImportExcel;
 import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.modules.sys.utils.OfficeUtil;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
@@ -361,7 +371,94 @@ public class WorkPlanController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage&planType=" + planTypeDict.getValue();
 	}
 
+	/**
+	 * 导出用户数据
+	 * @param user
+	 * @param request
+	 * @param response
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:edit")
+    @RequestMapping(value = "export", method=RequestMethod.POST)
+    public String exportFile(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+		try {
+            String fileName = "用户数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            List<WorkPlan> data = workPlanService.findList(new WorkPlan());
+    		new ExportExcel("用户数据", WorkPlan.class).setDataList(data).write(response, fileName).dispose();
+    		return null;
+		} catch (Exception e) {
+			addMessage(redirectAttributes, "导出用户失败！失败信息："+e.getMessage());
+		}
+		return "redirect:" + adminPath + "/work/workPlan/list?planType=" + request.getParameter("planType") + "&repage";
+    }
+
+	/**
+	 * 导入用户数据
+	 * @param file
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:edit")
+    @RequestMapping(value = "import", method=RequestMethod.POST)
+    public String importFile(HttpServletRequest request,MultipartFile file, RedirectAttributes redirectAttributes) {
+		if(Global.isDemoMode()){
+			addMessage(redirectAttributes, "演示模式，不允许操作！");
+			return "redirect:" + adminPath + "/work/workPlan/list?repage";
+		}
+		try {
+			int successNum = 0;
+			int failureNum = 0;
+			StringBuilder failureMsg = new StringBuilder();
+			ImportExcel ei = new ImportExcel(file, 1, 0);
+			List<WorkPlan> list = ei.getDataList(WorkPlan.class);
+			for (WorkPlan workPlan : list){
+				try{
+						workPlanService.save(workPlan);
+						successNum++;
+				}catch(ConstraintViolationException ex){
+					failureMsg.append("<br/>工作任务 "+workPlan.getName()+" 导入失败：");
+					List<String> messageList = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
+					for (String message : messageList){
+						failureMsg.append(message+"; ");
+						failureNum++;
+					}
+				}catch (Exception ex) {
+					failureMsg.append("<br/>工作任务 "+workPlan.getName()+" 导入失败："+ex.getMessage());
+				}
+			}
+			if (failureNum>0){
+				failureMsg.insert(0, "，失败 "+failureNum+" 条工作任务，导入信息如下：");
+			}
+			addMessage(redirectAttributes, "已成功导入 "+successNum+" 条工作任务"+failureMsg);
+		} catch (Exception e) {
+			addMessage(redirectAttributes, "导入工作计划失败！失败信息："+e.getMessage());
+		}
+		return "redirect:" + adminPath + "/work/workPlan/list?planType=" + request.getParameter("planType") + "&repage";
+    }
 	
+	/**
+	 * 下载导入用户数据模板
+	 * @param response
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:edit")
+    @RequestMapping(value = "import/template")
+    public String importFileTemplate(HttpServletRequest request,HttpServletResponse response, RedirectAttributes redirectAttributes) {
+		try {
+            String fileName = "工作计划数据导入模板.xlsx";
+    		List<WorkPlan> list = Lists.newArrayList(); 
+    		WorkPlan wp = workPlanService.findList(new WorkPlan()).get(0);
+    		list.add(wp);
+    		new ExportExcel("工作任务数据", WorkPlan.class, 2).setDataList(list).write(response, fileName).dispose();
+    		return null;
+		} catch (Exception e) {
+			System.out.println("导入模板下载失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+		}
+		return "redirect:" + adminPath + "/work/workPlan/list?planType=" + request.getParameter("planType") + "&repage";
+    }
 	/**
 	 * ******************************************************
 	 * ******************************************************

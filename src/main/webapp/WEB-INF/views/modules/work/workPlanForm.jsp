@@ -66,7 +66,6 @@
 		var message = "<font color='red'>计划起止时间、要求结束时间、频次选择一种时间类别............</font>";
 		$("#" + me.name + "_message").html(message).hide(15000);
 	}
-	
 </script>
 
 </head>
@@ -87,18 +86,18 @@
 					<label class="control-label">标题：</label>
 					<div class="controls">
 						<form:input path="name" htmlEscape="false" maxlength="200"
-							class="input-xlarge required" disabled="true"/>
+							class="input-xlarge required" disabled="true" />
 						<span class="help-inline"><font color="red">*</font> </span>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">工作类别：</label>
 					<div class="controls">
-						<form:input id="worktype" path="workType.id" htmlEscape="false" maxlength="200"
-							class="input-xlarge required" disabled="true"/>
+						<form:input id="worktype" path="workType.id" htmlEscape="false"
+							maxlength="200" class="input-xlarge required" disabled="true" />
 					</div>
 				</div>
-				
+
 				<hr />
 
 				<span id="timeType">
@@ -107,8 +106,7 @@
 						<div class="controls">
 							<input id="startTime" name="startTime" alt="start_end"
 								type="text" readonly="readonly" maxlength="20"
-								class="input-medium Wdate "
-								disabled="true"
+								class="input-medium Wdate " disabled="true"
 								value="<fmt:formatDate value="${workPlan.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});clearTime(this)"
 								onmouseover="showPrompt(this);" /> <span id="startTime_message"></span>
@@ -119,8 +117,7 @@
 						<div class="controls">
 							<input id="planedFinishTime" name="planedFinishTime" type="text"
 								readonly="readonly" alt="start_end" maxlength="20"
-								class="input-medium Wdate "
-								 disabled="true"
+								class="input-medium Wdate " disabled="true"
 								value="<fmt:formatDate value="${workPlan.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true});clearTime(this)"
 								onmouseover="showPrompt(this);" /> <span
@@ -132,8 +129,7 @@
 						<div class="controls">
 							<input id="requiredFinishTime" name="requiredFinishTime"
 								type="text" readonly="readonly" alt="required" maxlength="20"
-								class="input-medium Wdate "
-								 disabled="true"
+								class="input-medium Wdate " disabled="true"
 								value="<fmt:formatDate value="${workPlan.requiredFinishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true});clearTime(this)"
 								onmouseover="showPrompt(this);" /> <span
@@ -143,8 +139,8 @@
 					<div class="control-group">
 						<label class="control-label">任务频次：</label>
 						<div class="controls">
-							<form:checkboxes path="frequency" alt="frequencyTime"  disabled="true"
-								onclick="clearTime(this)"
+							<form:checkboxes path="frequency" alt="frequencyTime"
+								disabled="true" onclick="clearTime(this)"
 								items="${fns:getDictList('frequency_months')}" itemLabel="label"
 								itemValue="value" htmlEscape="false" class=""
 								onmouseover="showPrompt(this);" />
@@ -157,14 +153,14 @@
 					<label class="control-label">工作描述：</label>
 					<div class="controls">
 						<form:textarea path="workDesc" htmlEscape="false" rows="4"
-							maxlength="255" class="input-xxlarge "  disabled="true"/>
+							maxlength="255" class="input-xxlarge " disabled="true" />
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">工作要求：</label>
 					<div class="controls">
 						<form:textarea path="jobRequire" htmlEscape="false" rows="4"
-							maxlength="255" class="input-xxlarge "  disabled="true"/>
+							maxlength="255" class="input-xxlarge " disabled="true" />
 					</div>
 				</div>
 				<div class="control-group">
@@ -174,13 +170,14 @@
 							value="${workPlan.personLiable.id}" labelName="personLiable.name"
 							labelValue="${workPlan.personLiable.name}" title="用户"
 							url="/sys/office/treeData?type=3" allowClear="true"
-							notAllowSelectParent="true"  disabled="true"/>
+							notAllowSelectParent="true" disabled="true" />
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">工作级别：</label>
 					<div class="controls">
-						<form:select path="workLevelId" class="input-medium"  disabled="true"> 
+						<form:select path="workLevelId" class="input-medium"
+							disabled="true">
 							<form:options items="${fns:getDictList('work_level')}"
 								itemLabel="label" itemValue="value" htmlEscape="false" />
 						</form:select>
@@ -191,7 +188,7 @@
 					<label class="control-label">备注：</label>
 					<div class="controls">
 						<form:textarea path="remarks" htmlEscape="false" rows="4"
-							maxlength="255" class="input-xxlarge "  disabled="true"/>
+							maxlength="255" class="input-xxlarge " disabled="true" />
 					</div>
 				</div>
 				<c:if test="${not empty workPlan.id && not workPlan.noedit}">
@@ -502,6 +499,15 @@
 
 
 				</c:if>
+				<div class="control-group">
+					<label class="control-label">附件:</label>
+					<div class="controls">
+						<input type="hidden" id="attachFiles" name="attachFiles"
+							value="${workPlan.attachFiles}" />
+						<sys:ckfinder input="attachFiles" type="files" uploadPath="/workplan_template"
+							selectMultiple="true" />
+					</div>
+				</div>
 				<div class="form-actions">
 					<c:if test="${not workPlan.noedit}">
 						<shiro:hasPermission name="work:workPlan:edit">
@@ -513,20 +519,7 @@
 						onclick="history.go(-1)" />
 				</div>
 			</form:form>
-			<div id="files" class="control-group"></div>
-			<form:form id="fileForm" modelAttribute="workPlan"
-				enctype="multipart/form-data" action="${ctx}/work/workPlan/upload"
-				method="post" class="form-horizontal">
-				<form:hidden path="id" />
-				<div class="control-group">
-					<label class="control-label">工作附件：</label>
-					<div class="controls">
-						<input name="attachFile" type="file" width="100" />
-						<shiro:hasPermission name="work:workPlan:edit">
-							<input id="btnUpload" type="submit" value="上传" />&nbsp;</shiro:hasPermission>
-					</div>
-				</div>
-			</form:form>
+			
 		</c:otherwise>
 	</c:choose>
 </body>
