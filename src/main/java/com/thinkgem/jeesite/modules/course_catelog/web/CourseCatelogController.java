@@ -67,6 +67,7 @@ public class CourseCatelogController extends BaseController {
 		if (!beanValidator(model, courseCatelog)){
 			return form(courseCatelog, model);
 		}
+		
 		courseCatelogService.save(courseCatelog);
 		addMessage(redirectAttributes, "保存课件目录成功");
 		return "redirect:"+Global.getAdminPath()+"/course_catelog/courseCatelog/?repage";

@@ -45,7 +45,35 @@ public class TrainCourseService extends CrudService<TrainCourseDao, TrainCourse>
 	}
 	
 	
-	public void videoConvert(TrainCourse trainCourse, String filePath){
+	@Transactional(readOnly = false)
+	public void save(TrainCourse trainCourse) {
+		super.save(trainCourse);
+		
+		for (CourseCatelog courseCatelog : trainCourse.getCourseCatelogList()){
+			if (courseCatelog.getId() == null){
+				continue;
+			}
+			if (CourseCatelog.DEL_FLAG_NORMAL.equals(courseCatelog.getDelFlag())){
+				if (StringUtils.isBlank(courseCatelog.getId())){
+					courseCatelog.setTrainCourse(trainCourse);
+					courseCatelog.preInsert();
+					courseCatelogDao.insert(courseCatelog);
+				}else{
+					courseCatelog.preUpdate();
+					courseCatelogDao.update(courseCatelog);
+				}
+			}else{
+				courseCatelogDao.delete(courseCatelog);
+			}
+		}
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(TrainCourse trainCourse) {
+		super.delete(trainCourse);
+	}
+	
+public  void videoConvert(TrainCourse trainCourse, String filePath){
 		
 		//获得保存文件的路径
 	/*	String basePath = sctx.getRealPath("userfiles");*/
@@ -75,36 +103,6 @@ public class TrainCourseService extends CrudService<TrainCourseDao, TrainCourse>
 		}
 		
 		
-	}
-	
-	
-	
-	@Transactional(readOnly = false)
-	public void save(TrainCourse trainCourse) {
-		super.save(trainCourse);
-		
-		for (CourseCatelog courseCatelog : trainCourse.getCourseCatelogList()){
-			if (courseCatelog.getId() == null){
-				continue;
-			}
-			if (CourseCatelog.DEL_FLAG_NORMAL.equals(courseCatelog.getDelFlag())){
-				if (StringUtils.isBlank(courseCatelog.getId())){
-					courseCatelog.setTrainCourse(trainCourse);
-					courseCatelog.preInsert();
-					courseCatelogDao.insert(courseCatelog);
-				}else{
-					courseCatelog.preUpdate();
-					courseCatelogDao.update(courseCatelog);
-				}
-			}else{
-				courseCatelogDao.delete(courseCatelog);
-			}
-		}
-	}
-	
-	@Transactional(readOnly = false)
-	public void delete(TrainCourse trainCourse) {
-		super.delete(trainCourse);
 	}
 	
 }

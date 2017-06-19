@@ -81,7 +81,6 @@ public class TrainCourseController extends BaseController {
 			return form(trainCourse, model);
 		}
 		trainCourseService.videoConvert(trainCourse, httpServletRequest.getSession().getServletContext().getRealPath("/"));
-		
 		trainCourseService.save(trainCourse);
 		addMessage(redirectAttributes, "保存培训课件上传与查看成功");
 		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse/?repage";

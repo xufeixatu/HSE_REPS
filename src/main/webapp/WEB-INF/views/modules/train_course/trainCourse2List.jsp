@@ -136,12 +136,7 @@
 	               td.innerHTML = "☆";
 	               $(td).css("color","#FFFFFF");
 	                }  
-	            } 
-/*  		function decode(text){
- 			text = decodeURI(text);
- 			return text;
- 		} */
-	     
+
 	</script>
 	<style>
 		body{
@@ -478,9 +473,9 @@
 		        		<ul><li>${trainCourse.courseDec}</li></ul>
 		        	</li>
 		        	<li>【课程大纲】
-		       	     <%--    	<c:forEach items="${trainCourse.attachName}" var="videoName">
+		       	        <%-- 	<c:forEach items="${trainCourse.attachName}" var="videoName">
 		       	        		${videoName}
-		       	        	</c:forEach> --%>
+		       	        	</c:forEach>  --%>
 <%-- 		    这里是之前最开始使用的采用截取上传文件名的部分用来显示的代码，现在更改为可以为视频文件设置文件名，所以这段代码删除    
 						<ol>
 				        	<c:set var="testString" value="${trainCourse.docId}"/>

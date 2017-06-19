@@ -151,6 +151,7 @@
 				</div>
 <%-- 				<label class="control-label">课件附件上传：</label>
 				<div class="controls">
+							
 			<form:hidden id="docId" path="courseCatelogList[{{idx}}].attachId" htmlEscape="false" maxlength="500" class="input-xlarge"/>
 								<input name="courseCatelogList[{{idx}}].attachId" id="courseCatelogList{{idx}}_attachId maxlength="255" class="input-xlarge" type="hidden"/>
 								<sys:ckfinder input="courseCatelogList{{idx}}_attachId" type="files" uploadPath="/train_course/trainCourse" selectMultiple="false"/>

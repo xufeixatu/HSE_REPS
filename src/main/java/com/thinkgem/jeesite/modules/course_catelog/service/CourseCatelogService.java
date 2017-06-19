@@ -45,5 +45,6 @@ public class CourseCatelogService extends CrudService<CourseCatelogDao, CourseCa
 	public void delete(CourseCatelog courseCatelog) {
 		super.delete(courseCatelog);
 	}
+		
 	
 }
