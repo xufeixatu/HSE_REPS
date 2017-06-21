@@ -97,9 +97,7 @@
 							maxlength="200" class="input-xlarge required" disabled="true" />
 					</div>
 				</div>
-
 				<hr />
-
 				<span id="timeType">
 					<div class="control-group">
 						<label class="control-label">计划开始时间：</label>
@@ -163,16 +161,28 @@
 							maxlength="255" class="input-xxlarge " disabled="true" />
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label">负责人:</label>
-					<div class="controls">
-						<sys:treeselect id="personLiableId" name="personLiable.id"
-							value="${workPlan.personLiable.id}" labelName="personLiable.name"
-							labelValue="${workPlan.personLiable.name}" title="用户"
-							url="/sys/office/treeData?type=3" allowClear="true"
-							notAllowSelectParent="true" disabled="true" />
+				
+				<c:choose>
+				<c:when test="${workPlan.planType eq 'personal' or workPlan.planType eq 'action' }">
+						<form:hidden path="personLiable.id" value="${fns:getUser().id}"/>
+						<form:hidden path="depts.id" value="${fns:getUser().office.id}"/>			
+				</c:when>
+				<c:otherwise>
+					<c:if test="${workPlan.planType eq 'department'">
+						<form:hidden path="depts.id" value="${fns:getUser().office.id}"/>
+					</c:if>
+					<div class="control-group">
+						<label class="control-label">负责人:</label>
+						<div class="controls">
+							<sys:treeselect id="personLiableId" name="personLiable.id"
+								value="${workPlan.personLiable.id}" labelName="personLiable.name"
+								labelValue="${workPlan.personLiable.name}" title="用户"
+								url="/sys/office/treeData?type=3" allowClear="true"
+								notAllowSelectParent="true" disabled="true" />
+						</div>
 					</div>
-				</div>
+				</c:otherwise>
+				</c:choose>
 				<div class="control-group">
 					<label class="control-label">工作级别：</label>
 					<div class="controls">
@@ -221,16 +231,7 @@
 						</div>
 					</div>
 				</c:if>
-				<div class="control-group">
-					<label class="control-label">父计划:</label>
-					<div class="controls">
-						<sys:treeselect id="parent" name="parent.id"
-							value="${workPlan.parent.id}" labelName="parent.name"
-							labelValue="${workPlan.parent.name}" title="父工作计划"
-							url="/work/workPlan/treeData" extId="${workPlan.id}"
-							allowClear="true" />
-					</div>
-				</div>
+				
 
 				<c:if test="${planTypeDict.value eq 'company'}">
 					<div class="control-group">
@@ -391,16 +392,23 @@
 							maxlength="255" class="input-xxlarge " />
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label">负责人:</label>
-					<div class="controls">
-						<sys:treeselect id="personLiableId" name="personLiable.id"
-							value="${workPlan.personLiable.id}" labelName="personLiable.name"
-							labelValue="${workPlan.personLiable.name}" title="用户"
-							url="/sys/office/treeData?type=3" allowClear="true"
-							notAllowSelectParent="true" />
+				<c:choose>
+				<c:when test="${workPlan.planType eq 'personal' or workPlan.planType eq 'action' }">
+						<form:hidden path="personLiable.id" value="${fns:getUser().id}"/>			
+				</c:when>
+				<c:otherwise>
+					<div class="control-group">
+						<label class="control-label">负责人:</label>
+						<div class="controls">
+							<sys:treeselect id="personLiableId" name="personLiable.id"
+								value="${workPlan.personLiable.id}" labelName="personLiable.name"
+								labelValue="${workPlan.personLiable.name}" title="用户"
+								url="/sys/office/treeData?type=3" allowClear="true"
+								notAllowSelectParent="true" disabled="true" />
+						</div>
 					</div>
-				</div>
+				</c:otherwise>
+				</c:choose>
 				<div class="control-group">
 					<label class="control-label">工作级别：</label>
 					<div class="controls">
@@ -448,16 +456,6 @@
 						</div>
 					</div>
 				</c:if>
-				<div class="control-group">
-					<label class="control-label">父计划:</label>
-					<div class="controls">
-						<sys:treeselect id="parent" name="parent.id"
-							value="${workPlan.parent.id}" labelName="parent.name"
-							labelValue="${workPlan.parent.name}" title="父工作计划"
-							url="/work/workPlan/treeData" extId="${workPlan.id}"
-							allowClear="true" />
-					</div>
-				</div>
 
 				<c:if test="${planTypeDict.value eq 'company'}">
 					<div class="control-group">

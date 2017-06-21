@@ -10,22 +10,74 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
 import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+import com.thinkgem.jeesite.modules.act.entity.Act;
+import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 工作计划管理Entity
  * @author 何其锟
  * @version 2017-04-07
  */
-public class WorkPlan extends TreeEntity<WorkPlan> {
+public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
+	@Override
+	public WorkPlan clone() {
+		WorkPlan wp = null;
+		try {
+			wp = (WorkPlan)super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return wp;
+	}
 	private static final long serialVersionUID = 1L;
+
+	protected Act act; 		// 流程任务对象
+
+	
+	@JsonIgnore
+	public Act getAct() {
+		if (act == null){
+			act = new Act();
+		}
+		return act;
+	}
+
+	public void setAct(Act act) {
+		this.act = act;
+	}
+
+	/**
+	 * 获取流程实例ID
+	 * @return
+	 */
+	public String getProcInsId() {
+		return this.getAct().getProcInsId();
+	}
+
+	/**
+	 * 设置流程实例ID
+	 * @param procInsId
+	 */
+	public void setProcInsId(String procInsId) {
+		this.getAct().setProcInsId(procInsId);
+	}
 	
 	private ArrayList<WorkPlan> childWorkPlan = new ArrayList<WorkPlan>();
-	
+	private User currentAuditUse = null;
+	public User getCurrentAuditUse() {
+		return currentAuditUse;
+	}
+
+	public void setCurrentAuditUse(User currentAuditUse) {
+		this.currentAuditUse = currentAuditUse;
+	}
 	private WorkType workType;		// 工作类别
 	private Date requiredFinishTime;		// 要求结束时间
 	private Date startTime;		// 工作开始时间
@@ -65,8 +117,9 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private Date assignTime;		// 指派时间
 	private String endStateId;		// 结束状态
 	private String frequency;		// 频次
-	private String planType;     //计划类型：如个人计划，部门计划，公司计划
-
+	private String planType;     //计划类型ID：如个人计划，部门计划，公司计划
+	private Dict planTypeDetail; //计划类型详细内容
+	
 	private String workLevel; //级别
 	private boolean workSubmit = false;//是否提交
 	private boolean noedit = false; //是否不可编辑
@@ -134,7 +187,12 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String newReply; //最新回复
 	private String replyPeopleId; //回复人ID
 //	private Date replyTime;
-	
+	public Dict getPlanTypeDetail() {
+		return planTypeDetail;
+	}
+	public void setPlanTypeDetail(Dict planTypeDetail) {
+		this.planTypeDetail = planTypeDetail;
+	}
 	public String getCommentContent() {
 		return commentContent;
 	}

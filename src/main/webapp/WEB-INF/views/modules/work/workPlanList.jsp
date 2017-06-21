@@ -137,8 +137,6 @@
 		<shiro:hasPermission name="work:workPlan:edit">
 			<li><a
 				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
-				<li><a
-				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}行动计划</a></li>
 		</shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
@@ -170,6 +168,7 @@
 				<th>级别</th>
 				<th>时间要求</th>
 				<th>状态</th>
+				<th>工作类别</th>
 				<c:if test="${workPlan.planType eq 'company'}">
 					<th>责任单位</th>
 				</c:if>
@@ -225,6 +224,9 @@
 			{{/other}}
 			<td>
 				{{row.workState}}
+			</td>
+			<td>
+				{{row.planTypeDetail.label}}
 			</td>
 			{{#show_dept}}
 			<td>

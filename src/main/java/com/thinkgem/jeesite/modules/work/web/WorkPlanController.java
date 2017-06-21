@@ -83,6 +83,7 @@ public class WorkPlanController extends BaseController {
 
 	/**
 	 * 进入工作计划页面
+	 * 
 	 * @param workPlan
 	 * @param request
 	 * @param response
@@ -90,21 +91,20 @@ public class WorkPlanController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"index" })
-	public String index(WorkPlan workPlan, HttpServletRequest request, 
-			HttpServletResponse response, Model model) {
+	@RequestMapping(value = { "index" })
+	public String index(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		
+
 		return "modules/work/workIndex";
 	}
-	
+
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = { "list",""})
+	@RequestMapping(value = { "list", "" })
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
 		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
-		//根据工作计划中的分类生成过滤条件
-		if(workPlan.getWorkType() != null){
+		// 根据工作计划中的分类生成过滤条件
+		if (workPlan.getWorkType() != null) {
 			WorkPlanSqlMapFilter.getFilter().typeWorkTypeFilterSqlMapDsf(workPlan, model);
 		}
 		List<WorkPlan> list = workPlanService.findList(workPlan);
@@ -147,11 +147,9 @@ public class WorkPlanController extends BaseController {
 		WorkPlan wpn = workPlanService.get(workPlan.getId());
 		wpn.setCurrentRemainDeptId(workPlan.getCurrentRemainDeptId());
 		model.addAttribute("workPlan", wpn);
-		
+
 		return "modules/work/workRemainForm";
 	}
-
-	
 
 	/**
 	 * 受理(修改end_state为"已受理"状态)工作
@@ -193,7 +191,7 @@ public class WorkPlanController extends BaseController {
 			if (workPlan.getDepts() == null && workPlan.getPlanType().equals("department")) {
 				workPlan.setDepts(UserUtils.getUser().getOffice());
 			}
-			//把当前用户设置为工作计划指派人
+			// 把当前用户设置为工作计划指派人
 			workPlan.setAssignerId(UserUtils.getUser().getId());
 			// 获取排序号，最末节点排序号+30
 			if (StringUtils.isBlank(workPlan.getId())) {
@@ -216,8 +214,6 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workPlanForm";
 	}
 
-	
-	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "exec_form")
 	public String exec_form(WorkPlan workPlan, Model model) {
@@ -259,7 +255,6 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/exec/workPlanForm";
 	}
 
-	
 	/**
 	 * 进入分配公司工作给部门的表单
 	 * 
@@ -298,18 +293,20 @@ public class WorkPlanController extends BaseController {
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "submitPlan")
 	public String submitPlan(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		
 		String[] ids = request.getParameterValues("ids");
 		if (ids != null && ids.length > 0) {
 			for (String id : ids) {
 				WorkPlan w = new WorkPlan();
 				w.setId(id);
-				workPlanService.submit_company_plan(w);// 提交计划
+				workPlanService.submit_plan(w);// 提交计划
 			}
 		} else {
-			workPlanService.submit_company_plan(workPlan);// 提交计划
+			workPlanService.submit_plan(workPlan);// 提交计划
 		}
 		WorkPlan wp = new WorkPlan();
 		wp.setPlanType(workPlan.getPlanType());
+		
 		return list(wp, request, response, model);
 	}
 
@@ -350,7 +347,7 @@ public class WorkPlanController extends BaseController {
 		model.addAttribute("workPlan", workPlan);
 		return "modules/work/exec/workPlanDetail";
 	}
-	
+
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "save")
 	public String save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
@@ -373,6 +370,7 @@ public class WorkPlanController extends BaseController {
 
 	/**
 	 * 导出用户数据
+	 * 
 	 * @param user
 	 * @param request
 	 * @param response
@@ -380,29 +378,31 @@ public class WorkPlanController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:edit")
-    @RequestMapping(value = "export", method=RequestMethod.POST)
-    public String exportFile(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "export", method = RequestMethod.POST)
+	public String exportFile(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "用户数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
-            List<WorkPlan> data = workPlanService.findList(new WorkPlan());
-    		new ExportExcel("用户数据", WorkPlan.class).setDataList(data).write(response, fileName).dispose();
-    		return null;
+			String fileName = "用户数据" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+			List<WorkPlan> data = workPlanService.findList(new WorkPlan());
+			new ExportExcel("用户数据", WorkPlan.class).setDataList(data).write(response, fileName).dispose();
+			return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导出用户失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "导出用户失败！失败信息：" + e.getMessage());
 		}
 		return "redirect:" + adminPath + "/work/workPlan/list?planType=" + request.getParameter("planType") + "&repage";
-    }
+	}
 
 	/**
 	 * 导入用户数据
+	 * 
 	 * @param file
 	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:edit")
-    @RequestMapping(value = "import", method=RequestMethod.POST)
-    public String importFile(HttpServletRequest request,MultipartFile file, RedirectAttributes redirectAttributes) {
-		if(Global.isDemoMode()){
+	@RequestMapping(value = "import", method = RequestMethod.POST)
+	public String importFile(HttpServletRequest request, MultipartFile file, RedirectAttributes redirectAttributes) {
+		if (Global.isDemoMode()) {
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
 			return "redirect:" + adminPath + "/work/workPlan/list?repage";
 		}
@@ -412,53 +412,56 @@ public class WorkPlanController extends BaseController {
 			StringBuilder failureMsg = new StringBuilder();
 			ImportExcel ei = new ImportExcel(file, 1, 0);
 			List<WorkPlan> list = ei.getDataList(WorkPlan.class);
-			for (WorkPlan workPlan : list){
-				try{
-						workPlanService.save(workPlan);
-						successNum++;
-				}catch(ConstraintViolationException ex){
-					failureMsg.append("<br/>工作任务 "+workPlan.getName()+" 导入失败：");
+			for (WorkPlan workPlan : list) {
+				try {
+					workPlanService.save(workPlan);
+					successNum++;
+				} catch (ConstraintViolationException ex) {
+					failureMsg.append("<br/>工作任务 " + workPlan.getName() + " 导入失败：");
 					List<String> messageList = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
-					for (String message : messageList){
-						failureMsg.append(message+"; ");
+					for (String message : messageList) {
+						failureMsg.append(message + "; ");
 						failureNum++;
 					}
-				}catch (Exception ex) {
-					failureMsg.append("<br/>工作任务 "+workPlan.getName()+" 导入失败："+ex.getMessage());
+				} catch (Exception ex) {
+					failureMsg.append("<br/>工作任务 " + workPlan.getName() + " 导入失败：" + ex.getMessage());
 				}
 			}
-			if (failureNum>0){
-				failureMsg.insert(0, "，失败 "+failureNum+" 条工作任务，导入信息如下：");
+			if (failureNum > 0) {
+				failureMsg.insert(0, "，失败 " + failureNum + " 条工作任务，导入信息如下：");
 			}
-			addMessage(redirectAttributes, "已成功导入 "+successNum+" 条工作任务"+failureMsg);
+			addMessage(redirectAttributes, "已成功导入 " + successNum + " 条工作任务" + failureMsg);
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入工作计划失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "导入工作计划失败！失败信息：" + e.getMessage());
 		}
 		return "redirect:" + adminPath + "/work/workPlan/list?planType=" + request.getParameter("planType") + "&repage";
-    }
-	
+	}
+
 	/**
 	 * 下载导入用户数据模板
+	 * 
 	 * @param response
 	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:edit")
-    @RequestMapping(value = "import/template")
-    public String importFileTemplate(HttpServletRequest request,HttpServletResponse response, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "import/template")
+	public String importFileTemplate(HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "工作计划数据导入模板.xlsx";
-    		List<WorkPlan> list = Lists.newArrayList(); 
-    		WorkPlan wp = workPlanService.findList(new WorkPlan()).get(0);
-    		list.add(wp);
-    		new ExportExcel("工作任务数据", WorkPlan.class, 2).setDataList(list).write(response, fileName).dispose();
-    		return null;
+			String fileName = "工作计划数据导入模板.xlsx";
+			List<WorkPlan> list = Lists.newArrayList();
+			WorkPlan wp = workPlanService.findList(new WorkPlan()).get(0);
+			list.add(wp);
+			new ExportExcel("工作任务数据", WorkPlan.class, 2).setDataList(list).write(response, fileName).dispose();
+			return null;
 		} catch (Exception e) {
-			System.out.println("导入模板下载失败！失败信息："+e.getMessage());
-			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+			System.out.println("导入模板下载失败！失败信息：" + e.getMessage());
+			addMessage(redirectAttributes, "导入模板下载失败！失败信息：" + e.getMessage());
 		}
 		return "redirect:" + adminPath + "/work/workPlan/list?planType=" + request.getParameter("planType") + "&repage";
-    }
+	}
+
 	/**
 	 * ******************************************************
 	 * ******************************************************
@@ -466,14 +469,15 @@ public class WorkPlanController extends BaseController {
 	 * ******************************************************
 	 * ******************************************************
 	 * ******************************************************
-	 * ******************************************************
-	 * * ******************************************************
-	 * ******************************************************
+	 * ****************************************************** *
 	 * ******************************************************
 	 * ******************************************************
 	 * ******************************************************
 	 * ******************************************************
 	 * ******************************************************
+	 * ******************************************************
+	 * ******************************************************
+	 * 
 	 * @param workPlan
 	 * @param model
 	 * @return
@@ -606,7 +610,7 @@ public class WorkPlanController extends BaseController {
 		return mapList;
 	}
 
-//<<<<<<< HEAD
+	// <<<<<<< HEAD
 	/**
 	 * 查询待受理工作
 	 * 
@@ -650,7 +654,7 @@ public class WorkPlanController extends BaseController {
 		model.addAttribute("list", lst);
 		return "modules/work/exec/workRemainList";
 	}
-	
+
 	/**
 	 * 已受理工作列表
 	 * 

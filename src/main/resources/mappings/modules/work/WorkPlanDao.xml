@@ -4,7 +4,12 @@
     
 	<sql id="workPlanColumns">
 		a.id AS "id",
+		a.current_audit_use_id AS currentAuditUser.id,
 		a.work_type_id AS "workType.id",
+		sd3.label AS "planTypeDetail.label",
+		sd3.value AS "planTypeDetail.value",
+		sd3.type AS "planTypeDetail.type",
+		sd.id AS "planTypeDetail.id",
 		wt.name AS "workType.name",
 		a.required_finish_time AS "requiredFinishTime",
 		a.start_time AS "startTime",
@@ -64,6 +69,7 @@
 		LEFT JOIN SYS_OFFICE so ON so.id = pp.office_id
 		LEFT JOIN SYS_DICT sd ON sd.id = a.work_level_id
 		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
+		LEFT JOIN SYS_DICT sd3 ON sd3.id = a.plan_type
 		LEFT JOIN WORK_TYPE wt ON wt.id = a.work_type_id
 		LEFT JOIN work_remain_info wri ON a.id = wri.workplan_id
 		LEFT JOIN work_feedback_reply wfrf ON wfrf.remainId = wri.id AND 
@@ -362,10 +368,17 @@
 		WHERE id = #{id}
 	</update>
 	
-	<!-- 提交公司计划:更新work_plan表的work_plan表的work_state_id字段 -->
-	<update id="submit_company_plan">
+	<!-- 更新work_plan表的work_state_id字段 -->
+	<update id="updateWorkState">
 		UPDATE work_plan SET 
-			work_state_id = '45d756f45bb04155adb95e66b6a0d1c1'
+			work_state_id = #{workStateId}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新work_plan表的end_state_id字段 -->
+	<update id="updateEndState">
+		UPDATE work_plan SET 
+			end_state_id = #{endStateId}
 		WHERE id = #{id}
 	</update>
 	
