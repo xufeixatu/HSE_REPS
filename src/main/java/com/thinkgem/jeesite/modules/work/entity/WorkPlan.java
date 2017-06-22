@@ -3,22 +3,20 @@
  */
 package com.thinkgem.jeesite.modules.work.entity;
 
-import org.hibernate.validator.constraints.Length;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.thinkgem.jeesite.common.persistence.ActEntity;
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
 import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
-import com.thinkgem.jeesite.modules.act.entity.Act;
 import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 工作计划管理Entity
@@ -38,37 +36,16 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	}
 	private static final long serialVersionUID = 1L;
 
-	protected Act act; 		// 流程任务对象
-
+	private ActEntity<WorkPlan> actData = null;
 	
-	@JsonIgnore
-	public Act getAct() {
-		if (act == null){
-			act = new Act();
-		}
-		return act;
+	public ActEntity<WorkPlan> getActData() {
+		return actData;
 	}
 
-	public void setAct(Act act) {
-		this.act = act;
+	public void setActData(ActEntity<WorkPlan> actData) {
+		this.actData = actData;
+		this.actData.setOutObj(this);
 	}
-
-	/**
-	 * 获取流程实例ID
-	 * @return
-	 */
-	public String getProcInsId() {
-		return this.getAct().getProcInsId();
-	}
-
-	/**
-	 * 设置流程实例ID
-	 * @param procInsId
-	 */
-	public void setProcInsId(String procInsId) {
-		this.getAct().setProcInsId(procInsId);
-	}
-	
 	private ArrayList<WorkPlan> childWorkPlan = new ArrayList<WorkPlan>();
 	private User currentAuditUse = null;
 	public User getCurrentAuditUse() {

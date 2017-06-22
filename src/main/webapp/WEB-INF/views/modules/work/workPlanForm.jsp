@@ -82,6 +82,7 @@
 		<c:when test="${workPlan.noedit }">
 			<form:form id="inputForm" modelAttribute="workPlan"
 				class="form-horizontal">
+				<input type="hidden" name="parent.id" value="${workPlan.parent.id}"/>
 				<div class="control-group">
 					<label class="control-label">标题：</label>
 					<div class="controls">
@@ -168,7 +169,7 @@
 						<form:hidden path="depts.id" value="${fns:getUser().office.id}"/>			
 				</c:when>
 				<c:otherwise>
-					<c:if test="${workPlan.planType eq 'department'">
+					<c:if test="${workPlan.planType eq 'department'}">
 						<form:hidden path="depts.id" value="${fns:getUser().office.id}"/>
 					</c:if>
 					<div class="control-group">
@@ -289,6 +290,7 @@
 				enctype="multipart/form-data" action="${ctx}/work/workPlan/upload"
 				method="post" class="form-horizontal">
 				<form:hidden path="id" />
+				<form:hidden path="parent" value="0"/>
 				<div class="control-group">
 					<label class="control-label">工作附件：</label>
 					<div class="controls">

@@ -18,6 +18,14 @@ public abstract class ActEntity<T> extends DataEntity<T> implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	protected Act act; 		// 流程任务对象
+	private Object outObj = null;
+	public Object getOutObj() {
+		return outObj;
+	}
+
+	public void setOutObj(Object outObj) {
+		this.outObj = outObj;
+	}
 
 	public ActEntity() {
 		super();

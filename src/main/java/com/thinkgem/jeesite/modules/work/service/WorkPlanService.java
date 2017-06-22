@@ -17,7 +17,10 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.act.service.ActTaskService;
 import com.thinkgem.jeesite.modules.act.utils.ActUtils;
 import com.thinkgem.jeesite.modules.sys.entity.Dict;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
+import com.thinkgem.jeesite.modules.sys.utils.OfficeUtil;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.dao.WorkPlanDao;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
@@ -62,7 +65,7 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	public void submit_plan(WorkPlan workPlan) {
 		dao.updateWorkState(workPlan,DictUtils.getDictByValue("submit", "work_state").getId());
 		Dict d = DictUtils.getDictByID(workPlan.getPlanType());
-		
+		String planType = d.getValue();
 		//如果时间为频次则创建子任务
 		if (workPlan.getFrequency() != null && "".equals(workPlan.getFrequency())) {
 			createPlanChilds(workPlan);
@@ -71,12 +74,33 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 			//如果个人工作计划无需审核，直接将结束状态修改为“处理中”
 			dao.updateWorkState(workPlan,DictUtils.getDictByValue("handing", "work_state").getId());
 		}else{
+			String assignee = UserUtils.get(workPlan.getCurrentAuditUse().getId()).getLoginName();
+			if(assignee == null  || "".equals(assignee)){
+				switch (planType) {
+				case "action":
+					User currUser = UserUtils.getUser();
+					if(! currUser.getName().equals(currUser.getOffice().getDeputyPerson().getName())){
+						assignee = currUser.getOffice().getDeputyPerson().getName();
+					}else{
+						assignee = currUser.getOffice().getParent().getDeputyPerson().getName();
+					}
+					break;
+				case "department":
+				case "company":
+					assignee = UserUtils.getUser().getOffice().getDeputyPerson().getName();
+					break;
+				}
+			}
+			
 			//非个人工作计划均创建工作流
 			Map<String, Object> vars = Maps.newHashMap();
-			String currentAuditUserLoginName = UserUtils.get(workPlan.getCurrentAuditUse().getId()).getLoginName();
-			vars.put("userId", currentAuditUserLoginName);
+			vars.put("assignee", assignee);
+			vars.put("planType",d.getValue());
+			vars.put("current_user", UserUtils.getUser().getName());
 			//创建并提交审核工作流程
-			actTaskService.startProcess(ActUtils.PD_WORKPLAN_AUDIT[0], ActUtils.PD_WORKPLAN_AUDIT[1], workPlan.getId(), "工作计划审核", vars);
+			String pi = actTaskService.startProcess(ActUtils.PD_WORKPLAN_AUDIT[0], ActUtils.PD_WORKPLAN_AUDIT[1], workPlan.getId(), "工作计划审核", vars);
+			//更新流程实例ID
+			dao.updateProcessInstanceId(workPlan,pi);
 		}
 	}
 

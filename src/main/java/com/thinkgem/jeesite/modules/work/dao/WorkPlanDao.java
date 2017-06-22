@@ -112,11 +112,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	public int isRemainOver(@Param("depts") String depts, @Param("remainWorkPlanId") String remainWorkPlanId);
 
 	public List<WorkPlan> findCurrentRemainnedWorkPlanList(@Param("userid") String userid);
-	/**
-	 * 修改工作结束状态的方法
-	 * @param endStateId 
-	 */
-	public void updateEndState(String endStateId);
+	
 	/**
 	 * 保存反馈信息
 	 * @param workRemainId
@@ -168,4 +164,6 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	public void commentSave(@Param("userid") String userid, @Param("remainId") String remainId, @Param("commentContent") String commentContent, @Param("score") int score);
 
 	public WorkPlan findComment(@Param("remainId") String remainId);
+
+	public void updateProcessInstanceId(WorkPlan workPlan,@Param("processInstanceId") java.lang.String pi);
 }

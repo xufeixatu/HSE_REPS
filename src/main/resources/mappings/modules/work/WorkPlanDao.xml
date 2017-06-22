@@ -4,7 +4,7 @@
     
 	<sql id="workPlanColumns">
 		a.id AS "id",
-		a.current_audit_use_id AS currentAuditUser.id,
+		a.current_audit_use_id AS "currentAuditUser.id",
 		a.work_type_id AS "workType.id",
 		sd3.label AS "planTypeDetail.label",
 		sd3.value AS "planTypeDetail.value",
@@ -622,6 +622,13 @@
 	<update id="closeWorkPlan">
 		UPDATE work_plan SET 
 			end_state_id = '94236754111945de90fe6a1418edb8e4'
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新工作计划中的工作流实例Id -->
+	<update id="updateProcessInstanceId">
+		UPDATE work_plan SET 
+			processinstanceid = #{processInstanceId}
 		WHERE id = #{id}
 	</update>
 	<!-- 点评 -->
