@@ -83,6 +83,7 @@
 			<form:form id="inputForm" modelAttribute="workPlan"
 				class="form-horizontal">
 				<input type="hidden" name="parent.id" value="${workPlan.parent.id}"/>
+				
 				<div class="control-group">
 					<label class="control-label">标题：</label>
 					<div class="controls">
@@ -274,6 +275,16 @@
 
 
 				</c:if>
+				<div class="control-group">
+					<label class="control-label">父计划:</label>
+					<div class="controls">
+						<sys:treeselect id="parent" name="parent.id"
+							value="${workPlan.parent.id}" labelName="parent.name"
+							labelValue="${workPlan.parent.name}" title="父工作计划"
+							url="/work/workPlan/treeData" extId="${workPlan.id}"
+							allowClear="true" />
+					</div>
+				</div>
 				<div class="form-actions">
 					<c:if test="${not workPlan.noedit}">
 						<shiro:hasPermission name="work:workPlan:edit">
@@ -499,6 +510,16 @@
 
 
 				</c:if>
+				<div class="control-group">
+					<label class="control-label">父计划:</label>
+					<div class="controls">
+						<sys:treeselect id="parent" name="parent.id"
+							value="${workPlan.parent.id}" labelName="parent.name"
+							labelValue="${workPlan.parent.name}" title="父工作计划"
+							url="/work/workPlan/treeData" extId="${workPlan.id}"
+							allowClear="true" />
+					</div>
+				</div>
 				<div class="control-group">
 					<label class="control-label">附件:</label>
 					<div class="controls">

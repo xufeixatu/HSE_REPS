@@ -63,16 +63,16 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 
 	@Transactional(readOnly = false)
 	public void submit_plan(WorkPlan workPlan) {
-		dao.updateWorkState(workPlan,DictUtils.getDictByValue("submit", "work_state").getId());
-		Dict d = DictUtils.getDictByID(workPlan.getPlanType());
-		String planType = d.getValue();
+		dao.updateWorkState(workPlan.getId(),DictUtils.getDictByValue("submit", "work_state").getId());
+		Dict d = DictUtils.getDictByValue(workPlan.getPlanType(),"type_plan");
+		String planType = workPlan.getPlanType();
 		//如果时间为频次则创建子任务
-		if (workPlan.getFrequency() != null && "".equals(workPlan.getFrequency())) {
+		if (workPlan.getFrequency() != null && !"".equals(workPlan.getFrequency())) {
 			createPlanChilds(workPlan);
 		}
 		if (d.getValue().equals("personal")) {
 			//如果个人工作计划无需审核，直接将结束状态修改为“处理中”
-			dao.updateWorkState(workPlan,DictUtils.getDictByValue("handing", "work_state").getId());
+			dao.updateWorkState(workPlan.getId(),DictUtils.getDictByValue("handing", "work_state").getId());
 		}else{
 			String assignee = UserUtils.get(workPlan.getCurrentAuditUse().getId()).getLoginName();
 			if(assignee == null  || "".equals(assignee)){
@@ -127,6 +127,8 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 			for (int i = 0; i < ids.length; i++) {
 				for (int j = 0; j < months.length; j++) {
 					WorkPlan child = workPlan.clone();
+					child.setName(child.getName() + "-" + months[j] + "月子任务");;
+					child.setPlanType(DictUtils.getDictByValue(workPlan.getPlanType(), "type_plan").getId());
 					child.setParent(workPlan);
 					child.setParentIds(workPlan.getParentIds() + workPlan.getId() + ",");
 					child.setId(null);

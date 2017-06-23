@@ -130,6 +130,14 @@
   </function>
   
   <function>
+    <description>根据值获取字典对象</description>
+    <name>getDictByValue</name>
+    <function-class>com.thinkgem.jeesite.modules.sys.utils.DictUtils</function-class>
+    <function-signature>java.lang.String getDictByValue(java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getDictByValue(value, type)}</example>  
+  </function>
+  
+  <function>
     <description>获取字典对象列表</description>
     <name>getDictList</name>
     <function-class>com.thinkgem.jeesite.modules.sys.utils.DictUtils</function-class>

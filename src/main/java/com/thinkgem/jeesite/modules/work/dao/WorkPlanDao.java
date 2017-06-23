@@ -88,7 +88,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 * @param workPlan
 	 * @param workStateId
 	 */
-	public void updateWorkState(WorkPlan workPlan,@Param("workStateId") String workStateId);
+	public void updateWorkState(@Param("id") String id,@Param("workStateId") String workStateId);
 	
 	/**
 	 * 更新结束状态
