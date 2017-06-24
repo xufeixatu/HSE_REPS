@@ -78,29 +78,31 @@ public class TrainNeedMatrixController extends BaseController {
 	@RequestMapping(value = {"matrix"})
 	public String matrix(TrainNeedMatrix trainNeedMatrix, HttpServletRequest request, HttpServletResponse response, Model model) {
 		List<TrainNeedMatrix> trainNeedMatrixList = trainNeedMatrixService.findList(trainNeedMatrix);
-		Map<String,Integer> table_args = new HashMap<String,Integer>();
+		Map<String,Integer> table_col_args = new HashMap<String,Integer>();//跨列数
+		Map<String,Integer> table_row_args = new HashMap<String,Integer>();//跨行数
 		
 		model.addAttribute("trainNeedMatrixList", trainNeedMatrixList);
 		// 获取培训岗位列表
 		List<TrainJob> trainJobList = trainJobService.findList(new TrainJob());
 		model.addAttribute("trainJobList", trainJobList);
 		for(TrainJob tj : trainJobList){//count TrainJob by classify
-			if(table_args.get("tj"+tj.getClassify())==null){
-				table_args.put("tj"+tj.getClassify(),0);
+			if(table_col_args.get(tj.getClassify())==null){
+				table_row_args.put(tj.getClassify(),0);
 			}
-			table_args.put("tj"+tj.getClassify(), table_args.get("tj"+tj.getClassify())+1);
+			table_row_args.put(tj.getClassify(), table_row_args.get(tj.getClassify())+1);
 		}
 		// 获取培训知识内容列表
 		List<TrainContent> trainContentList = trainContentService.findList(new TrainContent());
 		model.addAttribute("trainContentList", trainContentList);
 		for(TrainContent tc : trainContentList){//count TrainContent by classify
-			if(table_args.get("tc"+tc.getClassify())==null){
-				table_args.put("tc"+tc.getClassify(),0);
+			if(table_col_args.get(tc.getClassify())==null){
+				table_col_args.put(tc.getClassify(),0);
 			}
-			table_args.put("tc"+tc.getClassify(), table_args.get("tc"+tc.getClassify())+1);
+			table_col_args.put(tc.getClassify(), table_col_args.get(tc.getClassify())+1);
 		}
 		
-		model.addAttribute("tableArgs", table_args);
+		model.addAttribute("tableColArgs", table_col_args);
+		model.addAttribute("tableRowArgs", table_row_args);
 		
 		return "modules/train/matrix/trainNeedMatrix";
 	}
