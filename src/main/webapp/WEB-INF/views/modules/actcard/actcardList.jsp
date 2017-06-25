@@ -53,7 +53,7 @@
 				<th>更新时间</th>
 				<th>备注信息</th>
 				<th>属地单位</th>
-				<shiro:hasPermission name="actcard:actcard:edit"><th>操作</th></shiro:hasPermission>
+				<!--<shiro:hasPermission name="actcard:actcard:edit"><th>操作</th></shiro:hasPermission>-->
 				<th>查看</th>
 			</tr>
 		</thead>
@@ -81,11 +81,13 @@
 				<td>
 					${actcard.territorialOffice.name}
 				</td>
+				<!-- 
 				<shiro:hasPermission name="actcard:actcard:edit"><td>
     				<a href="${ctx}/actcard/actcard/form?id=${actcard.id}">修改</a>
 					<a href="${ctx}/actcard/actcard/delete?id=${actcard.id}" onclick="return confirmx('确认要删除该ACT卡吗？', this.href)">删除</a>
 					
 				</td></shiro:hasPermission>
+				 -->
 				<td><a href="${ctx}/actcard/actcard/view?id=${actcard.id}">查看评阅</a></td>
 				
 			</tr>

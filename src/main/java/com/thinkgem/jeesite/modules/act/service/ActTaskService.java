@@ -157,7 +157,7 @@ public class ActTaskService extends BaseService {
 		if (act.getEndDate() != null){
 			toClaimQuery.taskCreatedBefore(act.getEndDate());
 		}
-		
+		System.out.println("查询任务 列表");
 		// 查询列表
 		List<Task> toClaimList = toClaimQuery.list();
 		for (Task task : toClaimList) {
@@ -175,7 +175,7 @@ public class ActTaskService extends BaseService {
 			String processInstanceId = task.getProcessInstanceId();
 			ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).active().singleResult();
 			String businessKey = processInstance.getBusinessKey();
-			System.out.println(businessKey);
+			System.out.println("businessKey------>"+businessKey);
 			Actcard actcard = actcardDao.get(businessKey.replaceAll("actcard:", ""));
 			if(null != actcard){//说明为actcard任务
 				if( null == actcard.getUser() || !UserUtils.getUser().getId().equals(actcard.getUser().getId())){//如果人员相等则为本人的任务

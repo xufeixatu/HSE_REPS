@@ -88,10 +88,10 @@
 		<include refid="actcardUnsafeJoins"/>
 		<where>
 			a.del_flag = '0'
-			and a.actcard_id in (
+			and a.actcard_id in 
 			<foreach item="item" index="index" collection="listIds" open="(" separator="," close=")">  
 			  #{item}  
-			 </foreach>)  
+			 </foreach>  
 			and a.unsafe_event_id = #{eventid}
 		</where>		
 	</select>

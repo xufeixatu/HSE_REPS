@@ -69,7 +69,7 @@
 					<form:options items="${trainContentList}" itemLabel="name" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li><label>培训需求状态：</label>
+			<li><label>培训状态：</label>
 				<form:radiobuttons path="status" items="${fns:getDictList('train_matrix_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -93,23 +93,8 @@
 				</c:forEach>
 			</tr>
 			<tr>
-				<c:forEach items="${trainContentList}" var="trainContent">
-				    <c:if test="${trainContent.classify=='1' && tableArgs['tc1'] > 0 }">
-				        <td style="text-align:center;" colspan="${tableArgs['tc1']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
-				        <p hidden="hidden">${tableArgs['tc1']=-1}</p> 
-				    </c:if>
-				    <c:if test="${trainContent.classify=='2' && tableArgs['tc2'] > 0 }">
-				        <td style="text-align:center;" colspan="${tableArgs['tc2']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
-				        <p hidden="hidden">${tableArgs['tc2']=-1}</p> 
-				    </c:if>
-				    <c:if test="${trainContent.classify=='3' && tableArgs['tc3'] > 0 }">
-				        <td style="text-align:center;" colspan="${tableArgs['tc3']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
-				        <p hidden="hidden">${tableArgs['tc3']=-1}</p> 
-				    </c:if>
-				    <c:if test="${trainContent.classify=='4' && tableArgs['tc4'] > 0 }">
-				        <td style="text-align:center;" colspan="${tableArgs['tc4']}">${fns:getDictLabel(trainContent.classify, 'train_content_classify', '')}</td>
-				        <p hidden="hidden">${tableArgs['tc4']=-1}</p> 
-				    </c:if>
+				<c:forEach items="${tableColArgs}" var="item">
+				        <td style="text-align:center;" colspan="${item.value}">${fns:getDictLabel(item.key, 'train_content_classify', '')}</td>
 				</c:forEach>
 			</tr>
 			<tr>
@@ -145,17 +130,8 @@
 		<tbody>
 		<c:forEach items="${trainJobList}" var="trainJob">
 			<tr>
-				<c:if test="${trainJob.classify=='1' && tableArgs['tj1'] > 0 }">
-				    <td style="text-align:center;" rowspan="${tableArgs['tj1']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
-				    <p hidden="hidden">${tableArgs['tj1']=-1}</p>
-				</c:if>
-				<c:if test="${trainJob.classify=='2' && tableArgs['tj2'] > 0 }">
-				    <td style="text-align:center;" rowspan="${tableArgs['tj2']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
-				    <p hidden="hidden">${tableArgs['tj2']=-1}</p>
-				</c:if>
-				<c:if test="${trainJob.classify=='3' && tableArgs['tj3'] > 0 }">
-				    <td style="text-align:center;" rowspan="${tableArgs['tj3']}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
-				     <p hidden="hidden">${tableArgs['tj3']=-1}</p>
+				<c:if test="${tableRowArgs[trainJob.classify] > 0 }">
+				    <td style="text-align:center;" rowspan="${tableRowArgs[trainJob.classify]}">${fns:getDictLabel(trainJob.classify, 'train_job_classify', '')}</td>
 				</c:if>
 				
 				<td style="text-align:center;">${trainJob.sn}</td>
