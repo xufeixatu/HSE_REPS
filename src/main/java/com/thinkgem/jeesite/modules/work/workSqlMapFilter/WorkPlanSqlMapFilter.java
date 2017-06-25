@@ -221,12 +221,27 @@ public class WorkPlanSqlMapFilter {
 	public void typeMyWorkPlanFilterSqlMapDsf(WorkPlan workPlan, Model model) {
 		common(workPlan, model);
 
-		// 只看本人负责的数据
+		// 只看本人负责的未提交状态的数据
 		dsf.append(" and ");
 		dsf.append("a.person_liable_id = '");
 		dsf.append(UserUtils.getUser().getId());
-		dsf.append("' ");
+		dsf.append("' and ");
+		dsf.append("a.work_state_id <> '");
+		dsf.append(DictUtils.getDictByValue("unsubmit", "work_state").getId());
+		dsf.append("'");
 
+		// 将字符串加回到sqlMap.dsf属性
+		sqlMap.put("dsf", dsf.toString());
+	}
+	//根据创建人是我并且工作状态为审核通过的工作
+	public void typeMyAssignedFilterSqlMapDsf(WorkPlan workPlan, Model model) {
+		common(workPlan, model);
+
+		dsf.append(" and ");
+		dsf.append("a.assigner_id = '");
+		dsf.append(UserUtils.getUser().getId());
+		dsf.append("' ");
+		
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}

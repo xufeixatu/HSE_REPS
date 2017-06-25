@@ -101,7 +101,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 
 	public void agree(WorkPlan workPlan);
 
-	public void asigned(WorkPlan workPlan);
+	public void assigne(WorkPlan workPlan);
 
 	public void remain_insert(WorkPlan workPlan);
 

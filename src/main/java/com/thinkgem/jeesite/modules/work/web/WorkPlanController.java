@@ -119,6 +119,27 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workPlanList";
 	}
 	
+	/**
+	 * 我负责工作的列表
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = { "myAssignedList"})
+	public String myAssignedList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		// 根据创建人是我并且工作状态为审核通过的工作
+		WorkPlanSqlMapFilter.getFilter().typeMyAssignedFilterSqlMapDsf(workPlan, model);
+		
+		List<WorkPlan> list = workPlanService.findList(workPlan);
+
+		model.addAttribute("list", list);
+		model.addAttribute("myType","assigned");
+		return "modules/work/workPlanList";
+	}
+	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -156,6 +177,92 @@ public class WorkPlanController extends BaseController {
 
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage&planType=" + planTypeDict.getValue();
 	}
+
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = "form")
+	public String form(WorkPlan workPlan, Model model) {
+		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
+
+		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
+			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
+			// 获得工作计划的完整工作类型
+			if (workPlan.getWorkType() != null && StringUtils.isNotBlank(workPlan.getWorkType().getId())) {
+				workPlan.setWorkType(workTypeService.get(workPlan.getWorkType().getId()));
+			}
+			// 获得工作计划的完整责任人
+			if (workPlan.getPersonLiable() != null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())) {
+				workPlan.setPersonLiable(UserUtils.get(workPlan.getPersonLiable().getId()));
+			}
+			// 如果责任部门为空并且当前计划类型是部门则指定责任部门为当前用户所在部门
+			if (workPlan.getDepts() == null && workPlan.getPlanType().equals("department")) {
+				workPlan.setDepts(UserUtils.getUser().getOffice());
+			}
+			// 把当前用户设置为工作计划指派人
+			workPlan.setAssignerId(UserUtils.getUser().getId());
+			// 获取排序号，最末节点排序号+30
+			if (StringUtils.isBlank(workPlan.getId())) {
+				WorkPlan workPlanChild = new WorkPlan();
+				workPlanChild.setParent(new WorkPlan(workPlan.getParent().getId()));
+				List<WorkPlan> list = workPlanService.findList(workPlan);
+				if (list.size() > 0) {
+					workPlan.setSort(list.get(list.size() - 1).getSort());
+					if (workPlan.getSort() != null) {
+						workPlan.setSort(workPlan.getSort() + 30);
+					}
+				}
+			}
+		}
+		if (workPlan.getSort() == null) {
+			workPlan.setSort(30);
+		}
+
+		model.addAttribute("workPlan", workPlan);
+		return "modules/work/workPlanForm";
+	}
+
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = "submitPlan")
+	public String submitPlan(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model,RedirectAttributes redirectAttributes) {
+		
+		String[] ids = request.getParameterValues("ids");
+		if (ids != null && ids.length > 0) {
+			for (String id : ids) {
+				WorkPlan w = new WorkPlan();
+				w.setId(id);
+				workPlanService.submit_plan(w);// 提交计划
+			}
+		} else {
+			workPlanService.submit_plan(workPlan);// 提交计划
+		}
+		addMessage(redirectAttributes, "提交工作计划'" + workPlan.getName() + "'成功");
+		WorkPlan wp = new WorkPlan();
+		wp.setPlanType(workPlan.getPlanType());
+		
+		return list(wp, request, response, model);
+	}
+	
+	/**
+	 * 分配工作给责任人
+	 * 
+	 * @param workPlan
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = "assign_work")
+	public String assign_work(WorkPlan workPlan, Model model) {
+
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+
+		workPlan = workPlanService.get(workPlan.getId());
+		workPlanService.assigne(workPlan);
+		
+		model.addAttribute("workPlan", workPlan);
+		return "modules/work/assignedWorkForm";
+	}
+
+	
 //	@RequiresPermissions("work:workPlan:view")
 //	@RequestMapping(value = { "workList" })
 //	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -212,51 +319,7 @@ public class WorkPlanController extends BaseController {
 		workPlanService.remain(workPlan);
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan/remain_list?repage&planType=company";
 	}
-
-	@RequiresPermissions("work:workPlan:view")
-
-	@RequestMapping(value = "form")
-	public String form(WorkPlan workPlan, Model model) {
-		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
-		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
-
-		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
-			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
-			// 获得工作计划的完整工作类型
-			if (workPlan.getWorkType() != null && StringUtils.isNotBlank(workPlan.getWorkType().getId())) {
-				workPlan.setWorkType(workTypeService.get(workPlan.getWorkType().getId()));
-			}
-			// 获得工作计划的完整责任人
-			if (workPlan.getPersonLiable() != null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())) {
-				workPlan.setPersonLiable(UserUtils.get(workPlan.getPersonLiable().getId()));
-			}
-			// 如果责任部门为空并且当前计划类型是部门则指定责任部门为当前用户所在部门
-			if (workPlan.getDepts() == null && workPlan.getPlanType().equals("department")) {
-				workPlan.setDepts(UserUtils.getUser().getOffice());
-			}
-			// 把当前用户设置为工作计划指派人
-			workPlan.setAssignerId(UserUtils.getUser().getId());
-			// 获取排序号，最末节点排序号+30
-			if (StringUtils.isBlank(workPlan.getId())) {
-				WorkPlan workPlanChild = new WorkPlan();
-				workPlanChild.setParent(new WorkPlan(workPlan.getParent().getId()));
-				List<WorkPlan> list = workPlanService.findList(workPlan);
-				if (list.size() > 0) {
-					workPlan.setSort(list.get(list.size() - 1).getSort());
-					if (workPlan.getSort() != null) {
-						workPlan.setSort(workPlan.getSort() + 30);
-					}
-				}
-			}
-		}
-		if (workPlan.getSort() == null) {
-			workPlan.setSort(30);
-		}
-
-		model.addAttribute("workPlan", workPlan);
-		return "modules/work/workPlanForm";
-	}
-
+	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "exec_form")
 	public String exec_form(WorkPlan workPlan, Model model) {
@@ -298,24 +361,24 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/exec/workPlanForm";
 	}
 
-	/**
-	 * 进入分配公司工作给部门的表单
-	 * 
-	 * @param workPlan
-	 * @param model
-	 * @return
-	 */
-	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = "assigned_work")
-	public String assigned_work(WorkPlan workPlan, Model model) {
-
-		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-
-		workPlan = workPlanService.get(workPlan.getId());
-
-		model.addAttribute("workPlan", workPlan);
-		return "modules/work/assignedWorkForm";
-	}
+//	/**
+//	 * 进入分配公司工作给部门的表单
+//	 * 
+//	 * @param workPlan
+//	 * @param model
+//	 * @return
+//	 */
+//	@RequiresPermissions("work:workPlan:view")
+//	@RequestMapping(value = "assigned_work")
+//	public String assigned_work(WorkPlan workPlan, Model model) {
+//
+//		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+//
+//		workPlan = workPlanService.get(workPlan.getId());
+//
+//		model.addAttribute("workPlan", workPlan);
+//		return "modules/work/assignedWorkForm";
+//	}
 
 	/**
 	 * 分配任务给部门
@@ -328,7 +391,7 @@ public class WorkPlanController extends BaseController {
 	@RequestMapping(value = "assigned")
 	public String assigned(WorkPlan workPlan, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.asigned(workPlan);
+		workPlanService.assigne(workPlan);
 		workPlan = new WorkPlan();
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?playType=compnay";// "modules/work/exec/workPendingList";
 	}
@@ -373,25 +436,7 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/exec/workPlanDetail";
 	}
 	
-	@RequiresPermissions("work:workPlan:edit")
-	@RequestMapping(value = "submitPlan")
-	public String submitPlan(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-		
-		String[] ids = request.getParameterValues("ids");
-		if (ids != null && ids.length > 0) {
-			for (String id : ids) {
-				WorkPlan w = new WorkPlan();
-				w.setId(id);
-				workPlanService.submit_plan(w);// 提交计划
-			}
-		} else {
-			workPlanService.submit_plan(workPlan);// 提交计划
-		}
-		WorkPlan wp = new WorkPlan();
-		wp.setPlanType(workPlan.getPlanType());
-		
-		return list(wp, request, response, model);
-	}
+	
 
 	/**
 	 * 导出用户数据

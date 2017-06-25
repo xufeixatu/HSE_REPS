@@ -35,12 +35,11 @@ import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 @Service
 @Transactional(readOnly = true)
 public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
-	
+
 	private static final String String = null;
-	
+
 	@Autowired
 	private ActTaskService actTaskService = null;
-	
 
 	public WorkPlan get(String id) {
 		return super.get(id);
@@ -65,49 +64,66 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 
 	@Transactional(readOnly = false)
 	public void submit_plan(WorkPlan workPlan) {
-		dao.updateWorkState(workPlan.getId(),DictUtils.getDictByValue("submit", "work_state").getId());
-		Dict d = DictUtils.getDictByValue(workPlan.getPlanType(),"type_plan");
+		dao.updateWorkState(workPlan.getId(), DictUtils.getDictByValue("submit", "work_state").getId());
+		Dict d = DictUtils.getDictByValue(workPlan.getPlanType(), "type_plan");
 		String planType = workPlan.getPlanType();
-		//如果时间为频次则创建子任务
-		
+		// 如果时间为频次则创建子任务
+
 		if (d.getValue().equals("personal") && workPlan.getFrequency() != null && !"".equals(workPlan.getFrequency())) {
+			// 如果个人工作计划无需审核，直接将结束状态修改为“处理中”
+			dao.updateWorkState(workPlan.getId(), DictUtils.getDictByValue("handing", "work_state").getId());
+			// 创建子工作计划
 			createPlanChilds(workPlan);
-			//如果个人工作计划无需审核，直接将结束状态修改为“处理中”
-			dao.updateWorkState(workPlan.getId(),DictUtils.getDictByValue("handing", "work_state").getId());
-		}else{
-			User user = workPlan.getCurrentAuditUse();//.getId()).getLoginName();
-			String assignee = null;
-			if(user == null){
-				switch (planType) {
-				case "action":
-					User currUser = UserUtils.getUser();
-					if(! currUser.getName().equals(currUser.getOffice().getPrimaryPerson().getName())){
-						assignee = currUser.getOffice().getPrimaryPerson().getName();
-					}else{
-						assignee = OfficeUtil.getOfficeById(currUser.getOffice().getParent().getId()).getPrimaryPerson().getName();
-					}
-					break;
-				case "department":
-				case "company":
-					assignee = UserUtils.getUser().getOffice().getPrimaryPerson().getName();
-					break;
-				}
-			}else{
-				assignee = UserUtils.get(user.getId()).getLoginName();
-			}
 			
-			//非个人工作计划均创建工作流
-			Map<String, Object> vars = Maps.newHashMap();
-			vars.put("assignee", assignee);
-			vars.put("planType",d.getValue());
-			vars.put("current_user", UserUtils.getUser().getName());
-			//创建并提交审核工作流程
-			String pi = actTaskService.startProcess(ActUtils.PD_WORKPLAN_AUDIT[0], ActUtils.PD_WORKPLAN_AUDIT[1], workPlan.getId(), "工作计划审核", vars);
-			//更新流程实例ID
-			dao.updateProcessInstanceId(workPlan.getId(),pi);
+		} else {
+			if ("true".equals(DictUtils.getDictList("type_audited").get(0).getValue())) {
+				User user = workPlan.getCurrentAuditUse();// .getId()).getLoginName();
+				String assignee = null;
+				if (user == null) {
+					switch (planType) {
+					case "action":
+						User currUser = UserUtils.getUser();
+						if (!currUser.getName().equals(currUser.getOffice().getPrimaryPerson().getName())) {
+							assignee = currUser.getOffice().getPrimaryPerson().getName();
+						} else {
+							assignee = OfficeUtil.getOfficeById(currUser.getOffice().getParent().getId())
+									.getPrimaryPerson().getName();
+						}
+						break;
+					case "department":
+					case "company":
+						assignee = UserUtils.getUser().getOffice().getPrimaryPerson().getName();
+						break;
+					}
+				} else {
+					assignee = UserUtils.get(user.getId()).getLoginName();
+				}
+
+				// 非个人工作计划均创建工作流
+				Map<String, Object> vars = Maps.newHashMap();
+				vars.put("assignee", assignee);
+				vars.put("planType", d.getValue());
+				vars.put("current_user", UserUtils.getUser().getName());
+				// 创建并提交审核工作流程
+				String pi = actTaskService.startProcess(ActUtils.PD_WORKPLAN_AUDIT[0], ActUtils.PD_WORKPLAN_AUDIT[1],
+						workPlan.getId(), "工作计划审核", vars);
+				// 更新流程实例ID
+				dao.updateProcessInstanceId(workPlan.getId(), pi);
+				dao.updateWorkState(workPlan.getId(), DictUtils.getDictByValue("auditing", "work_state").getId());
+			}else{
+				dao.updateWorkState(workPlan.getId(), DictUtils.getDictByValue("pass", "work_state").getId());
+			}
 		}
 	}
 
+	@Transactional(readOnly = false)
+	public void assigne(WorkPlan workPlan) {
+		dao.updateWorkState(workPlan.getId(), DictUtils.getDictByValue("allocated", "work_state").getId());
+		if (workPlan.getFrequency() != null && !"".equals(workPlan.getFrequency())) {
+			createPlanChilds(workPlan);
+		}
+	}
+	
 	@Transactional(readOnly = false)
 	public void reject(WorkPlan workPlan) {
 		dao.reject(workPlan);
@@ -131,24 +147,22 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 			for (int i = 0; i < ids.length; i++) {
 				for (int j = 0; j < months.length; j++) {
 					WorkPlan child = workPlan.clone();
-					child.setName(child.getName() + "-" + months[j] + "月子任务");;
+					child.setName(child.getName() + "-" + months[j] + "月子任务");
+					;
 					child.setPlanType(DictUtils.getDictByValue(workPlan.getPlanType(), "type_plan").getId());
 					child.setParent(workPlan);
 					child.setParentIds(workPlan.getParentIds() + workPlan.getId() + ",");
 					child.setId(null);
 					child.setFrequency(months[j]);
 					child.getDepts().setId(ids[i]);
-					child.setWorkState(DictUtils.getDictByValue("submit", "work_state").getId());
+					child.setWorkState(workPlan.getWorkStateId());
 					save(child);
 				}
 			}
 		}
 	}
 
-	@Transactional(readOnly = false)
-	public void asigned(WorkPlan workPlan) {
-		dao.asigned(workPlan);
-	}
+	
 
 	/**
 	 * 受理工作

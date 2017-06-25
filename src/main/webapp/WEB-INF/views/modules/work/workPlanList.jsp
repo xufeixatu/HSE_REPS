@@ -56,8 +56,7 @@
 							return row.workStateId != '${fns:getDictByValue('unsubmit','work_state').id}';
 						},
 						pass:function(){
-							return row.workStateId == '0374ed53f5034055943e0381aca4c22a' && 
-							 	   row.endStateId == null;
+							return row.workStateId == '${fns:getDictByValue('pass','work_state').id}';
 						},
 						start_time:function(){
 							return row.startTime != null && row.startTime != "";
@@ -130,12 +129,24 @@
 	</div>
 	
 	<ul class="nav nav-tabs">
-		<li class="active"><a
-			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">新增${planTypeDict.label}列表</a></li>
-		<shiro:hasPermission name="work:workPlan:edit">
-			<li><a
-				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
-		</shiro:hasPermission>
+		<c:choose>
+		<c:when test="${myType eq 'responsible'}">
+			<li class="active"><a
+				href="#">我负责的工作列表</a></li>
+		</c:when>
+		<c:when test="${myType eq 'assigned'}">
+			<li class="active"><a
+				href="#">我分派的工作列表</a></li>
+		</c:when>
+		<c:otherwise>
+			<li class="active"><a
+				href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">新增${planTypeDict.label}列表</a></li>
+			<shiro:hasPermission name="work:workPlan:edit">
+				<li><a
+					href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
+			</shiro:hasPermission>
+		</c:otherwise>
+		</c:choose>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
 		action="${ctx}/work/workPlan/?planType=${planTypeDict.value}" method="post"
