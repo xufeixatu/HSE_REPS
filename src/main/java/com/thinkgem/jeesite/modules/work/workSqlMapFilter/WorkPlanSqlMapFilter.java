@@ -213,6 +213,23 @@ public class WorkPlanSqlMapFilter {
 			sqlMap.put("dsf", dsf.toString());
 		}
 	}
+	/**
+	 * 我负责的工作的过滤条件
+	 * @param workPlan
+	 * @param model
+	 */
+	public void typeMyWorkPlanFilterSqlMapDsf(WorkPlan workPlan, Model model) {
+		common(workPlan, model);
+
+		// 只看本人负责的数据
+		dsf.append(" and ");
+		dsf.append("a.person_liable_id = '");
+		dsf.append(UserUtils.getUser().getId());
+		dsf.append("' ");
+
+		// 将字符串加回到sqlMap.dsf属性
+		sqlMap.put("dsf", dsf.toString());
+	}
 
 	
 }

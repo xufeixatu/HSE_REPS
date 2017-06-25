@@ -98,6 +98,27 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workIndex";
 	}
 
+	/**
+	 * 我负责工作的列表
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = { "myResponsibleList"})
+	public String myResponsibleList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		// 根据责任人查询我负责的工作
+		WorkPlanSqlMapFilter.getFilter().typeMyWorkPlanFilterSqlMapDsf(workPlan, model);
+		
+		List<WorkPlan> list = workPlanService.findList(workPlan);
+
+		model.addAttribute("list", list);
+		model.addAttribute("myType","responsible");
+		return "modules/work/workPlanList";
+	}
+	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -113,22 +134,44 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workPlanList";
 	}
 
-	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = { "workList" })
-	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-		if ("personal".equals(workPlan.getPlanType())) {
-			WorkPlanSqlMapFilter.getFilter().typeliableFilter(workPlan, model);
-		} else if ("department".equals(workPlan.getPlanType())) {
-			WorkPlanSqlMapFilter.getFilter().typeDeptFilter(workPlan, model);
-		} else if ("company".equals(workPlan.getPlanType())) {
-			WorkPlanSqlMapFilter.getFilter().typeCompnayFilter(workPlan, model);
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = "save")
+	public String save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
+		// 保存当前工作类别（个人，公司，部门等类别）的数据字典对象
+		Dict planTypeDict = DictUtils.getDictByID(workPlan.getPlanType());
+		// 如何个人工作计划，直接把当前用户所在部门设置到工作计划中
+		if ("personal".equals(planTypeDict.getValue()) || "department".equals(planTypeDict.getValue()) || "action".equals(planTypeDict.getValue())) {
+			workPlan.setDepts(UserUtils.getUser().getOffice());
 		}
+		// 个人工作计划和个人行动计划的责任人是自己
+		if("personal".equals(planTypeDict.getValue()) || "action".equals(planTypeDict.getValue())){
+			workPlan.setPersonLiable(UserUtils.getUser());
+		}
+		if (!beanValidator(model, workPlan)) {
+			workPlan.setPlanType(planTypeDict.getValue());
+			return form(workPlan, model);
+		}
+		workPlanService.save(workPlan);
+		addMessage(redirectAttributes, "保存工作计划成功");
 
-		List<WorkPlan> list = workPlanService.findList(workPlan);
-
-		model.addAttribute("list", list);
-		return "modules/work/workPlanList";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage&planType=" + planTypeDict.getValue();
 	}
+//	@RequiresPermissions("work:workPlan:view")
+//	@RequestMapping(value = { "workList" })
+//	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+//		if ("personal".equals(workPlan.getPlanType())) {
+//			WorkPlanSqlMapFilter.getFilter().typeliableFilter(workPlan, model);
+//		} else if ("department".equals(workPlan.getPlanType())) {
+//			WorkPlanSqlMapFilter.getFilter().typeDeptFilter(workPlan, model);
+//		} else if ("company".equals(workPlan.getPlanType())) {
+//			WorkPlanSqlMapFilter.getFilter().typeCompnayFilter(workPlan, model);
+//		}
+//
+//		List<WorkPlan> list = workPlanService.findList(workPlan);
+//
+//		model.addAttribute("list", list);
+//		return "modules/work/workPlanList";
+//	}
 
 	/**
 	 * 进入受理工作表单
@@ -290,25 +333,7 @@ public class WorkPlanController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan/pending_list?playType=compnay";// "modules/work/exec/workPendingList";
 	}
 
-	@RequiresPermissions("work:workPlan:edit")
-	@RequestMapping(value = "submitPlan")
-	public String submitPlan(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-		
-		String[] ids = request.getParameterValues("ids");
-		if (ids != null && ids.length > 0) {
-			for (String id : ids) {
-				WorkPlan w = new WorkPlan();
-				w.setId(id);
-				workPlanService.submit_plan(w);// 提交计划
-			}
-		} else {
-			workPlanService.submit_plan(workPlan);// 提交计划
-		}
-		WorkPlan wp = new WorkPlan();
-		wp.setPlanType(workPlan.getPlanType());
-		
-		return list(wp, request, response, model);
-	}
+	
 
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "detail")
@@ -347,25 +372,25 @@ public class WorkPlanController extends BaseController {
 		model.addAttribute("workPlan", workPlan);
 		return "modules/work/exec/workPlanDetail";
 	}
-
+	
 	@RequiresPermissions("work:workPlan:edit")
-	@RequestMapping(value = "save")
-	public String save(WorkPlan workPlan, Model model, RedirectAttributes redirectAttributes) {
-		// 保存当前工作类别（个人，公司，部门等类别）的数据字典对象
-		Dict planTypeDict = DictUtils.getDictByID(workPlan.getPlanType());
-		// 如何个人工作计划，直接把当前用户所在部门设置到工作计划中
-		if ("personal".equals(planTypeDict.getValue()) || "department".equals(planTypeDict.getValue()) || "action".equals(planTypeDict.getValue())) {
-			workPlan.setDepts(UserUtils.getUser().getOffice());
+	@RequestMapping(value = "submitPlan")
+	public String submitPlan(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+		
+		String[] ids = request.getParameterValues("ids");
+		if (ids != null && ids.length > 0) {
+			for (String id : ids) {
+				WorkPlan w = new WorkPlan();
+				w.setId(id);
+				workPlanService.submit_plan(w);// 提交计划
+			}
+		} else {
+			workPlanService.submit_plan(workPlan);// 提交计划
 		}
-
-		if (!beanValidator(model, workPlan)) {
-			workPlan.setPlanType(planTypeDict.getValue());
-			return form(workPlan, model);
-		}
-		workPlanService.save(workPlan);
-		addMessage(redirectAttributes, "保存工作计划成功");
-
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage&planType=" + planTypeDict.getValue();
+		WorkPlan wp = new WorkPlan();
+		wp.setPlanType(workPlan.getPlanType());
+		
+		return list(wp, request, response, model);
 	}
 
 	/**

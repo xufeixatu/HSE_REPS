@@ -69,10 +69,9 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		Dict d = DictUtils.getDictByValue(workPlan.getPlanType(),"type_plan");
 		String planType = workPlan.getPlanType();
 		//如果时间为频次则创建子任务
-		if (workPlan.getFrequency() != null && !"".equals(workPlan.getFrequency())) {
+		
+		if (d.getValue().equals("personal") && workPlan.getFrequency() != null && !"".equals(workPlan.getFrequency())) {
 			createPlanChilds(workPlan);
-		}
-		if (d.getValue().equals("personal")) {
 			//如果个人工作计划无需审核，直接将结束状态修改为“处理中”
 			dao.updateWorkState(workPlan.getId(),DictUtils.getDictByValue("handing", "work_state").getId());
 		}else{
@@ -85,12 +84,12 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 					if(! currUser.getName().equals(currUser.getOffice().getPrimaryPerson().getName())){
 						assignee = currUser.getOffice().getPrimaryPerson().getName();
 					}else{
-						assignee = currUser.getOffice().getParent().getPrimaryPerson().getName();
+						assignee = OfficeUtil.getOfficeById(currUser.getOffice().getParent().getId()).getPrimaryPerson().getName();
 					}
 					break;
 				case "department":
 				case "company":
-					assignee = UserUtils.getUser().getOffice().getDeputyPerson().getName();
+					assignee = UserUtils.getUser().getOffice().getPrimaryPerson().getName();
 					break;
 				}
 			}else{
@@ -105,7 +104,7 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 			//创建并提交审核工作流程
 			String pi = actTaskService.startProcess(ActUtils.PD_WORKPLAN_AUDIT[0], ActUtils.PD_WORKPLAN_AUDIT[1], workPlan.getId(), "工作计划审核", vars);
 			//更新流程实例ID
-			dao.updateProcessInstanceId(workPlan,pi);
+			dao.updateProcessInstanceId(workPlan.getId(),pi);
 		}
 	}
 
