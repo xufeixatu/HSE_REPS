@@ -39,7 +39,7 @@
 			<include refid="trainCourseColumns"/>
 		FROM train_course a
 		<include refid="trainCourseJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.id = #{id} AND a.course_name IS NOT null
 	</select>
 	
 	<select id="findList" resultType="TrainCourse">
@@ -150,7 +150,7 @@
 	<update id="delete">
 		UPDATE train_course SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}A
+		WHERE id = #{id}
 	</update>
 	
 </mapper>

@@ -16,7 +16,6 @@
 	</sql>
 	
 	<sql id="courseCatelogJoins">
-	LEFT JOIN train_course tc ON tc.id = a.course_id
 	</sql>
     
 	<select id="get" resultType="CourseCatelog">
@@ -25,6 +24,14 @@
 		FROM course_catelog a
 		<include refid="courseCatelogJoins"/>
 		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByCourseId" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		WHERE a.course_id = #{courseId} 
 	</select>
 	
 	<select id="findList" resultType="CourseCatelog">

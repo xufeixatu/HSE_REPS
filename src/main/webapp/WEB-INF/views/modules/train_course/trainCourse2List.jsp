@@ -440,7 +440,6 @@
 					<li class="focus">
 						<a>星级评分</a>
 					</li>
-<!-- <<<<<<< HEAD -->
 					<div id="star">
 						<ul>
 							<li><a href="javascript:;">1</a><>
@@ -473,9 +472,11 @@
 		        		<ul><li>${trainCourse.courseDec}</li></ul>
 		        	</li>
 		        	<li>【课程大纲】
-		       	        <%-- 	<c:forEach items="${trainCourse.attachName}" var="videoName">
-		       	        		${videoName}
-		       	        	</c:forEach>  --%>
+	 		       	    <ol>
+	 		       	      	<c:forEach items="${courseCatelog}" var="courseCatelog">
+			       	        	<li>${courseCatelog.attachName}</li>
+			       	        </c:forEach>  
+						</ol>
 <%-- 		    这里是之前最开始使用的采用截取上传文件名的部分用来显示的代码，现在更改为可以为视频文件设置文件名，所以这段代码删除    
 						<ol>
 				        	<c:set var="testString" value="${trainCourse.docId}"/>
@@ -489,7 +490,7 @@
 									<c:forEach items="${videoId}" var="videoName" begin="8" >
 										<c:out value="${tools:urlDecode(videoName)}"></c:out>
 									</c:forEach>								
-								</li>
+								</li>		
 							</c:forTokens>				        		
 		        		</ol>--%> 
 		        	</li>
@@ -497,27 +498,20 @@
 		    </div>
 		    
 		  <div class="tab-pane fade" id="chapter">
-		  	<ul>		        
-				<c:set var="testString" value="${trainCourse.docId}"/>
-							
-				<c:forTokens items="${testString}" delims="|" var="videoHref">
+		  	<ul>	
+		  		<c:forEach items="${courseCatelog}" var="courseCatelog" varStatus="status">	        
 					<li>
-						<span class="chapter-time">5:20</span>
+						<span class="chapter-time">${status.index + 1}</span>
 						<span class="chapetr-item">
 							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
-							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
-								
-										<!-- 字符串截取获取最后的文件名，并显示 -->
-										<c:set var="videoHrefString" value="${videoHref}"/>													
-										<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
-										<c:forEach items="${videoId}" var="videoName" begin="8" >
-											<c:out value="${tools:urlDecode(videoName)}"></c:out>
-										</c:forEach>
+							<a href="${ctx}/train_course/trainCourse3/list?id=${courseCatelog.attachId}">	
+								${courseCatelog.attachName}
 							</a>
 						</span>
 						<span class="chapter-circle-finish"></span>
 						</li>
-				</c:forTokens>			
+					</c:forEach> 
+<%-- 				</c:forTokens>	 --%>		
 		       </ul>
 		   </div>
 		    		

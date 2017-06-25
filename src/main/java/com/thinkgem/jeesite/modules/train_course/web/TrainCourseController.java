@@ -80,6 +80,8 @@ public class TrainCourseController extends BaseController {
 		if (!beanValidator(model, trainCourse)){
 			return form(trainCourse, model);
 		}
+		
+		//在视频存储之前对于视频的格式进行转换
 		trainCourseService.videoConvert(trainCourse, httpServletRequest.getSession().getServletContext().getRealPath("/"));
 		trainCourseService.save(trainCourse);
 		addMessage(redirectAttributes, "保存培训课件上传与查看成功");

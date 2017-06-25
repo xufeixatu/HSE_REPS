@@ -16,11 +16,12 @@ public class VideoConvertUtils {
 	// 创建一个List集合来保存转换视频文件为flv格式的命令
 	List<String> convert = new ArrayList<String>();
 	
-	convert.add("F:/HSE2/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/HSE/tools/ffmpeg.exe");
+	/*convert.add(FileUtils.path("F:/HSE2/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/HSE/tools/ffmpeg.exe"));*/
+	convert.add(FileUtils.path(ffmpegPath));
 	convert.add("-i"); // 添加参数＂-i＂，该参数指定要转换的文件
-	convert.add("F:/HSE2/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4"); // 添加要转换格式的视频文件的路径
+	convert.add(FileUtils.path(Encodes.urlDecode(upFilePath))); // 添加要转换格式的视频文件的路径"
 	convert.add("-y"); // 添加参数＂-y＂，该参数指定将覆盖已存在的文件
-	convert.add("F:/HSE2/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/HSE/userfiles/1/files/train_course/trainCourse/2017/05/movie.mp4");
+	convert.add(FileUtils.path(Encodes.urlDecode(codcFilePath)));
 	/*convert.add(ffmpegPath); // 添加转换工具路径
 	convert.add("-i"); // 添加参数＂-i＂，该参数指定要转换的文件
 	convert.add(upFilePath); // 添加要转换格式的视频文件的路径
