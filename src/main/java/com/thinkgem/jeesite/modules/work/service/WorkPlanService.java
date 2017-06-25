@@ -16,6 +16,7 @@ import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.act.service.ActTaskService;
 import com.thinkgem.jeesite.modules.act.utils.ActUtils;
+import com.thinkgem.jeesite.modules.message.dao.UserDao;
 import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
@@ -34,11 +35,12 @@ import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
 @Service
 @Transactional(readOnly = true)
 public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
-
+	
 	private static final String String = null;
 	
 	@Autowired
 	private ActTaskService actTaskService = null;
+	
 
 	public WorkPlan get(String id) {
 		return super.get(id);
@@ -74,15 +76,16 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 			//如果个人工作计划无需审核，直接将结束状态修改为“处理中”
 			dao.updateWorkState(workPlan.getId(),DictUtils.getDictByValue("handing", "work_state").getId());
 		}else{
-			String assignee = UserUtils.get(workPlan.getCurrentAuditUse().getId()).getLoginName();
-			if(assignee == null  || "".equals(assignee)){
+			User user = workPlan.getCurrentAuditUse();//.getId()).getLoginName();
+			String assignee = null;
+			if(user == null){
 				switch (planType) {
 				case "action":
 					User currUser = UserUtils.getUser();
-					if(! currUser.getName().equals(currUser.getOffice().getDeputyPerson().getName())){
-						assignee = currUser.getOffice().getDeputyPerson().getName();
+					if(! currUser.getName().equals(currUser.getOffice().getPrimaryPerson().getName())){
+						assignee = currUser.getOffice().getPrimaryPerson().getName();
 					}else{
-						assignee = currUser.getOffice().getParent().getDeputyPerson().getName();
+						assignee = currUser.getOffice().getParent().getPrimaryPerson().getName();
 					}
 					break;
 				case "department":
@@ -90,6 +93,8 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 					assignee = UserUtils.getUser().getOffice().getDeputyPerson().getName();
 					break;
 				}
+			}else{
+				assignee = UserUtils.get(user.getId()).getLoginName();
 			}
 			
 			//非个人工作计划均创建工作流

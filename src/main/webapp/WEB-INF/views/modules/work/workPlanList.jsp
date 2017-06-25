@@ -50,12 +50,10 @@
 						dict: {
 						blank123:0}, pid: (root?0:pid), row: row,
 						edit:function(){
-							return row.workStateId != '45d756f45bb04155adb95e66b6a0d1c1' && 
-								   row.workStateId != '0374ed53f5034055943e0381aca4c22a';
+							return row.workStateId == '${fns:getDictByValue('unsubmit','work_state').id}';
 						},
 						no_edit:function(){
-							return row.workStateId == '45d756f45bb04155adb95e66b6a0d1c1' || 
-								   row.workStateId == '0374ed53f5034055943e0381aca4c22a';
+							return row.workStateId != '${fns:getDictByValue('unsubmit','work_state').id}';
 						},
 						pass:function(){
 							return row.workStateId == '0374ed53f5034055943e0381aca4c22a' && 
@@ -112,7 +110,7 @@
 			var o = $('#ex_' + id);
 			var s = $('#s_' + id);
 			if(o.attr('style') == "display:none"){
-				o.attr('style','display:block');
+				o.attr('style','display:table-row');
 				s.attr('src','/HSE/static/images/open.jpg');
 			}else{
 				o.attr('style','display:none');
@@ -240,7 +238,7 @@
 			{{#edit}}
    				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>
 				<a href="${ctx}/work/workPlan/delete?id={{row.id}}&planType=${planTypeDict.value}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
-				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}&planType=${planTypeDict.value}">添加子工作</a> 
+				<!--<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}&planType=${planTypeDict.value}">添加子工作</a> -->
 				<a href="${ctx}/work/workPlan/submitPlan?id={{row.id}}&planType=${planTypeDict.value}" onclick="return submitAll(this)">提交</a>				
 			{{/edit}}
 			{{#pass}}
@@ -252,7 +250,7 @@
 		<tr id="ex_{{row.id}}" style="display:none">
 			<td colspan="100">
 				<a href="#" style="font-weight:900px">最新交流</a><br/>
-				最新反馈消息：{{row.newFeedback}}<br/>
+				最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}}<br/>
 				单位：{{row.feebackPeopleId}} 反馈人：{{row.remain_dept_id}} 反馈时间：{{row.feedbackTime}}<br/>
 				
 				最新回复消息：{{row.newReply}}<br/>

@@ -358,7 +358,7 @@
 	<update id="delete">
 		UPDATE work_plan SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+		WHERE id = #{id} OR parent_ids LIKE CONCAT(CONCAT('%,',#{id}),',%')
 	</update>
 	
 	<update id="updateParentIds">

@@ -354,7 +354,7 @@ public class WorkPlanController extends BaseController {
 		// 保存当前工作类别（个人，公司，部门等类别）的数据字典对象
 		Dict planTypeDict = DictUtils.getDictByID(workPlan.getPlanType());
 		// 如何个人工作计划，直接把当前用户所在部门设置到工作计划中
-		if ("personal".equals(planTypeDict.getValue()) || "department".equals(planTypeDict.getValue())) {
+		if ("personal".equals(planTypeDict.getValue()) || "department".equals(planTypeDict.getValue()) || "action".equals(planTypeDict.getValue())) {
 			workPlan.setDepts(UserUtils.getUser().getOffice());
 		}
 
@@ -577,9 +577,10 @@ public class WorkPlanController extends BaseController {
 	@RequiresPermissions("work:workPlan:edit")
 	@RequestMapping(value = "delete")
 	public String delete(WorkPlan workPlan, RedirectAttributes redirectAttributes) {
+		
 		workPlanService.delete(workPlan);
 		addMessage(redirectAttributes, "删除工作计划成功");
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?repage";
+		return "redirect:" + Global.getAdminPath() + "/work/workPlan/?planType=" + workPlan.getPlanType() + "&repage";
 	}
 
 	@RequiresPermissions("work:workPlan:edit")
