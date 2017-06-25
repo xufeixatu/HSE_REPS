@@ -7,7 +7,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,8 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
 import com.thinkgem.jeesite.modules.train_course.service.TrainCourseService;
@@ -81,7 +80,8 @@ public class TrainCourseController extends BaseController {
 		if (!beanValidator(model, trainCourse)){
 			return form(trainCourse, model);
 		}
-		trainCourseService.vedioConvert(trainCourse, httpServletRequest.getSession().getServletContext().getRealPath("/"));
+		trainCourseService.videoConvert(trainCourse, httpServletRequest.getSession().getServletContext().getRealPath("/"));
+		
 		trainCourseService.save(trainCourse);
 		addMessage(redirectAttributes, "保存培训课件上传与查看成功");
 		return "redirect:"+Global.getAdminPath()+"/train_course/trainCourse/?repage";

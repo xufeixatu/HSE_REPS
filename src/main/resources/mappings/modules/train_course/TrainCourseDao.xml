@@ -23,19 +23,15 @@
 		a.del_flag AS "delFlag",
 		a.unused_1 AS "unused1",
 		a.unused_2 AS "unused2",
-		a.unused_3 AS "unused3"<!-- ,
+		a.unused_3 AS "unused3",
 		cct.course_id AS "courseId",
 		cct.attach_name AS "attachName",
-<<<<<<< HEAD
 		cct.attach_id AS "attachId",
 		a.grade_count AS "gradeCount"
-=======
-		cct.attach_id AS "attachId" -->
-<!-- >>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git -->
 	</sql>
 	
 	<sql id="trainCourseJoins">
-	  <!--   LEFT JOIN COURSE_CATELOG cct ON cct.course_id = a.id -->
+	     LEFT JOIN COURSE_CATELOG cct ON cct.course_id = a.id 
 	</sql>
     
 	<select id="get" resultType="TrainCourse">
@@ -147,7 +143,8 @@
 			course_time = #{courseTime},
 			upload_by = #{uploadBy},
 			upload_time = #{uploadTime},
-			grade_count=#{gradeCount}
+			grade_count=#{gradeCount},
+			course_grade=#{courseGrade}
 		WHERE id = #{id}
 	</update>
 	

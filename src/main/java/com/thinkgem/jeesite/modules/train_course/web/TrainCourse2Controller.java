@@ -92,21 +92,8 @@ public class TrainCourse2Controller extends BaseController {
 		CourseStudy courseStudy =  new CourseStudy();
 		courseStudy.setCourseId(trainCourse.getId());
 		courseStudy.setCreateBy(UserUtils.getUser());
-		System.out.println("===============================");
+		System.out.println(courseStudy.getCourseId());
 		model.addAttribute("courseStudy", courseStudyService.findByCourseIdAndUserId(courseStudy));
-		System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-//=======
-//		Page<CourseReview> page1 = courseReviewService.findPage(new Page<CourseReview>(request, response), courseReview); 
-//		courseReview.setAssessById(UserUtils.getUser().getName());
-//		Date upload_time = new Date();
-//		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		dateFormat.format(upload_time);
-//		courseReview.setAssessTime(upload_time);
-//		
-//		courseReview.setCourseId(trainCourse.getId());
-//		model.addAttribute("courseReview", courseReview);
-//		model.addAttribute("page1", page1);
-//>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git
 		return "modules/train_course/trainCourse2List";
 	}
 
@@ -114,7 +101,6 @@ public class TrainCourse2Controller extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(TrainCourse trainCourse, Model model) {
 		model.addAttribute("trainCourse", trainCourse);
-		//model.addAttribute("courseReview", courseReview);
 		return "modules/train_course/trainCourse2Form";
 	}
 
