@@ -80,12 +80,20 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	public void  analyse(RiskAccess riskAccess) {
 		RiskSaferesult riskSaferesult=null;
 		riskAccess=get(riskAccess.getId());
-	
 		riskSaferesult=riskSaferesultDao.get(riskAccess.getAccessid());
-		
-		riskAccess.setLscore(riskSaferesult.getLscore());
-		riskAccess.setEscore(riskSaferesult.getEscore());
-		riskAccess.setCscore(riskSaferesult.getCscore());
+	   
+		if(riskSaferesult!=null){
+			riskAccess.setLscore(riskSaferesult.getLscore());
+			riskAccess.setEscore(riskSaferesult.getEscore());
+			riskAccess.setCscore(riskSaferesult.getCscore());
+			
+		}else{
+			RiskEnvirresult en = envirresultDao.get(riskAccess.getAccessid());
+			riskAccess.setMlscore("1");
+			riskAccess.setMscore(en.getMscore());
+			riskAccess.setEscore(en.getLscore());
+			riskAccess.setSscore(en.getSscore());
+		}
 
 		//return riskAccess;
 	}
@@ -106,10 +114,9 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	@Transactional(readOnly = false)
 	public void doLEC(RiskAccess riskAccess) {
 		
-		String lscore = riskAccess.getLscore();
-		lscore=lscore.substring(0,lscore.length()-1);
-		String escore = riskAccess.getEscore();
-		String cscore = riskAccess.getCscore();
+		String lscore = riskAccess.getLscore().replace(",", "");
+		String escore = riskAccess.getEscore().replace(",", "");
+		String cscore = riskAccess.getCscore().replace(",", "");
 		float dscore = 0;
 		if (lscore != null && escore != null && cscore != null && !lscore.isEmpty() && !escore.isEmpty()
 				&& !cscore.isEmpty()) {
