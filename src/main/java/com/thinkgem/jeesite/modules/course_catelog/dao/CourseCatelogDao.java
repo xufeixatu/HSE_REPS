@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.course_catelog.dao;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.course_catelog.entity.CourseCatelog;
@@ -15,5 +17,5 @@ import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
  */
 @MyBatisDao
 public interface CourseCatelogDao extends CrudDao<CourseCatelog> {
-	CourseCatelog getByCourseId(CourseCatelog courseCatelog);
+	List<CourseCatelog> findListByCourseId(CourseCatelog courseCatelog);
 }

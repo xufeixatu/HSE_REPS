@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.course_catelog.entity.CourseCatelog;
-import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
 import com.thinkgem.jeesite.modules.course_catelog.dao.CourseCatelogDao;
 
 /**
@@ -47,7 +46,7 @@ public class CourseCatelogService extends CrudService<CourseCatelogDao, CourseCa
 		super.delete(courseCatelog);
 	}
 		
-	public CourseCatelog findByCourseId(CourseCatelog courseCatelog) {
-		return super.dao.getByCourseId(courseCatelog);
+	public List<CourseCatelog> findListByCourseId(CourseCatelog courseCatelog) {
+		return super.dao.findListByCourseId(courseCatelog);
 	}
 }

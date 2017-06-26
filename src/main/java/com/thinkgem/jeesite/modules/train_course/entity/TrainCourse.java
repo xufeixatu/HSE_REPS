@@ -41,8 +41,8 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	private List<CourseCatelog> CourseCatelogList = Lists.newArrayList();		// 子表列表
 /*	private String courseId;		// 课程id
 	private String attachName;		// 附件名称
-	private String attachId;		// 附件id
-*/	
+*/	private String attachId;		// 附件id
+	
 	
 	public int getGradeCount() {
 		return gradeCount;
@@ -221,6 +221,14 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 
 	public void setCourseCatelogList(List<CourseCatelog> CourseCatelogList) {
 		this.CourseCatelogList = CourseCatelogList;
+	}
+
+	public String getAttachId() {
+		return attachId;
+	}
+
+	public void setAttachId(String attachId) {
+		this.attachId = attachId;
 	}
 
 	

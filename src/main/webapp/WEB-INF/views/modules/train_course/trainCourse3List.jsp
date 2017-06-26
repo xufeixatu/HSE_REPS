@@ -154,8 +154,8 @@
 	    <li><a href="#">培训管理</a></li>
 	    <li>>></li>
 	    <li class="active"><a href="#">查看课件</a></li>
-	    <li>>></li>
-	    <li class="active">${trainCourse.courseName}</li>
+<!-- 	    <li>>></li>
+	    <li class="active" type = "hidden" >trainCourse.courseName</li> -->
 	</ol>
 	<!-- 播放视频 -->
 			<div id="a1"></div>
@@ -168,7 +168,7 @@
 					e:1,
 					i:'http://www.ckplayer.com/static/images/cqdw.jpg'
 					};
-				/* var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always'};//这里定义播放器的其它参数如背景色（跟flashvars中的b不同），是否支持全屏，是否支持交互 */
+				 var params={bgcolor:'#FFF',allowFullScreen:true,allowScriptAccess:'always'};//这里定义播放器的其它参数如背景色（跟flashvars中的b不同），是否支持全屏，是否支持交互 
 				var video=['http://img.ksbbs.com/asset/Mon_1605/0ec8cc80112a2d6.mp4->video/mp4'];
 				var support=['all'];
 				CKobject.embedHTML5('a1','ckplayer_a1',1100,500,video,flashvars,support);				
@@ -181,27 +181,18 @@
 		</p>   
 	 	<div id="chapter">
 	        <ul>		        
-				<c:set var="testString" value="${trainCourse.docId}"/>
-						
-				<c:forTokens items="${testString}" delims="|" var="videoHref">
+				<c:forEach items="${courseCatelog}" var="courseCatelog" varStatus="status">	        
 					<li>
-						<span  id="chapterTime" class="chapter-time"></span>
-						<!-- <input type="button" onclick="getTotalTime()" name="clickme"/> -->
+						<span class="chapter-time">${status.index + 1}</span>
 						<span class="chapetr-item">
-						<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
-						<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
-							
-								<!-- 字符串截取获取最后的文件名，并显示 -->
-								<c:set var="videoHrefString" value="${videoHref}"/>													
-								<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
-								<c:forEach items="${videoId}" var="videoName" begin="8" >
-									${videoName}
-								</c:forEach>
+							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
+							<a href="${ctx}/train_course/trainCourse3/list?id=${courseCatelog.id}">	
+								${courseCatelog.attachName}
 							</a>
 						</span>
 						<span class="chapter-circle-finish"></span>
 					</li>
-				</c:forTokens>			
+				</c:forEach> 
 	        </ul>
 	    </div>
 	</div>

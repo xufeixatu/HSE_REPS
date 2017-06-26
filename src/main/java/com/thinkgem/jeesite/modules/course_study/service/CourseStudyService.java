@@ -3,7 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.course_study.service;
 
-//<<<<<<< HEAD
+
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
 import com.thinkgem.jeesite.modules.train_course.dao.TrainCourseDao;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
-import com.thinkgem.jeesite.modules.train_course.service.TrainCourseService;
 import com.thinkgem.jeesite.modules.course_study.dao.CourseStudyDao;
 
 /**

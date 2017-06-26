@@ -34,7 +34,7 @@
 		WHERE a.course_id = #{courseId} 
 	</select>
 	
-	<select id="findList" resultType="CourseCatelog">
+<!-- 		<select id="findList" resultType="CourseCatelog">
 		SELECT 
 			<include refid="courseCatelogColumns"/>
 		FROM course_catelog a
@@ -46,6 +46,53 @@
 			</if>
 			<if test="trainCourse != null and trainCourse.id != null and trainCourse.id != ''">
 				AND a.course_id = #{trainCourse.id}
+			</if>
+			<if test="attachId != null and attachId != ''">
+				AND a.attach_id = #{attachId} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select> -->
+	<select id="findListByCourseId" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="courseId != null and courseId != ''">
+				AND a.course_id = #{courseId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findList" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="attachName != null and attachName != ''">
+				AND a.attach_name = #{attachName}
+			</if>
+			<if test="courseId != null and courseId != ''">
+				AND a.course_id = #{courseId}
 			</if>
 			<if test="attachId != null and attachId != ''">
 				AND a.attach_id = #{attachId} 

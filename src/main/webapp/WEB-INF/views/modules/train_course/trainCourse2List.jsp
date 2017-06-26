@@ -435,7 +435,7 @@
 			<div class="course-detail-text-operate">
 				<ul>
 					<li class="continue">
-						<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}"   class="btn btn-success">继续学习</a>
+						<a href="${ctx}/course_catelog/courseCatelog/list?id=${trainCourse.id}"   class="btn btn-success">继续学习</a>
 					</li>
 					<li class="focus">
 						<a>星级评分</a>
@@ -504,7 +504,8 @@
 						<span class="chapter-time">${status.index + 1}</span>
 						<span class="chapetr-item">
 							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
-							<a href="${ctx}/train_course/trainCourse3/list?id=${courseCatelog.attachId}">	
+							<a href="${ctx}/course_catelog/courseCatelog/list?id=${courseCatelog.id}">	
+<%-- 							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">	 --%>
 								${courseCatelog.attachName}
 							</a>
 						</span>

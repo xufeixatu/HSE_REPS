@@ -123,6 +123,10 @@ public class TrainCourseService extends CrudService<TrainCourseDao, TrainCourse>
 			// 获取配置的转换工具（ffmpeg.exe）的存放路径
 			String ffmpegPath = ServletRealPath  + "\\tools\\ffmpeg.exe";	
 			
+			//获取视频时长
+			/*courseCatelog.setRemarks(videoDuarationUtils.getVideoTime(filePath, ffmpegPath));
+			*/
+			
 			//转码
 			try {
 				boolean flag = VideoConvertUtils.executeCodecs(ffmpegPath, filePath, codcFilePath);

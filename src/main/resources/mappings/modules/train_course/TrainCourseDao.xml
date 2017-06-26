@@ -39,7 +39,7 @@
 			<include refid="trainCourseColumns"/>
 		FROM train_course a
 		<include refid="trainCourseJoins"/>
-		WHERE a.id = #{id} AND a.course_name IS NOT null
+		WHERE a.id = #{id}
 	</select>
 	
 	<select id="findList" resultType="TrainCourse">
