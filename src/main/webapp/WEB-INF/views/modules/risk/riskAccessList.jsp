@@ -38,7 +38,7 @@
 <body>
 
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/risk/riskAccess/">健康安全辨识汇总</a></li>
+		<li class="active"><a href="${ctx}/risk/riskAccess/list?riskType=0">健康安全辨识汇总</a></li>
 	</ul>
 	<div id="importBox" class="hide">
 		<form id="importForm" action="${ctx}/risk/riskAccess/import" method="post" enctype="multipart/form-data"
@@ -80,7 +80,7 @@
 			<li><label>场所、设备：</label>
 				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
-			<li><label>是否重大风险：</label>
+			<li><label>是否重大：</label>
 				<form:radiobuttons path="isHeaverisk" items="${fns:getDictList('risk_heave_flag')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 			</li>
 			<li><label>风险等级：</label>

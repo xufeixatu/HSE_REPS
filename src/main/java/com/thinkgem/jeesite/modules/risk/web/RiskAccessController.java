@@ -110,6 +110,8 @@ public class RiskAccessController extends BaseController {
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
 			return "redirect:" + adminPath + "/risk/riskAccess/list?repage";
 		}
+		if(!riskAccess.getYears().equals("")){
+			
 		
 		try {
 			int successNum = 0;
@@ -117,19 +119,22 @@ public class RiskAccessController extends BaseController {
 			StringBuilder failureMsg = new StringBuilder();
 			List<RiskAccess> list =riskAccessService.findList(riskAccess);
 			if(list.isEmpty()){
-				addMessage(redirectAttributes, riskAccess.getYears()+"年份的风险为空");				
+				failureMsg.append(","+riskAccess.getYears()+"年份的风险为空!");			
 			}else{
 				for (RiskAccess risk :list) {
-					RiskAccess temp=new RiskAccess();
-					temp.setYears(riskAccess.getYears());
-					temp.setNumber(riskAccess.getNumber());
-					if(risk.getNumber()!=null&&riskAccessService.findList(temp).get(0).getYears().equals(risk.getNumber())){
+					 RiskAccess tmp = new RiskAccess();
+					 tmp.setYears(riskAccessService.getYears());
+					 tmp.setNumber(risk.getNumber());
+					if(!riskAccessService.findList(tmp).isEmpty()){
 						failureMsg.append("</br>编号为"+risk.getNumber()+"的风险已经存在");
 						failureNum++;
 					}else{
-						risk.setYears(riskAccessService.getYears());
-						risk.setId(null);
-						riskAccessService.addSave(risk);
+						risk.preInsert();
+						risk.setIsNewRecord(true);
+						risk.setAccessid(null);
+						risk.setRecognizeDate(new Date());
+						
+						riskAccessService.save(risk);
 						successNum++;
 					}
 				}
@@ -142,8 +147,10 @@ public class RiskAccessController extends BaseController {
 				addMessage(redirectAttributes, "导入往年失败！失败信息：" + e.getMessage());
 			}
 		
-		
-		return "redirect:" + adminPath + "/risk/riskAccess/list?repage";
+		}else{
+			addMessage(redirectAttributes, "导入往年失败！请选择年份" );
+		}
+		return "redirect:" + adminPath + "/risk/riskAccess/list?riskType"+riskAccess.getRiskType();
 	}
 	/**
 	 * 导入关键环节数据
@@ -152,11 +159,12 @@ public class RiskAccessController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "import", method = RequestMethod.POST)
-	public String importFile(MultipartFile file, RedirectAttributes redirectAttributes) {
+	public String importFile(MultipartFile file, RedirectAttributes redirectAttributes,HttpServletRequest request) {
 		if (Global.isDemoMode()) {
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
 			return "redirect:" + adminPath + "/risk/riskAccess/list?repage";
 		}
+		String riskType=request.getParameter("riskType");
 		try {
 			int successNum = 0;
 			int failureNum = 0;
@@ -168,17 +176,23 @@ public class RiskAccessController extends BaseController {
 					if (risk.getPlaceDevice().isEmpty()) {
 						failureMsg.append("<br/>设备物料不能为空");
 						failureNum++;
-					} else if (risk.getWorkName().isEmpty())  {
+					} 
+					if (risk.getWorkName().isEmpty())  {
 						failureMsg.append("<br/>作业活动名称/活动、物料、产品、服务不能为空");
 						failureNum++;
-					}else if (risk.getRiskFactors().isEmpty())  {
+					}
+					if (risk.getRiskFactors().isEmpty())  {
 						failureMsg.append("<br/>危害因素不能为空");
 						failureNum++;
-					}else{
-						risk.setRiskType("0");
-						riskAccessService.save(risk);
-						successNum++;
 					}
+					if("1".equals(riskType)){
+						risk.setRiskType("1");
+					}else{
+						risk.setRiskType("0");						
+					}
+					riskAccessService.save(risk);
+					successNum++;
+					
 				} catch (ConstraintViolationException ex) {
 					failureMsg.append("<br/>风险 " +risk.getWorkName() + " 导入失败：");
 					List<String> messageList = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
@@ -274,10 +288,15 @@ public class RiskAccessController extends BaseController {
 		if (!beanValidator(model, riskAccess)){
 			return form(riskAccess, model);
 		}
-	        
+		riskAccess.preInsert();
+		if("".equals(riskAccess.getMlscore())){
+			riskAccessService.doLEC(riskAccess);
+		}else{
+			riskAccessService.doMS(riskAccess);
+		}
 		riskAccessService.addSave(riskAccess);
 		addMessage(redirectAttributes, "保存风险成功");
-		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/?repage";
+		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/list?riskType="+riskAccess.getRiskType();
 	}
 	
 	@RequiresPermissions("risk:riskAccess:edit")

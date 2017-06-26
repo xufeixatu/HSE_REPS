@@ -5,6 +5,9 @@ package com.thinkgem.jeesite.modules.risk.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 //import org.hibernate.validator.constraints.Length(min=0, max=255, message="风险名称;
 import com.thinkgem.jeesite.common.annotation.FieldName;
@@ -53,6 +56,28 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	private String escore;		// E得分
 	private String cscore;		// C得分
 	
+	private String mlscore;		// L得分
+	private String mscore;		// M得分
+	private String sscore;		// S得分
+	
+	public String getMlscore() {
+		return mlscore;
+	}
+	public void setMlscore(String mlscore) {
+		this.mlscore = mlscore;
+	}
+	public String getMscore() {
+		return mscore;
+	}
+	public void setMscore(String mscore) {
+		this.mscore = mscore;
+	}
+	public String getSscore() {
+		return sscore;
+	}
+	public void setSscore(String sscore) {
+		this.sscore = sscore;
+	}
 	public String getLscore() {
 		return lscore;
 	}
@@ -142,6 +167,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 		this.category = category;
 	}
 	@ExcelField(title="场所、设备")
+	@NotNull(message="场所、设备不能为空")
 	@Length(min=0, max=255, message="场所、设备长度必须介于 0 和 255 之间")
 	public String getPlaceDevice() {
 		return placeDevice;
@@ -159,6 +185,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setRiskName(String riskName) {
 		this.riskName = riskName;
 	}
+	@NotNull(message="作业活动名称/活动、物料、产品不能为空")
 	@ExcelField(title="作业活动名称/活动、物料、产品")
 	@Length(min=0, max=255, message="作业活动名称/活动、物料、产品、服务长度必须介于 0 和 255 之间")
 	public String getWorkName() {
