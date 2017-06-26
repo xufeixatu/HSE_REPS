@@ -6,6 +6,24 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$("#btnExport").click(function(){
+				top.$.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){
+					if(v=="ok"){
+						$("#searchForm").attr("action","${ctx}/risk/riskAccess/excel");
+						$("#searchForm").submit();
+					}
+				},{buttonsFocus:1});
+				top.$('.jbox-body .jbox-icon').css('top','55px');
+			});
+			
+			$("#btnImport").click(function(){
+				$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
+					bottomText:"导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！"});
+			});
+			$("#btnImportHistroy").click(function(){
+				$.jBox($("#importBox2").html(), {title:"导入历史数据", buttons:{"关闭":true}, 
+					bottomText:"导入历史数据，请选择年份！"});
+			});
 			
 		});
 		function page(n,s){
@@ -19,12 +37,30 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/risk/riskAccess/"> 环境因素识别汇总</a></li>
-		<li ><a href="${ctx}/risk/riskAccess/exceltemplate">模板下载</a></li>
-		<li ><a href="${ctx}/risk/riskAccess/excelinput">关键环节导入</a></li>
 	</ul>
+	<div id="importBox" class="hide">
+		<form id="importForm" action="${ctx}/risk/riskAccess/import" method="post" enctype="multipart/form-data"
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+			<input  name="riskType" type="hidden" value="1"/>
+			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+			<a href="${ctx}/risk/riskAccess/exceltemplate">下载模板</a>
+		</form>
+	</div>
+	<div id="importBox2" class="hide">
+		<form:form id="importForm2"   modelAttribute="riskAccess"  action="${ctx}/risk/riskAccess/importHistroy" method="post" 
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入年度风险，请稍等...');"><br/>
+			<input  name="riskType" type="hidden" value="1"/>
+			<input id="years"  name="years"  type="text" readonly="readonly" maxlength="20" class="input-medium Wdate" style="width:163px;"
+				value="<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>"
+					onclick="WdatePicker({dateFmt:'yyyy'});"/>
+			<input id="btnImportHistorySubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+		</form:form>
+	</div>
 	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+		<input  name="riskType" type="hidden" value="1"/>
 		<ul class="ul-form">
 			<li><label>编号：</label>
 				<form:input path="number" htmlEscape="false" maxlength="255" class="input-medium"/>
@@ -41,7 +77,20 @@
 			<li><label>场所、设备：</label>
 				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
+			<li><label>是否重大：</label>
+				<form:radiobuttons path="isHeaverisk" items="${fns:getDictList('risk_heave_flag')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+			</li>
+			<li><label>风险等级：</label>
+				<form:select path="riskLevel" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('risk_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
+				<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
+				<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
+				<input id="btnImport" class="btn btn-primary" type="button" value="导入关键环节"/>
+				<input id="btnImportHistroy" class="btn btn-primary" type="button" value="导入往年"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
@@ -58,7 +107,6 @@
 				<th>可能产生的环境影响</th>
 				<th>时态</th>
 				<th>状态</th>
-				<th>当前处理现状与排向</th>
 				<th>是非判断</th>
 				<th>评价等级</th>
 				<th>是否重要环境因素</th>
@@ -69,7 +117,7 @@
 		<c:forEach items="${page.list}" var="riskAccess">
 			<tr>
 				<td><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">
-					<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>
+					${riskAccess.years}
 				</a></td>
 				<td>
 					${riskAccess.unit}

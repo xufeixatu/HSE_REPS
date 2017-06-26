@@ -106,8 +106,8 @@
 			</div>
 		</div>
 		
-		<div class="control-group">
-			<label class="control-label">评价方式：</label>
+			<div class="control-group">
+			<label class="control-label">评价方法：</label>
 			<div class="controls" >
 				<span><input  name="judgeMethod" type="radio" checked="checked" ><label for="judgeMethod1">LEC</label></span>
 				<span><input  name="judgeMethod" type="radio"  ><label for="judgeMethod2">MS</label></span>
@@ -132,66 +132,83 @@
 	    </script>
 
 		<!-- 	lec法则  开始-->
-
-		<div id="lec" class="control-group"  hidden="hidden">
-			<div class="control-group">
-				<label class="control-label">L(可能性)</label>
-				<div class="controls">
-					<form:select path="lscore" class="input-xlarge ">
-						<form:option value="" label="" />
-						<form:options items="${fns:getDictList('risk_lscore')}"
-							itemLabel="label" itemValue="value" htmlEscape="false" />
-					</form:select>
-				</div>
-				<label class="control-label">E(频繁程度)</label>
-				<div class="controls">
-					<form:select path="escore" class="input-xlarge ">
-						<form:option value="" label="" />
-						<form:options items="${fns:getDictList('risk_escore')}"
-							itemLabel="label" itemValue="value" htmlEscape="false" />
-					</form:select>
-				</div>
-				<label class="control-label">C(可能导致后果)</label>
-				<div class="controls">
-					<form:select path="cscore" class="input-xlarge ">
-						<form:option value="" label="" />
-						<form:options items="${fns:getDictList('risk_cscore')}"
-							itemLabel="label" itemValue="value" htmlEscape="false" />
-					</form:select>
-				</div>
-			</div>
+	<div id="lec" class="control-group"  hidden="hidden"  >
+			<table style="width: 500px;" class="table  table-striped table-hover table-bordered">				
+				<thead class="controls">
+					<tr>
+						<th>	<label class="control-label">L(可能性)</label></th>
+						<th>	<label class="control-label">E(频繁程度)</label></th>
+						<th>	<label class="control-label">C(可能导致后果)</label></th>
+					</tr>
+				</thead>
+				<tbody class="controls">
+					<tr>
+						<td>
+							<form:select path="lscore" class="input-xlarge ">
+								<form:option value="" label="" />
+								<form:options items="${fns:getDictList('risk_lscore')}"
+									itemLabel="label" itemValue="value" htmlEscape="false" />
+							</form:select>
+						</td>
+						<td>
+							<form:select path="escore" class="input-xlarge ">
+								<form:option value="" label="" />
+								<form:options items="${fns:getDictList('risk_escore')}"
+									itemLabel="label" itemValue="value" htmlEscape="false" />
+							</form:select>
+						</td>
+						<td>
+							<form:select path="cscore" class="input-xlarge ">
+								<form:option value="" label="" />
+								<form:options items="${fns:getDictList('risk_cscore')}"
+									itemLabel="label" itemValue="value" htmlEscape="false" />
+							</form:select>
+						</td>
+					</tr>
+	
+				</tbody>
+			</table>
 		</div>
-		<!-- LEC法则结束 -->
-		<!-- ms法则 -->
-		<div id="ms" class="control-group" hidden="hidden">
-			<div class="control-group">
-				<label class="control-label">L(事故发生可能性)</label>
-				<div class="controls">
-					<form:select path="lscore" class="input-xlarge ">
-						<form:option value="" label="" />
-						<form:options items="${fns:getDictList('risk_lscore')}"
-							itemLabel="label" itemValue="value" htmlEscape="false" />
-					</form:select>
-				</div>
-				<label class="control-label">M(控制措施的状态)</label>
-				<div class="controls">
-					<form:select path="escore" class="input-xlarge ">
-						<form:option value="" label="" />
-						<form:options items="${fns:getDictList('risk_mscore')}"
-							itemLabel="label" itemValue="value" htmlEscape="false" />
-					</form:select>
-				</div>
-				<label class="control-label">S(事故后果)</label>
-				<div class="controls">
-					<form:select path="cscore" class="input-xlarge ">
-						<form:option value="" label="" />
-						<form:options items="${fns:getDictList('risk_sscore')}"
-							itemLabel="label" itemValue="value" htmlEscape="false" />
-					</form:select>
-				</div>
-			</div>
+	<!-- 	lec法则  结束-->
+	<!-- 	ms法则  开始-->
+	<div id="ms" class="control-group"  hidden="hidden"  >
+			<table style="width: 500px;" class="table  table-striped table-hover table-bordered">				
+				<thead class="controls">
+					<tr>
+						<th><label class="control-label">L(事故发生可能性)</label></th>
+						<th><label class="control-label">M(控制措施的状态)</label></th>
+						<th><label class="control-label">S(事故后果)</label></th>
+					</tr>
+				</thead>
+				<tbody class="controls">
+					<tr>
+						<td>
+							<form:select path="lscore" class="input-xlarge ">
+								<form:option value="" label="" />
+								<form:options items="${fns:getDictList('risk_lscore')}"
+									itemLabel="label" itemValue="value" htmlEscape="false" />
+							</form:select>
+						</td>
+						<td>
+							<form:select path="mscore" class="input-xlarge ">
+								<form:option value="" label="" />
+								<form:options items="${fns:getDictList('risk_mscore')}"
+								itemLabel="label" itemValue="value" htmlEscape="false" />
+							</form:select>
+						</td>
+						<td>
+							<form:select path="sscore" class="input-xlarge ">
+								<form:option value="" label="" />
+								<form:options items="${fns:getDictList('risk_sscore')}"
+								itemLabel="label" itemValue="value" htmlEscape="false" />
+							</form:select>
+						</td>
+					</tr>
+	
+				</tbody>
+			</table>
 		</div>
-		<!-- ms法则结束 -->
+	<!-- 	ms法则  结束-->
 	
 		<div class="form-actions">
 			<shiro:hasPermission name="risk:riskAccess:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
