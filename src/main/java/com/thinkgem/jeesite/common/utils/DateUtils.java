@@ -3,7 +3,9 @@
  */
 package com.thinkgem.jeesite.common.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -168,6 +170,30 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 		long beforeTime = before.getTime();
 		long afterTime = after.getTime();
 		return (afterTime - beforeTime) / (1000 * 60 * 60 * 24);
+	}
+	
+	/**
+	 * 获得当前的日期
+	 * @return
+	 */
+	public static Date getCurrTime(){
+		Calendar calendar = Calendar.getInstance();
+		return calendar.getTime();
+	}
+	
+	/**
+	 * 日期转换成字符串
+	 * 
+	 * @param date
+	 * @return str
+	 */
+	public static String DateToStr(DateFormat format, Date date) {
+
+		String str = "";
+		if(date != null){
+			str = format.format(date);
+		}
+		return str;
 	}
 	
 	/**

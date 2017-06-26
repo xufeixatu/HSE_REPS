@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="problem_report" name="问题上报处理流程" isExecutable="true">
+    <startEvent id="problem_report_start" name="上报问题" activiti:initiator="problem_report_apply" activiti:formKey="/check/question/form"></startEvent>
+    <userTask id="problem_report_audit" name="部门负责人审核" activiti:assignee="${userId}">
+      <documentation>部门负责人审核</documentation>
+    </userTask>
+    <exclusiveGateway id="sid_audit_01"></exclusiveGateway>
+    <userTask id="problem_report_modify" name="上报问题修改" activiti:assignee="${userId}"></userTask>
+    <userTask id="problem_report_audit01" name="受检单位负责人受理问题" activiti:assignee="${userId}"></userTask>
+    <userTask id="problem_report_audit02" name="整改问题" activiti:assignee="${userId}"></userTask>
+    <userTask id="problem_report_audit03" name="验证整改结果" activiti:assignee="${userId}"></userTask>
+    <exclusiveGateway id="sid_audit_03"></exclusiveGateway>
+    <endEvent id="problem_report_end" name="问题关闭"></endEvent>
+    <exclusiveGateway id="sid_audit_02"></exclusiveGateway>
+    <sequenceFlow id="sid_01" sourceRef="problem_report_start" targetRef="problem_report_audit"></sequenceFlow>
+    <sequenceFlow id="sid_03" sourceRef="sid_audit_01" targetRef="problem_report_modify">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid_04" sourceRef="problem_report_modify" targetRef="sid_audit_02"></sequenceFlow>
+    <sequenceFlow id="sid_02" sourceRef="problem_report_audit" targetRef="sid_audit_01"></sequenceFlow>
+    <sequenceFlow id="sid_07" sourceRef="sid_audit_01" targetRef="problem_report_audit01">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid_12" name="整改通过" sourceRef="sid_audit_03" targetRef="problem_report_end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid_11" name="整改不通过" sourceRef="sid_audit_03" targetRef="problem_report_audit02">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid_10" sourceRef="problem_report_audit03" targetRef="sid_audit_03"></sequenceFlow>
+    <sequenceFlow id="sid_09" sourceRef="problem_report_audit02" targetRef="problem_report_audit03"></sequenceFlow>
+    <sequenceFlow id="sid_08" sourceRef="problem_report_audit01" targetRef="problem_report_audit02"></sequenceFlow>
+    <sequenceFlow id="sid_06" name="关闭问题" sourceRef="sid_audit_02" targetRef="problem_report_end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid_05" name="重新上报" sourceRef="sid_audit_02" targetRef="problem_report_audit">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass==1}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_problem_report">
+    <bpmndi:BPMNPlane bpmnElement="problem_report" id="BPMNPlane_problem_report">
+      <bpmndi:BPMNShape bpmnElement="problem_report_start" id="BPMNShape_problem_report_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="45.0" y="36.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="problem_report_audit" id="BPMNShape_problem_report_audit">
+        <omgdc:Bounds height="80.0" width="100.0" x="120.0" y="11.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid_audit_01" id="BPMNShape_sid_audit_01">
+        <omgdc:Bounds height="40.0" width="40.0" x="265.0" y="31.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="problem_report_modify" id="BPMNShape_problem_report_modify">
+        <omgdc:Bounds height="80.0" width="100.0" x="235.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="problem_report_audit01" id="BPMNShape_problem_report_audit01">
+        <omgdc:Bounds height="80.0" width="100.0" x="345.0" y="11.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="problem_report_audit02" id="BPMNShape_problem_report_audit02">
+        <omgdc:Bounds height="80.0" width="100.0" x="490.0" y="11.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="problem_report_audit03" id="BPMNShape_problem_report_audit03">
+        <omgdc:Bounds height="80.0" width="100.0" x="635.0" y="11.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid_audit_03" id="BPMNShape_sid_audit_03">
+        <omgdc:Bounds height="40.0" width="40.0" x="780.0" y="31.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="problem_report_end" id="BPMNShape_problem_report_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="885.0" y="37.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid_audit_02" id="BPMNShape_sid_audit_02">
+        <omgdc:Bounds height="40.0" width="40.0" x="265.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid_09" id="BPMNEdge_sid_09">
+        <omgdi:waypoint x="590.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="635.0" y="51.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_08" id="BPMNEdge_sid_08">
+        <omgdi:waypoint x="445.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="490.0" y="51.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_07" id="BPMNEdge_sid_07">
+        <omgdi:waypoint x="305.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="345.0" y="51.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_06" id="BPMNEdge_sid_06">
+        <omgdi:waypoint x="305.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="899.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="899.0" y="65.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="305.0" y="260.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_05" id="BPMNEdge_sid_05">
+        <omgdi:waypoint x="265.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="170.0" y="260.0"></omgdi:waypoint>
+        <omgdi:waypoint x="170.0" y="91.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="265.0" y="260.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_04" id="BPMNEdge_sid_04">
+        <omgdi:waypoint x="285.0" y="200.0"></omgdi:waypoint>
+        <omgdi:waypoint x="285.0" y="240.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_03" id="BPMNEdge_sid_03">
+        <omgdi:waypoint x="285.0" y="71.0"></omgdi:waypoint>
+        <omgdi:waypoint x="285.0" y="120.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_11" id="BPMNEdge_sid_11">
+        <omgdi:waypoint x="800.0" y="71.0"></omgdi:waypoint>
+        <omgdi:waypoint x="800.0" y="149.0"></omgdi:waypoint>
+        <omgdi:waypoint x="540.0" y="149.0"></omgdi:waypoint>
+        <omgdi:waypoint x="540.0" y="91.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="800.0" y="71.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_02" id="BPMNEdge_sid_02">
+        <omgdi:waypoint x="220.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="265.0" y="51.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_10" id="BPMNEdge_sid_10">
+        <omgdi:waypoint x="735.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="51.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_01" id="BPMNEdge_sid_01">
+        <omgdi:waypoint x="75.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="120.0" y="51.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid_12" id="BPMNEdge_sid_12">
+        <omgdi:waypoint x="820.0" y="51.0"></omgdi:waypoint>
+        <omgdi:waypoint x="885.0" y="51.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="820.0" y="51.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

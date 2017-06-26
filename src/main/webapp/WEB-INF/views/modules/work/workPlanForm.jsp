@@ -67,6 +67,7 @@
 		$("#" + me.name + "_message").html(message).hide(15000);
 	}
 </script>
+
 </head>
 <body>
 	<ul class="nav nav-tabs">
@@ -81,32 +82,31 @@
 		<c:when test="${workPlan.noedit }">
 			<form:form id="inputForm" modelAttribute="workPlan"
 				class="form-horizontal">
+				<input type="hidden" name="parent.id" value="${workPlan.parent.id}"/>
+				
 				<div class="control-group">
 					<label class="control-label">标题：</label>
 					<div class="controls">
 						<form:input path="name" htmlEscape="false" maxlength="200"
-							class="input-xlarge required" disabled="true"/>
+							class="input-xlarge required" disabled="true" />
 						<span class="help-inline"><font color="red">*</font> </span>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">工作类别：</label>
 					<div class="controls">
-						<form:input id="worktype" path="workType.id" htmlEscape="false" maxlength="200"
-							class="input-xlarge required" disabled="true"/>
+						<form:input id="worktype" path="workType.id" htmlEscape="false"
+							maxlength="200" class="input-xlarge required" disabled="true" />
 					</div>
 				</div>
-				
 				<hr />
-
 				<span id="timeType">
 					<div class="control-group">
 						<label class="control-label">计划开始时间：</label>
 						<div class="controls">
 							<input id="startTime" name="startTime" alt="start_end"
 								type="text" readonly="readonly" maxlength="20"
-								class="input-medium Wdate "
-								disabled="true"
+								class="input-medium Wdate " disabled="true"
 								value="<fmt:formatDate value="${workPlan.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});clearTime(this)"
 								onmouseover="showPrompt(this);" /> <span id="startTime_message"></span>
@@ -117,8 +117,7 @@
 						<div class="controls">
 							<input id="planedFinishTime" name="planedFinishTime" type="text"
 								readonly="readonly" alt="start_end" maxlength="20"
-								class="input-medium Wdate "
-								 disabled="true"
+								class="input-medium Wdate " disabled="true"
 								value="<fmt:formatDate value="${workPlan.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true});clearTime(this)"
 								onmouseover="showPrompt(this);" /> <span
@@ -130,8 +129,7 @@
 						<div class="controls">
 							<input id="requiredFinishTime" name="requiredFinishTime"
 								type="text" readonly="readonly" alt="required" maxlength="20"
-								class="input-medium Wdate "
-								 disabled="true"
+								class="input-medium Wdate " disabled="true"
 								value="<fmt:formatDate value="${workPlan.requiredFinishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 								onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true});clearTime(this)"
 								onmouseover="showPrompt(this);" /> <span
@@ -141,8 +139,8 @@
 					<div class="control-group">
 						<label class="control-label">任务频次：</label>
 						<div class="controls">
-							<form:checkboxes path="frequency" alt="frequencyTime"  disabled="true"
-								onclick="clearTime(this)"
+							<form:checkboxes path="frequency" alt="frequencyTime"
+								disabled="true" onclick="clearTime(this)"
 								items="${fns:getDictList('frequency_months')}" itemLabel="label"
 								itemValue="value" htmlEscape="false" class=""
 								onmouseover="showPrompt(this);" />
@@ -155,30 +153,43 @@
 					<label class="control-label">工作描述：</label>
 					<div class="controls">
 						<form:textarea path="workDesc" htmlEscape="false" rows="4"
-							maxlength="255" class="input-xxlarge "  disabled="true"/>
+							maxlength="255" class="input-xxlarge " disabled="true" />
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">工作要求：</label>
 					<div class="controls">
 						<form:textarea path="jobRequire" htmlEscape="false" rows="4"
-							maxlength="255" class="input-xxlarge "  disabled="true"/>
+							maxlength="255" class="input-xxlarge " disabled="true" />
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label">负责人:</label>
-					<div class="controls">
-						<sys:treeselect id="personLiableId" name="personLiable.id"
-							value="${workPlan.personLiable.id}" labelName="personLiable.name"
-							labelValue="${workPlan.personLiable.name}" title="用户"
-							url="/sys/office/treeData?type=3" allowClear="true"
-							notAllowSelectParent="true"  disabled="true"/>
+				
+				<c:choose>
+				<c:when test="${workPlan.planType eq 'personal' or workPlan.planType eq 'action' }">
+						<form:hidden path="personLiable.id" value="${fns:getUser().id}"/>
+						<form:hidden path="depts.id" value="${fns:getUser().office.id}"/>			
+				</c:when>
+				<c:otherwise>
+					<c:if test="${workPlan.planType eq 'department'}">
+						<form:hidden path="depts.id" value="${fns:getUser().office.id}"/>
+					</c:if>
+					<div class="control-group">
+						<label class="control-label">负责人:</label>
+						<div class="controls">
+							<sys:treeselect id="personLiableId" name="personLiable.id"
+								value="${workPlan.personLiable.id}" labelName="personLiable.name"
+								labelValue="${workPlan.personLiable.name}" title="用户"
+								url="/sys/office/treeData?type=3" allowClear="true"
+								notAllowSelectParent="true" disabled="true" />
+						</div>
 					</div>
-				</div>
+				</c:otherwise>
+				</c:choose>
 				<div class="control-group">
 					<label class="control-label">工作级别：</label>
 					<div class="controls">
-						<form:select path="workLevelId" class="input-medium"  disabled="true"> 
+						<form:select path="workLevelId" class="input-medium"
+							disabled="true">
 							<form:options items="${fns:getDictList('work_level')}"
 								itemLabel="label" itemValue="value" htmlEscape="false" />
 						</form:select>
@@ -189,7 +200,7 @@
 					<label class="control-label">备注：</label>
 					<div class="controls">
 						<form:textarea path="remarks" htmlEscape="false" rows="4"
-							maxlength="255" class="input-xxlarge "  disabled="true"/>
+							maxlength="255" class="input-xxlarge " disabled="true" />
 					</div>
 				</div>
 				<c:if test="${not empty workPlan.id && not workPlan.noedit}">
@@ -222,16 +233,7 @@
 						</div>
 					</div>
 				</c:if>
-				<div class="control-group">
-					<label class="control-label">父计划:</label>
-					<div class="controls">
-						<sys:treeselect id="parent" name="parent.id"
-							value="${workPlan.parent.id}" labelName="parent.name"
-							labelValue="${workPlan.parent.name}" title="父工作计划"
-							url="/work/workPlan/treeData" extId="${workPlan.id}"
-							allowClear="true" />
-					</div>
-				</div>
+				
 
 				<c:if test="${planTypeDict.value eq 'company'}">
 					<div class="control-group">
@@ -273,6 +275,16 @@
 
 
 				</c:if>
+				<div class="control-group">
+					<label class="control-label">父计划:</label>
+					<div class="controls">
+						<sys:treeselect id="parent" name="parent.id"
+							value="${workPlan.parent.id}" labelName="parent.name"
+							labelValue="${workPlan.parent.name}" title="父工作计划"
+							url="/work/workPlan/treeData" extId="${workPlan.id}"
+							allowClear="true" />
+					</div>
+				</div>
 				<div class="form-actions">
 					<c:if test="${not workPlan.noedit}">
 						<shiro:hasPermission name="work:workPlan:edit">
@@ -289,6 +301,7 @@
 				enctype="multipart/form-data" action="${ctx}/work/workPlan/upload"
 				method="post" class="form-horizontal">
 				<form:hidden path="id" />
+				<form:hidden path="parent" value="0"/>
 				<div class="control-group">
 					<label class="control-label">工作附件：</label>
 					<div class="controls">
@@ -392,16 +405,23 @@
 							maxlength="255" class="input-xxlarge " />
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label">负责人:</label>
-					<div class="controls">
-						<sys:treeselect id="personLiableId" name="personLiable.id"
-							value="${workPlan.personLiable.id}" labelName="personLiable.name"
-							labelValue="${workPlan.personLiable.name}" title="用户"
-							url="/sys/office/treeData?type=3" allowClear="true"
-							notAllowSelectParent="true" />
+				<c:choose>
+				<c:when test="${workPlan.planType eq 'personal' or workPlan.planType eq 'action' }">
+						<form:hidden path="personLiable.id" value="${fns:getUser().id}"/>			
+				</c:when>
+				<c:otherwise>
+					<div class="control-group">
+						<label class="control-label">负责人:</label>
+						<div class="controls">
+							<sys:treeselect id="personLiableId" name="personLiable.id"
+								value="${workPlan.personLiable.id}" labelName="personLiable.name"
+								labelValue="${workPlan.personLiable.name}" title="用户"
+								url="/sys/office/treeData?type=3" allowClear="true"
+								notAllowSelectParent="true" disabled="true" />
+						</div>
 					</div>
-				</div>
+				</c:otherwise>
+				</c:choose>
 				<div class="control-group">
 					<label class="control-label">工作级别：</label>
 					<div class="controls">
@@ -449,16 +469,6 @@
 						</div>
 					</div>
 				</c:if>
-				<div class="control-group">
-					<label class="control-label">父计划:</label>
-					<div class="controls">
-						<sys:treeselect id="parent" name="parent.id"
-							value="${workPlan.parent.id}" labelName="parent.name"
-							labelValue="${workPlan.parent.name}" title="父工作计划"
-							url="/work/workPlan/treeData" extId="${workPlan.id}"
-							allowClear="true" />
-					</div>
-				</div>
 
 				<c:if test="${planTypeDict.value eq 'company'}">
 					<div class="control-group">
@@ -500,6 +510,25 @@
 
 
 				</c:if>
+				<div class="control-group">
+					<label class="control-label">父计划:</label>
+					<div class="controls">
+						<sys:treeselect id="parent" name="parent.id"
+							value="${workPlan.parent.id}" labelName="parent.name"
+							labelValue="${workPlan.parent.name}" title="父工作计划"
+							url="/work/workPlan/treeData" extId="${workPlan.id}"
+							allowClear="true" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">附件:</label>
+					<div class="controls">
+						<input type="hidden" id="attachFiles" name="attachFiles"
+							value="${workPlan.attachFiles}" />
+						<sys:ckfinder input="attachFiles" type="files" uploadPath="/workplan_template"
+							selectMultiple="true" />
+					</div>
+				</div>
 				<div class="form-actions">
 					<c:if test="${not workPlan.noedit}">
 						<shiro:hasPermission name="work:workPlan:edit">
@@ -511,20 +540,7 @@
 						onclick="history.go(-1)" />
 				</div>
 			</form:form>
-			<div id="files" class="control-group"></div>
-			<form:form id="fileForm" modelAttribute="workPlan"
-				enctype="multipart/form-data" action="${ctx}/work/workPlan/upload"
-				method="post" class="form-horizontal">
-				<form:hidden path="id" />
-				<div class="control-group">
-					<label class="control-label">工作附件：</label>
-					<div class="controls">
-						<input name="attachFile" type="file" width="100" />
-						<shiro:hasPermission name="work:workPlan:edit">
-							<input id="btnUpload" type="submit" value="上传" />&nbsp;</shiro:hasPermission>
-					</div>
-				</div>
-			</form:form>
+			
 		</c:otherwise>
 	</c:choose>
 </body>

@@ -83,14 +83,25 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 *         任务指派给多个部门，指派的特定部门负责人受理工作反馈后如指派人接受结果并关闭则受理表中的受理状态为已关闭状态
 	 */
 	public static String REMAIN_STATE_CLOSED = "8cca32f9c7c44d31a31fbcbf57142147";
+	/**
+	 * 更新工作状态
+	 * @param workPlan
+	 * @param workStateId
+	 */
+	public void updateWorkState(@Param("id") String id,@Param("workStateId") String workStateId);
 	
-	public void submit_company_plan(WorkPlan workPlan);
+	/**
+	 * 更新结束状态
+	 * @param workPlan
+	 * @param workStateId
+	 */
+	public void updateEndState(WorkPlan workPlan,@Param("endStateId") String endStateId);
 
 	public void reject(WorkPlan workPlan);
 
 	public void agree(WorkPlan workPlan);
 
-	public void asigned(WorkPlan workPlan);
+	public void assigne(WorkPlan workPlan);
 
 	public void remain_insert(WorkPlan workPlan);
 
@@ -101,11 +112,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	public int isRemainOver(@Param("depts") String depts, @Param("remainWorkPlanId") String remainWorkPlanId);
 
 	public List<WorkPlan> findCurrentRemainnedWorkPlanList(@Param("userid") String userid);
-	/**
-	 * 修改工作结束状态的方法
-	 * @param endStateId 
-	 */
-	public void updateEndState(String endStateId);
+	
 	/**
 	 * 保存反馈信息
 	 * @param workRemainId
@@ -157,4 +164,6 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	public void commentSave(@Param("userid") String userid, @Param("remainId") String remainId, @Param("commentContent") String commentContent, @Param("score") int score);
 
 	public WorkPlan findComment(@Param("remainId") String remainId);
+
+	public void updateProcessInstanceId(@Param("id") String id,@Param("processInstanceId") java.lang.String pi);
 }
