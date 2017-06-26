@@ -23,6 +23,8 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.course_catelog.entity.CourseCatelog;
+import com.thinkgem.jeesite.modules.course_catelog.service.CourseCatelogService;
 import com.thinkgem.jeesite.modules.course_review.entity.CourseReview;
 import com.thinkgem.jeesite.modules.course_review.service.CourseReviewService;
 //<<<<<<< HEAD
@@ -47,11 +49,11 @@ public class TrainCourse2Controller extends BaseController {
 	private TrainCourseService trainCourseService;
 	@Autowired
 	private CourseReviewService courseReviewService;
-//<<<<<<< HEAD
 	@Autowired
 	private CourseStudyService courseStudyService;
-//=======
-//>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git
+	@Autowired
+	private CourseCatelogService courseCatelogService;
+	
 	@ModelAttribute
 	public TrainCourse get(@RequestParam(required=false) String id) {
 		TrainCourse entity = null;
@@ -72,7 +74,7 @@ public class TrainCourse2Controller extends BaseController {
 		model.addAttribute("page", page);
 		
 		CourseReview courseReview =new CourseReview();
-//<<<<<<< HEAD
+		CourseCatelog courseCatelog = new CourseCatelog();
 		//补充
 		courseReview.setCourseId(request.getParameter("id"));
 	 
@@ -86,6 +88,9 @@ public class TrainCourse2Controller extends BaseController {
 		
 		courseReview.setCourseId(trainCourse.getId());
 		model.addAttribute("courseReview", courseReview);
+		
+		courseCatelog.setCourseId(trainCourse.getId());
+		model.addAttribute("courseCatelog", courseCatelogService.findList(courseCatelog));
 		model.addAttribute("page1", page1);
 		
 		//传打分参数
@@ -94,6 +99,7 @@ public class TrainCourse2Controller extends BaseController {
 		courseStudy.setCreateBy(UserUtils.getUser());
 		System.out.println(courseStudy.getCourseId());
 		model.addAttribute("courseStudy", courseStudyService.findByCourseIdAndUserId(courseStudy));
+
 		return "modules/train_course/trainCourse2List";
 	}
 

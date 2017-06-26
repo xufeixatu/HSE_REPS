@@ -130,6 +130,14 @@
   </function>
   
   <function>
+    <description>根据值获取字典对象</description>
+    <name>getDictByValue</name>
+    <function-class>com.thinkgem.jeesite.modules.sys.utils.DictUtils</function-class>
+    <function-signature>java.lang.String getDictByValue(java.lang.String, java.lang.String)</function-signature>
+    <example>${fns:getDictByValue(value, type)}</example>  
+  </function>
+  
+  <function>
     <description>获取字典对象列表</description>
     <name>getDictList</name>
     <function-class>com.thinkgem.jeesite.modules.sys.utils.DictUtils</function-class>
@@ -144,7 +152,7 @@
     <function-signature>java.lang.String getDictListJson(java.lang.String)</function-signature>
     <example>${fns:getDictListJson(type)}</example>  
   </function>
-  
+
   <function>
     <description>根据ＩＤ获取字典对象</description>
     <name>getDictByID</name>
@@ -159,6 +167,14 @@
     <function-class>com.thinkgem.jeesite.modules.sys.utils.OfficeUtil</function-class>
     <function-signature>com.thinkgem.jeesite.modules.sys.utils.Office getOfficeById(java.lang.String)</function-signature>
     <example>${fns:getOfficeById(id)}</example>  
+  </function>
+  
+  <function>
+    <description>根据ＩＤ获取部门名称集合</description>
+    <name>getOfficeNameById</name>
+    <function-class>com.thinkgem.jeesite.modules.sys.utils.OfficeUtil</function-class>
+    <function-signature>com.thinkgem.jeesite.modules.sys.utils.Office getOfficeNameById(java.lang.String)</function-signature>
+    <example>${fns:getOfficeNameById(id)}</example>  
   </function>
   
   <!-- Encodes -->

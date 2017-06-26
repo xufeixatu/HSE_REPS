@@ -1,2 +1,5 @@
 /jeesite.properties
+
 /spring-context-shiro.xml
+
+/.gitignore

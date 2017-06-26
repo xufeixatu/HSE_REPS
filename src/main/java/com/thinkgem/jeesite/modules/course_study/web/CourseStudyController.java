@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-//<<<<<<< HEAD
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,9 +22,9 @@ import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
 import com.thinkgem.jeesite.modules.course_study.service.CourseStudyService;
+
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
-import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
-import com.thinkgem.jeesite.modules.train_course.service.TrainCourseService;
+
 
 /**
  * 学习记录Controller
@@ -38,9 +37,6 @@ public class CourseStudyController extends BaseController {
 
 	@Autowired
 	private CourseStudyService courseStudyService;
-	@Autowired
-	private TrainCourseService trainCourseService;
-	
 	@ModelAttribute
 	public CourseStudy get(@RequestParam(required=false) String id) {
 		CourseStudy entity = null;

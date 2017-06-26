@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.check.dao.CheckItemDao">
+    
+	<sql id="checkItemColumns">
+		a.id AS "id",
+		a.template_id AS "templateId",
+		a.check_content AS "checkContent",
+		a.check_standard AS "checkStandard",
+		a.sort AS "sort",
+		a.craete_by AS "craeteBy",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.obligate_1 AS "obligate1",
+		a.obligate_2 AS "obligate2",
+		a.obligate_3 AS "obligate3"
+	</sql>
+	
+	<sql id="checkItemJoins">
+	</sql>
+    
+	<select id="get" resultType="CheckItem">
+		SELECT 
+			<include refid="checkItemColumns"/>
+		FROM check_item a
+		<include refid="checkItemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CheckItem">
+		SELECT 
+			<include refid="checkItemColumns"/>
+		FROM check_item a
+		<include refid="checkItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CheckItem">
+		SELECT 
+			<include refid="checkItemColumns"/>
+		FROM check_item a
+		<include refid="checkItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO check_item(
+			id,
+			template_id,
+			check_content,
+			check_standard,
+			sort,
+			craete_by,
+			create_date,
+			update_date,
+			update_by,
+			remarks,
+			del_flag,
+			obligate_1,
+			obligate_2,
+			obligate_3
+		) VALUES (
+			#{id},
+			#{templateId},
+			#{checkContent},
+			#{checkStandard},
+			#{sort},
+			#{craeteBy},
+			#{createDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag},
+			#{obligate1},
+			#{obligate2},
+			#{obligate3}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE check_item SET 	
+			template_id = #{templateId},
+			check_content = #{checkContent},
+			check_standard = #{checkStandard},
+			sort = #{sort},
+			craete_by = #{craeteBy},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks},
+			obligate_1 = #{obligate1},
+			obligate_2 = #{obligate2},
+			obligate_3 = #{obligate3}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE check_item SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<where>
+	    	<if test="id!=null and id!=''">
+	    		id = #{id}
+	    	</if>
+	    	<if test="templateId!=null and templateId!=''">
+	    		template_id = #{templateId}
+	    	</if>	    	
+	    </where>
+	</update>
+	
+</mapper>

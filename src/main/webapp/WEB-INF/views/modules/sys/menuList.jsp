@@ -45,6 +45,7 @@
 						<a href="${ctx}/sys/menu/form?parent.id=${menu.id}">添加下级菜单</a> 
 					</td></shiro:hasPermission>
 				</tr>
+				
 			</c:forEach></tbody>
 		</table>
 		<shiro:hasPermission name="sys:menu:edit"><div class="form-actions pagination-left">

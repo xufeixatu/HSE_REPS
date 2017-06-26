@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+
 <html>
 <head>
 <title>工作计划管理</title>
@@ -25,6 +26,21 @@
 				addRow("#treeTableList", tpl, data, rootIds[i], true);
 			}
 			$("#treeTable").treeTable({expandLevel : 5});
+			$("a,input[type='checkbox'],span[arrow='true']").bind("click", function(event){event.stopPropagation();});
+			//导入导出功能钩子
+			$("#btnExport").click(function(){
+				top.$.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){
+					if(v=="ok"){
+						$("#searchForm").attr("action","${ctx}/work/workPlan/export?planType=${planTypeDict.value}");
+						$("#searchForm").submit();
+					}
+				},{buttonsFocus:1});
+				top.$('.jbox-body .jbox-icon').css('top','55px');
+			});
+			$("#btnImport").click(function(){
+				$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
+					bottomText:"导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！"});
+			});
 		});
 		function addRow(list, tpl, data, pid, root){
 			for (var i=0; i<data.length; i++){
@@ -34,16 +50,13 @@
 						dict: {
 						blank123:0}, pid: (root?0:pid), row: row,
 						edit:function(){
-							return row.workStateId != '45d756f45bb04155adb95e66b6a0d1c1' && 
-								   row.workStateId != '0374ed53f5034055943e0381aca4c22a';
+							return row.workStateId == '${fns:getDictByValue('unsubmit','work_state').id}';
 						},
 						no_edit:function(){
-							return row.workStateId == '45d756f45bb04155adb95e66b6a0d1c1' || 
-								   row.workStateId == '0374ed53f5034055943e0381aca4c22a';
+							return row.workStateId != '${fns:getDictByValue('unsubmit','work_state').id}';
 						},
 						pass:function(){
-							return row.workStateId == '0374ed53f5034055943e0381aca4c22a' && 
-							 	   row.endStateId == null;
+							return row.workStateId == '${fns:getDictByValue('pass','work_state').id}';
 						},
 						start_time:function(){
 							return row.startTime != null && row.startTime != "";
@@ -91,34 +104,70 @@
 			me.href += str;
 			return confirmx('确认要提交该工作计划吗？', me.href);
 		}
+		//显示隐藏详细行
+		function expandDetail(id){
+			var o = $('#ex_' + id);
+			var s = $('#s_' + id);
+			if(o.attr('style') == "display:none"){
+				o.attr('style','display:table-row');
+				s.attr('src','/HSE/static/images/open.jpg');
+			}else{
+				o.attr('style','display:none');
+				s.attr('src','/HSE/static/images/close.jpg');
+			}
+		}
 	</script>
 </head>
 <body>
+	<div id="importBox" class="hide">
+		<form id="importForm" action="${ctx}/work/workPlan/import?planType=${planTypeDict.value}" method="post" enctype="multipart/form-data"
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+			<a href="${ctx}/work/workPlan/import/template?planType=${planTypeDict.value}">下载模板</a>
+		</form>
+	</div>
+	
 	<ul class="nav nav-tabs">
-		<li class="active"><a
-			href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">新增${planTypeDict.label}列表</a></li>
-		<shiro:hasPermission name="work:workPlan:edit">
-			<li><a
-				href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
-		</shiro:hasPermission>
-		
+		<c:choose>
+		<c:when test="${myType eq 'responsible'}">
+			<li class="active"><a
+				href="#">我负责的工作列表</a></li>
+		</c:when>
+		<c:when test="${myType eq 'assigned'}">
+			<li class="active"><a
+				href="#">我分派的工作列表</a></li>
+		</c:when>
+		<c:otherwise>
+			<li class="active"><a
+				href="${ctx}/work/workPlan/?planType=${planTypeDict.value}">新增${planTypeDict.label}列表</a></li>
+			<shiro:hasPermission name="work:workPlan:edit">
+				<li><a
+					href="${ctx}/work/workPlan/form?planType=${planTypeDict.value}">${planTypeDict.label}添加</a></li>
+			</shiro:hasPermission>
+		</c:otherwise>
+		</c:choose>
 	</ul>
 	<form:form id="searchForm" modelAttribute="workPlan"
-		action="${ctx}/work/workPlan/" method="post"
+		action="${ctx}/work/workPlan/?planType=${planTypeDict.value}" method="post"
 		class="breadcrumb form-search">
 		<ul class="ul-form">
-			<li><label>标题：</label> <form:input path="name"
-					htmlEscape="false" maxlength="100" class="input-medium" /></li>
+			<li>
+				<label>工作状态：</label> 
+				<form:select path="workStateId" class="input-medium"> 
+							<form:options items="${fns:getDictList('work_state')}"
+								itemLabel="label" itemValue="id" htmlEscape="false" />
+				</form:select></li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary"
 				type="submit" value="查询" /></li>
 			<li class="btns">
-				<a href="#">下载工作计划模板</a></li>
-			<li class="btns">
-				<a href="#">导入工作计划EXCEL文件</a></li>
+				<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
+				<input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
 	<sys:message content="${message}" />
+	
 	<table id="treeTable"
 		class="table table-striped table-bordered table-condensed">
 		<thead>
@@ -128,6 +177,7 @@
 				<th>级别</th>
 				<th>时间要求</th>
 				<th>状态</th>
+				<th>工作类别</th>
 				<c:if test="${workPlan.planType eq 'company'}">
 					<th>责任单位</th>
 				</c:if>
@@ -135,14 +185,15 @@
 				<shiro:hasPermission name="work:workPlan:edit">
 					<th>操作</th>
 				</shiro:hasPermission>
+
 			</tr>
 		</thead>
 		<tbody id="treeTableList"></tbody>
 	</table>
 	<script type="text/template" id="treeTableTpl">
-		<tr id="{{row.id}}" pId="{{pid}}">
-			<td>
-				{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
+		<tr id="{{row.id}}" pId="{{pid}}" onclick="expandDetail('{{row.id}}')">
+			<td name="first">
+				<img id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
 			<td>{{#edit}}
 					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
@@ -183,6 +234,9 @@
 			<td>
 				{{row.workState}}
 			</td>
+			<td>
+				{{row.planTypeDetail.label}}
+			</td>
 			{{#show_dept}}
 			<td>
 				{{row.depts.name}}
@@ -195,13 +249,24 @@
 			{{#edit}}
    				<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}">修改</a>
 				<a href="${ctx}/work/workPlan/delete?id={{row.id}}&planType=${planTypeDict.value}" onclick="return confirmx('确认要删除该工作计划及所有子工作计划吗？', this.href)">删除</a>
-				<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}&planType=${planTypeDict.value}">添加子工作</a> 
+				<!--<a href="${ctx}/work/workPlan/form?parent.id={{row.id}}&planType=${planTypeDict.value}">添加子工作</a> -->
 				<a href="${ctx}/work/workPlan/submitPlan?id={{row.id}}&planType=${planTypeDict.value}" onclick="return submitAll(this)">提交</a>				
 			{{/edit}}
 			{{#pass}}
 				<a href="${ctx}/work/workPlan/assigned_work?id={{row.id}}&planType=${planTypeDict.value}">分配任务</a>	
 			{{/pass}}
 			</td></shiro:hasPermission>
+			
+		</tr>
+		<tr id="ex_{{row.id}}" style="display:none">
+			<td colspan="100">
+				<a href="#" style="font-weight:900px">最新交流</a><br/>
+				最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}}<br/>
+				单位：{{row.feebackPeopleId}} 反馈人：{{row.remain_dept_id}} 反馈时间：{{row.feedbackTime}}<br/>
+				
+				最新回复消息：{{row.newReply}}<br/>
+				回复人：{{row.replyPeopleId}} 回复时间：{{row.replyTime}}<br/>
+			</td>
 		</tr>
 	</script>
 	

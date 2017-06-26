@@ -12,6 +12,7 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.work.entity.WorkPlan;
+import com.thinkgem.jeesite.modules.work.entity.WorkType;
 
 @Component
 @Scope("prototype")
@@ -199,6 +200,48 @@ public class WorkPlanSqlMapFilter {
 		dsf.append("and");
 		dsf.append(" ");
 		dsf.append("wri.id is null");
+		// 将字符串加回到sqlMap.dsf属性
+		sqlMap.put("dsf", dsf.toString());
+	}
+
+	public void typeWorkTypeFilterSqlMapDsf(WorkPlan workPlan, Model model) {
+		if(workPlan.getWorkType() != null && !"".equals(workPlan.getWorkType().getId().trim())){
+			common(workPlan, model);
+			dsf.append(" and a.work_type_id = '" + workPlan.getWorkType().getId() + "' ");
+			System.out.println(workPlan.getWorkType().getId());
+			// 将字符串加回到sqlMap.dsf属性
+			sqlMap.put("dsf", dsf.toString());
+		}
+	}
+	/**
+	 * 我负责的工作的过滤条件
+	 * @param workPlan
+	 * @param model
+	 */
+	public void typeMyWorkPlanFilterSqlMapDsf(WorkPlan workPlan, Model model) {
+		common(workPlan, model);
+
+		// 只看本人负责的未提交状态的数据
+		dsf.append(" and ");
+		dsf.append("a.person_liable_id = '");
+		dsf.append(UserUtils.getUser().getId());
+		dsf.append("' and ");
+		dsf.append("a.work_state_id <> '");
+		dsf.append(DictUtils.getDictByValue("unsubmit", "work_state").getId());
+		dsf.append("'");
+
+		// 将字符串加回到sqlMap.dsf属性
+		sqlMap.put("dsf", dsf.toString());
+	}
+	//根据创建人是我并且工作状态为审核通过的工作
+	public void typeMyAssignedFilterSqlMapDsf(WorkPlan workPlan, Model model) {
+		common(workPlan, model);
+
+		dsf.append(" and ");
+		dsf.append("a.assigner_id = '");
+		dsf.append(UserUtils.getUser().getId());
+		dsf.append("' ");
+		
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}

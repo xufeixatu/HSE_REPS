@@ -3,14 +3,18 @@
  */
 package com.thinkgem.jeesite.modules.work.entity;
 
-import org.hibernate.validator.constraints.Length;
-
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.thinkgem.jeesite.common.persistence.ActEntity;
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+import com.thinkgem.jeesite.modules.sys.entity.Dict;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
@@ -19,8 +23,38 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
  * @author 何其锟
  * @version 2017-04-07
  */
-public class WorkPlan extends TreeEntity<WorkPlan> {
+public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
+	@Override
+	public WorkPlan clone() {
+		WorkPlan wp = null;
+		try {
+			wp = (WorkPlan)super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return wp;
+	}
 	private static final long serialVersionUID = 1L;
+
+	private ActEntity<WorkPlan> actData = null;
+	
+	public ActEntity<WorkPlan> getActData() {
+		return actData;
+	}
+
+	public void setActData(ActEntity<WorkPlan> actData) {
+		this.actData = actData;
+		this.actData.setOutObj(this);
+	}
+	private ArrayList<WorkPlan> childWorkPlan = new ArrayList<WorkPlan>();
+	private User currentAuditUse = null;
+	public User getCurrentAuditUse() {
+		return currentAuditUse;
+	}
+
+	public void setCurrentAuditUse(User currentAuditUse) {
+		this.currentAuditUse = currentAuditUse;
+	}
 	private WorkType workType;		// 工作类别
 	private Date requiredFinishTime;		// 要求结束时间
 	private Date startTime;		// 工作开始时间
@@ -44,7 +78,13 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String approveOpinion;		// approve_opinion
 	private String myDept;      //当前登陆用户所有部门的name字段
 	private String timeType;		//时间类别
-	
+	private String attachFiles;//附件路径集合
+	public String getAttachFiles() {
+		return attachFiles;
+	}
+	public void setAttachFiles(String attachFiles) {
+		this.attachFiles = attachFiles;
+	}
 	/**
 	 * 接受任务时间，已经淘汰不用。因公司任务分派给多个部门，所以同一任务的接受也是多个部门的信息，原设计用单一属性是错误的
 	 */
@@ -54,7 +94,9 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private Date assignTime;		// 指派时间
 	private String endStateId;		// 结束状态
 	private String frequency;		// 频次
-	private String planType;     //计划类型：如个人计划，部门计划，公司计划
+	private String planType;     //计划类型ID：如个人计划，部门计划，公司计划
+	private Dict planTypeDetail; //计划类型详细内容
+	
 	private String workLevel; //级别
 	private boolean workSubmit = false;//是否提交
 	private boolean noedit = false; //是否不可编辑
@@ -77,6 +119,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 * 受理状态ID
 	 */
 	private String remainStateId;
+
 	
 	/**
 	 * 存储受理人ID的临时变量
@@ -111,9 +154,22 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	private String remainCreateBy;
 	private String remainName;
 	private String remainDeptName;
+	
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
+	private String newFeedback; //最新反馈
+	private String feebackPeopleId; //反馈人
+	private Date feedbackTime; //最新反馈时间
+	private String newReply; //最新回复
+	private String replyPeopleId; //回复人ID
+//	private Date replyTime;
+	public Dict getPlanTypeDetail() {
+		return planTypeDetail;
+	}
+	public void setPlanTypeDetail(Dict planTypeDetail) {
+		this.planTypeDetail = planTypeDetail;
+	}
 	public String getCommentContent() {
 		return commentContent;
 	}
@@ -287,6 +343,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	 * 
 	 * @return
 	 */
+	@ExcelField(title="ID", type=1, align=2, sort=1)
 	public String getUserId() {
 		return userId;
 	}
@@ -321,6 +378,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setRemains(Set<WorkPlanRemain> remains) {
 		this.remains = remains;
 	}
+	@ExcelField(title="工作级别", align=2, sort=20)
 	public String getWorkLevel() {
 		return workLevel;
 	}
@@ -345,6 +403,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setWorkSubmit(boolean workSubmit) {
 		this.workSubmit = workSubmit;
 	}
+	@ExcelField(title="工作类别", align=2, sort=30)
 	public String getPlanType() {
 		return planType;
 	}
@@ -552,7 +611,12 @@ public class WorkPlan extends TreeEntity<WorkPlan> {
 	public void setDepts(Office depts) {
 		this.depts = depts;
 	}
-	
+	public ArrayList<WorkPlan> getChildWorkPlan() {
+		return childWorkPlan;
+	}
+	public void setChildWorkPlan(ArrayList<WorkPlan> childWorkPlan) {
+		this.childWorkPlan = childWorkPlan;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

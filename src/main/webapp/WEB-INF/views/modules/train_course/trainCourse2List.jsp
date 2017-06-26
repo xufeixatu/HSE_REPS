@@ -144,12 +144,7 @@
 	               td.innerHTML = "☆";
 	               $(td).css("color","#FFFFFF");
 	                }  
-	            } 
-/*  		function decode(text){
- 			text = decodeURI(text);
- 			return text;
- 		} */
-	     
+
 	</script>
 	<style>
 		body{
@@ -465,7 +460,6 @@
 					<li class="focus">
 						<a>星级评分</a>
 					</li>
-<!-- <<<<<<< HEAD -->
 					<div id="star">
 						<ul>
 							<li><a href="javascript:;">1</a><>
@@ -477,12 +471,6 @@
 						<span></span>
 						<p></p>
 					</div>
-<!-- =======
-					<li class="star" 	onmouseover="InitEvent()">
-						<table id="tblMain"><tr><td>☆</td><td>☆</td><td>☆</td><td>☆</td><td>☆</td></tr>
-	    				</table>
-					</li>
->>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git -->
 				</ul>
 			</div>
 		</div>
@@ -491,34 +479,26 @@
    <div class="course-description">
 		<ul id="myTab" class="nav nav-tabs">
 		    <li class="active">
-		        <a href="#introduce" data-toggle="tab">
-		            课程介绍
-		        </a>
+		        <a href="#introduce" data-toggle="tab">课程介绍</a>
 		    </li>
-		    <li>
-		    	<a href="#chapter" data-toggle="tab">
-					课程目录
-				</a>
-			</li>
-			 <li>
-
-		    	<a href="#appraise" data-toggle="tab" >
-
-					课程评价
-				</a>
-			</li>
+		    <li><a href="#chapter" data-toggle="tab">课程目录</a></li>
+			<li><a href="#appraise" data-toggle="tab" >课程评价</a></li>
 		</ul>
 		
 		<div id="myTabContent" class="tab-content">
 		    <div class="tab-pane fade in active" id="introduce">
 		        <ul>
 		        	<li>【学习目标】
-		        		<ul>
-		        			<li>${trainCourse.courseDec}</li>
-		        		</ul>
+		        		<ul><li>${trainCourse.courseDec}</li></ul>
 		        	</li>
 		        	<li>【课程大纲】
-		        		<ol>
+	 		       	    <ol>
+	 		       	      	<c:forEach items="${courseCatelog}" var="courseCatelog">
+			       	        	<li>${courseCatelog.attachName}</li>
+			       	        </c:forEach>  
+						</ol>
+<%-- 		    这里是之前最开始使用的采用截取上传文件名的部分用来显示的代码，现在更改为可以为视频文件设置文件名，所以这段代码删除    
+						<ol>
 				        	<c:set var="testString" value="${trainCourse.docId}"/>
 							
 							<c:forTokens items="${testString}" delims="|" var="videoHref">
@@ -528,55 +508,41 @@
 																		
 									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
 									<c:forEach items="${videoId}" var="videoName" begin="8" >
-									
-<!-- 									<script type="text/javascript">
-
-										/* videoName = decodeURI(videoName); */
-										
-									</script> -->
-									${videoName}
- 				 				<%-- 	<%=java.net.URLDecoder.decode("%E7%9F%A5%E8%AF%86%E5%B0%B1%E6%98%AF%E5%8A%9B%E9%87%8F.mp4","UTF-8")%> --%>
-							<%-- 	 	<%=java.net.URLDecoder.decode("vName","UTF-8")%>   --%>
+										<c:out value="${tools:urlDecode(videoName)}"></c:out>
 									</c:forEach>								
-								</li>
+								</li>		
 							</c:forTokens>				        		
-		        		</ol>
+		        		</ol>--%> 
 		        	</li>
-		        </ul>
+		    	</ul>
 		    </div>
 		    
-		    <div class="tab-pane fade" id="chapter">
-		        <ul>		        
-					<c:set var="testString" value="${trainCourse.docId}"/>
-							
-					<c:forTokens items="${testString}" delims="|" var="videoHref">
-						<li>
-							<span class="chapter-time"></span>
-							<span class="chapetr-item">
+		  <div class="tab-pane fade" id="chapter">
+		  	<ul>	
+		  		<c:forEach items="${courseCatelog}" var="courseCatelog" varStatus="status">	        
+					<li>
+						<span class="chapter-time">${status.index + 1}</span>
+						<span class="chapetr-item">
 							<!-- 这里是视频跳转的位置，如果需要使用插件来进行播放，请修改href的跳转位置。 -->
-							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">
-							
-									<!-- 字符串截取获取最后的文件名，并显示 -->
-									<c:set var="videoHrefString" value="${videoHref}"/>													
-									<c:set var="videoId" value="${fn:split(videoHrefString, '/')}" />
-									<c:forEach items="${videoId}" var="videoName" begin="8" >
-										${videoName}
-									</c:forEach>
-								</a>
-							</span>
-							<span class="chapter-circle-finish"></span>
+							<a href="${ctx}/course_catelog/courseCatelog/list?id=${courseCatelog.id}">	
+<%-- 							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}">	 --%>
+								${courseCatelog.attachName}
+							</a>
+						</span>
+						<span class="chapter-circle-finish"></span>
 						</li>
-					</c:forTokens>			
-		        </ul>
-		    </div>
+					</c:forEach> 
+<%-- 				</c:forTokens>	 --%>		
+		       </ul>
+		   </div>
 		    		
 		  <!--   评价 -->
 
 		<%--   <div>${courseReview.courseId}</div> --%>
 		  	<div class="tab-pane fade course_review" id="appraise">
 		  	<form:form id="inputForm" modelAttribute="courseReview"
-			action="${ctx}/course_review/courseReview/save1" method="post"
-			class="form-horizontal">
+				action="${ctx}/course_review/courseReview/save1" method="post"
+				class="form-horizontal">
 		 	<%-- <input name="courseId" value="${courseReview.courseId}" /> --%>
 		 	<form:hidden path="courseId"  value="${courseReview.courseId}"/>
 			<form:hidden path="id"/>
@@ -635,104 +601,11 @@
     		    	</li>
     		    	</c:forEach>
 		  	    </ul>
-		  	</div>
-		  	
-		  	
-	    	 <%-- 
-		<table id="contentTable"
-			class="table table-striped table-bordered table-condensed">
-			<thead>
-				<tr>
-					<th>评论内容</th>
-					<th>评论人</th>
-					<th>评论时间</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${page1.list}" var="courseReview">
-					<tr>
-						<td><a
-							href="${ctx}/course_review/courseReview/form?id=${courseReview.id}">
-								${courseReview.assessOpinion} </a></td>
-						<td>${courseReview.assessById}</td>
-						<td><fmt:formatDate value="${courseReview.assessTime}"
-								pattern="yyyy-MM-dd HH:mm:ss" /></td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table> --%> 
-     	</div>
-	
-		</div>
-		
-	</div>
-
-	 <div class="pagination">${page}</div>
-<%-- =======
-		  	<div class="tab-pane fade course_review" id="appraise">
-		  	<form:form id="inputForm" modelAttribute="courseReview"
-			action="${ctx}/course_review/courseReview/save1" method="post"
-			class="form-horizontal">
-			<form:hidden path="id"/>
-			<sys:message content="${message}" />
-			<div class="control-group">
-				<span> <form:textarea
-						path="assessOpinion" htmlEscape="false" rows="4" maxlength="255"
-						class="input-xxlarge " />
-				</span> 
-				<div hidden="hidden" class="control-group">
-				<label class="control-label">评论人：</label>
-				<div class="controls">
-					<form:input path="assessById" htmlEscape="false" maxlength="64" class="input-xlarge required" />
-						<span class="help-inline"><font color="red">*</font> </span>
-					</div>
-				</div>
-				<div hidden="hidden" class="control-group">
-				<label class="control-label">评论时间：</label>
-				<div class="controls">
-					<input name="assessTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
-						value="<fmt:formatDate value="${courseReview.assessTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-				onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-						<span class="help-inline"><font color="red">*</font> </span>
-					</div>
-				</div>
-						
-				<span> <shiro:hasPermission
-					name="course_review:courseReview:edit">
-					<input id="btnSubmit" class="btn btn-primary" type="submit"
-						value="发表" />&nbsp;</shiro:hasPermission>
-				</span>
-			</div>
-		 </form:form>
-		<sys:message content="${message}" />
-		  		  	
-		  	  <div class="cmt-wrap">
-                 <ul class="cmt-list">
-                 	<c:forEach items="${page1.list}" var="courseReview">
-                    <li class="cmt-post" >
-                      
-    				<div class="inner">
-	    			  	<div class="media"  style="display:inline;">
-	                   <a href="/u/1968386/courses" target="_blank"><img src="http://img.mukewang.com/555869eb0001716101800180-40-40.jpg" width="32" height="32" style="border-radius:37px 37px;"></a>
-        			    </div>
-    				
-    					<div class="hd" style="display:inline">
-                          <a href="javascript:void();" class="name disabled">${courseReview.assessById}</a>
-    					</div>
-    					<p class="cmt-txt" style="padding: 5px 41px;padding-top: 16px;">${courseReview.assessOpinion}</p>
-    					<div class="ft clearfix">
-						<span><fmt:formatDate value="${courseReview.assessTime}"
-								pattern="yyyy-MM-dd HH:mm:ss" /></span>
-						   </div>
-						</div>
-    		    	</li>
-    		    	</c:forEach>
-		  	    </ul>
-		  	</div>
+		  	</div>	  			 
      	</div>
 		</div>	
 	</div>
->>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git --%>
+	 <div class="pagination">${page}</div>
 </body>
 </html>
 
