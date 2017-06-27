@@ -29,10 +29,10 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">健康安全危害分析<shiro:hasPermission name="risk:riskAccess:edit">${not empty riskAccess.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="risk:riskAccess:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/save" method="post" class="form-horizontal">
+	<sys:message content="${message}"/>	
+	<form:form id="inputForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/report" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<input  type="hidden"  name="riskType"  value="2" />
-		<sys:message content="${message}"/>		
+		<input  type="hidden"  name="riskType"  value="2" />	
 		<div class="control-group">
 			<label class="control-label">场所、设备：</label>
 			<div class="controls">
@@ -84,9 +84,8 @@
 	        
 		<div class="control-group">
 			<label class="control-label">评价方法：</label>
-			<div class="controls" >
-				<span><input  name="judgeMethod" type="radio" checked="checked" ><label for="judgeMethod1">LEC</label></span>
-				<span><input  name="judgeMethod" type="radio"  ><label for="judgeMethod2">MS</label></span>
+			<div class="controls">
+				<form:radiobuttons path="accessMothed" items="${fns:getDictList('risk_access_mothed')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 

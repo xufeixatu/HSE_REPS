@@ -56,24 +56,13 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">场所、设备：</label>
+			<label class="control-label">场所、活动、设备、物料：</label>
 			<div class="controls">
 				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">安全风险名称：</label>
-			<div class="controls">
-				<form:input path="riskName" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">作业活动名称/活动、物料、产品、服务：</label>
-			<div class="controls">
-				<form:input path="workName" htmlEscape="false" maxlength="255" class="required"/>
-			</div>
-		</div>
+		
 		<div class="control-group">
 			<label class="control-label">危险源：</label>
 			<div class="controls">
@@ -106,9 +95,8 @@
 		</div>
 		<div class="control-group">
 			<label class="control-label">评价方法：</label>
-			<div class="controls" >
-				<span><input  name="judgeMethod" type="radio" checked="checked" ><label for="judgeMethod1">LEC</label></span>
-				<span><input  name="judgeMethod" type="radio"  ><label for="judgeMethod2">MS</label></span>
+			<div class="controls">
+				<form:radiobuttons path="accessMothed" items="${fns:getDictList('risk_access_mothed')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 

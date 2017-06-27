@@ -51,7 +51,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	private String reserve1;		// 预留字段1
 	private String reserve2;		// 预留字段2
 	private String reserve3;		// 预留字段3
-	
+	private String accessMothed;
 	private String lscore;		// L得分
 	private String escore;		// E得分
 	private String cscore;		// C得分
@@ -60,6 +60,12 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	private String mscore;		// M得分
 	private String sscore;		// S得分
 	
+	public String getAccessMothed() {
+		return accessMothed;
+	}
+	public void setAccessMothed(String accessMothed) {
+		this.accessMothed = accessMothed;
+	}
 	public String getMlscore() {
 		return mlscore;
 	}

@@ -30,6 +30,7 @@
 		a.measure AS "measure",
 		a.frequency AS "frequency",
 		a.reason AS "reason",
+		a.access_mothed AS "accessMothed",
 		a.reserve_1 AS "reserve1",
 		a.reserve_2 AS "reserve2",
 		a.reserve_3 AS "reserve3",
@@ -85,6 +86,9 @@
 			</if>
 			<if test="dutyUnit != null and dutyUnit != ''">
 				AND a.duty_unit = #{dutyUnit}
+			</if>
+			<if test="accessMothed != null and accessMothed != ''">
+				AND a.access_mothed = #{accessMothed}
 			</if>
 		</where>
 		<choose>
@@ -144,6 +148,7 @@
 			measure,
 			frequency,
 			reason,
+			access_mothed,
 			reserve_1,
 			reserve_2,
 			reserve_3,
@@ -181,6 +186,7 @@
 			#{measure},
 			#{frequency},
 			#{reason},
+			#{accessMothed},
 			#{reserve1},
 			#{reserve2},
 			#{reserve3},
@@ -214,6 +220,7 @@
 			management_plan = #{managementPlan},
 			affect = #{affect},
 			measure = #{measure},
+			access_mothed = #{accessMothed},
 			frequency = #{frequency},
 			reason = #{reason},
 			remarks = #{remarks}
