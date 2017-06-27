@@ -63,7 +63,6 @@
 				<th>措施</th>
 				<th>责任单位</th>
 				<th>对应管理方案</th>
-				<th>备注信息</th>
 				<shiro:hasPermission name="risk:riskAccess:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -71,7 +70,7 @@
 		<c:forEach items="${page.list}" var="riskAccess">
 			<tr>
 				<td><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">
-					<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>
+					${riskAccess.years}
 				</a></td>
 				<td>
 					${riskAccess.placeDevice}
@@ -96,9 +95,6 @@
 				</td>
 				<td>
 					${riskAccess.managementPlan}
-				</td>
-				<td>
-					${riskAccess.remarks}
 				</td>
 				<shiro:hasPermission name="risk:riskAccess:edit"><td>
     				<a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">修改</a>
