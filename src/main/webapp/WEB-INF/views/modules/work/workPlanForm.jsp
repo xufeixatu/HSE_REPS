@@ -318,6 +318,7 @@
 				class="form-horizontal">
 				<form:hidden path="id" />
 				<input type="hidden" name="planType" value="${planTypeDict.id}" />
+				<input type="hidden" name="workStateId" value="${fns:getDictByValue('unsubmit', 'work_state').id}"/>
 				<sys:message content="${message}" />
 				<div class="control-group">
 					<label class="control-label">标题：</label>

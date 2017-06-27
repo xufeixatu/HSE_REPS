@@ -59,15 +59,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a
-			href="${ctx}/work/workPlan/workList?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
-		
-		<c:if test="${user.name eq office_quality.primaryPerson.name or user.name eq office_quality.deputyPerson}">
-			<shiro:hasPermission name="work:workPlan:edit">
-				<li class="active"><a
-					href="${ctx}/work/workPlan/pending_list?planType=${planTypeDict.value}">接受待审核${planTypeDict.label}列表</a></li>
-			</shiro:hasPermission>
-		</c:if>
+		<li class="active"><a
+			href="#">受理工作任务</a></li>
 	</ul>
 	<br />
 	<form:form id="inputForm" modelAttribute="workPlan" class="form-horizontal">

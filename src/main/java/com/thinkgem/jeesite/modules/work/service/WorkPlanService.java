@@ -148,14 +148,18 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 				for (int j = 0; j < months.length; j++) {
 					WorkPlan child = workPlan.clone();
 					child.setName(child.getName() + "-" + months[j] + "月子任务");
-					;
+				
 					child.setPlanType(DictUtils.getDictByValue(workPlan.getPlanType(), "type_plan").getId());
 					child.setParent(workPlan);
 					child.setParentIds(workPlan.getParentIds() + workPlan.getId() + ",");
 					child.setId(null);
 					child.setFrequency(months[j]);
 					child.getDepts().setId(ids[i]);
-					child.setWorkState(workPlan.getWorkStateId());
+					if("personal".equals(workPlan.getPlanType()) || "action".equals(workPlan.getPlanType())){
+						child.setWorkStateId(DictUtils.getDictByValue("handing", "work_state").getId());
+					}else{
+						child.setWorkStateId(DictUtils.getDictByValue("pass", "work_state").getId());
+					}
 					save(child);
 				}
 			}
@@ -316,6 +320,11 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 
 	public WorkPlan findComment(String remainId) {
 		return dao.findComment(remainId);
+	}
+	
+	@Transactional(readOnly = false)
+	public void updatepersonLiable(String personLiableId,String id) {
+		dao.updatepersonLiable(personLiableId,id);
 	}
 
 }

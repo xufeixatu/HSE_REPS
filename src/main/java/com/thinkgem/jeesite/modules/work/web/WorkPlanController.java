@@ -250,36 +250,28 @@ public class WorkPlanController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = "assign_work")
-	public String assign_work(WorkPlan workPlan, Model model) {
+	@RequestMapping(value = "assigne_work")
+	public String assigne_work(WorkPlan workPlan, Model model, HttpServletRequest request, HttpServletResponse response) {
 
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-
-		workPlan = workPlanService.get(workPlan.getId());
-		workPlanService.assigne(workPlan);
 		
+		if(workPlan.getParent() != null && !"0".equals(workPlan.getParent().getId()) && (request.getParameter("child") == null || "".equals(request.getParameter("child")))){
+			return "modules/work/assignedWorkForm";
+		}
+		workPlanService.assigne(workPlan);
 		model.addAttribute("workPlan", workPlan);
-		return "modules/work/assignedWorkForm";
+		WorkPlan wp = new WorkPlan();
+		if("true".equals(request.getParameter("child"))){
+			workPlanService.updatepersonLiable(workPlan.getPersonLiable().getId(),workPlan.getId());
+			wp.setPlanType(DictUtils.getDictByID(workPlan.getPlanType()).getValue());
+		}else{
+			wp.setPlanType(workPlan.getPlanType());
+		}
+		
+		return list(wp, request, response, model);
+		
 	}
-
 	
-//	@RequiresPermissions("work:workPlan:view")
-//	@RequestMapping(value = { "workList" })
-//	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-//		if ("personal".equals(workPlan.getPlanType())) {
-//			WorkPlanSqlMapFilter.getFilter().typeliableFilter(workPlan, model);
-//		} else if ("department".equals(workPlan.getPlanType())) {
-//			WorkPlanSqlMapFilter.getFilter().typeDeptFilter(workPlan, model);
-//		} else if ("company".equals(workPlan.getPlanType())) {
-//			WorkPlanSqlMapFilter.getFilter().typeCompnayFilter(workPlan, model);
-//		}
-//
-//		List<WorkPlan> list = workPlanService.findList(workPlan);
-//
-//		model.addAttribute("list", list);
-//		return "modules/work/workPlanList";
-//	}
-
 	/**
 	 * 进入受理工作表单
 	 * 
@@ -300,7 +292,25 @@ public class WorkPlanController extends BaseController {
 
 		return "modules/work/workRemainForm";
 	}
+	
+//	@RequiresPermissions("work:workPlan:view")
+//	@RequestMapping(value = { "workList" })
+//	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+//		if ("personal".equals(workPlan.getPlanType())) {
+//			WorkPlanSqlMapFilter.getFilter().typeliableFilter(workPlan, model);
+//		} else if ("department".equals(workPlan.getPlanType())) {
+//			WorkPlanSqlMapFilter.getFilter().typeDeptFilter(workPlan, model);
+//		} else if ("company".equals(workPlan.getPlanType())) {
+//			WorkPlanSqlMapFilter.getFilter().typeCompnayFilter(workPlan, model);
+//		}
+//
+//		List<WorkPlan> list = workPlanService.findList(workPlan);
+//
+//		model.addAttribute("list", list);
+//		return "modules/work/workPlanList";
+//	}
 
+	
 	/**
 	 * 受理(修改end_state为"已受理"状态)工作
 	 * 
