@@ -23,12 +23,15 @@
 	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+		<input  name="riskType" type="hidden" value="3"/>
 		<ul class="ul-form">
 			<li><label>编号：</label>
 				<form:input path="number" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
 			<li><label>年份：</label>
-				<form:input path="years" htmlEscape="false" class="input-medium"/>
+				<input id="years"  name="years"  type="text"  maxlength="20" class="input-medium Wdate" style="width:163px;"
+				value=""${riskAccess.years}"
+					onclick="WdatePicker({dateFmt:'yyyy'});"/>
 			</li>
 			<li><label>属地单位：</label>
 				<form:select path="unit" class="input-medium">
@@ -58,7 +61,6 @@
 				<th>可能产生的环境影响</th>
 				<th>现有控制方法</th>
 				<th>类别</th>
-				<th>备注信息</th>
 				<shiro:hasPermission name="risk:riskAccess:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -66,7 +68,7 @@
 		<c:forEach items="${page.list}" var="riskAccess">
 			<tr>
 				<td><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">
-					<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>
+					${riskAccess.years}
 				</a></td>
 				<td>
 					${fns:getDictLabel(riskAccess.unit, '', '')}
