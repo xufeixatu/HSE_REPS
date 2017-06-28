@@ -77,18 +77,21 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	 * @return
 	 */
 	@Transactional(readOnly = false)
-	public void  analyse(RiskAccess riskAccess) {
-		riskAccess=get(riskAccess.getId());
+	public RiskAccess  analyse(RiskAccess riskAccess) {
+		if(riskAccess==null||riskAccess.getId()==null){
+			return riskAccess;
+		}
 		String id=riskAccess.getAccessid();
 		if(id==null){
-			return;
+			return riskAccess;
 		}else{
 			if("1".equals(riskAccess.getAccessMothed())){
 				RiskEnvirresult en=envirresultDao.get(id);
 				riskAccess.setMlscore(en.getReserve1());
 				riskAccess.setMscore(en.getMscore());
 				riskAccess.setEscore(en.getLscore());
-				riskAccess.setSscore(en.getSscore());			
+				riskAccess.setSscore(en.getSscore());
+				
 			}else if("0".equals(riskAccess.getAccessMothed())){ 
 				RiskSaferesult riskSaferesult=riskSaferesultDao.get(id);
 				riskAccess.setLscore(riskSaferesult.getLscore());
@@ -96,6 +99,7 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 				riskAccess.setCscore(riskSaferesult.getCscore());
 				
 			}
+			return riskAccess;
 			
 		}
 	}

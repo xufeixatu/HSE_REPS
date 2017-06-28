@@ -18,7 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active">安全风险清单</li>
+		<li class="active"><a>安全风险清单</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -65,7 +65,6 @@
 				<th>触发原因</th>
 				<th>措施</th>
 				<th>责任单位</th>
-				<th>对应管理方案</th>
 				<shiro:hasPermission name="risk:riskAccess:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -95,9 +94,6 @@
 				</td>
 				<td>
 					${fns:getDictLabel(riskAccess.dutyUnit, '', '')}
-				</td>
-				<td>
-					${riskAccess.managementPlan}
 				</td>
 				<shiro:hasPermission name="risk:riskAccess:edit"><td>
     				<a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">修改</a>

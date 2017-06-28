@@ -36,7 +36,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/risk/riskAccess/"> 环境因素识别汇总</a></li>
+		<li class="active"><a href="${ctx}/risk/riskAccess/list?riskType=1"> 环境因素识别汇总</a></li>
 	</ul>
 	<div id="importBox" class="hide">
 		<form id="importForm" action="${ctx}/risk/riskAccess/import" method="post" enctype="multipart/form-data"

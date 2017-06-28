@@ -191,7 +191,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setRiskName(String riskName) {
 		this.riskName = riskName;
 	}
-	@NotNull(message="作业活动名称/活动、物料、产品不能为空")
+	//@NotNull(message="作业活动名称/活动、物料、产品不能为空")
 	@ExcelField(title="作业活动名称/活动、物料、产品")
 	@Length(min=0, max=255, message="作业活动名称/活动、物料、产品、服务长度必须介于 0 和 255 之间")
 	public String getWorkName() {
@@ -201,6 +201,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setWorkName(String workName) {
 		this.workName = workName;
 	}
+	@NotNull(message="危险源不能为空")
 	@ExcelField(title="危害因素")
 	@Length(min=0, max=255, message="危害因素（危险源）长度必须介于 0 和 255 之间")
 	public String getRiskFactors() {

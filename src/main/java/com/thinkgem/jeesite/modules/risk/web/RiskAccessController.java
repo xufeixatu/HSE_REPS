@@ -242,6 +242,7 @@ public class RiskAccessController extends BaseController {
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = "form")
 	public String form(RiskAccess riskAccess, Model model) {
+		riskAccess=riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/riskAccessForm";
 	}
@@ -282,7 +283,7 @@ public class RiskAccessController extends BaseController {
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = "analyse")
 	public String analyse(RiskAccess riskAccess, Model model) {
-		riskAccessService.analyse(riskAccess);
+		riskAccess=riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/riskAccessAnalyseForm";
 	}
@@ -296,7 +297,7 @@ public class RiskAccessController extends BaseController {
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = "analyse_envir")
 	public String analyse_envir(RiskAccess riskAccess, Model model) {
-		riskAccessService.analyse(riskAccess);
+		riskAccess=riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/riskAccessEnvirAnalyseForm";
 	}
@@ -304,7 +305,7 @@ public class RiskAccessController extends BaseController {
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = "envirFactorForm")
 	public String environment(RiskAccess riskAccess, Model model) {
-	
+		riskAccess=riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/envirFactorForm";
 	}
@@ -336,7 +337,7 @@ public class RiskAccessController extends BaseController {
 	public String delete(RiskAccess riskAccess, RedirectAttributes redirectAttributes) {
 		riskAccessService.delete(riskAccess);
 		addMessage(redirectAttributes, "删除成功");
-		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/?repage";
+		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/list?riskType="+riskAccess.getRiskType();
 	}
 
 }

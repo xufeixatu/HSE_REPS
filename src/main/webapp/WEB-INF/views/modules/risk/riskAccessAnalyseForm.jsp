@@ -34,7 +34,7 @@
 		<form:hidden path="id"/>
 		<input  type="hidden"  name="riskType"  value="2" />	
 		<div class="control-group">
-			<label class="control-label">场所、设备：</label>
+			<label class="control-label">场所、活动、设备、物料：</label>
 			<div class="controls">
 				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
@@ -46,7 +46,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">作业活动名称：</label>
+			<label class="control-label">设备、设施、场所、作业活动名称：</label>
 			<div class="controls">
 				<form:input path="workName" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
@@ -193,22 +193,29 @@
 		</div>
 	<!-- 	ms法则  结束-->
 	
-	             <div >
+	           
 	             
-	             </div>
 		<div class="control-group">
 			<label class="control-label">可能导致的事故：</label>
 			<div class="controls">
-				<form:textarea path="affect" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:checkboxes path="affect" items="${fns:getDictList('risk_affect')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
-
 		<div class="control-group">
-			<label class="control-label">触发原因：</label>
+			<label class="control-label">触发原因：${riskAccess.isHeaverisk}</label>
 			<div class="controls">
 				<form:textarea path="reason" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
+		<c:if test="${riskAccess.isHeaverisk==1}">
+			 <div class="control-group">
+				<label class="control-label">对应管理方案：</label>
+				<div class="controls">
+					<form:hidden id="managementPlan" path="managementPlan" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+					<sys:ckfinder input="managementPlan" type="files" uploadPath="/risk/riskAccess" selectMultiple="true"/>
+				</div>
+			</div>
+		</c:if>
 		<div class="form-actions">
 			<shiro:hasPermission name="risk:riskAccess:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="报备"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
