@@ -26,11 +26,13 @@
 		a.unused_3 AS "unused3",
 <!-- 		cct.course_id AS "courseId",
 		cct.attach_name AS "attachName",
+		cct.attach_id AS "attachId",
 		cct.attach_id AS "attachId", -->
 		a.grade_count AS "gradeCount"
 	</sql>
 	
 	<sql id="trainCourseJoins">
+
 <!-- 	     LEFT JOIN COURSE_CATELOG cct ON cct.course_id = a.id  -->
 	</sql>
     
@@ -143,7 +145,8 @@
 			course_time = #{courseTime},
 			upload_by = #{uploadBy},
 			upload_time = #{uploadTime},
-			grade_count=#{gradeCount}
+			grade_count=#{gradeCount},
+			course_grade=#{courseGrade}
 		WHERE id = #{id}
 	</update>
 	

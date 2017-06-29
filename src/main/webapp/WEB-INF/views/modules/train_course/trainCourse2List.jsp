@@ -66,13 +66,21 @@
 				 $.ajax({
 		             type: "post",
 		             url: "${ctx}/course_study/courseStudy/setGrade",
-		             data: {"id":"${courseStudy.id}", "grade":str},
+		             data: {"courseId":"${trainCourse.id}", "grade":str},
 		             dataType: "html",
 		         
 		             success: function(data){
-		                  alert(data);	
+		                 if(data=='true'){
+		                	 alert("打分成功");
+		                 }
+		                 if(data=='alreadyGrade'){
+		                	 alert("已打过分");
+		                 }
+		                 if(data=='noStudy'){
+		                	 alert("没有学习，请先学习");
+		                 }
 		                         
-		                      },
+		             },
 		             error:function(){
 		            	 alert("打分失败");
 		             }
@@ -430,13 +438,25 @@
 			</div>
 			<div class="course-detail-text-progress">
 			    <div class="course-detail-text-progress-bar" role="progressbar" id="progress-value" value="40"></div>
-			    <span class="course-detail-text-progress-bar-text">40% 完成</span>
+			    <span class="course-detail-text-progress-bar-text">${courseStudy.status}已完成</span>
 			</div>
 			<div class="course-detail-text-operate">
 				<ul>
-					<li class="continue">
-						<a href="${ctx}/course_catelog/courseCatelog/list?id=${trainCourse.id}"   class="btn btn-success">继续学习</a>
-					</li>
+					<c:if test="${null == courseStudy}">
+						<li class="continue">
+							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}"   class="btn btn-success">开始学习</a>
+						</li>
+					</c:if>
+					<c:if test="${null != courseStudy && courseStudy.status == '0'}">
+							<li class="continue">
+							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}"   class="btn btn-success">继续学习</a>
+							</li>
+					</c:if>
+					<c:if test="${null != courseStudy && courseStudy.status == '1'}">
+						<li class="continue">
+							<a href="${ctx}/train_course/trainCourse3/list?id=${trainCourse.id}"   class="btn btn-success">学习完成</a>
+						</li>
+					</c:if>
 					<li class="focus">
 						<a>星级评分</a>
 					</li>
