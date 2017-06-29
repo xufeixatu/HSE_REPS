@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+    
+  <description>JSTL 1.1 functions library</description>
+  <display-name>JSTL functions tools</display-name>
+  <tlib-version>1.1</tlib-version>
+  <short-name>tools</short-name>
+  <uri>http://java.sun.com/jsp/jstl/functionsc</uri>
+
+  <function>
+    <description>字符串uri编码</description>
+    <name>urlEncode</name>
+    <function-class>com.thinkgem.jeesite.common.utils.Encodes</function-class>
+    <function-signature>java.lang.String urlEncode(java.lang.String)</function-signature>
+    <example>${tools:urlEncode(uri)}</example>  
+  </function>
+  
+   <function>
+    <description>字符串uri解码</description>
+    <name>urlDecode</name>
+    <function-class>com.thinkgem.jeesite.common.utils.Encodes</function-class>
+    <function-signature>java.lang.String urlDecode(java.lang.String)</function-signature>
+    <example>${tools:urlDecode(uri)}</example>  
+  </function>
+  
+
+  
+  
+<!--	example   
+	<function>
+    <description>获取当前管理站点编号</description>
+    <name>getCurrentSiteId</name>
+    <function-class>com.thinkgem.jeesite.modules.cms.entity.Site</function-class>
+    <function-signature>java.lang.String getCurrentSiteId()</function-signature>
+    <example>${fnc:getCurrentSiteId()}</example>  
+  </function>
+  
+  
+  <function>
+    <description>获取站点</description>
+    <name>getSite</name>
+    <function-class>com.thinkgem.jeesite.modules.cms.utils.CmsUtils</function-class>
+    <function-signature>com.thinkgem.jeesite.modules.cms.entity.Site getSite(java.lang.String)</function-signature>
+    <example>${fnc:getSite(siteId)}</example>  
+  </function>
+  
+  <function>
+    <description>获取文章列表</description>
+    <name>getArticleList</name>
+    <function-class>com.thinkgem.jeesite.modules.cms.utils.CmsUtils</function-class>
+    <function-signature>java.util.List getArticleList(java.lang.String, java.lang.String, int, java.lang.String)</function-signature>
+    <example>${fnc:getArticleList(siteId, categoryId, number, param)}</example>  
+  </function>
+ -->
+</taglib>

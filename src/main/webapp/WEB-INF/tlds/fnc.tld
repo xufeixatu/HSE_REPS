@@ -19,6 +19,7 @@
     <example>${fnc:getCurrentSiteId()}</example>  
   </function>
   
+  
   <function>
     <description>获取站点</description>
     <name>getSite</name>

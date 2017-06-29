@@ -25,6 +25,23 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>检查类别：</label>
+				<sys:treeselect id="checkTypeClass" name="checkTypeClass.id" value="${question.checkTypeClass.id}" 
+					labelName="checkTypeClass.name" labelValue="${question.checkTypeClass.name}"
+					title="检查类别" url="/check/checkTypeClass/treeData" extId="${question.checkTypeClass.id}" cssClass="input-small" allowClear="true"/>
+			</li>		
+			<li><label>问题级别：</label>
+				<form:select path="questionLevelId" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('problem_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</li>
+			<li><label>受理状态：</label>
+				<form:select path="stateId" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('problem_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</li>				
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>

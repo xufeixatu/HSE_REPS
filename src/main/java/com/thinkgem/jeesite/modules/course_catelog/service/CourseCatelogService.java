@@ -45,5 +45,8 @@ public class CourseCatelogService extends CrudService<CourseCatelogDao, CourseCa
 	public void delete(CourseCatelog courseCatelog) {
 		super.delete(courseCatelog);
 	}
-	
+		
+	public List<CourseCatelog> findListByCourseId(CourseCatelog courseCatelog) {
+		return super.dao.findListByCourseId(courseCatelog);
+	}
 }

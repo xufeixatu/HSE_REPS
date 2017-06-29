@@ -37,11 +37,21 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	private String unused1;		// unused_1
 	private String unused2;		// unused_2
 	private String unused3;		// unused_3
+	private int gradeCount;    //打分人数
+	private List<CourseCatelog> CourseCatelogList = Lists.newArrayList();		// 子表列表
 /*	private String courseId;		// 课程id
 	private String attachName;		// 附件名称
-	private String attachId;		// 附件id
-*/	private List<CourseCatelog> CourseCatelogList = Lists.newArrayList();		// 子表列表
+*/	private String attachId;		// 附件id
 	
+	
+	public int getGradeCount() {
+		return gradeCount;
+	}
+
+	public void setGradeCount(int gradeCount) {
+		this.gradeCount = gradeCount;
+	}
+
 	public TrainCourse() {
 		super();
 	}
@@ -176,6 +186,7 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	public void setUnused3(String unused3) {
 		this.unused3 = unused3;
 	}
+	
 /*	@Length(min=0, max=64, message="课程id长度必须介于 0 和 64 之间")
 	public String getCourseId() {
 		return courseId;
@@ -201,8 +212,8 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 
 	public void setAttachId(String attachId) {
 		this.attachId = attachId;
-	}*/
-	
+	}
+	*/
 	
 	public List<CourseCatelog> getCourseCatelogList() {
 		return CourseCatelogList;
@@ -211,5 +222,14 @@ public class TrainCourse extends DataEntity<TrainCourse> {
 	public void setCourseCatelogList(List<CourseCatelog> CourseCatelogList) {
 		this.CourseCatelogList = CourseCatelogList;
 	}
+
+	public String getAttachId() {
+		return attachId;
+	}
+
+	public void setAttachId(String attachId) {
+		this.attachId = attachId;
+	}
+
 	
 }

@@ -69,4 +69,5 @@ public class CourseCatelog extends DataEntity<CourseCatelog> {
 		this.attachId = attachId;
 	}
 	
+	
 }

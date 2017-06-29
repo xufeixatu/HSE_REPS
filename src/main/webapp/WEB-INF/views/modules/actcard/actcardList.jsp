@@ -60,9 +60,12 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="actcard">
 			<tr>
-				<td><a href="${ctx}/actcard/actcard/form?id=${actcard.id}">
-					${actcard.reporter}
-				</a></td>
+				<td>
+				<!-- 
+				<a href="${ctx}/actcard/actcard/form?id=${actcard.id}">
+				</a> -->
+				${actcard.reporter}
+				</td>
 				<td>
 					${actcard.reporterOffice}
 				</td>
