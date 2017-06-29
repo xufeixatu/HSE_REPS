@@ -287,7 +287,7 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	 */
 	@Transactional(readOnly = false)
 	public void closeWorkPlan(String id) {
-		dao.closeWorkPlan(id);
+		dao.updateWorkState(id, DictUtils.getDictByValue("received", "work_state").getId());
 	}
 
 	/**
