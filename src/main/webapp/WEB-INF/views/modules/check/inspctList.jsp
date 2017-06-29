@@ -30,10 +30,9 @@
 					title="部门" url="/sys/office/treeData?type=2" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
 			<li><label>检查类别：</label>
-				<form:select path="typeId" class="input-medium">
-					<form:option value="" label="请选择"/>
-					<form:options items="${checkTypes}" itemLabel="name" itemValue="id" htmlEscape="false"/>
-				</form:select>
+				<sys:treeselect id="checkTypeClass" name="checkTypeClass.id" value="${inspct.checkTypeClass.id}" 
+					labelName="checkTypeClass.name" labelValue="${inspct.checkTypeClass.name}"
+					title="检查类别" url="/check/checkTypeClass/treeData" extId="${inspct.checkTypeClass.id}" cssClass="input-small" allowClear="true"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
