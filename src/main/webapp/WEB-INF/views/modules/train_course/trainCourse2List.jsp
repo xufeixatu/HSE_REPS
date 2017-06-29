@@ -529,7 +529,13 @@
 								${courseCatelog.attachName}
 							</a>
 						</span>
-						<span class="chapter-circle-finish"></span>
+						<c:set var = "study_status" value="${courseStudy.status}"/>
+						<c:if test="${study_status == 1}">
+							<span class="chapter-circle-finish"></span>
+						</c:if>
+<%--  					<c:if test="${study_status != 1}">
+							<span class="chapter-circle-unfinish"></span>
+						</c:if>  --%>
 						</li>
 					</c:forEach> 
 <%-- 				</c:forTokens>	 --%>		
