@@ -55,14 +55,14 @@
 		sd2.label AS "workState",
 		so.name AS "myDept",
 		
-		wfrf.reply_content AS newFeedback,
-		wfrf.reply_people_id AS feebackPeopleId,
-		wfrf.reply_time AS feedbackTime,
-		wri.remain_dept_id AS remainDeptId,
-		
-		wfrr.reply_content AS newReply,
-		wfrr.reply_people_id AS replyPeopleId,
-		wfrf.reply_time AS replyTime
+		wfrf.reply_content AS "newFeedback",
+		wfrf.reply_people_id AS "feebackPeopleId",
+		wfrf.reply_time AS "feedbackTime",
+		wri.remain_dept_id AS "remainDeptId",
+		wri.id AS "remainId",
+		wfrr.reply_content AS "newReply",
+		wfrr.reply_people_id AS "replyPeopleId",
+		wfrf.reply_time AS "replyTime"
 	</sql>
 	<sql id="workPlanJoins">
 		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
@@ -202,17 +202,18 @@
 		${sqlMap.dsf}
 		ORDER BY a.work_state_id DESC,a.sort ASC
 	</select>
-	
+	<!-- 查找一个问题的讨论过程 -->
 	<select id="findDiscusses" resultType="WorkPlan">
 		SELECT 
+			a.id AS "remainId",
 			a.reply_people_id AS "replyPeopleId",
-			a.reply_content AS "newFeedback",
+			a.reply_content AS "newReply",
 			a.reply_time AS "replay_time",
 			a.type AS "type"
 		FROM work_feedback_reply a
 
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			a.del_flag = 0
 			AND a.remainId = #{id}
 		</where>
 		ORDER BY a.reply_time ASC
@@ -575,18 +576,20 @@
 	</insert>
 	
 	<insert id="feedbackSave">
-		INSERT INTO work_feedback(
+		INSERT INTO work_feedback_reply(
 			id,
-			feedback_info,
-			remain_id,
-			feedback_user_id,
-			feedback_time
+			reply_content,
+			remainId,
+			reply_people_id,
+			reply_time,
+			type
 		) VALUES (
 			UUID(),
-			#{feedbackDesc},
+			#{newReply},
 			#{remainId},
-			#{userid},
-			NOW()
+			#{replyPeopleId},
+			NOW(),
+			#{type}
 		)
 	</insert>
 	
