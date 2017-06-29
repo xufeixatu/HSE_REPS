@@ -63,6 +63,15 @@
 		<include refid="questionJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="questionLevelId != null and questionLevelId != ''">
+				AND a.question_level_id = #{questionLevelId}
+			</if>
+			<if test="stateId != null and stateId != ''">
+				AND a.state_id = #{stateId}
+			</if>
+			<if test="checkTypeClass != null and checkTypeClass.id != null and checkTypeClass.id != ''">
+				AND a.check_type_class_id = #{checkTypeClass.id}
+			</if>									
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

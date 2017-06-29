@@ -56,6 +56,9 @@
 			<if test="checkOffice != null and checkOffice.id != null and checkOffice.id != ''">
 				AND a.check_dept = #{checkOffice.id}
 			</if>
+			<if test="checkTypeClass != null and checkTypeClass.id != null and checkTypeClass.id != ''">
+				AND type.id = #{checkTypeClass.id}
+			</if>			
 		 </where>) AS data
 	LEFT JOIN sys_office office1 ON office1.id = data.checkOfficeId
 	LEFT JOIN sys_office office2 ON office2.id = data.inspectionOfficeId
