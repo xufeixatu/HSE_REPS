@@ -134,7 +134,6 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	private String replyContent;//回复内容
 	private String replyId;//回复ID
 	private User replyPeople;//回复人
-	private Date replyTime;//回复时间
 	private String commentContent; //点评内容
 	private int score;//打分
 	
@@ -158,12 +157,19 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	/***************************************************************************************
 	 **********************************Remain受理表数据结束***********************************
 	 ***************************************************************************************/
-	private String newFeedback; //最新反馈
-	private String feebackPeopleId; //反馈人
-	private Date feedbackTime; //最新反馈时间
+	private Date replyTime; //最新反馈时间
 	private String newReply; //最新回复
 	private String replyPeopleId; //回复人ID
-//	private Date replyTime;
+	private String type;
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	//	private Date replyTime;
 	public Dict getPlanTypeDetail() {
 		return planTypeDetail;
 	}

@@ -238,10 +238,13 @@ public class WorkPlanSqlMapFilter {
 		common(workPlan, model);
 
 		dsf.append(" and ");
-		dsf.append("a.assigner_id = '");
+		dsf.append("a.create_by = '");
 		dsf.append(UserUtils.getUser().getId());
+		dsf.append("'");
+		dsf.append(" and ");
+		dsf.append("a.work_state_id <> '");
+		dsf.append(DictUtils.getDictByValue("unsubmit", "work_state").getId());
 		dsf.append("' ");
-		
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}

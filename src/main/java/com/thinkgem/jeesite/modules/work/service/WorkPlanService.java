@@ -182,14 +182,10 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 		wrkpln.setRemainDeptId(workPlan.getCurrentRemainDeptId());
 		wrkpln.setRemainWorkPlanId(workPlan.getId());
 		dao.remain_insert(wrkpln);
-
 		/**
-		 * 如果所有分配该工作的部门均已接受，则将受理状态改为已受理
+		 * 受理状态改为已受理
 		 */
-		String depts = workPlan.getDepts().getId();
-		if (dao.isRemainOver(depts, wrkpln.getRemainWorkPlanId()) == depts.split(",").length) {
-			dao.remain(workPlan.getId());
-		}
+		dao.updateWorkState(workPlan.getId(), DictUtils.getDictByValue("received", "work_state").getId());
 	}
 
 	/**
@@ -325,6 +321,10 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	@Transactional(readOnly = false)
 	public void updatepersonLiable(String personLiableId,String id) {
 		dao.updatepersonLiable(personLiableId,id);
+	}
+	
+	public List<WorkPlan> findDiscusses(String id) {
+		return dao.findDiscusses(id);
 	}
 
 }

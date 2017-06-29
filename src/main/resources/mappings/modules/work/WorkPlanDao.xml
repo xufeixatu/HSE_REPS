@@ -163,7 +163,7 @@
 		a.name AS "name"
 	</sql>
 	<sql id="workRemainJoins">
-
+		
 	</sql>
     
 	<select id="get" resultType="WorkPlan">
@@ -172,6 +172,7 @@
 		FROM work_plan a
 		<include refid="workPlanJoins"/>
 		WHERE a.id = #{id}
+		GROUP BY a.work_state_id
 	</select>
 	<!-- 
 	<resultMap type="WorkPlan" id="workPlanList">
@@ -200,6 +201,21 @@
 		</where>
 		${sqlMap.dsf}
 		ORDER BY a.work_state_id DESC,a.sort ASC
+	</select>
+	
+	<select id="findDiscusses" resultType="WorkPlan">
+		SELECT 
+			a.reply_people_id AS "replyPeopleId",
+			a.reply_content AS "newFeedback",
+			a.reply_time AS "replay_time",
+			a.type AS "type"
+		FROM work_feedback_reply a
+
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.remainId = #{id}
+		</where>
+		ORDER BY a.reply_time ASC
 	</select>
 	
 	<select id="findAllList" resultType="WorkPlan">

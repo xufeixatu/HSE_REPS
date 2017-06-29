@@ -61,6 +61,9 @@
 						accept:function(){
 							return row.workStateId == '${fns:getDictByValue('allocated','work_state').id}';
 						},
+						remain:function(){
+							return row.workStateId == '${fns:getDictByValue('received','work_state').id}';
+						},
 						start_time:function(){
 							return row.startTime != null && row.startTime != "";
 						},
@@ -261,6 +264,9 @@
 			{{#accept}}
 				<a href="${ctx}/work/workPlan/remain_form?id={{row.id}}&planType=${planTypeDict.value}">受理</a>	
 			{{/accept}}
+			{{#remain}}
+				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}">反馈</a>	
+			{{/remain}}
 			</td></shiro:hasPermission>
 		</tr>
 		<tr id="ex_{{row.id}}" style="display:none">

@@ -168,4 +168,6 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	public void updateProcessInstanceId(@Param("id") String id,@Param("processInstanceId") java.lang.String pi);
 
 	public void updatepersonLiable(@Param("personLiableId") String personLiableId,@Param("id") String id);
+
+	public List<WorkPlan> findDiscusses(@Param("id") java.lang.String id);
 }

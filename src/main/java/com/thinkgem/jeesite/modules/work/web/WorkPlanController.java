@@ -293,6 +293,45 @@ public class WorkPlanController extends BaseController {
 		return "modules/work/workRemainForm";
 	}
 	
+	
+	/**
+	 * 工作受理
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"remain_save"})
+	public String remain_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		workPlanService.remain(workPlan);
+		
+		return "modules/work/list";
+	}
+
+	
+	/**
+	 * 进入工作反馈表单
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"discuss_form"})
+	public String discuss_form(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		
+		workPlanService.findDiscusses(workPlan.getId());
+		
+		return "modules/work/discussForm";
+	}
 //	@RequiresPermissions("work:workPlan:view")
 //	@RequestMapping(value = { "workList" })
 //	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -311,24 +350,7 @@ public class WorkPlanController extends BaseController {
 //	}
 
 	
-	/**
-	 * 受理(修改end_state为"已受理"状态)工作
-	 * 
-	 * @param workPlan
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 */
-	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = { "remain_save" })
-	public String remain_save(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response,
-			Model model) {
-
-		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.remain(workPlan);
-		return "redirect:" + Global.getAdminPath() + "/work/workPlan/remain_list?repage&planType=company";
-	}
+	
 	
 	@RequiresPermissions("work:workPlan:view")
 	@RequestMapping(value = "exec_form")
