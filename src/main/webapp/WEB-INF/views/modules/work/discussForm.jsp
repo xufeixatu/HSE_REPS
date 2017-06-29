@@ -81,6 +81,7 @@
 	<form:form action="${ctx}/work/workPlan/discuss_save" method="post"
 		id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
 		<form:hidden path="remainId" />
+		<form:hidden path="type" />
 		<input type="hidden" name="planType" value="${workPlan.planType}" />
 		<div class="control-group">
 			<label class="control-label">${fns:getUser().name} ${fns:getDictLabel(workPlan.type, "discuss_type", "")}:</label>

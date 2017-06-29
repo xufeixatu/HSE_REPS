@@ -62,7 +62,12 @@
 							return row.workStateId == '${fns:getDictByValue('allocated','work_state').id}';
 						},
 						remain:function(){
-							return row.workStateId == '${fns:getDictByValue('received','work_state').id}';
+							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' &&
+								   ${myType eq 'responsible'};
+						},
+						reply:function(){
+							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' &&
+							   		${myType eq 'assigned'};
 						},
 						start_time:function(){
 							return row.startTime != null && row.startTime != "";
@@ -265,8 +270,11 @@
 				<a href="${ctx}/work/workPlan/remain_form?id={{row.id}}&planType=${planTypeDict.value}">受理</a>	
 			{{/accept}}
 			{{#remain}}
-				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&type=feedback">反馈</a>	
+				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&remainId={{row.remainId}}&type=feedback">反馈回复详情</a>	
 			{{/remain}}
+			{{#reply}}
+				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&remainId={{row.remainId}}&type=reply">反馈回复详情</a>	
+			{{/reply}}
 			</td></shiro:hasPermission>
 		</tr>
 		<tr id="ex_{{row.id}}" style="display:none">

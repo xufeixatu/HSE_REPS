@@ -328,7 +328,7 @@ public class WorkPlanController extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
-		List<WorkPlan> discusses = workPlanService.findDiscusses(workPlan.getId());
+		List<WorkPlan> discusses = workPlanService.findDiscusses(workPlan.getRemainId());
 		model.addAttribute("discusses",discusses);
 		return "modules/work/discussForm";
 	}
@@ -347,7 +347,7 @@ public class WorkPlanController extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getNewReply(),UserUtils.getUser().getId(),workPlan.getType());
-		return "modules/work/discussForm";
+		return discuss_form(workPlan, request, response, model);
 	}
 //	@RequiresPermissions("work:workPlan:view")
 //	@RequestMapping(value = { "workList" })
