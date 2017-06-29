@@ -163,7 +163,7 @@
 		a.name AS "name"
 	</sql>
 	<sql id="workRemainJoins">
-
+		
 	</sql>
     
 	<select id="get" resultType="WorkPlan">
@@ -172,6 +172,7 @@
 		FROM work_plan a
 		<include refid="workPlanJoins"/>
 		WHERE a.id = #{id}
+		GROUP BY a.work_state_id
 	</select>
 	<!-- 
 	<resultMap type="WorkPlan" id="workPlanList">
@@ -200,6 +201,21 @@
 		</where>
 		${sqlMap.dsf}
 		ORDER BY a.work_state_id DESC,a.sort ASC
+	</select>
+	
+	<select id="findDiscusses" resultType="WorkPlan">
+		SELECT 
+			a.reply_people_id AS "replyPeopleId",
+			a.reply_content AS "newFeedback",
+			a.reply_time AS "replay_time",
+			a.type AS "type"
+		FROM work_feedback_reply a
+
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.remainId = #{id}
+		</where>
+		ORDER BY a.reply_time ASC
 	</select>
 	
 	<select id="findAllList" resultType="WorkPlan">
@@ -283,7 +299,7 @@
 			#{workDesc},
 			#{jobRequire},
 			#{zskId},
-			'f3aa6747844045e0ad00605e60b8b5c1',
+			#{workStateId},
 			#{isOpen},
 			#{createBy.id},
 			#{parent.id},
@@ -403,6 +419,12 @@
 			end_state_id = '042bb2ce059249729da41c7995e4381b',
 			depts = #{depts.id},
 			assigner_id = #{currentUser.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updatepersonLiable">
+		UPDATE work_plan SET 
+			person_liable_id = #{personLiableId}
 		WHERE id = #{id}
 	</update>
 

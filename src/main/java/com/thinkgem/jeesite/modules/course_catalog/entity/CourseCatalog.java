@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
 
 /**
- * 课件类别管理Entity
+ * 课件类别管理Entity  课件类别管理添加
  * @author 曹洪运
  * @version 2017-06-01
  */
