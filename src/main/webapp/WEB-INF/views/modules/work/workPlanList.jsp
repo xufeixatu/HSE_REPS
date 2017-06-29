@@ -265,7 +265,7 @@
 				<a href="${ctx}/work/workPlan/remain_form?id={{row.id}}&planType=${planTypeDict.value}">受理</a>	
 			{{/accept}}
 			{{#remain}}
-				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}">反馈</a>	
+				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&type=feedback">反馈</a>	
 			{{/remain}}
 			</td></shiro:hasPermission>
 		</tr>

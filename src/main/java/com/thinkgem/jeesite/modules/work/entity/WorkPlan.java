@@ -161,6 +161,22 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	private String newReply; //最新回复
 	private String replyPeopleId; //回复人ID
 	private String type;
+	public String getNewReply() {
+		return newReply;
+	}
+
+	public void setNewReply(String newReply) {
+		this.newReply = newReply;
+	}
+	
+	public String getReplyPeopleId() {
+		return replyPeopleId;
+	}
+
+	public void setReplyPeopleId(String replyPeopleId) {
+		this.replyPeopleId = replyPeopleId;
+	}
+	
 	public String getType() {
 		return type;
 	}

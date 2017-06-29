@@ -328,8 +328,25 @@ public class WorkPlanController extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
-		workPlanService.findDiscusses(workPlan.getId());
-		
+		List<WorkPlan> discusses = workPlanService.findDiscusses(workPlan.getId());
+		model.addAttribute("discusses",discusses);
+		return "modules/work/discussForm";
+	}
+	
+	/**
+	 * 讨论保存
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = {"discuss_save"})
+	public String discuss_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getNewReply(),UserUtils.getUser().getId());
 		return "modules/work/discussForm";
 	}
 //	@RequiresPermissions("work:workPlan:view")
