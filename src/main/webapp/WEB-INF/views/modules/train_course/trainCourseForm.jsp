@@ -61,14 +61,14 @@
 		<li><a href="${ctx}/train_course/trainCourse/">培训课件查看列表</a></li>
 		<li class="active"><a href="${ctx}/train_course/trainCourse/form?id=${trainCourse.id}">上传培训课件<shiro:hasPermission name="train_course:trainCourse:edit">${not empty trainCourse.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="train_course:trainCourse:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="trainCourse" action="${ctx}/train_course/trainCourse/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="trainCourse" action="${ctx}/train_course/trainCourse/save" method="post" class="form-horizontal" type="multipart/form-data">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">封面上传：</label>
 			<div class="controls">
 				<form:hidden id="coverId" path="coverId" htmlEscape="false" maxlength="255" class="input-xlarge"/>
-				<sys:ckfinder input="coverId" type="files" uploadPath="/train_course/trainCourse" selectMultiple="false"/>
+				<sys:ckfinder input="coverId" type="images" uploadPath="/train_course/trainCourse" selectMultiple="false"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -101,8 +101,7 @@
 		</div>
 		
 		<div class="control-group">
-		
-						<div class="control-group">
+			<div class="control-group">
 				<label class="control-label">课件附件上传：</label>
 				<div class="controls">
 					<table id="contentTable" class="table table-striped table-bordered table-condensed">
@@ -130,9 +129,10 @@
 								<input id="courseCatelogList{{idx}}_attachName" name="courseCatelogList[{{idx}}].attachName" type="text" value="{{row.attach_name}}" maxlength="100" class="input-small "/>
 							</td>
 							<td>					
-								<form:hidden id="courseCatelogList{{idx}}_attachId" path="courseCatelogList[0].attachId" maxlength="255" class="input-xlarge"/>
+								<input name="courseCatelogList[{{idx}}].attachId" id="courseCatelogList{{idx}}_attachId" maxlength="255" class="input-xlarge" type="hidden"/>
 								<sys:ckfinder input="courseCatelogList{{idx}}_attachId" type="files" uploadPath="/train_course/trainCourse" selectMultiple="false"/>
 							</td>
+							
 							<shiro:hasPermission name="train_course:trainCourse:edit"><td class="text-center" width="10">
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#courseCatelogList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 							</td></shiro:hasPermission>
@@ -149,13 +149,16 @@
 						});
 					</script>
 				</div>
-			</div>	
-<%-- 			<label class="control-label">课件附件上传：</label>
-	<input id="courseCatelogList{{idx}}_attach_id" name="courseCatelogList[{{idx}}].attach_id" type="text" value="{{row.attach_id}}" maxlength="255" class="input-small "/>
-			<div class="controls">
-				<form:hidden id="docId" path="docId" htmlEscape="false" maxlength="500" class="input-xlarge"/>
-				<sys:ckfinder input="docId" type="files" uploadPath="/train_course/trainCourse" selectMultiple="true"/>
-			</div> --%>
+<%-- 				<label class="control-label">课件附件上传：</label>
+				<div class="controls">
+							
+			<form:hidden id="docId" path="courseCatelogList[{{idx}}].attachId" htmlEscape="false" maxlength="500" class="input-xlarge"/>
+								<input name="courseCatelogList[{{idx}}].attachId" id="courseCatelogList{{idx}}_attachId maxlength="255" class="input-xlarge" type="hidden"/>
+								<sys:ckfinder input="courseCatelogList{{idx}}_attachId" type="files" uploadPath="/train_course/trainCourse" selectMultiple="false"/>
+				
+
+				</div> --%>
+			</div> 
 		</div>
 		<div class="control-group">
 			<label class="control-label">上传人：</label>
@@ -175,7 +178,8 @@
 		</div>
 		
 		<div class="form-actions">
-			<shiro:hasPermission name="train_course:trainCourse:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasPermission name="train_course:trainCourse:edit">
+			<input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

@@ -391,4 +391,23 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     	return result.toString();
     }
     
+    
+    /**
+     * 将文件路径分割出目录
+     * @param objectString 字符串
+     *   例如：row.user.id
+     *   返回：!row?'':!row.user?'':!row.user.id?'':row.user.id
+     */
+    public static String getPathDir(String objectString){
+    	StringBuilder result = new StringBuilder();
+    	StringBuilder val = new StringBuilder();
+    	String[] vals = split(objectString, "/");
+    	for (int i=0; i<vals.length; i++){
+    		val.append(vals[i]);
+    		result.append("!"+(val.substring(1))+"?'':");
+    	}
+    	result.append(val.substring(1));
+    	return result.toString();
+    }
+    
 }

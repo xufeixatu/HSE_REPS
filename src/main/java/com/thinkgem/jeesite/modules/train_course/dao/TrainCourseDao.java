@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.train_course.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
 
 /**
@@ -14,5 +15,7 @@ import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
  */
 @MyBatisDao
 public interface TrainCourseDao extends CrudDao<TrainCourse> {
+
+	
 	
 }

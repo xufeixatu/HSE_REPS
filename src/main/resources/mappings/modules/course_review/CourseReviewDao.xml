@@ -37,6 +37,15 @@
 		<include refid="courseReviewJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+<!-- <<<<<<< HEAD -->
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="courseId != null and courseId != ''">
+				AND a.course_id = #{courseId}
+			</if>
+<!-- =======
+>>>>>>> branch 'trainCourse' of https://github.com/xufeixatu/HSE_REPS.git -->
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

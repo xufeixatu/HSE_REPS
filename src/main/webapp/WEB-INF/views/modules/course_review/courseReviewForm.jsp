@@ -46,7 +46,9 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">评价星级：</label>
+
+			<label class="control-label">评论星级：</label>
+
 			<div class="controls">
 				<form:input path="assessGrade" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
