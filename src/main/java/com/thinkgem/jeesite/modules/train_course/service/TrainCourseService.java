@@ -46,23 +46,23 @@ public class TrainCourseService extends CrudService<TrainCourseDao, TrainCourse>
 
 	
 	
-	public void videoConvert(TrainCourse trainCourse, String filePath){
+/*	public void videoConvert(TrainCourse trainCourse, String filePath){
 		
 		//获得保存文件的路径
-	/*	String basePath = sctx.getRealPath("userfiles");*/
+		String basePath = sctx.getRealPath("userfiles");
 		//拿到文件路径和转码
-/*		String filePath[]=trainCourse.getDocId().split("|");*/
+		String filePath[]=trainCourse.getDocId().split("|");
 		String path = filePath + "userfiles\\1\\files\\train_course\\trainCourse\\2017\\05\\movie.mp4";
 		
-		/*String codcFilePath = filePath + "userfiles\\1\\files\\train_course\\trainCourse\\2017\\05\\" + "NewVedioTest" + ".mp4";				//设置转换为flv格式后文件的保存路径
-*/
+		String codcFilePath = filePath + "userfiles\\1\\files\\train_course\\trainCourse\\2017\\05\\" + "NewVedioTest" + ".mp4";				//设置转换为flv格式后文件的保存路径
+
 		String codcFilePath = "http://localhost:8080/HSE/userfiles\\1\\files\\train_course\\trainCourse\\2017\\05\\" + "NewVedioTest" + ".mp4";				//设置转换为flv格式后文件的保存路径
 		// 获取配置的转换工具（ffmpeg.exe）的存放路径
 		String ffmpegPath = filePath + ".." + "\\tools\\ffmpeg.exe";	
 		//转码
 
 		try {
-/*			boolean flag = VideoConvertUtils.executeCodecs(ffmpegPath, filePath[0], codcFilePath);*/
+			boolean flag = VideoConvertUtils.executeCodecs(ffmpegPath, filePath[0], codcFilePath);
 			boolean flag = VideoConvertUtils.executeCodecs(ffmpegPath, path, codcFilePath);
 			if(flag == true){
 				//TODO
@@ -76,7 +76,7 @@ public class TrainCourseService extends CrudService<TrainCourseDao, TrainCourse>
 		}
 		
 		
-	}
+	}*/
 	
 	
 	@Transactional(readOnly = false)
