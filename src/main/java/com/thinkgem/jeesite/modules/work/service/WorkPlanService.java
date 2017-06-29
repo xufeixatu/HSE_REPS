@@ -206,9 +206,9 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	}
 
 	@Transactional(readOnly = false)
-	public void feedbackSave(String remainId, String feedbackDesc,
-			String userid/* ,boolean isOver */) {
-		dao.feedbackSave(remainId, feedbackDesc, userid);
+	public void feedbackSave(String remainId, String replyContent,
+			String replyPeopleId,String type) {
+		dao.feedbackSave(remainId, replyContent, replyPeopleId,type);
 		// if(isOver){
 		// dao.feedback_over(remainId,WorkPlanDao.REMAIN_STATE_PROCESSED);
 		// }

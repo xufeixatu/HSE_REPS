@@ -119,7 +119,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 * @param feedbackDesc
 	 * @param userid
 	 */
-	public void feedbackSave(@Param("remainId") String remainId,@Param("feedbackDesc") String feedbackDesc, @Param("userid") String userid);
+	public void feedbackSave(@Param("remainId") String remainId,@Param("replyContent") String replyContent, @Param("replyPeopleId") String replyPeopleId,@Param("type") String type);
 	/**
 	 * 修改结束状态为已处理状态
 	 * @param workplanId

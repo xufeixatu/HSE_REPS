@@ -58,7 +58,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a
+		<li class="active"><a
 			href="#">${planTypeDict.label}回复反馈列表</a></li>
 
 	</ul>
@@ -67,7 +67,7 @@
 	<c:forEach items="${discusses}" var="w">
 		<div class="control-group">
 			<label class="control-label">
-				${fns:getUserById(w.replyPeopleId)}
+				${fns:getUserById(w.replyPeopleId).name}
 				${fns:getDictLabel(w.type, "discuss_type", "")}:
 			</label>
 			<label class="control-label">
@@ -83,7 +83,7 @@
 		<form:hidden path="remainId" />
 		<input type="hidden" name="planType" value="${workPlan.planType}" />
 		<div class="control-group">
-			<label class="control-label">回复|反馈:</label>
+			<label class="control-label">${fns:getUser().name} ${fns:getDictLabel(workPlan.type, "discuss_type", "")}:</label>
 			<div class="controls">
 				<form:textarea path="newReply" htmlEscape="false" rows="4"
 					maxlength="255" class="input-xxlarge " cssClass="required" />

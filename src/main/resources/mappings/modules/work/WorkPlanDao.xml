@@ -575,18 +575,20 @@
 	</insert>
 	
 	<insert id="feedbackSave">
-		INSERT INTO work_feedback(
+		INSERT INTO work_feedback_reply(
 			id,
-			feedback_info,
-			remain_id,
-			feedback_user_id,
-			feedback_time
+			reply_content,
+			remainId,
+			reply_people_id,
+			reply_time,
+			type
 		) VALUES (
 			UUID(),
-			#{feedbackDesc},
+			#{newReply},
 			#{remainId},
-			#{userid},
-			NOW()
+			#{replyPeopleId},
+			NOW(),
+			#{type}
 		)
 	</insert>
 	

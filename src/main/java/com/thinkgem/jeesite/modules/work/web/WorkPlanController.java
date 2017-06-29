@@ -346,7 +346,7 @@ public class WorkPlanController extends BaseController {
 	public String discuss_save(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getNewReply(),UserUtils.getUser().getId());
+		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getNewReply(),UserUtils.getUser().getId(),workPlan.getType());
 		return "modules/work/discussForm";
 	}
 //	@RequiresPermissions("work:workPlan:view")
