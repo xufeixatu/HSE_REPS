@@ -142,6 +142,10 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	 **********************************Remain受理表数据开始***********************************
 	 ***************************************************************************************/
 	private String remainId;
+	
+	public void setFeedbackTime(Date feedbackTime) {
+		this.feedbackTime = feedbackTime;
+	}
 	private String remainDesc;
 	private String remainnerId;
 	private String remainDeptId;
@@ -164,6 +168,18 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	private String newReply; //最新回复
 	private String type;//类型反馈或回复
 	private String replyPeopleId; //回复人ID
+	public String getFeebackPeopleId() {
+		return feebackPeopleId;
+	}
+
+	public void setFeebackPeopleId(String feebackPeopleId) {
+		this.feebackPeopleId = feebackPeopleId;
+	}
+
+	public Date getFeedbackTime() {
+		return feedbackTime;
+	}
+
 	public String getNewReply() {
 		return newReply;
 	}

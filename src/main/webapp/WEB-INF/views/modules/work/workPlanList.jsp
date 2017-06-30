@@ -56,19 +56,16 @@
 							return row.workStateId != '${fns:getDictByValue('unsubmit','work_state').id}';
 						},
 						pass:function(){
-							return row.workStateId == '${fns:getDictByValue('pass','work_state').id}';
+							return row.workStateId == '${fns:getDictByValue('pass','work_state').id}' && ${empty myType};
 						},
 						accept:function(){
-							return row.workStateId == '${fns:getDictByValue('allocated','work_state').id}';
+							return row.workStateId == '${fns:getDictByValue('allocated','work_state').id}' && ${empty myType};
 						},
 						remain:function(){
-							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' &&
-								   ${myType eq 'responsible'};
+							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' && ${myType eq 'responsible'};
 						},
 						reply:function(){
-							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' &&
-							   		${myType eq 'assigned'} && 
-							   		row.workStateId != '${fns:getDictByValue('closed','work_state').id}';
+							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' && ${myType eq 'assigned'} &&  row.workStateId != '${fns:getDictByValue('closed','work_state').id}';
 						},
 						start_time:function(){
 							return row.startTime != null && row.startTime != "";
@@ -283,7 +280,7 @@
 		<tr id="ex_{{row.id}}" style="display:none">
 			<td colspan="100">
 				<a href="#" style="font-weight:900px">最新交流</a><br/>
-				最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}}<br/>
+				最新反馈消息：{{row.newFeedback}}<br/>
 				单位：{{row.feebackPeopleId}} 反馈人：{{row.remain_dept_id}} 反馈时间：{{row.feedbackTime}}<br/>
 				
 				最新回复消息：{{row.newReply}}<br/>
