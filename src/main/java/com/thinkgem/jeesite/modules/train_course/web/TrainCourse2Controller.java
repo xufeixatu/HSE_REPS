@@ -97,10 +97,9 @@ public class TrainCourse2Controller extends BaseController {
 		CourseStudy courseStudy =  new CourseStudy();
 		courseStudy.setCourseId(trainCourse.getId());
 		courseStudy.setCreateBy(UserUtils.getUser());
-		System.out.println("===============================");
+		System.out.println(courseStudy.getCourseId());
 		model.addAttribute("courseStudy", courseStudyService.findByCourseIdAndUserId(courseStudy));
-		System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-		
+
 		return "modules/train_course/trainCourse2List";
 	}
 
@@ -108,7 +107,6 @@ public class TrainCourse2Controller extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(TrainCourse trainCourse, Model model) {
 		model.addAttribute("trainCourse", trainCourse);
-		//model.addAttribute("courseReview", courseReview);
 		return "modules/train_course/trainCourse2Form";
 	}
 

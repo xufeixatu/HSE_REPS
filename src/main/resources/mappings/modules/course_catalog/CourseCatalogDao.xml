@@ -131,7 +131,7 @@
 	<update id="delete">
 		UPDATE course_catalog SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+		WHERE id = #{id} OR parent_ids LIKE '%${id}%'
 	</update>
 	
 </mapper>

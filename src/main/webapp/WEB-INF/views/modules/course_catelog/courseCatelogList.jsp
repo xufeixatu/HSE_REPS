@@ -196,7 +196,7 @@
 							</a>
 						</span>
 						<c:set var = "study_status" value="${courseStudy.status}"/>
-						<c:if test="${study_status != 1}">
+						<c:if test="${study_status == 1}">
 							<span class="chapter-circle-finish"></span>
 						</c:if>
 <%--  						<c:if test="${study_status != 1}">

@@ -23,6 +23,9 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.course_study.entity.CourseStudy;
 import com.thinkgem.jeesite.modules.course_study.service.CourseStudyService;
 
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+
+
 /**
  * 学习记录Controller
  * @author 王少昌
@@ -81,11 +84,18 @@ public class CourseStudyController extends BaseController {
 	}
 
 	@ResponseBody
-    @RequiresPermissions("course_study:courseStudy:edit")
+    @RequiresPermissions  ("course_study:courseStudy:edit")
 	@RequestMapping(value = "setGrade")//  grade打分
 	public String setGrade(CourseStudy courseStudy) {
-		System.out.println(courseStudy.getGrade());
-		System.out.println(courseStudy.getId());
+		courseStudy.setCreateBy(UserUtils.getUser());
+		
+					/*	test output
+						System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+						System.out.println(courseStudy.getCreateBy());
+						System.out.println(courseStudy.getGrade());
+						System.out.println(courseStudy.getCourseId());
+						System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+				*/
 		return courseStudyService.avg(courseStudy);
 		
 	}
