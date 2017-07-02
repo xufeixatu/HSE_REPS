@@ -282,7 +282,7 @@
 				<a href="#" style="font-weight:900px">最新交流</a><br/>
 				最新反馈消息：{{row.newFeedback}}<br/>
 				单位：{{row.feebackPeopleId}} 反馈人：{{row.remain_dept_id}} 反馈时间：{{row.feedbackTime}}<br/>
-				
+				{{row.remainId}}
 				最新回复消息：{{row.newReply}}<br/>
 				回复人：{{row.replyPeopleId}} 回复时间：{{row.replyTime}}<br/>
 			</td>
