@@ -511,7 +511,7 @@
 
 
 				</c:if>
-				<div class="control-group">
+				<div class="control-group" style="display:none">
 					<label class="control-label">父计划:</label>
 					<div class="controls">
 						<sys:treeselect id="parent" name="parent.id"
