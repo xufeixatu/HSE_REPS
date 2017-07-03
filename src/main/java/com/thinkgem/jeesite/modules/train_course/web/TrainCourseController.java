@@ -22,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.common.utils.videoDuarationUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.train_course.entity.TrainCourse;
@@ -81,7 +80,7 @@ public class TrainCourseController extends BaseController {
 		if (!beanValidator(model, trainCourse)){
 			return form(trainCourse, model);
 		}
-		
+
 		//在视频存储之前对于视频的格式进行转换
 		trainCourseService.videoConvert(trainCourse, httpServletRequest.getSession().getServletContext().getRealPath("/"));
 		trainCourseService.save(trainCourse);

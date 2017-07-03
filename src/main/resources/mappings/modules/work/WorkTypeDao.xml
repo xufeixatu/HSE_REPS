@@ -139,7 +139,7 @@
 	
 	<update id="delete">
 		DELETE FROM work_type
-		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+		WHERE id = #{id}
 	</update>
 	
 </mapper>

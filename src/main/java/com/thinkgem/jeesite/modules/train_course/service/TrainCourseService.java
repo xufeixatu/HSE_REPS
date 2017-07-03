@@ -44,7 +44,6 @@ public class TrainCourseService extends CrudService<TrainCourseDao, TrainCourse>
 		return super.findPage(page, trainCourse);
 	}
 	
-	
 	@Transactional(readOnly = false)
 	public void save(TrainCourse trainCourse) {
 		super.save(trainCourse);

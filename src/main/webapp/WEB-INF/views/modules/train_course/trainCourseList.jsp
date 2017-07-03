@@ -181,10 +181,16 @@
 		  		 			<span class="course-text-count-time">${trainCourse.courseTime}课时</span>
 		  		 			<span class="course-text-count-study">${trainCourse.courseCount}学习</span>
 		  		 		</span>
-			  		 	<span class="star" onmouseover="InitEvent()" >
-							<table id="tblMain"><tr><td>★</td><td>★</td><td>★</td><td>★</td><td>★</td></tr>
-		    				</table>
-						</span>
+						<span class="course-text-count">
+							<span class="course-text-count-time">${trainCourse.courseGrade}评分</span>						
+						
+						</span>	  		 
+							  		 
+							  		 
+							  		 <!-- 	<span class="star" onmouseover="InitEvent()" >
+											<table id="tblMain"><tr><td>★</td><td>★</td><td>★</td><td>★</td><td>★</td></tr>
+						    				</table>
+										</span> -->
 		  		 		<span class="course-text-operate">
 		  		 			<a class="course-text-operate-modify" href="${ctx}/train_course/trainCourse/form?id=${trainCourse.id}">修改</a>
 		  		 			<a class="course-text-operate-delete" href="${ctx}/train_course/trainCourse/delete?id=${trainCourse.id}" onclick="return confirmx('确认要删除该培训课件上传与查看吗？', this.href)">删除</a>

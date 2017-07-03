@@ -56,13 +56,16 @@
 							return row.workStateId != '${fns:getDictByValue('unsubmit','work_state').id}';
 						},
 						pass:function(){
-							return row.workStateId == '${fns:getDictByValue('pass','work_state').id}';
+							return row.workStateId == '${fns:getDictByValue('pass','work_state').id}' && ${empty myType};
 						},
 						accept:function(){
-							return row.workStateId == '${fns:getDictByValue('allocated','work_state').id}';
+							return row.workStateId == '${fns:getDictByValue('allocated','work_state').id}' && ${empty myType};
 						},
 						remain:function(){
-							return row.workStateId == '${fns:getDictByValue('received','work_state').id}';
+							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' && ${myType eq 'responsible'};
+						},
+						reply:function(){
+							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' && ${myType eq 'assigned'} &&  row.workStateId != '${fns:getDictByValue('closed','work_state').id}';
 						},
 						start_time:function(){
 							return row.startTime != null && row.startTime != "";
@@ -259,22 +262,27 @@
 				<a href="${ctx}/work/workPlan/submitPlan?id={{row.id}}&planType=${planTypeDict.value}" onclick="return submitAll(this)">提交</a>				
 			{{/edit}}
 			{{#pass}}
-				<a href="${ctx}/work/workPlan/assigne_work?id={{row.id}}&planType=${planTypeDict.value}">分配任务</a>	
+				<a href="${ctx}/work/workPlan/assigne_work?id={{row.id}}&planType=${planTypeDict.value}">分配任务</a>
 			{{/pass}}
 			{{#accept}}
 				<a href="${ctx}/work/workPlan/remain_form?id={{row.id}}&planType=${planTypeDict.value}">受理</a>	
 			{{/accept}}
 			{{#remain}}
-				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}">反馈</a>	
+				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&remainId={{row.remainId}}&type=feedback">反馈回复详情</a>	
 			{{/remain}}
+			{{#reply}}
+				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&remainId={{row.remainId}}&type=reply">反馈回复详情</a>
+				<a href="${ctx}/work/workPlan/urge_work?id={{row.id}}&planType=${planTypeDict.value}&myType=assigned">催办</a>	
+				<a href="${ctx}/work/workPlan/close_work?id={{row.id}}&planType=${planTypeDict.value}&myType=assigned">关闭</a>
+			{{/reply}}
 			</td></shiro:hasPermission>
 		</tr>
 		<tr id="ex_{{row.id}}" style="display:none">
 			<td colspan="100">
 				<a href="#" style="font-weight:900px">最新交流</a><br/>
-				最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}} 最新反馈消息：{{row.newFeedback}}<br/>
+				最新反馈消息：{{row.newFeedback}}<br/>
 				单位：{{row.feebackPeopleId}} 反馈人：{{row.remain_dept_id}} 反馈时间：{{row.feedbackTime}}<br/>
-				
+				{{row.remainId}}
 				最新回复消息：{{row.newReply}}<br/>
 				回复人：{{row.replyPeopleId}} 回复时间：{{row.replyTime}}<br/>
 			</td>

@@ -328,10 +328,62 @@ public class WorkPlanController extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
-		workPlanService.findDiscusses(workPlan.getId());
-		
+		List<WorkPlan> discusses = workPlanService.findDiscusses(workPlan.getRemainId());
+		model.addAttribute("discusses",discusses);
 		return "modules/work/discussForm";
 	}
+	
+	/**
+	 * 讨论保存
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = {"discuss_save"})
+	public String discuss_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getNewReply(),UserUtils.getUser().getId(),workPlan.getType());
+		return discuss_form(workPlan, request, response, model);
+	}
+	
+	/**
+	 * 关闭工作
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"close_work"})
+	public String close_work(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		workPlanService.closeWorkPlan(workPlan.getId());
+		return list(workPlan, request, response, model);
+	}
+	
+	/**
+	 * 催办工作
+	 * @param workPlan
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = {"urge_work"})
+	public String urge_work(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		workPlanService.closeWorkPlan(workPlan.getId());
+		return list(workPlan, request, response, model);
+	}
+	
 //	@RequiresPermissions("work:workPlan:view")
 //	@RequestMapping(value = { "workList" })
 //	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {

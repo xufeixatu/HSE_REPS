@@ -32,7 +32,7 @@ public class CourseStudyService extends CrudService<CourseStudyDao, CourseStudy>
 	private TrainCourseDao trainCourseDao;
 	@Autowired
 	private CourseStudyDao courseStudyDao;
-
+	
 	public CourseStudy get(String id) {
 		CourseStudy courseStudy = super.get(id);
 		return courseStudy;
@@ -61,8 +61,11 @@ public class CourseStudyService extends CrudService<CourseStudyDao, CourseStudy>
 	public String avg(CourseStudy courseStudy) {
 		TrainCourse trainCourse = trainCourseDao.get(courseStudy.getCourseId());
 		String grade = courseStudy.getGrade();
-		courseStudy = courseStudyDao.get(courseStudy);
-		if (courseStudy.getGrade()==null) {
+		courseStudy = courseStudyDao.getByCourseIdAndUserId(courseStudy);
+		if(courseStudy==null){
+			return "noStudy";
+		}
+		if (courseStudy.getGrade()==null || courseStudy.getGrade().equals("")) {
 			int totalGradeNum = trainCourse.getGradeCount();
 			double totalGrade = Double.valueOf(totalGradeNum) * Double.valueOf(trainCourse.getCourseGrade())
 					+ Double.valueOf(grade);
@@ -71,18 +74,48 @@ public class CourseStudyService extends CrudService<CourseStudyDao, CourseStudy>
 			courseStudy.preUpdate();
 			courseStudyDao.update(courseStudy);
 			
-			trainCourse.setCourseGrade("" + totalGrade / (totalGradeNum + 1));
-			trainCourse.setCourseCount("" + totalGradeNum + 1);
+			trainCourse.setCourseGrade("" + totalGrade / (totalGradeNum + 1));   //平均分
+			trainCourse.setGradeCount(totalGradeNum + 1);    //总人数
 			trainCourse.preUpdate();
 			trainCourseDao.update(trainCourse);
 			return "true";
+		}else{
+		return "alreadyGrade";
 		}
-		return "false";
 	}
+	
+	// 开始学习
+	@Transactional(readOnly = false)
+	public String startStudy(CourseStudy courseStudy) {
+		//courseStudy.set
+		courseStudy.setStatus("0");
+		courseStudy.setStudyStartTime(new Date());
+		courseStudy.preInsert();
+		
+		
+		if(null == courseStudyDao.getByCourseIdAndUserId(courseStudy)){
+			
+
+			if(1==courseStudyDao.insert(courseStudy)){
+				return "true";
+			}else{
+				return "false";
+			}
+			
+		}else{
+			return "alreadyStudy";
+		}
+		
+	}
+
 
 	public CourseStudy findByCourseIdAndUserId(CourseStudy courseStudy) {
 		return super.dao.getByCourseIdAndUserId(courseStudy);
 	}
+
+	
+	
+	
 //=======
 //import java.util.List;
 //

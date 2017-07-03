@@ -144,7 +144,8 @@ public class WorkPlanController2 extends BaseController {
 	public String feedback_save(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getFeedbackDesc(),UserUtils.getUser().getId());
+		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getFeedbackDesc(),UserUtils.getUser().getId(),workPlan.getType());
+		
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan2/dept_remainned_list?repage&planType=company";
 	}
 	
