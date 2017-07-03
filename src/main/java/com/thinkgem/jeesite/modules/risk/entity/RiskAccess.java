@@ -172,8 +172,8 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	@ExcelField(title="场所、设备")
 	@NotNull(message="场所、设备不能为空")
+	@ExcelField(title="场所、设备")
 	@Length(min=0, max=255, message="场所、设备长度必须介于 0 和 255 之间")
 	public String getPlaceDevice() {
 		return placeDevice;

@@ -22,29 +22,7 @@
 					}
 				}
 			});
-		});
-
-		function autoPingjia(){
-			 var lscore=$('#lscore option:selected').val();
-			 var escore=$('#escore option:selected').val();
-			 var cscore=$('#cscore option:selected').val();
-			  if(lscore>0&&escore>0&&cscore>0){
-				/* var dscore=lscore*escore*cscore;
-				if(dscore>=320){
-					$("#riskLevel option[value='5']").attr("selected","selected");
-				}else if(dscore>=160){
-					$("#riskLevel option[value='4']").attr("selected","selected");		
-				}else if(dscore>=70){
-					$("#riskLevel option[value='3']").attr("selected", "selected");
-				}else if(dscore>=20){
-					$("#riskLevel option[value='2']").attr("selected", "selected");	
-				}else {
-					$("#riskLevel option[value='1']").attr("selected", "selected");
-				} */
-				
-				
-			 } 
-		
+		})
 	</script>
 </head>
 <body>
@@ -84,7 +62,7 @@
 		<div class="control-group">
 			<label class="control-label">可能导致的后果：</label>
 			<div class="controls">
-				<form:textarea path="result" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:checkboxes path="result" items="${fns:getDictList('risk_result')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -93,7 +71,7 @@
 				<form:radiobuttons path="judgeTf" items="${fns:getDictList('risk_is_flag')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
-		<div class="control-group">
+	<div class="control-group">
 			<label class="control-label">评价方法：</label>
 			<div class="controls">
 				<form:radiobuttons path="accessMothed" items="${fns:getDictList('risk_access_mothed')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
@@ -203,6 +181,7 @@
 			</table>
 		</div>
 	<!-- 	ms法则  结束-->
+	
 		<div class="form-actions">
 			<shiro:hasPermission name="risk:riskAccess:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

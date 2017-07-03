@@ -62,7 +62,6 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	@Transactional(readOnly = false)
 	public void addSave(RiskAccess riskAccess) {
 	
-	
 		riskAccess.setNumber(new Date().getTime()+"");
 		riskAccess.setYears(getYears());
 		riskAccess.setRecognizeDate(new Date());
@@ -161,7 +160,7 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	//MS法则实现
 	@Transactional(readOnly = false)
 	public void doMS(RiskAccess riskAccess) {
-		riskAccess.setAccessMothed("1");;
+		riskAccess.setAccessMothed("1");
 		String mlscore = riskAccess.getMlscore().replace(",", "");
 		String mscore = riskAccess.getMscore().replace(",", "");
 		String sscore = riskAccess.getSscore().replace(",", "");

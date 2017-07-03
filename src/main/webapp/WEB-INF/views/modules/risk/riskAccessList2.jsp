@@ -135,7 +135,7 @@
 					${riskAccess.placeDevice}
 				</td>
 				<td>
-					${riskAccess.riskFactors}
+				${fns:getDictLabel(riskAccess.riskFactors, 'risk_factors', '')}
 				</td>
 				<td>
 					${fns:getDictLabel(riskAccess.tense, 'risk_tense_type', '')}

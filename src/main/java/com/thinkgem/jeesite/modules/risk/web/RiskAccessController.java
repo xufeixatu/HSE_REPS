@@ -90,6 +90,7 @@ public class RiskAccessController extends BaseController {
 	@RequestMapping(value = "excel")
 	public void excel(RiskAccess riskAccess,HttpServletRequest request, HttpServletResponse response, Model model) {
 		ExportExcel exportExcel=new ExportExcel("风险控制数据", RiskAccess.class, 1);
+		
 		try {
 			exportExcel.write(response, "风险控制数据.xlsx");
 		} catch (IOException e) {
@@ -190,7 +191,7 @@ public class RiskAccessController extends BaseController {
 					}else{
 						risk.setRiskType("0");						
 					}
-					riskAccessService.save(risk);
+					riskAccessService.addSave(risk);
 					successNum++;
 					
 				} catch (ConstraintViolationException ex) {
@@ -211,7 +212,7 @@ public class RiskAccessController extends BaseController {
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入关键环节失败！失败信息：" + e.getMessage());
 		}
-		return "redirect:" + adminPath + "/risk/riskAccess/list?repage";
+		return "redirect:" + adminPath + "/risk/riskAccess/list?riskType="+riskType;
 	}
 
 	@RequiresPermissions("risk:riskAccess:view")
@@ -234,6 +235,8 @@ public class RiskAccessController extends BaseController {
 		}
 		else if("4".equals(riskAccess.getRiskType())){
 			return "modules/risk/riskAccessList5";			
+		}else if("5".equals(riskAccess.getRiskType())){
+			return "modules/risk/riskAccessList6";			
 		}else{
 			return "modules/risk/riskAccessList";		
 		}
@@ -267,7 +270,23 @@ public class RiskAccessController extends BaseController {
 			}
 			
 		}else if("1".equals(riskAccess.getIsHeaverisk())){
-			riskAccess.setRiskType("4");
+			if("0".equals(riskAccess.getRiskType())){
+				riskAccess.setRiskType("4");
+			}
+			if("1".equals(riskAccess.getRiskType())){
+				riskAccess.setRiskType("5");
+			}
+		}
+		//报备时 将这个风险与上年比较 结果保存在保留字段2
+		if(riskAccess.getLastyearRecognize()!=null && !("").equals(riskAccess.getLastyearRecognize())){
+			String s=riskAccessService.get(riskAccess.getLastyearRecognize()).getRiskLevel();
+			if(s.equals(riskAccess.getRiskLevel())){
+				riskAccess.setReserve2("0");
+			}else if((s.charAt(0)-riskAccess.getRiskLevel().charAt(0))>0){
+				riskAccess.setReserve2("-1");
+			}   {
+				riskAccess.setReserve2("1");
+			}
 		}
 		riskAccessService.save(riskAccess);
 		addMessage(redirectAttributes, "报备风险成功");
@@ -318,9 +337,9 @@ public class RiskAccessController extends BaseController {
 		}
 		if("".equals(riskAccess.getId())||riskAccess.getId()==null){
 			riskAccess.preInsert();
-			if("".equals(riskAccess.getMlscore())){
+			if("0".equals(riskAccess.getAccessMothed())){
 				riskAccessService.doLEC(riskAccess);
-			}else{
+			}else if("1".equals(riskAccess.getAccessMothed())){
 				riskAccessService.doMS(riskAccess);
 			}
 			riskAccessService.addSave(riskAccess);

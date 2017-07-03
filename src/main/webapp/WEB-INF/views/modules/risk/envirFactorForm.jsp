@@ -45,7 +45,8 @@
 		<div class="control-group">
 			<label class="control-label">场所、活动设备、物料：</label>
 			<div class="controls">
-				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-xlarge required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		

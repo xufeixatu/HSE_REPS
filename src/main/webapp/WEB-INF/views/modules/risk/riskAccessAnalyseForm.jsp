@@ -202,7 +202,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">触发原因：${riskAccess.isHeaverisk}</label>
+			<label class="control-label">触发原因：</label>
 			<div class="controls">
 				<form:textarea path="reason" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
