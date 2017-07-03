@@ -25,6 +25,10 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>受检单位：</label>
+				<sys:treeselect id="checkedOffice" name="checkedOffice.id" value="${question.checkedOffice.id}" labelName="checkedOffice.name" labelValue="${question.checkedOffice.name}"
+					title="部门" url="/sys/office/treeData?type=2" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
+			</li>		
 			<li><label>检查类别：</label>
 				<sys:treeselect id="checkTypeClass" name="checkTypeClass.id" value="${question.checkTypeClass.id}" 
 					labelName="checkTypeClass.name" labelValue="${question.checkTypeClass.name}"
@@ -41,6 +45,12 @@
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('problem_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
+			</li>
+			<li>
+				<label>检查时间：</label>
+				<input id="createDate"  name="createDate"  type="text" readonly="readonly" maxlength="20" class="input-medium Wdate" style="width:163px;"
+					value="<fmt:formatDate value="${question.createDate}" pattern="yyyy-MM"/>"
+						onclick="WdatePicker({dateFmt:'yyyy-MM'});"/>			
 			</li>				
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>

@@ -71,12 +71,14 @@
 				</td>
 				<td>
 					共【${inspct.aLLQuestionCount}】已整改【${inspct.solvedQuestionCount}】
-				</td>				
+				</td>
 				<shiro:hasPermission name="check:inspct:edit"><td>
 					<a href="${ctx}/check/checkItemCheck?inspctId=${inspct.id}">进入检查</a>
 					<%-- <a href="${ctx}/check/checkItemCheck">查看具体检查项</a>
-    				<a href="${ctx}/check/inspct/form?id=${inspct.id}">修改</a>
-					<a href="${ctx}/check/inspct/delete?id=${inspct.id}" onclick="return confirmx('确认要删除该检查记录管理吗？', this.href)">删除</a> --%>
+    				<a href="${ctx}/check/inspct/form?id=${inspct.id}">修改</a> --%>
+    				<c:if test="${fns:getUser().admin}">
+						<a href="${ctx}/check/inspct/delete?id=${inspct.id}" onclick="return confirmx('确认要删除该检查记录管理吗？', this.href)">删除</a>
+					</c:if>	
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
