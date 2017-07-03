@@ -51,12 +51,13 @@ public class WorkPlanSqlMapFilter {
 		common(workPlan, model);
 
 		// 设置根据计划类别（个人计划｜｜部门计划｜｜公司计划）过滤工作计划条件字符串
-		dsf.append("and");
-		dsf.append(" ");
-		dsf.append("a.plan_type = '");
-		dsf.append(planTypeDict.getId());
-		dsf.append("'");
-
+		if (planTypeDict != null) {
+			dsf.append("and");
+			dsf.append(" ");
+			dsf.append("a.plan_type = '");
+			dsf.append(planTypeDict.getId());
+			dsf.append("'");
+		}
 		// 只看本人创建的数据
 		dsf.append(" and ");
 		dsf.append("a.create_by = '");
@@ -129,7 +130,7 @@ public class WorkPlanSqlMapFilter {
 		dsf.append("' ");
 		dsf.append("and");
 		dsf.append(" (");
-		dsf.append("a.is_open = 0");//开放状态
+		dsf.append("a.is_open = 0");// 开放状态
 		dsf.append(" or ");
 		dsf.append("a.person_liable_id='");
 		dsf.append(UserUtils.getUser().getId());
@@ -137,16 +138,17 @@ public class WorkPlanSqlMapFilter {
 		dsf.append("a.assigner_id='");
 		dsf.append(UserUtils.getUser().getId());
 		dsf.append("') ");
-		
+
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}
+
 	/**
-	 * 过滤所有已经提交状态的公司级工作计划
-	 *    work_state_id = '45d756f45bb04155adb95e66b6a0d1c1'
+	 * 过滤所有已经提交状态的公司级工作计划 work_state_id = '45d756f45bb04155adb95e66b6a0d1c1'
+	 * 
 	 * @param id
 	 */
-	public void typeSubmittedCompanyWorkPlanyFilter(WorkPlan workPlan, Model model){
+	public void typeSubmittedCompanyWorkPlanyFilter(WorkPlan workPlan, Model model) {
 		common(workPlan, model);
 		planTypeDict = DictUtils.getDictByValue("company", "type_plan");
 		dsf.append("and");
@@ -157,13 +159,14 @@ public class WorkPlanSqlMapFilter {
 		dsf.append("and");
 		dsf.append(" ");
 		dsf.append("a.work_state_id = '45d756f45bb04155adb95e66b6a0d1c1'");
-		
+
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}
 
 	/**
 	 * 过滤出所有end_state为"已分派"状态的公司级工作计划
+	 * 
 	 * @param workPlan
 	 * @param model
 	 */
@@ -181,8 +184,10 @@ public class WorkPlanSqlMapFilter {
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}
+
 	/**
 	 * 待受理部门工作列表的过滤条件
+	 * 
 	 * @param workPlan
 	 * @param model
 	 */
@@ -205,7 +210,7 @@ public class WorkPlanSqlMapFilter {
 	}
 
 	public void typeWorkTypeFilterSqlMapDsf(WorkPlan workPlan, Model model) {
-		if(workPlan.getWorkType() != null && !"".equals(workPlan.getWorkType().getId().trim())){
+		if (workPlan.getWorkType() != null && !"".equals(workPlan.getWorkType().getId().trim())) {
 			common(workPlan, model);
 			dsf.append(" and a.work_type_id = '" + workPlan.getWorkType().getId() + "' ");
 			System.out.println(workPlan.getWorkType().getId());
@@ -213,8 +218,10 @@ public class WorkPlanSqlMapFilter {
 			sqlMap.put("dsf", dsf.toString());
 		}
 	}
+
 	/**
 	 * 我负责的工作的过滤条件
+	 * 
 	 * @param workPlan
 	 * @param model
 	 */
@@ -233,7 +240,8 @@ public class WorkPlanSqlMapFilter {
 		// 将字符串加回到sqlMap.dsf属性
 		sqlMap.put("dsf", dsf.toString());
 	}
-	//根据创建人是我并且工作状态为审核通过的工作
+
+	// 根据创建人是我并且工作状态为审核通过的工作
 	public void typeMyAssignedFilterSqlMapDsf(WorkPlan workPlan, Model model) {
 		common(workPlan, model);
 
@@ -249,5 +257,4 @@ public class WorkPlanSqlMapFilter {
 		sqlMap.put("dsf", dsf.toString());
 	}
 
-	
 }

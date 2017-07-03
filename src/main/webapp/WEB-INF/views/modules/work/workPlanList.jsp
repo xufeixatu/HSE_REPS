@@ -205,12 +205,12 @@
 				<img id="s_{{row.id}}" src="/HSE/static/images/close.jpg"></img>&nbsp;&nbsp;{{#edit}}<input type="checkbox" name="ids" value="{{row.id}}"/>{{/edit}}
 			</td>
 			<td>{{#edit}}
-					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
+					<a href="${ctx}/work/workPlan/workPlanDetail?id={{row.id}}&planType=${planTypeDict.value}&noedit=false">
 						{{row.name}}
 					</a>
 				{{/edit}}
 				{{#no_edit}}
-					<a href="${ctx}/work/workPlan/form?id={{row.id}}&planType=${planTypeDict.value}&noedit=true">
+					<a href="${ctx}/work/workPlan/workPlanDetail?id={{row.id}}&planType=${planTypeDict.value}&noedit=true">
 						{{row.name}}
 					</a>
 				{{/no_edit}}
