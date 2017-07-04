@@ -408,7 +408,8 @@ public class WorkPlanController extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		workPlanService.closeWorkPlan(workPlan.getId());
-		return list(workPlan, request, response, model);
+		workPlan = new WorkPlan();
+		return myAssignedList(workPlan, request, response, model);
 	}
 	
 	/**
