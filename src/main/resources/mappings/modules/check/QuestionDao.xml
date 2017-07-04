@@ -39,7 +39,8 @@
 		o.name AS "checkedOffice.name",
 		type_class.id AS "checkTypeClass.id",
 		type_class.name AS "checkTypeClass.name",
-		a.report_user_id AS "reportUserId"
+		a.report_user_id AS "reportUserId",
+		a.photos AS photos
 	</sql>
 	
 	<sql id="questionJoins">
@@ -141,7 +142,8 @@
 			rectifier_comment,
 			report_user_id,
 			current_audit_user_id,
-			checked_office_id
+			checked_office_id,
+			photos
 		) VALUES (
 			#{id},
 			#{checkItemCheckId},
@@ -175,7 +177,8 @@
 			#{rectifierComment},
 			#{reportUserId},
 			#{currentAuditUser.id},
-			#{checkedOffice.id}
+			#{checkedOffice.id},
+			#{photos}
 		)
 	</insert>
 	
