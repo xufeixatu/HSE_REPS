@@ -7,23 +7,25 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-			<li><a
-				href="${ctx}/work/workPlan/workList/?planType=${planTypeDict.value}">${planTypeDict.label}列表</a></li>
-			<shiro:hasPermission name="work:workPlan:edit">
-				<li><a
-						href="${ctx}/work/workPlan2/dept_remain_list?planType=${planTypeDict.value}">待受理${planTypeDict.label}列表</a></li>
-				<li><a
-						href="${ctx}/work/workPlan2/dept_remainned_list?planType=${planTypeDict.value}">已受理${planTypeDict.label}列表</a></li>
-				<li><a
-						href="${ctx}/work/workPlan2/dept_clos_remainned_feedback_list?planType=${planTypeDict.value}">待关闭${planTypeDict.label}受理反馈列表</a></li>
-				<li><a
-						href="${ctx}/work/workPlan2/dept_closed_remain_feedback_list?planType=${planTypeDict.value}">已关闭${planTypeDict.label}受理反馈列表</a></li>
-				<li><a>点评</a></li>
-			</shiro:hasPermission>
+			<li class="active"><a
+				href="#">点评列表</a></li>
+			
 	</ul>
-	<form:form action="${ctx}/work/workPlan2/dept_workplan_comment_save" method="post" id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
-		<form:hidden path="remainId" />
-		<input type="hidden" name="planType" value="department" />
+	<br />
+	<div class="control-group">点评列表：</div>
+	<c:forEach items="${comments}" var="w">
+		<div class="control-group">
+			<label class="control-label">
+				${fns:getUserById(w.reviwer.id).name}
+				点评:
+			</label>
+			<label class="control-label">
+				${w.commentTime}
+			</label>
+		</div>
+	</c:forEach>
+	<form:form action="${ctx}/work/workPlan/comment_save" method="post" modelAttribute="workPlan" class="form-horizontal">
+		<form:hidden path="id" />
 		<div class="control-group">
 			<label class="control-label">点评:</label>
 			<div class="controls">

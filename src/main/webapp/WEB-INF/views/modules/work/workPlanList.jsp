@@ -65,7 +65,13 @@
 							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' && ${myType eq 'responsible'};
 						},
 						reply:function(){
-							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' && ${myType eq 'assigned'} &&  row.workStateId != '${fns:getDictByValue('closed','work_state').id}';
+							return row.workStateId == '${fns:getDictByValue('received','work_state').id}' && ${myType eq 'assigned'} &&  (row.workStateId != '${fns:getDictByValue('closed','work_state').id}' || row.workStateId != '${fns:getDictByValue('urge_closed','work_state').id}' );
+						},
+						urge:function(){
+							return row.workStateId == '${fns:getDictByValue('urge','work_state').id}' && ${myType eq 'assigned'} &&  (row.workStateId != '${fns:getDictByValue('closed','work_state').id}' || row.workStateId != '${fns:getDictByValue('urge_closed','work_state').id}' );
+						},
+						closed:function(){
+							return ${myType eq 'assigned'} &&  (row.workStateId == '${fns:getDictByValue('closed','work_state').id}' || row.workStateId == '${fns:getDictByValue('urge_closed','work_state').id}' );
 						},
 						start_time:function(){
 							return row.startTime != null && row.startTime != "";
@@ -272,9 +278,16 @@
 			{{/remain}}
 			{{#reply}}
 				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&remainId={{row.remainId}}&type=reply">反馈回复详情</a>
-				<a href="${ctx}/work/workPlan/urge_work?id={{row.id}}&planType=${planTypeDict.value}&myType=assigned">催办</a>	
-				<a href="${ctx}/work/workPlan/close_work?id={{row.id}}&planType=${planTypeDict.value}&myType=assigned">关闭</a>
+				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&remainId={{row.remainId}}&type=urge">催办</a>	
+				<a href="${ctx}/work/workPlan/close_work?id={{row.id}}&planType=${planTypeDict.value}&myType=assigned&workState={{row.workState}}">关闭</a>
 			{{/reply}}
+			{{#urge}}
+				<a href="${ctx}/work/workPlan/discuss_form?id={{row.id}}&planType=${planTypeDict.value}&remainId={{row.remainId}}&type=urge">催办</a>	
+				<a href="${ctx}/work/workPlan/close_work?id={{row.id}}&planType=${planTypeDict.value}&myType=assigned&workState={{row.workState}}">关闭</a>
+			{{/urge}}
+			{{#closed}}
+				<a href="${ctx}/work/workPlan/comment_form?id={{row.id}}&planType=${planTypeDict.value}">点评</a>	
+			{{/closed}}
 			</td></shiro:hasPermission>
 		</tr>
 		<tr id="ex_{{row.id}}" style="display:none">
