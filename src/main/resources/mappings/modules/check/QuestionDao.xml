@@ -71,7 +71,13 @@
 			</if>
 			<if test="checkTypeClass != null and checkTypeClass.id != null and checkTypeClass.id != ''">
 				AND a.check_type_class_id = #{checkTypeClass.id}
-			</if>									
+			</if>
+			<if test="checkedOffice != null and checkedOffice.id != null and checkedOffice.id != ''">
+				AND a.checked_office_id = #{checkedOffice.id}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND DATE_FORMAT(a.create_date,'%Y-%m') = DATE_FORMAT(#{createDate},'%Y-%m')
+			</if>															
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

@@ -51,7 +51,7 @@ public class Question extends ActEntity<Question> {
 	private User currentAuditUser; //当前流程执行人
 	private Office checkedOffice; //受检部门
 	private CheckTypeClass checkTypeClass;
-	
+
 	public String getReportUserName() {
 		return reportUserName;
 	}
