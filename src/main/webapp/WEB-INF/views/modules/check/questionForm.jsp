@@ -69,8 +69,8 @@
 				<tr>
 					<td class="tit">上传照片</td>
 					<td>
-						<form:hidden id="filePath" path="" htmlEscape="false" class="input-xlarge"/>
-						<sys:ckfinder input="filePath" type="files" uploadPath="" selectMultiple="true"/>
+						<form:hidden id="questionPhoto" path="photos" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+						<sys:ckfinder input="questionPhoto" type="images" uploadPath="/question_photos" selectMultiple="true" maxWidth="100" maxHeight="100"/>					
 					</td>
 					<td class="tit">受检部门</td>
 					<td>
