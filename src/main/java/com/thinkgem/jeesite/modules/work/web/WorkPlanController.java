@@ -145,12 +145,13 @@ public class WorkPlanController extends BaseController {
 	public String list(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
 		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
+		
 		// 根据工作计划中的分类生成过滤条件
 		if (workPlan.getWorkType() != null) {
 			WorkPlanSqlMapFilter.getFilter().typeWorkTypeFilterSqlMapDsf(workPlan, model);
 		}
 		List<WorkPlan> list = workPlanService.findList(workPlan);
-
+		
 		model.addAttribute("list", list);
 		return "modules/work/workPlanList";
 	}
@@ -219,6 +220,49 @@ public class WorkPlanController extends BaseController {
 
 		model.addAttribute("workPlan", workPlan);
 		return "modules/work/workPlanForm";
+	}
+	
+	@RequiresPermissions("work:workPlan:view")
+	@RequestMapping(value = "workPlanDetail")
+	public String workPlanDetail(WorkPlan workPlan, Model model) {
+		// 根据工作计划中的计划类别（个人计划，部门计划，公司计划）生成过滤条件保存在sqlMap.dsf中
+		WorkPlanSqlMapFilter.getFilter().typePersonFilterSqlMapDsf(workPlan, model);
+
+		if (workPlan.getParent() != null && StringUtils.isNotBlank(workPlan.getParent().getId())) {
+			workPlan.setParent(workPlanService.get(workPlan.getParent().getId()));
+			// 获得工作计划的完整工作类型
+			if (workPlan.getWorkType() != null && StringUtils.isNotBlank(workPlan.getWorkType().getId())) {
+				workPlan.setWorkType(workTypeService.get(workPlan.getWorkType().getId()));
+			}
+			// 获得工作计划的完整责任人
+			if (workPlan.getPersonLiable() != null && StringUtils.isNotBlank(workPlan.getPersonLiable().getId())) {
+				workPlan.setPersonLiable(UserUtils.get(workPlan.getPersonLiable().getId()));
+			}
+			// 如果责任部门为空并且当前计划类型是部门则指定责任部门为当前用户所在部门
+			if (workPlan.getDepts() == null && workPlan.getPlanType().equals("department")) {
+				workPlan.setDepts(UserUtils.getUser().getOffice());
+			}
+			// 把当前用户设置为工作计划指派人
+			workPlan.setAssignerId(UserUtils.getUser().getId());
+			// 获取排序号，最末节点排序号+30
+			if (StringUtils.isBlank(workPlan.getId())) {
+				WorkPlan workPlanChild = new WorkPlan();
+				workPlanChild.setParent(new WorkPlan(workPlan.getParent().getId()));
+				List<WorkPlan> list = workPlanService.findList(workPlan);
+				if (list.size() > 0) {
+					workPlan.setSort(list.get(list.size() - 1).getSort());
+					if (workPlan.getSort() != null) {
+						workPlan.setSort(workPlan.getSort() + 30);
+					}
+				}
+			}
+		}
+		if (workPlan.getSort() == null) {
+			workPlan.setSort(30);
+		}
+
+		model.addAttribute("workPlan", workPlan);
+		return "modules/work/workPlanDetail";
 	}
 
 	@RequiresPermissions("work:workPlan:edit")
@@ -364,7 +408,8 @@ public class WorkPlanController extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		workPlanService.closeWorkPlan(workPlan.getId());
-		return list(workPlan, request, response, model);
+		workPlan = new WorkPlan();
+		return myAssignedList(workPlan, request, response, model);
 	}
 	
 	/**
