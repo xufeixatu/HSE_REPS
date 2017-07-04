@@ -90,6 +90,7 @@ public class RiskAccessController extends BaseController {
 	@RequestMapping(value = "excel")
 	public void excel(RiskAccess riskAccess,HttpServletRequest request, HttpServletResponse response, Model model) {
 		ExportExcel exportExcel=new ExportExcel("风险控制数据", RiskAccess.class, 1);
+		
 		try {
 			exportExcel.write(response, "风险控制数据.xlsx");
 		} catch (IOException e) {
@@ -129,11 +130,11 @@ public class RiskAccessController extends BaseController {
 						failureMsg.append("</br>编号为"+risk.getNumber()+"的风险已经存在");
 						failureNum++;
 					}else{
-						risk.preInsert();
-						risk.setIsNewRecord(true);
 						risk.setAccessid(null);
 						risk.setRecognizeDate(new Date());
-						
+						risk.setLastyearRecognize(risk.getId());
+						risk.preInsert();
+						risk.setIsNewRecord(true);
 						riskAccessService.save(risk);
 						successNum++;
 					}
@@ -190,7 +191,7 @@ public class RiskAccessController extends BaseController {
 					}else{
 						risk.setRiskType("0");						
 					}
-					riskAccessService.save(risk);
+					riskAccessService.addSave(risk);
 					successNum++;
 					
 				} catch (ConstraintViolationException ex) {
@@ -211,7 +212,7 @@ public class RiskAccessController extends BaseController {
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入关键环节失败！失败信息：" + e.getMessage());
 		}
-		return "redirect:" + adminPath + "/risk/riskAccess/list?repage";
+		return "redirect:" + adminPath + "/risk/riskAccess/list?riskType="+riskType;
 	}
 
 	@RequiresPermissions("risk:riskAccess:view")
@@ -221,19 +222,21 @@ public class RiskAccessController extends BaseController {
 		model.addAttribute("page", page);
 		if(riskAccess==null||riskAccess.getRiskType()==null){
 			return "modules/risk/riskAccessList";		
-		}else if(riskAccess.getRiskType().equals("0")){
+		}else if("0".equals(riskAccess.getRiskType())){
 			return "modules/risk/riskAccessList";			
-		}else if(riskAccess.getRiskType().equals("1")){
+		}else if("1".equals(riskAccess.getRiskType())){
 			return "modules/risk/riskAccessList2";			
 		}
-		else if(riskAccess.getRiskType().equals("2")){
+		else if("2".equals(riskAccess.getRiskType())){
 			return "modules/risk/riskAccessList3";			
 		}
-		else if(riskAccess.getRiskType().equals("3")){
+		else if("3".equals(riskAccess.getRiskType())){
 			return "modules/risk/riskAccessList4";			
 		}
-		else if(riskAccess.getRiskType().equals("4")){
+		else if("4".equals(riskAccess.getRiskType())){
 			return "modules/risk/riskAccessList5";			
+		}else if("5".equals(riskAccess.getRiskType())){
+			return "modules/risk/riskAccessList6";			
 		}else{
 			return "modules/risk/riskAccessList";		
 		}
@@ -242,8 +245,52 @@ public class RiskAccessController extends BaseController {
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = "form")
 	public String form(RiskAccess riskAccess, Model model) {
+		riskAccess=riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/riskAccessForm";
+	}
+	/**
+	 * 报备
+	 * @param riskAccess
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("risk:riskAccess:view")
+	@RequestMapping(value = "report")
+	public String report(RiskAccess riskAccess, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, riskAccess)){
+			return form(riskAccess, model);
+		}
+		if("0".equals(riskAccess.getIsHeaverisk())){
+			if("0".equals(riskAccess.getRiskType())){
+				riskAccess.setRiskType("2");
+			}
+			if("1".equals(riskAccess.getRiskType())){
+				riskAccess.setRiskType("3");
+			}
+			
+		}else if("1".equals(riskAccess.getIsHeaverisk())){
+			if("0".equals(riskAccess.getRiskType())){
+				riskAccess.setRiskType("4");
+			}
+			if("1".equals(riskAccess.getRiskType())){
+				riskAccess.setRiskType("5");
+			}
+		}
+		//报备时 将这个风险与上年比较 结果保存在保留字段2
+		if(riskAccess.getLastyearRecognize()!=null && !("").equals(riskAccess.getLastyearRecognize())){
+			String s=riskAccessService.get(riskAccess.getLastyearRecognize()).getRiskLevel();
+			if(s.equals(riskAccess.getRiskLevel())){
+				riskAccess.setReserve2("0");
+			}else if((s.charAt(0)-riskAccess.getRiskLevel().charAt(0))>0){
+				riskAccess.setReserve2("-1");
+			}   {
+				riskAccess.setReserve2("1");
+			}
+		}
+		riskAccessService.save(riskAccess);
+		addMessage(redirectAttributes, "报备风险成功");
+		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/list?riskType="+riskAccess.getRiskType();
 	}
 
 	/**
@@ -255,7 +302,7 @@ public class RiskAccessController extends BaseController {
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = "analyse")
 	public String analyse(RiskAccess riskAccess, Model model) {
-		riskAccessService.analyse(riskAccess);
+		riskAccess=riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/riskAccessAnalyseForm";
 	}
@@ -269,7 +316,7 @@ public class RiskAccessController extends BaseController {
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = "analyse_envir")
 	public String analyse_envir(RiskAccess riskAccess, Model model) {
-		riskAccessService.analyse_envir(riskAccess);
+		riskAccess=riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/riskAccessEnvirAnalyseForm";
 	}
@@ -277,7 +324,7 @@ public class RiskAccessController extends BaseController {
 	@RequiresPermissions("risk:riskAccess:view")
 	@RequestMapping(value = "envirFactorForm")
 	public String environment(RiskAccess riskAccess, Model model) {
-	
+		riskAccess=riskAccessService.analyse(riskAccess);
 		model.addAttribute("riskAccess", riskAccess);
 		return "modules/risk/envirFactorForm";
 	}
@@ -288,14 +335,19 @@ public class RiskAccessController extends BaseController {
 		if (!beanValidator(model, riskAccess)){
 			return form(riskAccess, model);
 		}
-		riskAccess.preInsert();
-		if("".equals(riskAccess.getMlscore())){
-			riskAccessService.doLEC(riskAccess);
+		if(riskAccess.getId()==null||"".equals(riskAccess.getId())){
+			riskAccess.preInsert();
+			if("0".equals(riskAccess.getAccessMothed())){
+				riskAccessService.doLEC(riskAccess);
+			}else if("1".equals(riskAccess.getAccessMothed())){
+				riskAccessService.doMS(riskAccess);
+			}
+			riskAccessService.addSave(riskAccess);
+			addMessage(redirectAttributes, "保存风险成功");			
 		}else{
-			riskAccessService.doMS(riskAccess);
+			riskAccessService.save(riskAccess);
+			addMessage(redirectAttributes, "修改风险成功");		
 		}
-		riskAccessService.addSave(riskAccess);
-		addMessage(redirectAttributes, "保存风险成功");
 		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/list?riskType="+riskAccess.getRiskType();
 	}
 	
@@ -304,7 +356,7 @@ public class RiskAccessController extends BaseController {
 	public String delete(RiskAccess riskAccess, RedirectAttributes redirectAttributes) {
 		riskAccessService.delete(riskAccess);
 		addMessage(redirectAttributes, "删除成功");
-		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/?repage";
+		return "redirect:"+Global.getAdminPath()+"/risk/riskAccess/list?riskType="+riskAccess.getRiskType();
 	}
 
 }

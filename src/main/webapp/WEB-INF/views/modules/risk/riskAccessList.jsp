@@ -52,8 +52,8 @@
 		<form:form id="importForm2"   modelAttribute="riskAccess"  action="${ctx}/risk/riskAccess/importHistroy" method="post" 
 			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入年度风险，请稍等...');"><br/>
 			<input  name="riskType" type="hidden" value="0"/>
-			<input id="years"  name="years"  type="text" readonly="readonly" maxlength="20" class="input-medium Wdate" style="width:163px;"
-				value="<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>"
+			<input id="years"  name="years"  type="text"  maxlength="20" class="input-medium Wdate" style="width:163px;"
+				value=""${riskAccess.years}"
 					onclick="WdatePicker({dateFmt:'yyyy'});"/>
 			<input id="btnImportHistorySubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
 		</form:form>
@@ -67,8 +67,8 @@
 				<form:input path="number" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
 			<li><label>年份：</label>
-				<input id="years"  name="years"  type="text" readonly="readonly" maxlength="20" class="input-medium Wdate" style="width:163px;"
-				value="<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>"
+				<input id="years"  name="years"  type="text"  maxlength="20" class="input-medium Wdate" style="width:163px;"
+				value=""${riskAccess.years}"
 					onclick="WdatePicker({dateFmt:'yyyy'});"/>
 			</li>
 			<li><label>属地单位：</label>

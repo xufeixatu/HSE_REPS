@@ -43,25 +43,15 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">场所、设备：</label>
+			<label class="control-label">场所、活动设备、物料：</label>
 			<div class="controls">
-				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-xlarge required"/>
+				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
+		
 		<div class="control-group">
-			<label class="control-label">环境因素名称：</label>
-			<div class="controls">
-				<form:input path="riskName" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">活动、物料、产品、服务：</label>
-			<div class="controls">
-				<form:input path="workName" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">危害因素（危险源）：</label>
+			<label class="control-label">危害因素：</label>
 			<div class="controls">
 				<form:checkboxes path="riskFactors" items="${fns:getDictList('risk_factors')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
@@ -106,29 +96,24 @@
 			</div>
 		</div>
 		
-			<div class="control-group">
+		<div class="control-group">
 			<label class="control-label">评价方法：</label>
-			<div class="controls" >
-				<span><input  name="judgeMethod" type="radio" checked="checked" ><label for="judgeMethod1">LEC</label></span>
-				<span><input  name="judgeMethod" type="radio"  ><label for="judgeMethod2">MS</label></span>
+			<div class="controls"  >
+				<form:radiobuttons path="accessMothed" items="${fns:getDictList('risk_access_mothed')}" itemLabel="label" itemValue="value" htmlEscape="false" class="" onclick="javascript:_pingjiafangfa_(this)"    />
 			</div>
 		</div>
 
 	    <script>
-	        $(function () {
-	            $("#lec").show();
-	            $(".controls span").click(function () {
-	    if($(this).index()==1){
+	 function _pingjiafangfa_(_self){
+	   if($(_self).val()==1){
 	    	$("#lec").hide();
 	    	$("#ms").show();
-	    }
-	    if($(this).index()==0){
+	      }
+	    if($(_self).val()==0){
 	    	$("#ms").hide();
 	    	$("#lec").show();
 	    }
-	    	
-	            })
-	        })
+	}
 	    </script>
 
 		<!-- 	lec法则  开始-->

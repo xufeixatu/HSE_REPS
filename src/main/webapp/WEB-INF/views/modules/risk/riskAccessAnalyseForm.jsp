@@ -29,12 +29,12 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">健康安全危害分析<shiro:hasPermission name="risk:riskAccess:edit">${not empty riskAccess.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="risk:riskAccess:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/save" method="post" class="form-horizontal">
+	<sys:message content="${message}"/>	
+	<form:form id="inputForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/report" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<input  type="hidden"  name="riskType"  value="2" />
-		<sys:message content="${message}"/>		
+		<input  type="hidden"  name="riskType"  value="2" />	
 		<div class="control-group">
-			<label class="control-label">场所、设备：</label>
+			<label class="control-label">场所、活动、设备、物料：</label>
 			<div class="controls">
 				<form:input path="placeDevice" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
@@ -46,7 +46,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">作业活动名称：</label>
+			<label class="control-label">设备、设施、场所、作业活动名称：</label>
 			<div class="controls">
 				<form:input path="workName" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
@@ -84,31 +84,26 @@
 	        
 		<div class="control-group">
 			<label class="control-label">评价方法：</label>
-			<div class="controls" >
-				<span><input  name="judgeMethod" type="radio" checked="checked" ><label for="judgeMethod1">LEC</label></span>
-				<span><input  name="judgeMethod" type="radio"  ><label for="judgeMethod2">MS</label></span>
+			<div class="controls"  >
+				<form:radiobuttons path="accessMothed" items="${fns:getDictList('risk_access_mothed')}" itemLabel="label" itemValue="value" htmlEscape="false" class="" onclick="javascript:_pingjiafangfa_(this)"    />
 			</div>
 		</div>
 
 	    <script>
-	        $(function () {
-	            $("#lec").show();
-	            $(".controls span").click(function () {
-	    if($(this).index()==1){
+	 function _pingjiafangfa_(_self){
+	   if($(_self).val()==1){
 	    	$("#lec").hide();
 	    	$("#ms").show();
-	    }
-	    if($(this).index()==0){
+	      }
+	    if($(_self).val()==0){
 	    	$("#ms").hide();
 	    	$("#lec").show();
 	    }
-	    	
-	            })
-	        })
+	}
 	    </script>
 
 		<!-- 	lec法则  开始-->
-	<div id="lec" class="control-group"  hidden="hidden"  >
+	<div id="lec" class="control-group"    >
 			<table style="width: 500px;" class="table  table-striped table-hover table-bordered">				
 				<thead class="controls">
 					<tr>
@@ -194,22 +189,29 @@
 		</div>
 	<!-- 	ms法则  结束-->
 	
-	             <div >
+	           
 	             
-	             </div>
 		<div class="control-group">
 			<label class="control-label">可能导致的事故：</label>
 			<div class="controls">
-				<form:textarea path="affect" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:checkboxes path="affect" items="${fns:getDictList('risk_affect')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
-
 		<div class="control-group">
 			<label class="control-label">触发原因：</label>
 			<div class="controls">
 				<form:textarea path="reason" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
+		<c:if test="${riskAccess.isHeaverisk==1}">
+			 <div class="control-group">
+				<label class="control-label">对应管理方案：</label>
+				<div class="controls">
+					<form:hidden id="managementPlan" path="managementPlan" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+					<sys:ckfinder input="managementPlan" type="files" uploadPath="/risk/riskAccess" selectMultiple="true"/>
+				</div>
+			</div>
+		</c:if>
 		<div class="form-actions">
 			<shiro:hasPermission name="risk:riskAccess:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="报备"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

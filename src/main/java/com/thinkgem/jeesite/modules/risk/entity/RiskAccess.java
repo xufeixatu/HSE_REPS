@@ -51,7 +51,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	private String reserve1;		// 预留字段1
 	private String reserve2;		// 预留字段2
 	private String reserve3;		// 预留字段3
-	
+	private String accessMothed;
 	private String lscore;		// L得分
 	private String escore;		// E得分
 	private String cscore;		// C得分
@@ -60,6 +60,12 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	private String mscore;		// M得分
 	private String sscore;		// S得分
 	
+	public String getAccessMothed() {
+		return accessMothed;
+	}
+	public void setAccessMothed(String accessMothed) {
+		this.accessMothed = accessMothed;
+	}
 	public String getMlscore() {
 		return mlscore;
 	}
@@ -166,8 +172,8 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	@ExcelField(title="场所、设备")
 	@NotNull(message="场所、设备不能为空")
+	@ExcelField(title="场所、设备")
 	@Length(min=0, max=255, message="场所、设备长度必须介于 0 和 255 之间")
 	public String getPlaceDevice() {
 		return placeDevice;
@@ -185,7 +191,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setRiskName(String riskName) {
 		this.riskName = riskName;
 	}
-	@NotNull(message="作业活动名称/活动、物料、产品不能为空")
+	//@NotNull(message="作业活动名称/活动、物料、产品不能为空")
 	@ExcelField(title="作业活动名称/活动、物料、产品")
 	@Length(min=0, max=255, message="作业活动名称/活动、物料、产品、服务长度必须介于 0 和 255 之间")
 	public String getWorkName() {
@@ -195,6 +201,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setWorkName(String workName) {
 		this.workName = workName;
 	}
+	@NotNull(message="危险源不能为空")
 	@ExcelField(title="危害因素")
 	@Length(min=0, max=255, message="危害因素（危险源）长度必须介于 0 和 255 之间")
 	public String getRiskFactors() {

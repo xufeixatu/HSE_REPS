@@ -18,17 +18,20 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active">重大风险清单</li>
+		<li class="active"><a>重大风险清单</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="riskAccess" action="${ctx}/risk/riskAccess/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+		<input  name="riskType" type="hidden" value="4"/>
 		<ul class="ul-form">
 			<li><label>编号：</label>
 				<form:input path="number" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
 			<li><label>年份：</label>
-				<form:input path="years" htmlEscape="false" class="input-medium"/>
+				<input id="years"  name="years"  type="text"  maxlength="20" class="input-medium Wdate" style="width:163px;"
+				value=""${riskAccess.years}"
+					onclick="WdatePicker({dateFmt:'yyyy'});"/>
 			</li>
 			<li><label>属地单位：</label>
 				<form:select path="unit" class="input-medium">
@@ -63,7 +66,6 @@
 				<th>措施</th>
 				<th>责任单位</th>
 				<th>对应管理方案</th>
-				<th>备注信息</th>
 				<shiro:hasPermission name="risk:riskAccess:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -71,7 +73,7 @@
 		<c:forEach items="${page.list}" var="riskAccess">
 			<tr>
 				<td><a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">
-					<fmt:formatDate value="${riskAccess.years}" pattern="yyyy"/>
+					${riskAccess.years}
 				</a></td>
 				<td>
 					${riskAccess.placeDevice}
@@ -95,10 +97,8 @@
 					${fns:getDictLabel(riskAccess.dutyUnit, '', '')}
 				</td>
 				<td>
-					${riskAccess.managementPlan}
-				</td>
-				<td>
-					${riskAccess.remarks}
+				<input hidden="hidden"  id="${riskAccess.id}all"  value="${riskAccess.managementPlan}" ></input>
+				<ol  id="${riskAccess.id}list"   ></ol>
 				</td>
 				<shiro:hasPermission name="risk:riskAccess:edit"><td>
     				<a href="${ctx}/risk/riskAccess/form?id=${riskAccess.id}">修改</a>
@@ -109,5 +109,25 @@
 		</tbody>
 	</table>
 	<div class="pagination">${page}</div>
+	<script type="text/javascript">
+	   $(function () {
+		   var li, urls = $("#${riskAccess.id}").val().split("|");
+      	 })
+	function ${riskAccess.id}(){
+		var li, urls = $("#${riskAccess.id}").val().split("|");
+		$("#${riskAccess.id}").children().remove();
+		for (var i=0; i<urls.length; i++){
+			if (urls[i]!=""){//<c:if test="${type eq 'thumb' || type eq 'images'}">
+				li = "<li><img src=\""+urls[i]+"\" url=\""+urls[i]+"\" style=\"max-width:${empty maxWidth ? 200 : maxWidth}px;max-height:${empty maxHeight ? 200 : maxHeight}px;_height:${empty maxHeight ? 200 : maxHeight}px;border:0;padding:3px;\">";//</c:if><c:if test="${type ne 'thumb' && type ne 'images'}">
+				li = "<li><a href=\""+urls[i]+"\" url=\""+urls[i]+"\" target=\"_blank\">"+decodeURIComponent(urls[i].substring(urls[i].lastIndexOf("/")+1))+"</a>";//</c:if>
+				li += "&nbsp;&nbsp;<c:if test="${!readonly}"><a href=\"javascript:\" onclick=\"${input}Del(this);\">×</a></c:if></li>";
+				$("#${riskAccess.id}").append(li);
+			}
+		}
+		if ($("#${riskAccess.id}").text() == ""){
+			$("#${riskAccess.id}").html("<li style='list-style:none;padding-top:5px;'>无</li>");
+		}
+	}
+	</script>
 </body>
 </html>

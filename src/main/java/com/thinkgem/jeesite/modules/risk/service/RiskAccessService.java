@@ -62,7 +62,6 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	@Transactional(readOnly = false)
 	public void addSave(RiskAccess riskAccess) {
 	
-	
 		riskAccess.setNumber(new Date().getTime()+"");
 		riskAccess.setYears(getYears());
 		riskAccess.setRecognizeDate(new Date());
@@ -77,25 +76,31 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	 * @return
 	 */
 	@Transactional(readOnly = false)
-	public void  analyse(RiskAccess riskAccess) {
-		RiskSaferesult riskSaferesult=null;
-		riskAccess=get(riskAccess.getId());
-		riskSaferesult=riskSaferesultDao.get(riskAccess.getAccessid());
-	   
-		if(riskSaferesult!=null){
-			riskAccess.setLscore(riskSaferesult.getLscore());
-			riskAccess.setEscore(riskSaferesult.getEscore());
-			riskAccess.setCscore(riskSaferesult.getCscore());
-			
-		}else{
-			RiskEnvirresult en = envirresultDao.get(riskAccess.getAccessid());
-			riskAccess.setMlscore("1");
-			riskAccess.setMscore(en.getMscore());
-			riskAccess.setEscore(en.getLscore());
-			riskAccess.setSscore(en.getSscore());
+	public RiskAccess  analyse(RiskAccess riskAccess) {
+		if(riskAccess==null||riskAccess.getId()==null){
+			return riskAccess;
 		}
-
-		//return riskAccess;
+		String id=riskAccess.getAccessid();
+		if(id==null){
+			return riskAccess;
+		}else{
+			if("1".equals(riskAccess.getAccessMothed())){
+				RiskEnvirresult en=envirresultDao.get(id);
+				riskAccess.setMlscore(en.getReserve1());
+				riskAccess.setMscore(en.getMscore());
+				riskAccess.setEscore(en.getLscore());
+				riskAccess.setSscore(en.getSscore());
+				
+			}else if("0".equals(riskAccess.getAccessMothed())){ 
+				RiskSaferesult riskSaferesult=riskSaferesultDao.get(id);
+				riskAccess.setLscore(riskSaferesult.getLscore());
+				riskAccess.setEscore(riskSaferesult.getEscore());
+				riskAccess.setCscore(riskSaferesult.getCscore());
+				
+			}
+			return riskAccess;
+			
+		}
 	}
 
 	public String getYears(){
@@ -103,17 +108,11 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 		calendar.setTime(new Date());
 		return String.valueOf(calendar.get(Calendar.YEAR));
 	}
-	public void analyse_envir(RiskAccess riskAccess) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-
 
 	//LEC法则实现
 	@Transactional(readOnly = false)
 	public void doLEC(RiskAccess riskAccess) {
-		
+		riskAccess.setAccessMothed("0");
 		String lscore = riskAccess.getLscore().replace(",", "");
 		String escore = riskAccess.getEscore().replace(",", "");
 		String cscore = riskAccess.getCscore().replace(",", "");
@@ -161,6 +160,7 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 	//MS法则实现
 	@Transactional(readOnly = false)
 	public void doMS(RiskAccess riskAccess) {
+		riskAccess.setAccessMothed("1");
 		String mlscore = riskAccess.getMlscore().replace(",", "");
 		String mscore = riskAccess.getMscore().replace(",", "");
 		String sscore = riskAccess.getSscore().replace(",", "");
@@ -175,6 +175,8 @@ public class RiskAccessService extends CrudService<RiskAccessDao, RiskAccess> {
 				dscore = Float.parseFloat(escore) * Float.parseFloat(mscore) * Float.parseFloat(sscore);
 			}
 			RiskEnvirresult entity = new RiskEnvirresult();
+			//保存是否有人身伤害
+			entity.setReserve1(mlscore);
 			entity.setLscore(escore);
 			entity.setMscore(mscore);
 			entity.setSscore(sscore);

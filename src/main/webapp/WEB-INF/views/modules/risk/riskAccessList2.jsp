@@ -36,7 +36,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/risk/riskAccess/"> 环境因素识别汇总</a></li>
+		<li class="active"><a href="${ctx}/risk/riskAccess/list?riskType=1"> 环境因素识别汇总</a></li>
 	</ul>
 	<div id="importBox" class="hide">
 		<form id="importForm" action="${ctx}/risk/riskAccess/import" method="post" enctype="multipart/form-data"
@@ -66,7 +66,9 @@
 				<form:input path="number" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
 			<li><label>年份：</label>
-				<form:input path="years" htmlEscape="false" class="input-medium"/>
+				<input id="years"  name="years"  type="text"  maxlength="20" class="input-medium Wdate" style="width:163px;"
+				value=""${riskAccess.years}"
+					onclick="WdatePicker({dateFmt:'yyyy'});"/>
 			</li>
 			<li><label>属地单位：</label>
 				<form:select path="unit" class="input-medium">
@@ -86,8 +88,7 @@
 					<form:options items="${fns:getDictList('risk_level')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
-				<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
+			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
 				<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
 				<input id="btnImport" class="btn btn-primary" type="button" value="导入关键环节"/>
 				<input id="btnImportHistroy" class="btn btn-primary" type="button" value="导入往年"/></li>
@@ -133,7 +134,7 @@
 					${riskAccess.placeDevice}
 				</td>
 				<td>
-					${riskAccess.riskFactors}
+				${fns:getDictLabel(riskAccess.riskFactors, 'risk_factors', '')}
 				</td>
 				<td>
 					${fns:getDictLabel(riskAccess.tense, 'risk_tense_type', '')}
