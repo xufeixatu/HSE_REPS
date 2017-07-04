@@ -353,8 +353,8 @@ public class WorkPlanController extends BaseController {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
 		workPlanService.remain(workPlan);
-		
-		return "modules/work/list";
+		workPlan = new WorkPlan();
+		return list(workPlan, request, response, model);
 	}
 
 	
