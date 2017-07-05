@@ -222,9 +222,6 @@ public class WorkPlanController2 extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan2/work_list?planType=department";
 	}
 	
-	
-
-	
 	/**
 	 * 进入已关闭已受理反馈部门工作点评表单
 	 * @param workPlan
