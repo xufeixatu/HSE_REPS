@@ -290,8 +290,9 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	 */
 	@Transactional(readOnly = false)
 	public void closeWorkPlan(String workState,String id) {
-		if("urge".equals(workState)){
+		if("催办".equals(workState)){
 			dao.updateWorkState(id, DictUtils.getDictByValue("urge_closed", "work_state").getId());
+			return;
 		}
 		dao.updateWorkState(id, DictUtils.getDictByValue("closed", "work_state").getId());
 	}
@@ -317,7 +318,7 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	 */
 	@Transactional(readOnly = false)
 	public void commentSave(String id,String commentContent, int score) {
-		dao.commentSave(id, commentContent, score);
+		dao.commentSave(UserUtils.getUser().getId(),id, commentContent, score);
 	}
 
 	public WorkPlan findComment(String remainId) {

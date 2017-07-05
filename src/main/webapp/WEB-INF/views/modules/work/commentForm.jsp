@@ -16,11 +16,11 @@
 	<c:forEach items="${comments}" var="w">
 		<div class="control-group">
 			<label class="control-label">
-				${fns:getUserById(w.reviwer.id).name}
+				${fns:getUserById(w.reviewer.id).name}
 				点评:
 			</label>
 			<label class="control-label">
-				${w.commentTime}
+				${w.commentContent}
 			</label>
 		</div>
 	</c:forEach>

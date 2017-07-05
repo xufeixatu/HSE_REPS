@@ -684,8 +684,8 @@
 			wc.reviewer_id AS "reviewer.id"
 		FROM work_comment wc
 			<where>
-				wc.del_flag = '0' AND
-				
+				wc.work_remain_id = #{id} and
+				wc.del_flag = '0'
 				order by wc.comment_time
 			</where>
 	</select>

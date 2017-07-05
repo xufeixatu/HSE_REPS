@@ -55,14 +55,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	public void setCurrentAuditUse(User currentAuditUse) {
 		this.currentAuditUse = currentAuditUse;
 	}
-	private String id;
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	
 	private WorkType workType;		// 工作类别
 	private Date requiredFinishTime;		// 要求结束时间
 	private Date startTime;		// 工作开始时间

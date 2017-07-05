@@ -161,7 +161,7 @@ public interface WorkPlanDao extends TreeDao<WorkPlan> {
 	 * @param commentContent 点评内容
 	 * @param score 成绩
 	 */
-	public void commentSave(@Param("userid") String userid, @Param("commentContent") String commentContent, @Param("score") int score);
+	public void commentSave(@Param("userid") String userid, @Param("id") String id,@Param("commentContent") String commentContent, @Param("score") int score);
 
 	public WorkPlan findComment(@Param("remainId") String remainId);
 
