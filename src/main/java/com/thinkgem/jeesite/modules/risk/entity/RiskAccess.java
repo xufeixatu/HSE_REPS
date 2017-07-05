@@ -5,6 +5,9 @@ package com.thinkgem.jeesite.modules.risk.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 //import org.hibernate.validator.constraints.Length(min=0, max=255, message="风险名称;
 import com.thinkgem.jeesite.common.annotation.FieldName;
@@ -20,7 +23,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	
 	private static final long serialVersionUID = 1L;
 	private String number;		// 编号
-	private Date years;		// 年份
+	private String years;		// 年份
 	private String unit;		// 属地单位
 	private String recognizeBy;		// 辨识人
 	private Date recognizeDate;		// 辨识时间
@@ -48,11 +51,39 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	private String reserve1;		// 预留字段1
 	private String reserve2;		// 预留字段2
 	private String reserve3;		// 预留字段3
-	
+	private String accessMothed;
 	private String lscore;		// L得分
 	private String escore;		// E得分
 	private String cscore;		// C得分
 	
+	private String mlscore;		// L得分
+	private String mscore;		// M得分
+	private String sscore;		// S得分
+	
+	public String getAccessMothed() {
+		return accessMothed;
+	}
+	public void setAccessMothed(String accessMothed) {
+		this.accessMothed = accessMothed;
+	}
+	public String getMlscore() {
+		return mlscore;
+	}
+	public void setMlscore(String mlscore) {
+		this.mlscore = mlscore;
+	}
+	public String getMscore() {
+		return mscore;
+	}
+	public void setMscore(String mscore) {
+		this.mscore = mscore;
+	}
+	public String getSscore() {
+		return sscore;
+	}
+	public void setSscore(String sscore) {
+		this.sscore = sscore;
+	}
 	public String getLscore() {
 		return lscore;
 	}
@@ -64,7 +95,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	}
 	public void setEscore(String escore) {
 		this.escore = escore;
-	}
+	} 
 	public String getCscore() {
 		return cscore;
 	}
@@ -89,11 +120,11 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	}
 	
 	@JsonFormat(pattern = "yyyy")
-	public Date getYears() {
+	public String getYears() {
 		return years;
 	}
 
-	public void setYears(Date years) {
+	public void setYears(String years) {
 		this.years = years;
 	}
 	
@@ -141,6 +172,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	@NotNull(message="场所、设备不能为空")
 	@ExcelField(title="场所、设备")
 	@Length(min=0, max=255, message="场所、设备长度必须介于 0 和 255 之间")
 	public String getPlaceDevice() {
@@ -159,6 +191,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setRiskName(String riskName) {
 		this.riskName = riskName;
 	}
+	//@NotNull(message="作业活动名称/活动、物料、产品不能为空")
 	@ExcelField(title="作业活动名称/活动、物料、产品")
 	@Length(min=0, max=255, message="作业活动名称/活动、物料、产品、服务长度必须介于 0 和 255 之间")
 	public String getWorkName() {
@@ -168,6 +201,7 @@ public class RiskAccess extends DataEntity<RiskAccess> {
 	public void setWorkName(String workName) {
 		this.workName = workName;
 	}
+	@NotNull(message="危险源不能为空")
 	@ExcelField(title="危害因素")
 	@Length(min=0, max=255, message="危害因素（危险源）长度必须介于 0 和 255 之间")
 	public String getRiskFactors() {
