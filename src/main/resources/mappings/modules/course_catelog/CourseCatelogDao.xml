@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.course_catelog.dao.CourseCatelogDao">
+    
+	<sql id="courseCatelogColumns">
+		a.id AS "id",
+		a.course_id AS "courseId",
+		a.attach_name AS "attachName",
+		a.attach_id AS "attachId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="courseCatelogJoins">
+	</sql>
+    
+	<select id="get" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByCourseId" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		WHERE a.course_id = #{courseId} 
+	</select>
+	
+<!-- 		<select id="findList" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="attachName != null and attachName != ''">
+				AND a.attach_name = #{attachName}
+			</if>
+			<if test="trainCourse != null and trainCourse.id != null and trainCourse.id != ''">
+				AND a.course_id = #{trainCourse.id}
+			</if>
+			<if test="attachId != null and attachId != ''">
+				AND a.attach_id = #{attachId} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select> -->
+	<select id="findListByCourseId" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="courseId != null and courseId != ''">
+				AND a.course_id = #{courseId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findList" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="attachName != null and attachName != ''">
+				AND a.attach_name = #{attachName}
+			</if>
+			<if test="courseId != null and courseId != ''">
+				AND a.course_id = #{courseId}
+			</if>
+			<if test="attachId != null and attachId != ''">
+				AND a.attach_id = #{attachId} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CourseCatelog">
+		SELECT 
+			<include refid="courseCatelogColumns"/>
+		FROM course_catelog a
+		<include refid="courseCatelogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO course_catelog(
+			id,
+			course_id,
+			attach_name,
+			attach_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{trainCourse.id},
+			#{attachName},
+			#{attachId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">s
+		UPDATE course_catelog SET 	
+			attach_name = #{attachName},
+			attach_id = #{attachId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE course_catelog SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

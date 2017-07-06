@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.course_catalog.dao.CourseCatalogDao">
+    
+	<sql id="courseCatalogColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.catalog_name AS "catalogName",
+		a.catalog_desc AS "catalogDesc",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="courseCatalogJoins">
+	</sql>
+    
+	<select id="get" resultType="CourseCatalog">
+		SELECT 
+			<include refid="courseCatalogColumns"/>
+		FROM course_catalog a
+		<include refid="courseCatalogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CourseCatalog">
+		SELECT 
+			<include refid="courseCatalogColumns"/>
+		FROM course_catalog a
+		<include refid="courseCatalogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="catalogName != null and catalogName != ''">
+				AND a.catalog_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{catalogName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{catalogName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{catalogName},'%')</if>
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findAllList" resultType="CourseCatalog">
+		SELECT 
+			<include refid="courseCatalogColumns"/>
+		FROM course_catalog a
+		<include refid="courseCatalogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="CourseCatalog">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM course_catalog a
+		<include refid="courseCatalogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO course_catalog(
+			id,
+			parent_id,
+			catalog_name,
+			catalog_desc,
+			parent_ids,
+			name,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{catalogName},
+			#{catalogDesc},
+			#{parentIds},
+			#{name},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE course_catalog SET 	
+			parent_id = #{parent.id},
+			catalog_name = #{catalogName},
+			catalog_desc = #{catalogDesc},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE course_catalog SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE course_catalog SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE '%${id}%'
+	</update>
+	
+</mapper>

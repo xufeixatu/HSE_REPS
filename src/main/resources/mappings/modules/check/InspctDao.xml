@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.check.dao.InspctDao">
+    
+	<sql id="inspctColumns">
+		a.id AS "id",
+		a.type_id AS "checkTypeClass.id",
+		a.check_dept AS "checkOffice.id",
+		a.check_dept AS "checkOfficeId",
+		a.check_person AS "checkPerson",
+		a.check_date AS "checkDate",
+		a.inspection_dept_id AS "inspectionOffice.id",
+		a.inspection_dept_id AS "inspectionOfficeId",
+		a.template_id AS "templateId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.obligate_1 AS "obligate1",
+		a.obligate_2 AS "obligate2",
+		a.obligate_3 AS "obligate3"
+	</sql>
+	
+<!-- 	<sql id="inspctJoins">
+	    LEFT JOIN check_type_class type ON type.id = a.template_id
+		LEFT JOIN sys_office o3 ON o3.id = a.check_dept
+		LEFT JOIN sys_office o6 ON o6.id = a.inspection_dept_id
+	</sql> -->
+    
+	<select id="get" resultType="Inspct">
+		SELECT 
+			<include refid="inspctColumns"/>
+		FROM inspct a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Inspct">
+	SELECT data.*,office1.name AS checkOfficeName, office2.name AS inspectionOfficeName,
+	IFNULL(check_result.all_question_count,0) AS aLLQuestionCount,
+	IFNULL(check_result1.solved_question_count,0) AS solvedQuestionCount
+	FROM
+		(SELECT 
+			<include refid="inspctColumns"/>,
+			type.name As typeName,
+			user.name AS checkUserName
+		 FROM inspct a, check_type_class AS type, sys_user AS user
+		 <where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.type_id = type.id
+			AND a.check_person = user.id
+			<if test="typeId != null and typeId != ''">
+				AND a.type_id = #{typeId}
+			</if>
+			<if test="checkOffice != null and checkOffice.id != null and checkOffice.id != ''">
+				AND a.check_dept = #{checkOffice.id}
+			</if>
+			<if test="checkTypeClass != null and checkTypeClass.id != null and checkTypeClass.id != ''">
+				AND type.id = #{checkTypeClass.id}
+			</if>			
+		 </where>) AS data
+	LEFT JOIN sys_office office1 ON office1.id = data.checkOfficeId
+	LEFT JOIN sys_office office2 ON office2.id = data.inspectionOfficeId
+	LEFT JOIN
+	(SELECT inspct_id, count(*) AS all_question_count 
+		FROM check_item_check
+		WHERE check_result = '0'
+		GROUP BY inspct_id) AS check_result
+	ON data.id = check_result.inspct_id
+	LEFT JOIN
+	(SELECT check_item_check.inspct_id, count(*) AS solved_question_count
+		FROM check_item_check, question
+		WHERE check_item_check.id = question.check_item_check_id
+		AND question.state_id = '5'
+		AND check_item_check.check_result = '0'
+		GROUP BY check_item_check.inspct_id) AS check_result1
+	ON data.id = check_result1.inspct_id	
+	</select>
+	
+	<select id="findAllList" resultType="Inspct">
+		SELECT 
+			<include refid="inspctColumns"/>
+		FROM inspct a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO inspct(
+			id,
+			type_id,
+			check_dept,
+			check_person,
+			check_date,
+			inspection_dept_id,
+			template_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{checkTypeClass.id},
+			#{checkOffice.id},
+			#{checkPerson},
+			#{checkDate},
+			#{inspectionOffice.id},
+			#{templateId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE inspct SET 	
+			type_id = #{checkTypeClass.id},
+			check_dept = #{checkOffice.id},
+			check_person = #{checkPerson},
+			inspection_dept_id = #{inspectionOffice.id},
+			template_id = #{templateId},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE inspct SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getALLQuestionCountByInspctId"  parameterType="java.lang.String" resultType="int">
+		SELECT count(*) AS count
+		FROM question,
+		(SELECT * FROM check_item_check
+		WHERE check_result = '0'
+		AND inspct_id = #{inspctId}
+		) AS check_result
+		WHERE question.check_item_check_id = check_result.id
+		AND question.state_id != '5'	
+	</select>
+
+	<select id="getSolvedQuestionCountByInspctId"  parameterType="java.lang.String" resultType="int">
+		SELECT count(*) AS count
+		FROM question,
+		(SELECT * FROM check_item_check
+		WHERE check_result = '0'
+		AND inspct_id = #{inspctId}
+		) AS check_result
+		WHERE question.check_item_check_id = check_result.id
+		AND question.state_id = '5'	
+	</select>
+	
+</mapper>

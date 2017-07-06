@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.risk.dao.RiskAccessDao">
+    
+	<sql id="riskAccessColumns">
+		a.id AS "id",
+		a.number AS "number",
+		a.years AS "years",
+		a.unit AS "unit",
+		a.recognize_by AS "recognizeBy",
+		a.recognize_date AS "recognizeDate",
+		a.risk_type AS "riskType",
+		a.category AS "category",
+		a.place_device AS "placeDevice",
+		a.risk_name AS "riskName",
+		a.work_name AS "workName",
+		a.risk_factors AS "riskFactors",
+		a.tense AS "tense",
+		a.status AS "status",
+		a.result AS "result",
+		a.judge_tf AS "judgeTf",
+		a.accessid AS "accessid",
+		a.is_heaverisk AS "isHeaverisk",
+		a.lastyear_recognize AS "lastyearRecognize",
+		a.risk_level AS "riskLevel",
+		a.workflowid AS "workflowid",
+		a.duty_unit AS "dutyUnit",
+		a.management_plan AS "managementPlan",
+		a.affect AS "affect",
+		a.measure AS "measure",
+		a.frequency AS "frequency",
+		a.reason AS "reason",
+		a.access_mothed AS "accessMothed",
+		a.reserve_1 AS "reserve1",
+		a.reserve_2 AS "reserve2",
+		a.reserve_3 AS "reserve3",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="riskAccessJoins">
+	</sql>
+    
+	<select id="get" resultType="RiskAccess">
+		SELECT 
+			<include refid="riskAccessColumns"/>
+		FROM risk_access a
+		<include refid="riskAccessJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RiskAccess">
+		SELECT 
+			<include refid="riskAccessColumns"/>
+		FROM risk_access a
+		<include refid="riskAccessJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="number != null and number != ''">
+				AND a.number = #{number}
+			</if>
+			<if test="years != null and years != ''">
+				AND a.years = #{years}
+			</if>
+			<if test="unit != null and unit != ''">
+				AND a.unit = #{unit}
+			</if>
+			<if test="riskType != null and riskType != ''">
+				AND a.risk_type = #{riskType}
+			</if>
+			<if test="placeDevice != null and placeDevice != ''">
+				AND a.place_device = #{placeDevice}
+			</if>
+			<if test="isHeaverisk != null and isHeaverisk != ''">
+				AND a.is_heaverisk = #{isHeaverisk}
+			</if>
+			<if test="riskLevel != null and riskLevel != ''">
+				AND a.risk_level = #{riskLevel}
+			</if>
+			<if test="dutyUnit != null and dutyUnit != ''">
+				AND a.duty_unit = #{dutyUnit}
+			</if>
+			<if test="accessMothed != null and accessMothed != ''">
+				AND a.access_mothed = #{accessMothed}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="RiskAccess">
+		SELECT 
+			<include refid="riskAccessColumns"/>
+		FROM risk_access a
+		<include refid="riskAccessJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO risk_access(
+			id,
+			number,
+			years,
+			unit,
+			recognize_by,
+			recognize_date,
+			risk_type,
+			category,
+			place_device,
+			risk_name,
+			work_name,
+			risk_factors,
+			tense,
+			status,
+			result,
+			judge_tf,
+			accessid,
+			is_heaverisk,
+			lastyear_recognize,
+			risk_level,
+			workflowid,
+			duty_unit,
+			management_plan,
+			affect,
+			measure,
+			frequency,
+			reason,
+			access_mothed,
+			reserve_1,
+			reserve_2,
+			reserve_3,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{number},
+			#{years},
+			#{unit},
+			#{recognizeBy},
+			#{recognizeDate},
+			#{riskType},
+			#{category},
+			#{placeDevice},
+			#{riskName},
+			#{workName},
+			#{riskFactors},
+			#{tense},
+			#{status},
+			#{result},
+			#{judgeTf},
+			#{accessid},
+			#{isHeaverisk},
+			#{lastyearRecognize},
+			#{riskLevel},
+			#{workflowid},
+			#{dutyUnit},
+			#{managementPlan},
+			#{affect},
+			#{measure},
+			#{frequency},
+			#{reason},
+			#{accessMothed},
+			#{reserve1},
+			#{reserve2},
+			#{reserve3},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE risk_access SET 	
+			risk_type = #{riskType},
+			category = #{category},
+			place_device = #{placeDevice},
+			risk_name = #{riskName},
+			work_name = #{workName},
+			risk_factors = #{riskFactors},
+			tense = #{tense},
+			status = #{status},
+			result = #{result},
+			judge_tf = #{judgeTf},
+			accessid = #{accessid},
+			is_heaverisk = #{isHeaverisk},
+			lastyear_recognize = #{lastyearRecognize},
+			risk_level = #{riskLevel},
+			workflowid = #{workflowid},
+			duty_unit = #{dutyUnit},
+			management_plan = #{managementPlan},
+			affect = #{affect},
+			measure = #{measure},
+			access_mothed = #{accessMothed},
+			frequency = #{frequency},
+			reason = #{reason},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE risk_access SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

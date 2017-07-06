@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.zsk.dao.ZskClassDao">
+    
+	<sql id="zskClassColumns">
+		a.id AS "id",
+		a.zsk_name AS "zskName",
+		a.desc_info AS "descInfo",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.sort AS "sort",
+		a.name AS "name",
+		a.parent_ids AS "parentIds",
+		a.parent_id AS "parent.id"
+	</sql>
+	
+	<sql id="zskClassJoins">
+	</sql>
+    
+	<select id="get" resultType="ZskClass">
+		SELECT 
+			<include refid="zskClassColumns"/>
+		FROM zsk_class a
+		<include refid="zskClassJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ZskClass">
+		SELECT 
+			<include refid="zskClassColumns"/>
+		FROM zsk_class a
+		<include refid="zskClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="zskName != null and zskName != ''">
+				AND a.zsk_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{zskName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{zskName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{zskName},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids = #{parentIds}
+			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findAllList" resultType="ZskClass">
+		SELECT 
+			<include refid="zskClassColumns"/>
+		FROM zsk_class a
+		<include refid="zskClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="ZskClass">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM zsk_class a
+		<include refid="zskClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zsk_class(
+			id,
+			zsk_name,
+			desc_info,
+			del_flag,
+			remarks,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			sort,
+			name,
+			parent_ids,
+			parent_id
+		) VALUES (
+			#{id},
+			#{zskName},
+			#{descInfo},
+			#{delFlag},
+			#{remarks},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{sort},
+			#{name},
+			#{parentIds},
+			#{parent.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE zsk_class SET 	
+			zsk_name = #{zskName},
+			desc_info = #{descInfo},
+			del_flag = #{delFlag},
+			remarks = #{remarks},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			sort = #{sort},
+			name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE zsk_class SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE zsk_class SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} 
+	</update>
+	
+</mapper>

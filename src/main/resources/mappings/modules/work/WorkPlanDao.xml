@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.work.dao.WorkPlanDao">
+    
+	<sql id="workPlanColumns">
+		a.id AS "id",
+		a.current_audit_use_id AS "currentAuditUser.id",
+		a.work_type_id AS "workType.id",
+		sd3.label AS "planTypeDetail.label",
+		sd3.value AS "planTypeDetail.value",
+		sd3.type AS "planTypeDetail.type",
+		sd.id AS "planTypeDetail.id",
+		wt.name AS "workType.name",
+		a.required_finish_time AS "requiredFinishTime",
+		a.start_time AS "startTime",
+		a.planed_finish_time AS "planedFinishTime",
+		a.depts AS "depts.id",
+		a.person_liable_id AS "personLiable.id",
+		a.actual_finish_time AS "actualFinishTime",
+		a.work_level_id AS "workLevelId",
+		a.work_desc AS "workDesc",
+		a.job_require AS "jobRequire",
+		a.zsk_id AS "zskId",
+		a.work_state_id AS "workStateId",
+		a.is_open AS "isOpen",
+		a.create_by AS "createBy.id",
+		a.parent_id AS "parent.id",
+		a.is_cancel AS "isCancel",
+		a.cancel_reason AS "cancelReason",
+		a.is_remove AS "isRemove",
+		a.remove_reason AS "removeReason",
+		a.is_approvable AS "isApprovable",
+		a.is_approve_update AS "isApproveUpdate",
+		a.is_retains_approve_update AS "isRetainsApproveUpdate",
+		a.approve_opinion AS "approveOpinion",
+		a.reminder_desc AS "reminderDesc",
+		a.assigner_id AS "assignerId",
+		a.assign_time AS "assignTime",
+		a.acceptance_time AS "acceptanceTime",
+		a.end_state_id AS "endStateId",
+		a.frequency AS "frequency",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.sort AS "sort",
+		a.name AS "name",
+		a.plan_type as "planType",
+		a.attach_files as "attachFiles",
+		a.work_submit as "workSubmit",
+		a.parent_ids AS "parentIds",
+		pp.name AS "personLiable.name",
+		sd.label AS "workLevel",
+		sd2.label AS "workState",
+		so.name AS "myDept",
+		wfrf.reply_content AS "newFeedback",
+		wfrf.reply_people_id AS "feebackPeopleId",
+		wfrf.reply_time AS "feedbackTime",
+		wri.remain_dept_id AS "remainDeptId",
+		wri.id AS "remainId",
+		wfrr.reply_content AS "newReply",
+		wfrr.reply_people_id AS "replyPeopleId",
+		wfrf.reply_time AS "replyTime"
+	</sql>
+	<sql id="workPlanJoins">
+		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
+		LEFT JOIN SYS_OFFICE so ON so.id = pp.office_id
+		LEFT JOIN SYS_DICT sd ON sd.id = a.work_level_id
+		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
+		LEFT JOIN SYS_DICT sd3 ON sd3.id = a.plan_type
+		LEFT JOIN WORK_TYPE wt ON wt.id = a.work_type_id
+		LEFT JOIN work_remain_info wri ON a.id = wri.workplan_id
+		LEFT JOIN work_feedback_reply wfrf ON wfrf.remainId = wri.id AND 
+											 wfrf.type='feedback' AND 
+											 wfrf.reply_time = (SELECT MAX(ww.reply_time) 
+											 					  FROM work_feedback_reply ww
+											 					  WHERE ww.remainId = wri.id AND 
+											 					        ww.type = 'feedback')
+		LEFT JOIN work_feedback_reply wfrr ON wfrr.remainId = wri.id AND 
+											 wfrr.type='reply' AND 
+											 wfrr.reply_time = (SELECT MAX(reply_time) 
+											 					  FROM work_feedback_reply 
+											 					  WHERE remainId = wri.id AND 
+											 					        type = 'reply')
+	</sql>
+	
+	<sql id="workPlanColumns1">
+		a.id AS "id",
+		a.work_type_id AS "workType.id",
+		a.required_finish_time AS "requiredFinishTime",
+		a.start_time AS "startTime",
+		a.planed_finish_time AS "planedFinishTime",
+		a.depts AS "depts.id",
+		a.person_liable_id AS "personLiable.id",
+		a.actual_finish_time AS "actualFinishTime",
+		a.work_level_id AS "workLevelId",
+		a.work_desc AS "workDesc",
+		a.job_require AS "jobRequire",
+		a.zsk_id AS "zskId",
+		a.work_state_id AS "workStateId",
+		a.is_open AS "isOpen",
+		a.create_by AS "createBy.id",
+		a.parent_id AS "parent.id",
+		a.is_cancel AS "isCancel",
+		a.cancel_reason AS "cancelReason",
+		a.is_remove AS "isRemove",
+		a.remove_reason AS "removeReason",
+		a.is_approvable AS "isApprovable",
+		a.is_approve_update AS "isApproveUpdate",
+		a.is_retains_approve_update AS "isRetainsApproveUpdate",
+		a.approve_opinion AS "approveOpinion",
+		a.reminder_desc AS "reminderDesc",
+		a.assigner_id AS "assignerId",
+		a.assign_time AS "assignTime",
+		a.acceptance_time AS "acceptanceTime",
+		a.end_state_id AS "endStateId",
+		a.frequency AS "frequency",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.sort AS "sort",
+		a.name AS "name",
+		a.plan_type as "planType",
+		a.work_submit as "workSubmit",
+		a.parent_ids AS "parentIds",
+		su.id AS "remainnerId",
+		su.name AS "remainName", 
+		so.id AS "remainDeptId",
+		so.name AS "remainDeptName",
+		sd.value AS "endState",
+		sd2.label AS "workState",
+		pp.name AS "personLiable.name",
+		wri.id AS "remainId"
+	</sql>
+	<sql id="workPlanJoins1">
+		INNER JOIN work_remain_info wri ON a.id = wri.workplan_id 
+		INNER JOIN sys_user su ON wri.remainner_id = su.id
+		INNER JOIN sys_office so ON so.id = wri.remain_dept_id 
+		LEFT JOIN SYS_DICT sd ON sd.id = a.end_state_id
+		LEFT JOIN SYS_DICT sd2 ON sd2.id = a.work_state_id
+		LEFT JOIN SYS_USER pp ON pp.id = a.person_liable_id
+	</sql>
+	
+	
+    
+    <sql id="workRemainCollumns">
+		a.id AS "id",
+		a.remain_desc AS "remainDesc",
+		a.remainner_id AS "remainnerId",
+		a.remain_dept_id AS "remainDeptId",
+		a.workplan_id AS "workPlanId",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy",
+		a.sort AS "sort",
+		a.name AS "name"
+	</sql>
+	<sql id="workRemainJoins">
+		
+	</sql>
+    
+	<select id="get" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns"/>
+		FROM work_plan a
+		<include refid="workPlanJoins"/>
+		WHERE a.id = #{id}
+		GROUP BY a.work_state_id
+	</select>
+	<!-- 
+	<resultMap type="WorkPlan" id="workPlanList">
+		<include refid="workPlanColumns"/>
+	</resultMap>
+	 -->
+	<select id="findList" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns"></include>
+		FROM work_plan a
+		<include refid="workPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="workStateId != null and workStateId != ''">
+				AND a.work_state_id = #{workStateId}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+		</where>
+		${sqlMap.dsf}
+		ORDER BY a.work_state_id DESC,a.sort ASC
+	</select>
+	<!-- 查找一个问题的讨论过程 -->
+	<select id="findDiscusses" resultType="WorkPlan">
+		SELECT 
+			a.id AS "remainId",
+			a.reply_people_id AS "replyPeopleId",
+			a.reply_content AS "newReply",
+			a.reply_time AS "replay_time",
+			a.type AS "type"
+		FROM work_feedback_reply a
+
+		<where>
+			a.del_flag = 0
+			AND a.remainId = #{id}
+		</where>
+		ORDER BY a.reply_time ASC
+	</select>
+	
+	<select id="findAllList" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns"/>
+		FROM work_plan a
+		<include refid="workPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="WorkPlan">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM work_plan a
+		<include refid="workPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO work_plan(
+			id,
+			work_type_id,
+			required_finish_time,
+			start_time,
+			planed_finish_time,
+			depts,
+			person_liable_id,
+			actual_finish_time,
+			work_level_id,
+			work_desc,
+			job_require,
+			zsk_id,
+			work_state_id,
+			is_open,
+			create_by,
+			parent_id,
+			is_cancel,
+			cancel_reason,
+			is_remove,
+			remove_reason,
+			is_approvable,
+			is_approve_update,
+			is_retains_approve_update,
+			approve_opinion,
+			reminder_desc,
+			assigner_id,
+			assign_time,
+			acceptance_time,
+			end_state_id,
+			frequency,
+			del_flag,
+			remarks,
+			update_date,
+			update_by,
+			create_date,
+			sort,
+			name,
+			plan_type,
+			work_submit,
+			parent_ids,
+			attach_files
+		) VALUES (
+			#{id},
+			#{workType.id},
+			#{requiredFinishTime},
+			#{startTime},
+			#{planedFinishTime},
+			#{depts.id},
+			#{personLiable.id},
+			#{actualFinishTime},
+			#{workLevelId},
+			#{workDesc},
+			#{jobRequire},
+			#{zskId},
+			#{workStateId},
+			#{isOpen},
+			#{createBy.id},
+			#{parent.id},
+			#{isCancel},
+			#{cancelReason},
+			#{isRemove},
+			#{removeReason},
+			#{isApprovable},
+			#{isApproveUpdate},
+			#{isRetainsApproveUpdate},
+			#{approveOpinion},
+			#{reminderDesc},
+			#{assignerId},
+			#{assignTime},
+			#{acceptanceTime},
+			#{endStateId},
+			#{frequency},
+			#{delFlag},
+			#{remarks},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{sort},
+			#{name},
+			#{planType},
+			#{workSubmit},
+			#{parentIds},
+			#{attachFiles}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE work_plan SET 	
+			work_type_id = #{workType.id},
+			required_finish_time = #{requiredFinishTime},
+			start_time = #{startTime},
+			planed_finish_time = #{planedFinishTime},
+			depts = #{depts.id},
+			person_liable_id = #{personLiable.id},
+			actual_finish_time = #{actualFinishTime},
+			work_level_id = #{workLevelId},
+			work_desc = #{workDesc},
+			job_require = #{jobRequire},
+			zsk_id = #{zskId},
+			work_state_id = #{workStateId},
+			is_open = #{isOpen},
+			parent_id = #{parent.id},
+			is_cancel = #{isCancel},
+			cancel_reason = #{cancelReason},
+			is_remove = #{isRemove},
+			remove_reason = #{removeReason},
+			is_approvable = #{isApprovable},
+			is_approve_update = #{isApproveUpdate},
+			is_retains_approve_update = #{isRetainsApproveUpdate},
+			approve_opinion = #{approveOpinion},
+			reminder_desc = #{reminderDesc},
+			assigner_id = #{assignerId},
+			assign_time = #{assignTime},
+			acceptance_time = #{acceptanceTime},
+			end_state_id = #{endStateId},
+			frequency = #{frequency},
+			remarks = #{remarks},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			sort = #{sort},
+			name = #{name},
+			work_submit = #{workSubmit},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE work_plan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE CONCAT(CONCAT('%,',#{id}),',%')
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE work_plan SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新work_plan表的work_state_id字段 -->
+	<update id="updateWorkState">
+		UPDATE work_plan SET 
+			work_state_id = #{workStateId}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新work_plan表的end_state_id字段 -->
+	<update id="updateEndState">
+		UPDATE work_plan SET 
+			end_state_id = #{endStateId}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 审核拒绝公司计划:更新work_plan表的work_state_id字段 -->
+	<update id="reject">
+		UPDATE work_plan SET 
+			work_state_id = '8332da35c3e3419caf094f53e7a6c58c'
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 审核同意公司计划:更新work_plan表的work_state_id字段 -->
+	<update id="agree">
+		UPDATE work_plan SET 
+			work_state_id = '0374ed53f5034055943e0381aca4c22a',
+			approve_opinion = #{approveOpinion}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 公司计划审核通过后分派给部门:更新work_plan表的end_state_id字段 -->
+	<update id="asigned">
+		UPDATE work_plan SET 
+			end_state_id = '042bb2ce059249729da41c7995e4381b',
+			depts = #{depts.id},
+			assigner_id = #{currentUser.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updatepersonLiable">
+		UPDATE work_plan SET 
+			person_liable_id = #{personLiableId}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 受理分派的公司计划:更新WorkPlan表的end_state_id字段,为已受理状态 -->
+	<update id="remain">
+		UPDATE work_plan SET 
+			end_state_id = '1564424ef256499bb3faa03033924b2f'
+		WHERE id = #{id} 
+	</update>
+	
+	<!-- 查询当前用户已受理的工作 -->
+	<select id="findCurrentRemainnedWorkPlanList" resultType="WorkPlan">
+		SELECT 
+		<include refid="workPlanColumns1"/> 
+		FROM work_plan a 
+		<include refid="workPlanJoins1"/> 
+		<where>
+			a.del_flag = '0' AND
+			wri.remainner_id = #{userid} AND 
+			wri.remain_state_id = '8cee3cf155744bf6bb2a6295d72fad1b'
+		</where>
+	</select>
+	
+	<!-- 查看一条部门工作记录的一条受理信息的所有反馈列表 -->
+	<select id="findWorkPlanRemainAllFeedback" resultType="WorkPlan">
+		SELECT 
+		<include refid="workPlanColumns1"/>,
+		wfb.id AS "feedbackId",
+		wfb.feedback_info AS "feedbackDesc",
+		wfb.feedback_time AS "feedBackTime"
+		FROM work_plan a 
+		<include refid="workPlanJoins1"/>
+		inner join work_feedback wfb on wri.id = wfb.remain_id
+		<where>
+			a.del_flag = '0' AND
+			a.id = #{id} AND 
+			wri.id = #{remainId}
+		</where>
+		order by wfb.feedback_time desc
+	</select>
+	
+	<!-- 查看一条部门工作记录的一个受理的一个工作反馈的所有回复列表  -->
+	<select id="findWorkPlanRemainFeedbackAllRefly" resultType="WorkPlan">
+		SELECT 
+		<include refid="workPlanColumns1"/>,
+		wfb.id AS "feedbackId",
+		wfb.feedback_info AS "feedbackDesc",
+		wfb.feedback_time AS "feedBackTime",
+		wfr.reply_content AS "replyContent",
+		wfr.reply_time AS "replyTime",
+		wfr.reply_people_id AS "replyPeople.id"
+		FROM work_plan a 
+		<include refid="workPlanJoins1"/>
+		inner join work_feedback wfb on wri.id = wfb.remain_id
+		inner join work_feedback_reply wfr on wfr.feedback_id = wfb.id
+		<where>
+			a.del_flag = '0' AND
+			a.id = #{id} AND 
+			wri.id = #{remainId} AND 
+			wfr.feedback_id = #{feedback_id}
+		</where>
+		order by wfr.reply_time desc
+	</select>
+	
+	<!-- 查看一条工作记录的受理的反馈的信息  -->
+	<select id="findReplayBy3Id" resultType="WorkPlan">
+		SELECT 
+		<include refid="workPlanColumns1"/>,
+		wfb.id AS "feedbackId",
+		wfb.feedback_info AS "feedbackDesc",
+		wfb.feedback_time AS "feedBackTime"
+		FROM work_plan a 
+		<include refid="workPlanJoins1"/>
+		inner join work_feedback wfb on wri.id = wfb.remain_id
+		<where>
+			a.del_flag = '0' AND
+			a.id = #{id} AND 
+			wri.id = #{remainId} AND 
+			wfb.id = #{feedback_id}
+		</where>
+	</select>
+
+	<!-- 查询特定工作被分配部门受理的次数 -->
+	<select id="isRemainOver" resultType="int">
+		SELECT count(*) FROM work_remain_info a
+		<where>
+			a.workplan_id = #{remainWorkPlanId} and 
+			FIND_IN_SET(remain_dept_id,#{depts}) > 0
+		</where>
+	</select>
+	
+	<!-- 查询特定工作被分配给特定部门的当前用户受理的次数，表示是否受理过 -->
+	<select id="remainsCount" resultType="int">
+		SELECT count(*) FROM work_remain_info a
+		<where>
+			a.workplan_id = #{workPlanId} and 
+			a.remain_dept_id = #{officeId} and 
+			a.remainner_id = #{remainnerId}
+		</where>
+	</select>
+	
+	<insert id="saveRemainFeedbackReplay">
+		INSERT INTO work_feedback_reply(
+			id,
+			reply_people_id,
+			reply_content,
+			feedback_id,
+			reply_time
+		) VALUES (
+			UUID(),
+			#{userId},
+			#{replyContent},
+			#{feedback_id},
+			NOW()
+		)
+	</insert>
+	
+	<insert id="remain_insert">
+		INSERT INTO work_remain_info(
+			id,
+			remain_desc,
+			remainner_id,
+			remain_dept_id,
+			workplan_id,
+			remain_state_id,
+			create_by,
+			del_flag,
+			remarks,
+			update_date,
+			update_by,
+			create_date,
+			name
+		) VALUES (
+			#{remainId},
+			#{remainDesc},
+			#{remainnerId},
+			#{remainDeptId},
+			#{remainWorkPlanId},
+			'8cee3cf155744bf6bb2a6295d72fad1b',
+			#{remainCreateBy},
+			#{remainDelFlag},
+			#{remainRemarks},
+			#{remainUpdateDate},
+			#{remainUpdateBy},
+			now(),
+			#{remainName}
+		)
+	</insert>
+	
+	<insert id="feedbackSave">
+		INSERT INTO work_feedback_reply(
+			id,
+			reply_content,
+			remainId,
+			reply_people_id,
+			reply_time,
+			type
+		) VALUES (
+			UUID(),
+			#{newReply},
+			#{remainId},
+			#{replyPeopleId},
+			NOW(),
+			#{type}
+		)
+	</insert>
+	
+	<update id="feedback_over">
+		UPDATE work_remain_info SET 
+			remain_state_id = #{endStateProcessed}
+		WHERE id = #{remainId}
+	</update>
+	
+	<!-- 查找 已受理的受理状态为已处理的反馈记录且反馈记录的已回复状态（isReply）为否(false)且工作的指派人为当前用户的工作、受理及最新反馈信息列表 -->
+	<select id="findClosingReply" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns1"/>,
+			wf.id AS "feedbackId"
+		FROM work_plan a
+			<include refid="workPlanJoins1"/>
+			INNER JOIN work_feedback wf ON wri.id = wf.remain_id
+			<where>
+				wri.remain_state_id = '842994c380da4d39803c83a293856066' and
+				wf.is_reply = 0 and
+				a.assigner_id = #{assignerId}
+			</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<!-- 查找 所有待关闭已受理状态的工作列表 -->
+	<select id="findAllWaitClosingRemainWorkPlan" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns1"/>
+		FROM work_plan a
+			<include refid="workPlanJoins1"/>
+			<where>
+				a.del_flag = '0' AND
+				a.end_state_id = '1564424ef256499bb3faa03033924b2f' AND
+				a.depts like concat('%',#{officeid},'%') AND 
+				a.plan_type = #{plan_type}
+			</where>
+	</select>
+	
+	<!-- 查找 所有已关闭的工作列表 -->
+	<select id="findAllClosedRemainWorkPlan" resultType="WorkPlan">
+		SELECT 
+			<include refid="workPlanColumns1"/>
+		FROM work_plan a
+			<include refid="workPlanJoins1"/>
+			<where>
+				a.del_flag = '0' AND
+				a.end_state_id = '94236754111945de90fe6a1418edb8e4' AND
+				a.depts like concat('%',#{officeid},'%') AND 
+				a.plan_type = #{plan_type}
+			</where>
+	</select>
+	
+	<!-- 关闭工作计划 -->
+	<update id="closeWorkPlan">
+		UPDATE work_plan SET 
+			end_state_id = '94236754111945de90fe6a1418edb8e4'
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 更新工作计划中的工作流实例Id -->
+	<update id="updateProcessInstanceId">
+		UPDATE work_plan SET 
+			processinstanceid = #{processInstanceId}
+		WHERE id = #{id}
+	</update>
+	<!-- 点评 -->
+	<insert id="commentSave">
+		INSERT INTO work_comment(
+			id,
+			reviewer_id,
+			work_remain_id,
+			comment_content,
+			comment_time,
+			score
+		) VALUES (
+			UUID(),
+			#{userid},
+			#{id},
+			#{commentContent},
+			NOW(),
+			#{score}
+		)
+	</insert>
+	
+	<!-- 查看点评 -->
+	<select id="findCommentList" resultType="WorkPlan">
+		SELECT 
+			wc.work_remain_id AS "id",
+			wc.comment_time AS "commentTime",
+			wc.comment_content AS "commentContent",
+			wc.score AS "score",
+			wc.reviewer_id AS "reviewer.id"
+		FROM work_comment wc
+			<where>
+				wc.work_remain_id = #{id} and
+				wc.del_flag = '0'
+				order by wc.comment_time
+			</where>
+	</select>
+</mapper>
