@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.check.dao.CheckTypeClassDao">
+    
+	<sql id="checkTypeClassColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.type_desc AS "typeDesc",
+		a.sort AS "sort",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.craete_by AS "craeteBy",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.obligate_1 AS "obligate1",
+		a.obligate_2 AS "obligate2",
+		a.obligate_3 AS "obligate3"
+	</sql>
+	
+	<sql id="checkTypeClassJoins">
+	</sql>
+    
+	<select id="get" resultType="CheckTypeClass">
+		SELECT 
+			<include refid="checkTypeClassColumns"/>
+		FROM check_type_class a
+		<include refid="checkTypeClassJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CheckTypeClass">
+		SELECT 
+			<include refid="checkTypeClassColumns"/>
+		FROM check_type_class a
+		<include refid="checkTypeClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findAllList" resultType="CheckTypeClass">
+		SELECT 
+			<include refid="checkTypeClassColumns"/>
+		FROM check_type_class a
+		<include refid="checkTypeClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="CheckTypeClass">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM check_type_class a
+		<include refid="checkTypeClassJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO check_type_class(
+			id,
+			name,
+			type_desc,
+			sort,
+			parent_id,
+			parent_ids,
+			craete_by,
+			create_date,
+			update_date,
+			update_by,
+			remarks,
+			del_flag,
+			obligate_1,
+			obligate_2,
+			obligate_3
+		) VALUES (
+			#{id},
+			#{name},
+			#{typeDesc},
+			#{sort},
+			#{parent.id},
+			#{parentIds},
+			#{craeteBy},
+			#{createDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag},
+			#{obligate1},
+			#{obligate2},
+			#{obligate3}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE check_type_class SET 	
+			name = #{name},
+			type_desc = #{typeDesc},
+			sort = #{sort},
+			parent_id = #{parent.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE check_type_class SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE check_type_class SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} 
+		OR parent_ids LIKE CONCAT('%',#{id},'%')
+	</update>
+	
+</mapper>

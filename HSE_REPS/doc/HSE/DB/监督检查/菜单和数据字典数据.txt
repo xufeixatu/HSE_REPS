@@ -1,0 +1,27 @@
+INSERT INTO `sys_dict` VALUES ('ab6b2a6ca3fd473e9eb2986b6b30bc73', '5', '已关闭', 'problem_status', '问题上报者关闭问题', '14', '0', '1', '2017-05-20 21:30:07', '1', '2017-05-20 21:30:07', '', '0');
+INSERT INTO `sys_dict` VALUES ('8b4456b04477414eb10b1f465fd2d95f', '2', '受理中', 'problem_status', '受检部门负责人受理问题', '11', '0', '1', '2017-05-20 21:26:37', '1', '2017-05-20 21:26:48', '', '0');
+INSERT INTO `sys_dict` VALUES ('4c9ff2d4b3f2443fa8f4b1e96bfa5ac4', '1', '审批中', 'problem_status', '检查部门负责人审批上报问题', '10', '0', '1', '2017-05-20 21:25:23', '1', '2017-05-20 21:27:07', '', '0');
+INSERT INTO `sys_dict` VALUES ('1845b24b73334894929ae90c3834b931', '3', '处理中', 'problem_status', '受检部门责任人整改问题', '12', '0', '1', '2017-05-20 21:28:20', '1', '2017-05-20 21:28:20', '', '0');
+INSERT INTO `sys_dict` VALUES ('b41548fdc3b44813ae21d42455d711c1', '4', '待关闭', 'problem_status', '问题上报者确认问题是否整改', '13', '0', '1', '2017-05-20 21:29:33', '1', '2017-05-20 21:29:33', '', '0');
+INSERT INTO `sys_dict` VALUES ('5dc4ccdd626d4a66beb262ca834af4f9', 'important', '重要', 'problem_level', '重要问题', '20', '0', '1', '2017-05-19 22:59:39', '1', '2017-05-19 22:59:39', '', '0');
+INSERT INTO `sys_dict` VALUES ('5e573159d9884651a8bfaf91e8e3cb27', 'ordinary', '一般', 'problem_level', '一般问题', '10', '0', '1', '2017-05-19 22:58:59', '1', '2017-05-19 22:58:59', '', '0');
+
+INSERT INTO `sys_menu` VALUES ('1d25df71413e415d87479915c76bd76f', 'd3b6b4ad821147fea4cab3c7e2a759ad', '0,1,451f08106de444c4b4fc07b891305c8b,d3b6b4ad821147fea4cab3c7e2a759ad,', '上报问题管理', '251', '/check/question', '', 'bell-alt', '1', 'check:question:view,check:question:edit', '1', '2017-05-15 17:47:01', '1', '2017-05-19 22:21:13', '', '0');
+INSERT INTO `sys_menu` VALUES ('50bb8875e43c47f3a2d9661dfba2f2cd', '249d1a7ed6ee439dbc2e27b632ce9e8c', '0,1,451f08106de444c4b4fc07b891305c8b,249d1a7ed6ee439dbc2e27b632ce9e8c,', '检查模板管理', '221', '/check/checkTemplate', '', 'file', '1', 'check:checkTemplate:view,check:checkTemplate:edit', '1', '2017-05-07 22:15:49', '1', '2017-05-08 18:09:45', '', '0');
+INSERT INTO `sys_menu` VALUES ('249d1a7ed6ee439dbc2e27b632ce9e8c', '451f08106de444c4b4fc07b891305c8b', '0,1,451f08106de444c4b4fc07b891305c8b,', '检查模板设置', '22', '', '', '', '1', '', '1', '2017-05-07 22:14:55', '1', '2017-05-07 22:14:55', '', '0');
+INSERT INTO `sys_menu` VALUES ('e8e366f9a7e040149eae78ffddab72c3', 'd4ced8aaf7bb401b9e64249c45af54b7', '0,1,451f08106de444c4b4fc07b891305c8b,d4ced8aaf7bb401b9e64249c45af54b7,', '检查类别管理', '211', '/check/checkTypeClass', '', 'cog', '1', 'check:checkTypeClass:view,check:checkTypeClass:edit', '1', '2017-05-06 22:31:22', '1', '2017-05-07 09:43:19', '', '0');
+INSERT INTO `sys_menu` VALUES ('d4ced8aaf7bb401b9e64249c45af54b7', '451f08106de444c4b4fc07b891305c8b', '0,1,451f08106de444c4b4fc07b891305c8b,', '检查类别设置', '21', '', '', '', '1', '', '1', '2017-05-06 21:22:02', '1', '2017-05-06 22:30:46', '', '0');
+INSERT INTO `sys_menu` VALUES ('383504b532854ec8bb6735f62c21b518', 'd3b6b4ad821147fea4cab3c7e2a759ad', '0,1,451f08106de444c4b4fc07b891305c8b,d3b6b4ad821147fea4cab3c7e2a759ad,', '检查记录管理', '221', '/check/inspct', '', 'pencil', '1', 'check:inspct:view,check:inspct:edit,check:checkItemCheck:view', '1', '2017-05-06 10:38:35', '1', '2017-05-12 16:17:38', '', '0');
+INSERT INTO `sys_menu` VALUES ('d3b6b4ad821147fea4cab3c7e2a759ad', '451f08106de444c4b4fc07b891305c8b', '0,1,451f08106de444c4b4fc07b891305c8b,', '检查记录设置', '22', '', '', '', '1', '', '1', '2017-05-06 10:11:15', '1', '2017-05-10 21:01:34', '', '0');
+INSERT INTO `sys_menu` VALUES ('451f08106de444c4b4fc07b891305c8b', '1', '0,1,', '监督检查', '2', '', '', '', '1', '', '1', '2017-05-03 23:44:35', '1', '2017-05-06 10:34:52', '监督检查管理模块', '0');
+
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES ('6', '1d25df71413e415d87479915c76bd76f');
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES ('6', '50bb8875e43c47f3a2d9661dfba2f2cd');
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES ('6', '249d1a7ed6ee439dbc2e27b632ce9e8c');
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES ('6', 'e8e366f9a7e040149eae78ffddab72c3');
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES ('6', 'd4ced8aaf7bb401b9e64249c45af54b7');
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES ('6', '383504b532854ec8bb6735f62c21b518');
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES ('6', 'd3b6b4ad821147fea4cab3c7e2a759ad');
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES ('6', '451f08106de444c4b4fc07b891305c8b');
+
+
