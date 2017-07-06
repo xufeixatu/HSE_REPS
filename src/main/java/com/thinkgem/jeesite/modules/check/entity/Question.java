@@ -51,6 +51,7 @@ public class Question extends ActEntity<Question> {
 	private User currentAuditUser; //当前流程执行人
 	private Office checkedOffice; //受检部门
 	private CheckTypeClass checkTypeClass;
+	private String photos;
 
 	public String getReportUserName() {
 		return reportUserName;
@@ -319,6 +320,14 @@ public class Question extends ActEntity<Question> {
 
 	public void setRectifierComment(String rectifierComment) {
 		this.rectifierComment = rectifierComment;
+	}
+
+	public String getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(String photos) {
+		this.photos = photos;
 	}
 	
 }

@@ -206,9 +206,12 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	}
 
 	@Transactional(readOnly = false)
-	public void feedbackSave(String remainId, String newReply,
+	public void feedbackSave(String id,String remainId, String newReply,
 			String replyPeopleId,String type) {
 		dao.feedbackSave(remainId, newReply, replyPeopleId,type);
+		if("urge".equals(type)){
+			dao.updateWorkState(id,  DictUtils.getDictByValue("urge", "work_state").getId());
+		}
 		// if(isOver){
 		// dao.feedback_over(remainId,WorkPlanDao.REMAIN_STATE_PROCESSED);
 		// }
@@ -286,7 +289,11 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	 * @param id
 	 */
 	@Transactional(readOnly = false)
-	public void closeWorkPlan(String id) {
+	public void closeWorkPlan(String workState,String id) {
+		if("催办".equals(workState)){
+			dao.updateWorkState(id, DictUtils.getDictByValue("urge_closed", "work_state").getId());
+			return;
+		}
 		dao.updateWorkState(id, DictUtils.getDictByValue("closed", "work_state").getId());
 	}
 
@@ -310,8 +317,8 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	 * @param score
 	 */
 	@Transactional(readOnly = false)
-	public void commentSave(String id, String remainId, String commentContent, int score) {
-		dao.commentSave(id, remainId, commentContent, score);
+	public void commentSave(String id,String commentContent, int score) {
+		dao.commentSave(UserUtils.getUser().getId(),id, commentContent, score);
 	}
 
 	public WorkPlan findComment(String remainId) {
@@ -325,6 +332,10 @@ public class WorkPlanService extends TreeService<WorkPlanDao, WorkPlan> {
 	
 	public List<WorkPlan> findDiscusses(String id) {
 		return dao.findDiscusses(id);
+	}
+
+	public List<WorkPlan> findCommentList(String id) {
+		return dao.findCommentList(id);
 	}
 
 }

@@ -55,6 +55,7 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	public void setCurrentAuditUse(User currentAuditUse) {
 		this.currentAuditUse = currentAuditUse;
 	}
+	
 	private WorkType workType;		// 工作类别
 	private Date requiredFinishTime;		// 要求结束时间
 	private Date startTime;		// 工作开始时间
@@ -168,6 +169,32 @@ public class WorkPlan extends TreeEntity<WorkPlan> implements Cloneable{
 	private String newReply; //最新回复
 	private String type;//类型反馈或回复
 	private String replyPeopleId; //回复人ID
+	
+	/***************************************************************************************
+	 **********************************点评数据开始***********************************
+	 ***************************************************************************************/
+	private Date commentTime;
+//	private String commentContent;
+	private User reviewer;
+	
+	/***************************************************************************************
+	 **********************************点评数据结束***********************************
+	 ***************************************************************************************/
+	public Date getCommentTime() {
+		return commentTime;
+	}
+
+	public void setCommentTime(Date commentTime) {
+		this.commentTime = commentTime;
+	}
+
+	public User getReviewer() {
+		return reviewer;
+	}
+
+	public void setReviewer(User reviewer) {
+		this.reviewer = reviewer;
+	}
 	public String getFeebackPeopleId() {
 		return feebackPeopleId;
 	}

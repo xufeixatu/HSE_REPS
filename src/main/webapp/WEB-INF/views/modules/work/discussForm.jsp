@@ -81,6 +81,7 @@
 	<form:form action="${ctx}/work/workPlan/discuss_save" method="post"
 		id="auditingForm" modelAttribute="workPlan" class="form-horizontal">
 		<form:hidden path="remainId" />
+		<form:hidden path="id" />
 		<form:hidden path="type" />
 		<input type="hidden" name="planType" value="${workPlan.planType}" />
 		<div class="control-group">
@@ -94,7 +95,7 @@
 		<div class="form-actions">
 
 			<input id="btnSubmit1" class="btn btn-primary" type="submit"
-				value="反馈" />&nbsp; <input id="btnCancel" class="btn" type="button"
+				value="${fns:getDictLabel(workPlan.type, "discuss_type", "")}" />&nbsp; <input id="btnCancel" class="btn" type="button"
 				value="返 回" onclick="history.go(-1)" />
 		</div>
 	</form:form>

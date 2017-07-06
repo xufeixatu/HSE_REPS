@@ -667,7 +667,7 @@
 		) VALUES (
 			UUID(),
 			#{userid},
-			#{remainId},
+			#{id},
 			#{commentContent},
 			NOW(),
 			#{score}
@@ -675,19 +675,18 @@
 	</insert>
 	
 	<!-- 查看点评 -->
-	<select id="findComment" resultType="WorkPlan">
+	<select id="findCommentList" resultType="WorkPlan">
 		SELECT 
-			<include refid="workPlanColumns1"/>,
+			wc.work_remain_id AS "id",
+			wc.comment_time AS "commentTime",
 			wc.comment_content AS "commentContent",
-			wc.score AS "score"
-		FROM work_plan a
-			<include refid="workPlanJoins1"/>
-			inner join work_comment wc on wc.work_remain_id = wri.id
+			wc.score AS "score",
+			wc.reviewer_id AS "reviewer.id"
+		FROM work_comment wc
 			<where>
-				a.del_flag = '0' AND
-				wri.id = #{remainId}
+				wc.work_remain_id = #{id} and
+				wc.del_flag = '0'
 				order by wc.comment_time
-				limit 1
 			</where>
 	</select>
 </mapper>

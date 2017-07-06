@@ -353,8 +353,8 @@ public class WorkPlanController extends BaseController {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
 		workPlanService.remain(workPlan);
-		
-		return "modules/work/list";
+	
+		return "redirect:" + adminPath + "/work/workPlan/list?planType=" + workPlan.getPlanType() + "&repage";
 	}
 
 	
@@ -390,7 +390,7 @@ public class WorkPlanController extends BaseController {
 	public String discuss_save(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getNewReply(),UserUtils.getUser().getId(),workPlan.getType());
+		workPlanService.feedbackSave(workPlan.getId(),workPlan.getRemainId(),workPlan.getNewReply(),UserUtils.getUser().getId(),workPlan.getType());
 		return discuss_form(workPlan, request, response, model);
 	}
 	
@@ -407,28 +407,29 @@ public class WorkPlanController extends BaseController {
 	public String close_work(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.closeWorkPlan(workPlan.getId());
+		workPlanService.closeWorkPlan(workPlan.getWorkState(),workPlan.getId());
 		workPlan = new WorkPlan();
 		return myAssignedList(workPlan, request, response, model);
 	}
 	
-	/**
-	 * 催办工作
-	 * @param workPlan
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 */
 	@RequiresPermissions("work:workPlan:view")
-	@RequestMapping(value = {"urge_work"})
-	public String urge_work(WorkPlan workPlan, HttpServletRequest request, 
+	@RequestMapping(value = {"comment_form"})
+	public String comment_form(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.closeWorkPlan(workPlan.getId());
-		return list(workPlan, request, response, model);
+		List<WorkPlan> comments = workPlanService.findCommentList(workPlan.getId());
+		model.addAttribute("comments", comments);
+		return "modules/work/commentForm";
 	}
 	
+	@RequiresPermissions("work:workPlan:edit")
+	@RequestMapping(value = {"comment_save"})
+	public String comment_save(WorkPlan workPlan, HttpServletRequest request, 
+			HttpServletResponse response, Model model) {
+		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
+		workPlanService.commentSave(workPlan.getId(),workPlan.getCommentContent(), workPlan.getScore());
+		return comment_form(workPlan, request, response, model);
+	}
 //	@RequiresPermissions("work:workPlan:view")
 //	@RequestMapping(value = { "workList" })
 //	public String workList(WorkPlan workPlan, HttpServletRequest request, HttpServletResponse response, Model model) {

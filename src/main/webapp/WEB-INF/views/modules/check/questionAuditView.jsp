@@ -30,7 +30,7 @@
 		<li><a href="${ctx}/check/question/">上报问题列表</a></li>
 		<li class="active"><a href="${ctx}/check/question/form/?procInsId=${testAudit.procInsId}">处理详情</a></li>
 	</ul>
-	<form:form class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="question" action="" method="post" class="form-horizontal">
 		<sys:message content="${message}"/>
 		<fieldset>
 			<legend>上报问题详情</legend>
@@ -54,6 +54,8 @@
 				<tr>
 					<td class="tit">上传照片</td>
 					<td>
+						<form:hidden id="questionPhoto" path="photos" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+						<sys:ckfinder input="questionPhoto" type="images" uploadPath="/question_photos" selectMultiple="false" readonly="true"/>					
 					</td>
 					<td class="tit">受检部门</td>
 					<td>

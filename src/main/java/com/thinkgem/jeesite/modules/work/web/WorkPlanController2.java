@@ -144,7 +144,7 @@ public class WorkPlanController2 extends BaseController {
 	public String feedback_save(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getFeedbackDesc(),UserUtils.getUser().getId(),workPlan.getType());
+//		workPlanService.feedbackSave(workPlan.getRemainId(),workPlan.getFeedbackDesc(),UserUtils.getUser().getId(),workPlan.getType());
 		
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan2/dept_remainned_list?repage&planType=company";
 	}
@@ -218,12 +218,9 @@ public class WorkPlanController2 extends BaseController {
 	public String close_work(WorkPlan workPlan, HttpServletRequest request, 
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
-		workPlanService.closeWorkPlan(workPlan.getId());
+//		workPlanService.closeWorkPlan(workPlan.getId());
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan2/work_list?planType=department";
 	}
-	
-	
-
 	
 	/**
 	 * 进入已关闭已受理反馈部门工作点评表单
@@ -256,7 +253,7 @@ public class WorkPlanController2 extends BaseController {
 			HttpServletResponse response, Model model) {
 		WorkPlanSqlMapFilter.getFilter().common(workPlan, model);
 		
-		workPlanService.commentSave(UserUtils.getUser().getId(),workPlan.getRemainId(),workPlan.getCommentContent(),workPlan.getScore());
+//		workPlanService.commentSave(UserUtils.getUser().getId(),workPlan.getRemainId(),workPlan.getCommentContent(),workPlan.getScore());
 		
 		return "redirect:" + Global.getAdminPath() + "/work/workPlan2/dept_closed_remain_feedback_list?planType=department";
 	}
