@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.train.dao.plan.TrainPlanDao">
+    
+	<sql id="trainPlanColumns">
+		a.id AS "id",
+		a.object_office_id AS "objectOffice.id",
+		a.classify AS "classify",
+		a.name AS "name",
+		a.train_object AS "trainObject",
+		a.train_time AS "trainTime",
+		a.period AS "period",
+		a.plan_number AS "planNumber",
+		a.train_method AS "trainMethod",
+		a.subject_office_id AS "subjectOffice.id",
+		a.frequency AS "frequency",
+		a.requirement AS "requirement",
+		a.status AS "status",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		
+		o2.name AS "objectOffice.name",
+		o10.name AS "subjectOffice.name"
+	</sql>
+	
+	<sql id="trainPlanJoins">
+		LEFT JOIN sys_office o2 ON o2.id = a.object_office_id
+		LEFT JOIN sys_office o10 ON o10.id = a.subject_office_id
+	</sql>
+    
+	<select id="get" resultType="TrainPlan">
+		SELECT 
+			<include refid="trainPlanColumns"/>
+		FROM train_plan a
+		<include refid="trainPlanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TrainPlan">
+		SELECT 
+			<include refid="trainPlanColumns"/>
+		FROM train_plan a
+		<include refid="trainPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="objectOffice != null and objectOffice.id != null and objectOffice.id != ''">
+				AND a.object_office_id = #{objectOffice.id}
+			</if>
+			<if test="classify != null and classify != ''">
+				AND a.classify = #{classify}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="trainObject != null and trainObject != ''">
+				AND a.train_object = #{trainObject}
+			</if>
+			<if test="subjectOffice != null and subjectOffice.id != null and subjectOffice.id != ''">
+				AND a.subject_office_id = #{subjectOffice.id}
+			</if>
+			<if test="frequency != null and frequency != ''">
+				AND a.frequency = #{frequency}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TrainPlan">
+		SELECT 
+			<include refid="trainPlanColumns"/>
+		FROM train_plan a
+		<include refid="trainPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO train_plan(
+			id,
+			object_office_id,
+			classify,
+			name,
+			train_object,
+			train_time,
+			period,
+			plan_number,
+			train_method,
+			subject_office_id,
+			frequency,
+			requirement,
+			status,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{objectOffice.id},
+			#{classify},
+			#{name},
+			#{trainObject},
+			#{trainTime},
+			#{period},
+			#{planNumber},
+			#{trainMethod},
+			#{subjectOffice.id},
+			#{frequency},
+			#{requirement},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE train_plan SET 	
+			object_office_id = #{objectOffice.id},
+			classify = #{classify},
+			name = #{name},
+			train_object = #{trainObject},
+			train_time = #{trainTime},
+			period = #{period},
+			plan_number = #{planNumber},
+			train_method = #{trainMethod},
+			subject_office_id = #{subjectOffice.id},
+			frequency = #{frequency},
+			requirement = #{requirement},
+			status = #{status},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE train_plan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

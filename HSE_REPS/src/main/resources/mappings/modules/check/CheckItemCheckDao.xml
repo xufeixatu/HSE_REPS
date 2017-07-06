@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.check.dao.CheckItemCheckDao">
+    
+	<sql id="checkItemCheckColumns">
+		a.id AS "id",
+		a.inspct_id AS "inspctId",
+		a.check_item_id AS "checkItemId",
+		a.check_result AS "checkResult",
+		a.check_time AS "checkTime",
+		a.report_status AS "reportStatus",
+		a.craete_by AS "craeteBy",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.obligate_1 AS "obligate1",
+		a.obligate_2 AS "obligate2",
+		a.obligate_3 AS "obligate3"
+	</sql>
+	
+	<sql id="checkItemCheckJoins">
+	</sql>
+    
+	<select id="get" resultType="CheckItemCheck">
+		SELECT 
+			<include refid="checkItemCheckColumns"/>
+		FROM check_item_check a
+		<include refid="checkItemCheckJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CheckItemCheck">
+		SELECT 
+			<include refid="checkItemCheckColumns"/>,
+			item.check_content AS checkContent,
+			item.check_standard AS checkStandard,
+			user.name AS checkPersonName
+		FROM check_item_check a, check_item AS item, inspct, sys_user AS user
+		<include refid="checkItemCheckJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND user.id = inspct.check_person
+			AND a.check_item_id = item.id
+			AND a.inspct_id = inspct.id
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CheckItemCheck">
+		SELECT 
+			<include refid="checkItemCheckColumns"/>
+		FROM check_item_check a
+		<include refid="checkItemCheckJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO check_item_check(
+			id,
+			inspct_id,
+			check_item_id,
+			check_result,
+			check_time,
+			report_status,
+			craete_by,
+			create_date,
+			update_date,
+			update_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{inspctId},
+			#{checkItemId},
+			#{checkResult},
+			#{checkTime},
+			#{reportStatus},
+			#{craeteBy},
+			#{createDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE check_item_check SET 	
+			inspct_id = #{inspctId},
+			check_item_id = #{checkItemId},
+			check_result = #{checkResult},
+			check_time = #{checkTime},
+			report_status = #{reportStatus},
+			craete_by = #{craeteBy},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE check_item_check SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

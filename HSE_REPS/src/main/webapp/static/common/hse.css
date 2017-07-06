@@ -1,0 +1,67 @@
+/*HSE工作管理列表样式开始*/
+
+.table_item {
+	position: relative;
+	padding-left: 40px;
+}
+
+.table_item>div:first-child {
+	background-color: #FFFFFF;
+	font-family: '微软雅黑';
+	letter-spacing: 1px;
+	font-size: 16px;
+	margin: 10px;
+	position: relative;
+	padding: 15px;
+	border-top: solid #F0F0F0 3px;
+}
+
+.table_item>div:first-child>div:nth-child(1) {
+	position: relative;
+}
+
+.table_item>div>div:nth-child(2) {
+	height: 1px;
+	background-color: #E6E6E6;
+	margin-top: 5px;
+	line-height: 1px;
+	clear: both;
+	display: block;
+	overflow: hidden
+}
+
+.table_item>div>div:nth-child(3) {
+	font-size: 15px;
+	padding-left: 15px;
+	word-spacing: 20px;
+}
+
+.table_item>div>div:nth-child(3)>div {
+	margin-top: 10px;
+}
+
+.table_item>div>div:nth-child(3)>div:nth-child(2) {
+	color: #9B9B9B;
+	font-size: 14px;
+}
+
+.table_item>div>div:nth-child(4) {
+	position: relative;
+	margin-top: 15px;
+}
+
+.table_item>div>div:nth-child(5) {
+	background-color: #F6F7FB;
+	font-size: 15px;
+	word-spacing: 20px;
+	padding: 15px;
+}
+
+.table_item>div>div:nth-child(5)>div:first-child {
+	margin-top: 10px;
+	color: #9B9B9B;
+	font-size: 14px;
+}
+
+
+/*HSE工作管理列表样式结束*/

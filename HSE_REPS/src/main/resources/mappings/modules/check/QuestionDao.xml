@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.check.dao.QuestionDao">
+    
+	<sql id="questionColumns">
+		a.id AS "id",
+		a.check_item_check_id AS "checkItemCheckId",
+		a.create_date AS "createDate",
+		a.question_desc AS "questionDesc",
+		a.check_type_class_id AS "checkTypeClassId",
+		a.question_level_id AS "questionLevelId",
+		a.inspection_dept_type_id AS "inspectionDeptTypeId",
+		a.state_id AS "stateId",
+		a.approval_opinion AS "approvalOpinion",
+		a.approval_time AS "approvalTime",
+		a.accept_person_id AS "acceptPersonId",
+		a.ractification_person_id AS "ractificationPersonId",
+		a.ractification_state_id AS "ractificationStateId",
+		a.accept_time AS "acceptTime",
+		a.specify_end_time AS "specifyEndTime",
+		a.real_end_time AS "realEndTime",
+		a.closer_id AS "closerId",
+		a.close_time AS "closeTime",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.document_id AS "documentId",
+		a.upload_time AS "uploadTime",
+		a.proc_ins_id AS "procInsId",
+		a.reporter_comment AS "reporterComment",
+		a.reporter_leader_comment AS "reporterLeaderComment",
+		a.rectifier_leader_comment AS "rectifierLeaderComment",
+		a.rectifier_comment AS "rectifierComment",
+		u.id AS "currentAuditUser.id", 
+		u.name AS "currentAuditUser.name", 
+		o.id AS "checkedOffice.id", 
+		o.name AS "checkedOffice.name",
+		type_class.id AS "checkTypeClass.id",
+		type_class.name AS "checkTypeClass.name",
+		a.report_user_id AS "reportUserId"
+	</sql>
+	
+	<sql id="questionJoins">
+		JOIN sys_user u ON u.id=a.current_audit_user_id
+		JOIN sys_office o ON o.id=a.checked_office_id
+		JOIN check_type_class type_class ON type_class.id = a.check_type_class_id
+	</sql>
+    
+	<select id="get" resultType="Question">
+		SELECT 
+			<include refid="questionColumns"/>
+		FROM question a
+		<include refid="questionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Question">
+		SELECT 
+			<include refid="questionColumns"/>
+		FROM question a
+		<include refid="questionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Question">
+		SELECT 
+			<include refid="questionColumns"/>
+		FROM question a
+		<include refid="questionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO question(
+			id,
+			check_item_check_id,
+			create_date,
+			question_desc,
+			check_type_class_id,
+			question_level_id,
+			inspection_dept_type_id,
+			state_id,
+			approval_opinion,
+			approval_time,
+			accept_person_id,
+			ractification_person_id,
+			ractification_state_id,
+			accept_time,
+			specify_end_time,
+			real_end_time,
+			closer_id,
+			close_time,
+			create_by,
+			update_date,
+			update_by,
+			remarks,
+			del_flag,
+			document_id,
+			upload_time,
+			proc_ins_id,
+			reporter_comment,
+			reporter_leader_comment,
+			rectifier_leader_comment,
+			rectifier_comment,
+			report_user_id,
+			current_audit_user_id,
+			checked_office_id
+		) VALUES (
+			#{id},
+			#{checkItemCheckId},
+			#{createDate},
+			#{questionDesc},
+			#{checkTypeClass.id},
+			#{questionLevelId},
+			#{inspectionDeptTypeId},
+			#{stateId},
+			#{approvalOpinion},
+			#{approvalTime},
+			#{acceptPersonId},
+			#{ractificationPersonId},
+			#{ractificationStateId},
+			#{acceptTime},
+			#{specifyEndTime},
+			#{realEndTime},
+			#{closerId},
+			#{closeTime},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag},
+			#{documentId},
+			#{uploadTime},
+			#{procInsId},
+			#{reporterComment},
+			#{reporterLeaderComment},
+			#{rectifierLeaderComment},
+			#{rectifierComment},
+			#{reportUserId},
+			#{currentAuditUser.id},
+			#{checkedOffice.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE question
+		<set >
+	      <if test="questionDesc != null" >
+	        question_desc = #{questionDesc},
+	      </if>
+	      <if test="checkTypeClassId != null" >
+	        check_type_class_id = #{checkTypeClassId},
+	      </if>
+	      <if test="questionLevelId != null" >
+	        question_level_id = #{questionLevelId},
+	      </if>
+	      <if test="reporterComment != null" >
+	        reporter_comment = #{reporterComment},
+	      </if>
+	      <if test="reporterLeaderComment != null" >
+	        reporter_leader_comment = #{reporterLeaderComment},
+	      </if>	 
+	      <if test="rectifierLeaderComment != null" >
+	        rectifier_leader_comment = #{rectifierLeaderComment},
+	      </if>
+	      <if test="rectifierComment != null" >
+	        rectifier_comment = #{rectifierComment},
+	      </if>
+	      <if test="updateBy.id != null" >
+	        update_by = #{updateBy.id}, 
+	      </if>	
+	      <if test="updateDate != null" >
+	        update_date = #{updateDate},
+	      </if>		            	      	      
+	      <if test="stateId != null" >
+	        state_id = #{stateId}
+	      </if>		      
+	    </set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE question SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
