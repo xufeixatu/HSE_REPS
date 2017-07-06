@@ -436,10 +436,10 @@
 					<span class="course-detail-text-status-study-text">学习人数</span>
 				</div>
 			</div>
-			<div class="course-detail-text-progress">
-			    <div class="course-detail-text-progress-bar" role="progressbar" id="progress-value" value="40"></div>
+<%-- 			<div class="course-detail-text-progress">
+			   <!--  <div class="course-detail-text-progress-bar" role="progressbar" id="progress-value" value="40"></div> -->
 			    <span class="course-detail-text-progress-bar-text">${courseStudy.status}已完成</span>
-			</div>
+			</div> --%>
 			<div class="course-detail-text-operate">
 				<ul>
 					<c:if test="${null == courseStudy}">
